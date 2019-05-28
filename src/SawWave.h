@@ -5,7 +5,7 @@
 
 class SawWave : public Waveform {
   public:
-    double getWaveformSample(double phase);
+    double getWaveformSample(double phase) const;
 };
 
 #endif

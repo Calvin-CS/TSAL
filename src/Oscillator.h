@@ -27,8 +27,8 @@ class Oscillator {
     void setNote(unsigned note);
     void setFrequency(double frequency);
     void setGain(double gain);
-    double getFrequency() { return mFrequency; };
-    double getGain() { return mGain; };
+    double getFrequency() const { return mFrequency; };
+    double getGain() const { return mGain; };
 
     static double getFrequencyFromNote(unsigned note) {
       return 27.5 * pow(2.0, (note - 21) / 12.0);

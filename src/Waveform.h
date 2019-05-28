@@ -6,7 +6,7 @@
 
 class Waveform {
   public:
-    virtual double getWaveformSample(double phase) { return 0; };
+    virtual double getWaveformSample(double phase) const { return 0; };
 };
 
 #endif
