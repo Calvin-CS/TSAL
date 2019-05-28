@@ -1,4 +1,4 @@
-#include "Oscillator.h"
+#include "OscillatorNode.h"
 #include "TSAudio.h"
 #include <vector>
 
@@ -16,7 +16,7 @@ class Chord {
     void step(unsigned id, double inc);
 
   private: 
-    std::vector<Oscillator*> mOscillators;
+    std::vector<OscillatorNode*> mOscillatorNodes;
     std::vector<double> mPitchChanges;
     
     unsigned mNoteDeltas[3] = {0, 4, 7};

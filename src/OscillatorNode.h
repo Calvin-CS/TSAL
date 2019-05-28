@@ -5,8 +5,8 @@
 #include "SawWave.h"
 #include "SquareWave.h"
 
-#ifndef OSCILLATOR_H
-#define OSCILLATOR_H
+#ifndef OSCILLATORNODE_H
+#define OSCILLATORNODE_H
 
 enum OscillatorMode {
   SAW,
@@ -15,9 +15,9 @@ enum OscillatorMode {
   CUSTOM
 };
 
-class Oscillator : public AudioNode {
+class OscillatorNode : public AudioNode {
   public:
-    Oscillator(unsigned sampleRate);
+    OscillatorNode(unsigned sampleRate);
     void start();
     void stop();
     double getBufferSample();

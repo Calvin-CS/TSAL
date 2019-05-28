@@ -1,4 +1,4 @@
-#include "Oscillator.h"
+#include "OscillatorNode.h"
 #include "Chord.h"
 #include <iostream>
 #include <memory>
