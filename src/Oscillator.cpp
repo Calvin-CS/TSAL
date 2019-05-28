@@ -70,7 +70,6 @@ void Oscillator::initStream() {
   try {
     mRtAudio.openStream(&oParams, NULL, RTAUDIO_SINT16, mSampleRate, &bufferFrames, 
       &streamCallback, (void *)this, &options, &errorCallback);
-    mRtAudio.startStream();
   } catch (RtAudioError& e) {
     e.printMessage();
   }
@@ -79,6 +78,22 @@ void Oscillator::initStream() {
 Oscillator::~Oscillator() {
   if (mRtAudio.isStreamOpen())
     mRtAudio.closeStream();
+}
+
+void Oscillator::start() {
+  try {
+    mRtAudio.startStream();
+  } catch (RtAudioError& e) {
+    e.printMessage();
+  }
+}
+
+void Oscillator::stop() {
+  try {
+    mRtAudio.stopStream();
+  } catch (RtAudioError& e) {
+    e.printMessage();
+  }
 }
 
 void Oscillator::setWaveform(std::unique_ptr<Waveform> waveform) {

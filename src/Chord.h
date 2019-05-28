@@ -8,8 +8,8 @@ class Chord {
   public:
     Chord(unsigned size, unsigned startNote, unsigned endNote);
     ~Chord();
-    void start();
-    void stop();
+    void start(unsigned id);
+    void stop(unsigned id);
     void incrementNoteFrequency(unsigned id);
 
   private: 

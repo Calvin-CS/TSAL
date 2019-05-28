@@ -3,7 +3,7 @@
 Chord::Chord(unsigned size, unsigned startNote, unsigned endNote) {
   for (unsigned i = 0; i < size; i++) {
     Oscillator* osc = new Oscillator();
-    osc->setNote(startNote + mNoteDeltas[i]);
+    osc->setNote(startNote += mNoteDeltas[i]);
     osc->setGain(0.4);
     mOscillators.push_back(osc);
   }
@@ -15,14 +15,12 @@ Chord::~Chord() {
   }
 }
 
-void Chord::start() {
-  for(unsigned i = 0; i < mOscillators.size(); i++) {
-    //mOscillators[i]->start();
-  }
+void Chord::start(unsigned id) {
+  mOscillators[id]->start();
+  std::cout << "Starting osc: " << id << " at frequency: " 
+    << mOscillators[id]->getFrequency() << std::endl;
 }
 
-void Chord::stop() {
-  for(unsigned i = 0; i < mOscillators.size(); i++) {
-    mOscillators[i]->stop();
-  }
+void Chord::stop(unsigned id) {
+  mOscillators[id]->stop();
 }

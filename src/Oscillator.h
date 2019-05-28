@@ -19,8 +19,8 @@ class Oscillator {
     Oscillator();
     Oscillator(unsigned channels, unsigned sampleRate);
     ~Oscillator();
-    void start() { mRtAudio.startStream(); };
-    void stop() { mRtAudio.stopStream(); };
+    void start();
+    void stop();
     double getBufferSample();
     void setWaveform(std::unique_ptr<Waveform> wavefrom);
     void setMode(OscillatorMode mode);
