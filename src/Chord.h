@@ -1,4 +1,5 @@
 #include "Oscillator.h"
+#include "TSAudio.h"
 #include <vector>
 
 #ifndef CHORD_H
@@ -6,7 +7,7 @@
 
 class Chord {
   public:
-    Chord(unsigned size, unsigned startNote, unsigned endNote);
+    Chord(TSAudio* audio, unsigned size, unsigned startNote, unsigned endNote);
     ~Chord();
     void start();
     void stop();

@@ -1,4 +1,5 @@
 #include <memory>
+#include "AudioNode.h"
 #include "RtAudio.h"
 #include "SineWave.h"
 #include "SawWave.h"
@@ -14,11 +15,9 @@ enum OscillatorMode {
   CUSTOM
 };
 
-class Oscillator {
+class Oscillator : public AudioNode {
   public:
-    Oscillator();
-    Oscillator(unsigned channels, unsigned sampleRate);
-    ~Oscillator();
+    Oscillator(unsigned sampleRate);
     void start();
     void stop();
     double getBufferSample();
@@ -28,20 +27,18 @@ class Oscillator {
     void setFrequency(double frequency);
     void setGain(double gain);
     double getFrequency() const { return mFrequency; };
+    unsigned getNote() const { return getNoteFromFrequency(mFrequency); };
     double getGain() const { return mGain; };
 
-    static double getFrequencyFromNote(unsigned note) {
-      return 27.5 * pow(2.0, (note - 21) / 12.0);
-    };
+    static unsigned getNoteFromFrequency(double frequency);
+    static double getFrequencyFromNote(unsigned note);
 
   private:
-    void initStream();
-    RtAudio mRtAudio;
     double mGain;
     double mFrequency;
-    double mSampleRate;
-    double mChannels;
-    
+    unsigned mSampleRate;
+    bool mActive;
+
     std::unique_ptr<Waveform> mCustomWaveform;
     SineWave mSine;
     SawWave mSaw;
