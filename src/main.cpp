@@ -43,19 +43,29 @@ int main() {
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
   }
 */
-  omp_set_num_threads(3);
 
-  Chord chord(3, 60, 70);
+  const unsigned threads = 5;
+  omp_set_num_threads(threads);
+
+  Chord chord(threads, 48, 60);
+
   #pragma omp parallel
   {
     unsigned id = omp_get_thread_num();
+
     chord.start(id);
-    for(int i = 1; i < 300; ++i) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+    
+    #pragma omp for
+    for(int i = 1; i <= 400; i++) {
+
       std::this_thread::sleep_for(std::chrono::milliseconds(5));
+      chord.step(id, 1.0/400.0 * omp_get_num_threads() );
     }
-    chord.stop(id);
+    std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+    
   }
-  
+  chord.stop();
 
 /*
   std::cout << "\n Press <enter> to stop\n" << std::endl;

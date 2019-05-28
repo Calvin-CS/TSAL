@@ -81,19 +81,11 @@ Oscillator::~Oscillator() {
 }
 
 void Oscillator::start() {
-  try {
-    mRtAudio.startStream();
-  } catch (RtAudioError& e) {
-    e.printMessage();
-  }
+  mRtAudio.startStream();
 }
 
 void Oscillator::stop() {
-  try {
-    mRtAudio.stopStream();
-  } catch (RtAudioError& e) {
-    e.printMessage();
-  }
+  mRtAudio.abortStream();
 }
 
 void Oscillator::setWaveform(std::unique_ptr<Waveform> waveform) {
@@ -102,7 +94,7 @@ void Oscillator::setWaveform(std::unique_ptr<Waveform> waveform) {
 }
 
 void Oscillator::setNote(unsigned note) {
-  setFrequency(27.5 * pow(2.0, (note - 21) / 12.0));
+  setFrequency(getFrequencyFromNote(note));
 }
 
 void Oscillator::setFrequency(double frequency) {

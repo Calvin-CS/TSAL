@@ -30,6 +30,10 @@ class Oscillator {
     double getFrequency() { return mFrequency; };
     double getGain() { return mGain; };
 
+    static double getFrequencyFromNote(unsigned note) {
+      return 27.5 * pow(2.0, (note - 21) / 12.0);
+    };
+
   private:
     void initStream();
     RtAudio mRtAudio;
