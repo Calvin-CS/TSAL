@@ -95,4 +95,4 @@ flycheck_*.el
 
 # Other stuff
 .vscode
-questions.txt
+todo.txt
