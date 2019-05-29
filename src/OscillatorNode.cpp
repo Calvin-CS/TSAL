@@ -6,7 +6,7 @@
 OscillatorNode::OscillatorNode(unsigned sampleRate) {
   mSampleRate = sampleRate;
   setMode(SINE);
-  setGain(0.3);
+  setGain(0.4);
   setFrequency(440);
 }
 
@@ -18,8 +18,8 @@ void OscillatorNode::stop() {
   mActive = false;
 }
 
-void OscillatorNode::setWaveform(std::unique_ptr<Waveform> waveform) {
-  mCustomWaveform = std::move(waveform);
+void OscillatorNode::setWaveform(Waveform waveform) {
+  mCustomWaveform = waveform;
   setMode(CUSTOM);
 }
 
@@ -57,7 +57,7 @@ double OscillatorNode::getBufferSample() {
       value = mSquare.getWaveformSample(mPhase);
       break;
     case CUSTOM:
-      value = mCustomWaveform->getWaveformSample(mPhase);
+      value = mCustomWaveform.getWaveformSample(mPhase);
       break;
   }
 

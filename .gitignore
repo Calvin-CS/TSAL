@@ -1,4 +1,3 @@
-
 # Created by https://www.gitignore.io/api/c++,emacs
 # Edit at https://www.gitignore.io/?templates=c++,emacs
 
@@ -86,8 +85,13 @@ flycheck_*.el
 # network security
 /network-security.data
 
-
 # End of https://www.gitignore.io/api/c++,emacs
+# Doxygen
+/html
+/latex
+/rtf
+/man
+
 
 # Other stuff
 .vscode

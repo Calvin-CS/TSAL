@@ -8,20 +8,44 @@
 #ifndef OSCILLATORNODE_H
 #define OSCILLATORNODE_H
 
-enum OscillatorMode {
-  SAW,
-  SINE,
-  SQUARE,
-  CUSTOM
-};
-
+/** \class OscillatorNode
+ * \brief An audio node that generates sound from waveforms
+ *  
+ * OscillatorNode is a low level synthesizer that generates samples from
+ * algorithmic waveforms. It supports saw, sine, and square waveforms, as well
+ * as custom waveforms that can be created by the user.
+ */
 class OscillatorNode : public AudioNode {
   public:
+    /** \brief Modes for the oscillator 
+     * 
+     * Oscillator mode can be switched at anytime during execution
+     */
+    enum OscillatorMode {
+      SAW,
+      SINE,
+      SQUARE,
+      CUSTOM
+    };
+
     OscillatorNode(unsigned sampleRate);
+
+    /** \brief Starts sampling the waveform */
     void start();
+
+    /** \brief Stops sampling the waveform */
     void stop();
+
+    /** \brief Reserved for TSAudio to sample the waveform */
     double getBufferSample();
-    void setWaveform(std::unique_ptr<Waveform> wavefrom);
+
+    /** \brief Sets a custom waveform for the oscillator
+     * Given a Waveform class, the oscillator will automatically switch to CUSTOM mode and 
+     * start sampling from the new waveform.
+     * \param waveform a Waveform class that implements the getWaveformSample method
+     */ 
+    void setWaveform(Waveform waveform);
+
     void setMode(OscillatorMode mode);
     void setNote(unsigned note);
     void setFrequency(double frequency);
@@ -39,7 +63,7 @@ class OscillatorNode : public AudioNode {
     unsigned mSampleRate;
     bool mActive;
 
-    std::unique_ptr<Waveform> mCustomWaveform;
+    Waveform mCustomWaveform;
     SineWave mSine;
     SawWave mSaw;
     SquareWave mSquare;

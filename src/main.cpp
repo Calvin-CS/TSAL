@@ -7,30 +7,35 @@
 #include <chrono>
 #include <thread>
 
-int main() {
-  TSAudio audio;
+void thread_sleep(unsigned milliseconds) {
+  std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
+}
 
-  const unsigned threads = 5;
+const unsigned problemSize = 10;
+const unsigned threads = 5;
+
+int main() {  
   omp_set_num_threads(threads);
-
-  Chord chord(&audio, threads, 48, 60);
+  
+  TSAudio audio;
+  Chord chord(audio, threads, 60, 70);
   
   #pragma omp parallel
   {
     unsigned id = omp_get_thread_num();
 
     chord.start(id);
-    std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+    thread_sleep(3000);
     
     #pragma omp for
-    for(int i = 1; i <= 400; i++) {
+    for(unsigned i = 1; i <= problemSize; i++) {
 
-      std::this_thread::sleep_for(std::chrono::milliseconds(5));
-      chord.step(id, 1.0/400.0 * omp_get_num_threads() );
+      thread_sleep(1000);
+      chord.step(id, 1.0/((double) problemSize) * omp_get_num_threads() );
     }
-    std::this_thread::sleep_for(std::chrono::milliseconds(5000));
-    
+    thread_sleep(3000);
   }
+
   chord.stop();
 
 /*

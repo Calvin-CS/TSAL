@@ -7,7 +7,7 @@
 
 class Chord {
   public:
-    Chord(TSAudio* audio, unsigned size, unsigned startNote, unsigned endNote);
+    Chord(TSAudio &audio, unsigned size, unsigned startNote, unsigned endNote);
     ~Chord();
     void start();
     void stop();
