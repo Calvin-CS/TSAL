@@ -14,7 +14,7 @@ void thread_sleep(unsigned milliseconds) {
 }
 
 const unsigned problemSize = 300;
-const unsigned threads = 1;
+const unsigned threads = 5;
 
 int main() {  
   omp_set_num_threads(threads);
@@ -23,8 +23,7 @@ int main() {
   CompressorNode* compressor = new CompressorNode();
   audio.addNode(compressor);
 
-  Chord chord(*compressor, threads, 60, 70);
-  //thread_sleep(1000);
+  Chord chord(compressor, threads, 60, 70);
   
   #pragma omp parallel
   {

@@ -3,8 +3,8 @@
 #ifndef AUDIONODE_H
 #define AUDIONODE_H
 
-/** \class AudioNode
- * \brief Base class for audio nodes
+/** @class AudioNode
+ * @brief Base class for audio nodes
  * 
  * AudioNode is the basic structure for nodes handled by TSAudio
  */
@@ -12,32 +12,32 @@ class AudioNode {
   public:
     virtual ~AudioNode();
     /**
-     * \brief Get an audio sample for the audio buffer
+     * @brief Get an audio sample for the audio buffer
      * 
      * Used by TSAudio to get samples of sound
      * 
-     * \return double the audio sample
+     * @return double the audio sample
      */
     virtual double nextBufferSample() { return 0; };
 
     /**
-     * \brief Add an audio node to be for generating sound
+     * @brief Add an audio node to be for generating sound
      * 
-     * \param node 
+     * @param node 
      */
     void addNode(AudioNode* node);
 
     /**
-     * \brief Remove an audio node
+     * @brief Remove an audio node
      * 
-     * \param node 
+     * @param node 
      */
     void removeNode(AudioNode* node);
 
     /**
-     * \brief Get the combined audio sample of child nodes
+     * @brief Get the combined audio sample of child nodes
      * 
-     * \return double the sample
+     * @return double the sample
      */
     double getNodeSamples();
 

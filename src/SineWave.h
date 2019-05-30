@@ -5,7 +5,7 @@
 
 class SineWave : public Waveform {
   public:
-    double getWaveformSample(double phase) const;
+    double getWaveformSample(double phase) const override;
 };
 
 #endif

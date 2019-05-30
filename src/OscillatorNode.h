@@ -8,8 +8,8 @@
 #ifndef OSCILLATORNODE_H
 #define OSCILLATORNODE_H
 
-/** \class OscillatorNode
- * \brief An audio node that generates sound from waveforms
+/** @class OscillatorNode
+ * @brief An audio node that generates sound from waveforms
  *  
  * OscillatorNode is a low level synthesizer that generates samples from
  * algorithmic waveforms. It supports saw, sine, and square waveforms, as well
@@ -18,7 +18,7 @@
 class OscillatorNode : public AudioNode {
   public:
     /**
-     * \brief Modes for the oscillator 
+     * @brief Modes for the oscillator 
      * 
      * Oscillator mode can be switched at anytime during execution
      */
@@ -32,24 +32,24 @@ class OscillatorNode : public AudioNode {
     OscillatorNode();
 
     /** 
-     * \brief Start sampling the waveform 
+     * @brief Start sampling the waveform 
      */
     void start();
 
     /** 
-     * \brief Stop sampling the waveform 
+     * @brief Stop sampling the waveform 
      */
     void stop();
 
-    double nextBufferSample();
+    double nextBufferSample() override;
 
     /** 
-     * \brief Set a custom waveform for the oscillator
+     * @brief Set a custom waveform for the oscillator
      * 
      * Given a Waveform class, the oscillator will automatically switch to CUSTOM mode and 
      * start sampling from the new waveform.
      * 
-     * \param waveform a Waveform class that implements the getWaveformSample method
+     * @param waveform a Waveform class that implements the getWaveformSample method
      */ 
     void setWaveform(Waveform waveform);
 

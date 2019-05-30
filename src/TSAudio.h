@@ -4,8 +4,8 @@
 #ifndef TSAUDIO_H
 #define TSAUDIO_H
 
-/** \class TSAudio
- * \brief The main audio manager that handles the overhead of audio buffers, audio nodes,
+/** @class TSAudio
+ * @brief The main audio manager that handles the overhead of audio buffers, audio nodes,
  * and sampling
  * 
  * To use TSAL, the TSAudio class needs to be initiliazed at the start of the project.
@@ -15,10 +15,10 @@ class TSAudio : public AudioNode {
   public:
     TSAudio();
     /**
-     * \brief Construct a new TSAudio object
+     * @brief Construct a new TSAudio object
      * 
-     * \param channels number of channels, ex: 1 = mono, 2 = stereo
-     * \param sampleRate if left blank, TSAudio will default to the highest sample rate supported
+     * @param channels number of channels, ex: 1 = mono, 2 = stereo
+     * @param sampleRate if left blank, TSAudio will default to the highest sample rate supported
      */
     TSAudio(unsigned channels, unsigned sampleRate);
 
