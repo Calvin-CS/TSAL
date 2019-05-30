@@ -2,9 +2,9 @@
 #include <math.h>
 #include <iostream>
 
-CompressorNode::CompressorNode(unsigned sampleRate) {
-  mSampleRate = sampleRate;
-  
+CompressorNode::CompressorNode() {
+  setAttackTime(0.01);
+  setReleaseTime(10.0);
 }
 
 double CompressorNode::nextBufferSample() {
@@ -23,15 +23,15 @@ double CompressorNode::nextBufferSample() {
 }
 
 void CompressorNode::getEnvelope() {
-  double attackGain = std::exp(-1.0 / mSampleRate * mAttackTime);
-  double releaseGain = std::exp(-1.0 / mSampleRate * mReleaseTime);
+  // double attackGain = std::exp(-1.0 / (mSampleRate * mAttackTime));
+  // double releaseGain = std::exp(-1.0 / (mSampleRate * mReleaseTime));/
 
   for (unsigned i = 0; i < mAudioDataSize; i++) {
     // Using peak detection since it is faster
     // Maybe implement RMS
     double envIn = std::abs(mAudioBuffer[i]);
 
-    double gain = mEnvelopeSample < envIn ? attackGain : releaseGain;
+    double gain = mEnvelopeSample < envIn ? mAttackGain : mReleaseGain;
     mEnvelopeSample = envIn + gain * (mEnvelopeSample - envIn);
 
     mEnvelope[i] = mEnvelopeSample;
@@ -57,6 +57,16 @@ void CompressorNode::filterAudio() {
     mGain = dbToAmp(mGain);
     mAudioBuffer[i] *= (mGain * postGainAmp);
   }
+}
+
+void CompressorNode::setAttackTime(double attackTime) {
+  mAttackTime = attackTime;
+  mAttackGain = std::exp(-1.0 / (mSampleRate * attackTime));
+}
+
+void CompressorNode::setReleaseTime(double releaseTime) {
+  mReleaseTime = releaseTime;
+  mReleaseGain = std::exp(-1.0 / (mSampleRate * releaseTime));
 }
 
 void CompressorNode::calculateSlope() {

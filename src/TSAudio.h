@@ -24,17 +24,9 @@ class TSAudio : public AudioNode {
 
     ~TSAudio();
 
-    /**
-     * \brief Get the Sample Rate object
-     * 
-     * \return unsigned 
-     */
-    unsigned getSampleRate() { return mSampleRate; };
-
   private:
     void initalizeStream();
     RtAudio mRtAudio;
-    unsigned mSampleRate = 0;
     unsigned mChannels;
 };
 

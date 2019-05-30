@@ -3,8 +3,7 @@
 
 #define SCALE 32767.0
 
-OscillatorNode::OscillatorNode(unsigned sampleRate) {
-  mSampleRate = sampleRate;
+OscillatorNode::OscillatorNode() {
   setMode(SINE);
   setGain(0.4);
   setFrequency(440);

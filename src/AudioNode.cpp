@@ -26,3 +26,5 @@ void AudioNode::removeNode(AudioNode* node) {
     }
   }
 }
+
+unsigned AudioNode::mSampleRate = 0;

@@ -14,9 +14,12 @@
  */
 class CompressorNode : public AudioNode {
   public:
-    CompressorNode(unsigned sampleRate);
+    CompressorNode();
     double nextBufferSample();
     void filterAudio();
+
+    void setAttackTime(double attackTime);
+    void setReleaseTime(double releaseTime);
 
     static double ampToDb(double amplitude);
     static double dbToAmp(double db);
@@ -24,7 +27,6 @@ class CompressorNode : public AudioNode {
   private:
     void getEnvelope();
     void calculateSlope();
-    unsigned mSampleRate;
     double mEnvelopeSample;
 
     unsigned mAudioDataSize = 512;
@@ -34,13 +36,15 @@ class CompressorNode : public AudioNode {
     
     double mSlope;
     double mGain;
+    double mAttackGain;
+    double mReleaseGain;
 
     double mThreshold = 50.0;
     double mRatio = 2.0;
     double mKnee = 0.2;
     double mPreGain = 0.0;
     double mPostGain = 0.0;
-    double mAttackTime = 10.0;
+    double mAttackTime = 1.0;
     double mReleaseTime = 50.0;
     double mLookAheadTime = 0.0;
 };

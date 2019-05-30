@@ -29,7 +29,7 @@ class OscillatorNode : public AudioNode {
       CUSTOM
     };
 
-    OscillatorNode(unsigned sampleRate);
+    OscillatorNode();
 
     /** 
      * \brief Start sampling the waveform 
@@ -69,7 +69,6 @@ class OscillatorNode : public AudioNode {
     double polyBLEP(double t);
     double mGain;
     double mFrequency;
-    unsigned mSampleRate;
     bool mActive;
 
     Waveform mCustomWaveform;

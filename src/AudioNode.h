@@ -42,7 +42,12 @@ class AudioNode {
     double getNodeSamples();
 
   protected:
+    static unsigned mSampleRate;
     std::vector<AudioNode*> mAudioNodes;
+
+  //private:
+    //static unsgiend mSampleRate
+  //friend class TSAudio;
 };
 
 #endif

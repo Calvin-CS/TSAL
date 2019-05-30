@@ -20,7 +20,7 @@ int main() {
   omp_set_num_threads(threads);
   
   TSAudio audio;
-  CompressorNode* compressor = new CompressorNode(audio.getSampleRate());
+  CompressorNode* compressor = new CompressorNode();
   audio.addNode(compressor);
 
   Chord chord(*compressor, threads, 60, 70);
