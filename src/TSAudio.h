@@ -11,7 +11,7 @@
  * To use TSAL, the TSAudio class needs to be initiliazed at the start of the project.
  * All other audio nodes will be routed through TSAudio
  */
-class TSAudio {
+class TSAudio : public AudioNode {
   public:
     TSAudio();
     /**
@@ -24,31 +24,18 @@ class TSAudio {
 
     ~TSAudio();
 
-    /** 
-     * \brief Get all the samples from the audio nodes and outputs to a buffer
+    /**
+     * \brief Get the Sample Rate object
+     * 
+     * \return unsigned 
      */
-    double getBufferSamples();
+    unsigned getSampleRate() { return mSampleRate; };
 
-    /**
-     * \brief Add an audio node to be for generating sound
-     * 
-     * \param node 
-     */
-    void addNode(AudioNode* node) { mAudioNodes.push_back(node); };
-    /**
-     * \brief Remove an audio node
-     * 
-     * \param node 
-     */
-    void removeNode(AudioNode* node);
-    
   private:
     void initalizeStream();
     RtAudio mRtAudio;
     unsigned mSampleRate = 0;
     unsigned mChannels;
-
-    std::vector<AudioNode*> mAudioNodes;
 };
 
 #endif

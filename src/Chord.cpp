@@ -1,7 +1,7 @@
 #include "Chord.h"
 
 
-Chord::Chord(TSAudio &audio, unsigned size, unsigned startNote, unsigned endNote) {
+Chord::Chord(AudioNode &node, unsigned size, unsigned startNote, unsigned endNote) {
   mStartNote = startNote;
   mEndNote = endNote;
 
@@ -14,8 +14,8 @@ Chord::Chord(TSAudio &audio, unsigned size, unsigned startNote, unsigned endNote
     // Create the OscillatorNode
     OscillatorNode* osc = new OscillatorNode(96000);
     osc->setNote(startNote + noteOctave + mNoteDeltas[i % sizeOfChord]);
-    osc->setGain(0.1);
-    audio.addNode(osc);
+    osc->setGain(1);
+    node.addNode(osc);
 
     // Calculate target pitch
     double pitchChange = 

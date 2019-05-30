@@ -22,7 +22,7 @@ int streamCallback(void *outputBuffer, void *inputBuffer, unsigned nBufferFrames
     std::cout << "Stream underflow detected!" << std::endl;
 
   for (unsigned i = 0; i < nBufferFrames; i++) {
-    *buffer++ = (MY_TYPE) audio->getBufferSamples();
+    *buffer++ = (MY_TYPE) audio->getNodeSamples();
   }
 
   return 0;        
@@ -78,21 +78,4 @@ TSAudio::TSAudio(unsigned channels, unsigned sampleRate) {
 TSAudio::~TSAudio() {
   if (mRtAudio.isStreamOpen())
     mRtAudio.closeStream();
-}
-
-double TSAudio::getBufferSamples() {
-  double sample = 0.0;
-
-  for (unsigned i = 0; i < mAudioNodes.size(); i++)
-    sample += mAudioNodes[i]->nextBufferSample();
-
-  return sample;
-}
-
-void TSAudio::removeNode(AudioNode* node) {
-  for (std::vector<AudioNode*>::iterator it = mAudioNodes.begin(); it != mAudioNodes.end(); ++it) {
-    if (node == *it) {
-      mAudioNodes.erase(it);
-    }
-  }
 }

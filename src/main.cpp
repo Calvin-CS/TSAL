@@ -1,5 +1,7 @@
 #include "OscillatorNode.h"
 #include "Chord.h"
+#include "TSAudio.h"
+#include "CompressorNode.h"
 #include <iostream>
 #include <memory>
 
@@ -18,14 +20,18 @@ int main() {
   omp_set_num_threads(threads);
   
   TSAudio audio;
-  Chord chord(audio, threads, 60, 70);
+  CompressorNode* compressor = new CompressorNode(audio.getSampleRate());
+  audio.addNode(compressor);
+
+  Chord chord(*compressor, threads, 60, 70);
+  //thread_sleep(1000);
   
   #pragma omp parallel
   {
     unsigned id = omp_get_thread_num();
 
     chord.start(id);
-    thread_sleep(3000);
+    thread_sleep(1000);
     
     #pragma omp for
     for(unsigned i = 1; i <= problemSize; i++) {
@@ -33,7 +39,7 @@ int main() {
       thread_sleep(10);
       chord.step(id, 1.0/((double) problemSize) * omp_get_num_threads() );
     }
-    thread_sleep(3000);
+    thread_sleep(1000);
   }
 
   chord.stop();

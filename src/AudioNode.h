@@ -1,3 +1,5 @@
+#include <vector>
+
 #ifndef AUDIONODE_H
 #define AUDIONODE_H
 
@@ -8,6 +10,7 @@
  */
 class AudioNode {
   public:
+    virtual ~AudioNode();
     /**
      * \brief Get an audio sample for the audio buffer
      * 
@@ -16,6 +19,30 @@ class AudioNode {
      * \return double the audio sample
      */
     virtual double nextBufferSample() { return 0; };
+
+    /**
+     * \brief Add an audio node to be for generating sound
+     * 
+     * \param node 
+     */
+    void addNode(AudioNode* node);
+
+    /**
+     * \brief Remove an audio node
+     * 
+     * \param node 
+     */
+    void removeNode(AudioNode* node);
+
+    /**
+     * \brief Get the combined audio sample of child nodes
+     * 
+     * \return double the sample
+     */
+    double getNodeSamples();
+
+  protected:
+    std::vector<AudioNode*> mAudioNodes;
 };
 
 #endif

@@ -30,18 +30,18 @@ class CompressorNode : public AudioNode {
     unsigned mAudioDataSize = 512;
     double mAudioBuffer[512];
     double mEnvelope[512];
-    unsigned mCurrentSample = 0;
+    unsigned mCurrentSample = 511;
     
     double mSlope;
     double mGain;
 
-    double mThreshold = 0.0;
-    double mRatio = 10.0;
+    double mThreshold = 50.0;
+    double mRatio = 2.0;
     double mKnee = 0.2;
     double mPreGain = 0.0;
     double mPostGain = 0.0;
     double mAttackTime = 10.0;
-    double mReleaseTIme = 50.0;
+    double mReleaseTime = 50.0;
     double mLookAheadTime = 0.0;
 };
 

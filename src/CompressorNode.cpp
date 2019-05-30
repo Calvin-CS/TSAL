@@ -1,22 +1,33 @@
 #include "CompressorNode.h"
 #include <math.h>
+#include <iostream>
 
 CompressorNode::CompressorNode(unsigned sampleRate) {
   mSampleRate = sampleRate;
+  
 }
 
 double CompressorNode::nextBufferSample() {
-  if (mCurrentSample < mAudioDataSize) {
-    
+  
+  // We have reached the end of the buffer
+  if (mCurrentSample == mAudioDataSize) {
+    mCurrentSample = 0;
+    for (unsigned i = 0; i < mAudioDataSize; i++) {
+      mAudioBuffer[i] = getNodeSamples();
+    }
+    filterAudio();
   }
+  return mAudioBuffer[mCurrentSample++];
+  
+  //return getNodeSamples();
 }
 
 void CompressorNode::getEnvelope() {
-  double attackGain = std::exp(-1.0 / mSampleRate * 10.0);
-  double releaseGain = std::exp(-1.0 / mSampleRate * 10.0);
+  double attackGain = std::exp(-1.0 / mSampleRate * mAttackTime);
+  double releaseGain = std::exp(-1.0 / mSampleRate * mReleaseTime);
 
-  for (unsigned i = 0; i < 512; i++) {
-    // Using peak detection
+  for (unsigned i = 0; i < mAudioDataSize; i++) {
+    // Using peak detection since it is faster
     // Maybe implement RMS
     double envIn = std::abs(mAudioBuffer[i]);
 
@@ -49,13 +60,13 @@ void CompressorNode::filterAudio() {
 }
 
 void CompressorNode::calculateSlope() {
-  mSlope = 1.0 - (1.0/mRatio);
+  mSlope = 1.0 - (1.0 / mRatio);
 }
 
 double CompressorNode::ampToDb(double amplitude) {
-   20 * std::log(amplitude) / M_LN10;
+  return 20.0 * std::log(amplitude) / M_LN10;
 }
 
 double CompressorNode::dbToAmp(double db) {
-  return std::pow(10, db / 20);
+  return std::pow(10.0, db / 20.0);
 }

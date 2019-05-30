@@ -1,5 +1,5 @@
 #include "OscillatorNode.h"
-#include "TSAudio.h"
+#include "AudioNode.h"
 #include <vector>
 
 #ifndef CHORD_H
@@ -16,12 +16,12 @@ class Chord {
     /**
      * \brief Construct a new Chord object
      * 
-     * \param audio the TSAudio object 
+     * \param node a node to append to
      * \param size the number of threads that will be running the chord
      * \param startNote the starting note for the chord
      * \param endNote the target note for the chord pitch change
      */
-    Chord(TSAudio &audio, unsigned size, unsigned startNote, unsigned endNote);
+    Chord(AudioNode &node, unsigned size, unsigned startNote, unsigned endNote);
 
     ~Chord();
 
