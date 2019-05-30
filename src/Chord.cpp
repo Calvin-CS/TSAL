@@ -14,6 +14,7 @@ Chord::Chord(TSAudio &audio, unsigned size, unsigned startNote, unsigned endNote
     // Create the OscillatorNode
     OscillatorNode* osc = new OscillatorNode(96000);
     osc->setNote(startNote + noteOctave + mNoteDeltas[i % sizeOfChord]);
+    osc->setGain(0.1);
     audio.addNode(osc);
 
     // Calculate target pitch

@@ -11,8 +11,8 @@ void thread_sleep(unsigned milliseconds) {
   std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
 }
 
-const unsigned problemSize = 10;
-const unsigned threads = 5;
+const unsigned problemSize = 300;
+const unsigned threads = 1;
 
 int main() {  
   omp_set_num_threads(threads);
@@ -30,7 +30,7 @@ int main() {
     #pragma omp for
     for(unsigned i = 1; i <= problemSize; i++) {
 
-      thread_sleep(1000);
+      thread_sleep(10);
       chord.step(id, 1.0/((double) problemSize) * omp_get_num_threads() );
     }
     thread_sleep(3000);

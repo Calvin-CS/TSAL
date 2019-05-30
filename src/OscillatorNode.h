@@ -41,10 +41,7 @@ class OscillatorNode : public AudioNode {
      */
     void stop();
 
-    /** 
-     * \brief Reserved for TSAudio to sample the waveform 
-     */
-    double getBufferSample();
+    double nextBufferSample();
 
     /** 
      * \brief Set a custom waveform for the oscillator
@@ -68,6 +65,8 @@ class OscillatorNode : public AudioNode {
     static double getFrequencyFromNote(unsigned note);
 
   private:
+    static const double mPI2;
+    double polyBLEP(double t);
     double mGain;
     double mFrequency;
     unsigned mSampleRate;

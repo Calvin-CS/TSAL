@@ -84,7 +84,7 @@ double TSAudio::getBufferSamples() {
   double sample = 0.0;
 
   for (unsigned i = 0; i < mAudioNodes.size(); i++)
-    sample += mAudioNodes[i]->getBufferSample();
+    sample += mAudioNodes[i]->nextBufferSample();
 
   return sample;
 }

@@ -11,9 +11,11 @@ class AudioNode {
     /**
      * \brief Get an audio sample for the audio buffer
      * 
+     * Used by TSAudio to get samples of sound
+     * 
      * \return double the audio sample
      */
-    virtual double getBufferSample() { return 0; };
+    virtual double nextBufferSample() { return 0; };
 };
 
 #endif
