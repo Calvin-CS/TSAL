@@ -24,7 +24,7 @@ int streamCallback(void *outputBuffer, void *inputBuffer, unsigned nBufferFrames
   for (unsigned i = 0; i < nBufferFrames; i++) {
     *buffer++ = (MY_TYPE) audio->getNodeSamples();
   }
-
+  
   return 0;        
 }
 

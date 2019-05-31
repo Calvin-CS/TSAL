@@ -41,7 +41,7 @@ class OscillatorNode : public AudioNode {
      */
     void stop();
 
-    double nextBufferSample() override;
+    virtual double nextBufferSample() override;
 
     /** 
      * @brief Set a custom waveform for the oscillator

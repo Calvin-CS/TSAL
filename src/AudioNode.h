@@ -1,3 +1,4 @@
+#include <iostream>
 #include <vector>
 
 #ifndef AUDIONODE_H
@@ -10,7 +11,7 @@
  */
 class AudioNode {
   public:
-    virtual ~AudioNode();
+    virtual ~AudioNode() {};
     /**
      * @brief Get an audio sample for the audio buffer
      * 
@@ -18,7 +19,7 @@ class AudioNode {
      * 
      * @return double the audio sample
      */
-    virtual double nextBufferSample() { return 0; };
+    virtual double nextBufferSample() { return getNodeSamples(); };
 
     /**
      * @brief Add an audio node to be for generating sound

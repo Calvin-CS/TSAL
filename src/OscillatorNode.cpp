@@ -1,12 +1,13 @@
 #include "OscillatorNode.h"
+#include "MidiNotes.h"
 #include <iostream>
 
 #define SCALE 32767.0
 
 OscillatorNode::OscillatorNode() {
   setMode(SINE);
-  setGain(0.4);
-  setFrequency(440);
+  setGain(0.5);
+  setNote(tsal::C4);
 }
 
 void OscillatorNode::start() {

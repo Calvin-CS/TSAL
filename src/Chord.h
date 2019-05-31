@@ -11,17 +11,17 @@
  * Chord is an audiolization that starts from one pitch and transitions to another over
  * a period of work or time using the step method in a multithreaded environement
  */
-class Chord {
+class Chord : public AudioNode {
   public:
     /**
      * @brief Construct a new Chord object
      * 
-     * @param node a node to append to
-     * @param size the number of threads that will be running the chord
+     * @param numThreads correlates to the number of threads that will be running the chord
+     * @param problemSize the number of iterations or amount of work to compute
      * @param startNote the starting note for the chord
      * @param endNote the target note for the chord pitch change
      */
-    Chord(AudioNode* node, unsigned size, unsigned startNote, unsigned endNote);
+    Chord(unsigned numOscillators, unsigned problemSize, unsigned startNote, unsigned endNote);
 
     ~Chord();
 
@@ -59,15 +59,14 @@ class Chord {
      * @param id the id of the thread and correlationg oscillator
      * @param inc the fraction of work or time
      */
-    void step(unsigned id, double inc);
+    void step(unsigned id);
 
   private: 
     std::vector<OscillatorNode*> mOscillatorNodes;
-    std::vector<double> mPitchChanges;
+    std::vector<double> mTotalPitchChanges;
     
     unsigned mNoteDeltas[3] = {0, 4, 7};
-    unsigned mStartNote;
-    unsigned mEndNote;
+    unsigned mProblemSize;
 };
 
 #endif

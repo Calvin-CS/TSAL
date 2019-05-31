@@ -1,5 +1,5 @@
 #include "CompressorNode.h"
-#include <math.h>
+#include <cmath>
 #include <iostream>
 
 CompressorNode::CompressorNode() {
@@ -62,6 +62,10 @@ void CompressorNode::filterAudio() {
 }
 
 void CompressorNode::setAttackTime(double attackTime) {
+  if (checkInRange(attackTime, mAttackTimeRange)) {
+    std::cout << "AttackTime: invalid range" << std::endl;
+    return;
+  }
   mAttackTime = attackTime/1000;
   mAttackGain = std::exp(-1.0 / (mSampleRate * mAttackTime));
 }
@@ -82,3 +86,9 @@ double CompressorNode::ampToDb(double amplitude) {
 double CompressorNode::dbToAmp(double db) {
   return std::pow(10.0, db / 20.0);
 }
+
+bool CompressorNode::checkInRange(double parameter, range parameterRange) {
+  return parameterRange.first < parameter && parameter > parameterRange.second;
+}
+
+range CompressorNode::mAttackTimeRange = std::make_pair(0.0, 1000.0);

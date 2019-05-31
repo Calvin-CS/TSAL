@@ -6,6 +6,7 @@
 
 // Using 512 as the buffer size for now, reimplement eventually
 
+typedef std::pair<double, double> range;
 
 /** @class CompressorNode
  * @brief A DSP compressor
@@ -17,7 +18,7 @@
 class CompressorNode : public AudioNode {
   public:
     CompressorNode();
-    double nextBufferSample() override;
+    virtual double nextBufferSample() override;
 
     /**
      * @brief Set the attack time (milliseconds)
@@ -71,12 +72,13 @@ class CompressorNode : public AudioNode {
 
     double mThreshold = 70.0;
     double mRatio = 2.0;
-    double mKnee = 0.2;
     double mPreGain = 0.0;
     double mPostGain = 0.0;
     double mAttackTime = 1.0;
-    double mReleaseTime = 50.0;
-    double mLookAheadTime = 0.0;
+    double mReleaseTime = 500.0;
+
+    static bool checkInRange(double parameter, range parameterRange);
+    static range mAttackTimeRange;
 };
 
 #endif
