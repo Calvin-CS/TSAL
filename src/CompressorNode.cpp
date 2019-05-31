@@ -2,6 +2,8 @@
 #include <cmath>
 #include <iostream>
 
+namespace tsal {
+
 CompressorNode::CompressorNode() {
   setAttackTime(1.0);
   setReleaseTime(10.0);
@@ -92,3 +94,5 @@ bool CompressorNode::checkInRange(double parameter, range parameterRange) {
 }
 
 range CompressorNode::mAttackTimeRange = std::make_pair(0.0, 1000.0);
+
+}

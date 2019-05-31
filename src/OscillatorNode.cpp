@@ -4,6 +4,8 @@
 
 #define SCALE 32767.0
 
+namespace tsal {
+
 OscillatorNode::OscillatorNode() {
   setMode(SINE);
   setGain(0.5);
@@ -108,3 +110,5 @@ double OscillatorNode::polyBLEP(double t)
 }
 
 const double OscillatorNode::mPI2 = M_PI * 2;
+
+}

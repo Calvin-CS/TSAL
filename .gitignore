@@ -86,12 +86,12 @@ flycheck_*.el
 /network-security.data
 
 # End of https://www.gitignore.io/api/c++,emacs
+
 # Doxygen
 /html
 /latex
 /rtf
 /man
-
 
 # Other stuff
 .vscode

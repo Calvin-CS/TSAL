@@ -2,6 +2,8 @@
 #include <algorithm>
 #include "AudioNode.h"
 
+namespace tsal {
+
 double AudioNode::getNodeSamples() {
   double sample = 0.0;
 
@@ -23,3 +25,5 @@ void AudioNode::removeNode(AudioNode* node) {
 
 // Set the sampleRate to zero and let the TSAudio object handle it
 unsigned AudioNode::mSampleRate = 0;
+
+}

@@ -6,6 +6,8 @@
 
 // Using 512 as the buffer size for now, reimplement eventually
 
+namespace tsal {
+
 typedef std::pair<double, double> range;
 
 /** @class CompressorNode
@@ -81,4 +83,5 @@ class CompressorNode : public AudioNode {
     static range mAttackTimeRange;
 };
 
+}
 #endif

@@ -1,5 +1,7 @@
 #include "TSAudio.h"
 
+namespace tsal {
+
 typedef signed short MY_TYPE;
 
 void errorCallback( RtAudioError::Type type, const std::string &errorText )
@@ -78,4 +80,6 @@ TSAudio::TSAudio(unsigned channels, unsigned sampleRate) {
 TSAudio::~TSAudio() {
   if (mRtAudio.isStreamOpen())
     mRtAudio.closeStream();
+}
+
 }

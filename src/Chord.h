@@ -5,6 +5,8 @@
 #ifndef CHORD_H
 #define CHORD_H
 
+namespace tsal {
+  
 /** @class Chord
  * @brief An audiolization class that changes pitch 
  * 
@@ -69,4 +71,5 @@ class Chord : public AudioNode {
     unsigned mProblemSize;
 };
 
+}
 #endif

@@ -4,6 +4,8 @@
 #ifndef WAVEFORM_H
 #define WAVEFORM_H
 
+namespace tsal {
+
 /** @class Waveform
  * @brief Defines a waveform that can be sampled
  * 
@@ -21,4 +23,5 @@ class Waveform {
     virtual double getWaveformSample(double phase) const { return 0; };
 };
 
+}
 #endif

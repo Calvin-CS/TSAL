@@ -4,6 +4,8 @@
 #ifndef AUDIONODE_H
 #define AUDIONODE_H
 
+namespace tsal {
+  
 /** @class AudioNode
  * @brief Base class for audio nodes
  * 
@@ -51,4 +53,5 @@ class AudioNode {
   //friend class TSAudio;
 };
 
+}
 #endif

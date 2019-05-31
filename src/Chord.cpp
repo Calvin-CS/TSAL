@@ -1,5 +1,6 @@
 #include "Chord.h"
 
+namespace tsal {
 
 Chord::Chord(unsigned numOscillators, unsigned problemSize, unsigned startNote, unsigned endNote) {
   mProblemSize = problemSize;
@@ -74,4 +75,6 @@ void Chord::step(unsigned id) {
   double inc = 1.0/((double) mProblemSize) * mOscillatorNodes.size();
   // Update the oscillator
   osc->setFrequency(osc->getFrequency() + inc * mTotalPitchChanges[id]);
+}
+
 }

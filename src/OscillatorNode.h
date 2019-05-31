@@ -8,6 +8,8 @@
 #ifndef OSCILLATORNODE_H
 #define OSCILLATORNODE_H
 
+namespace tsal {
+
 /** @class OscillatorNode
  * @brief An audio node that generates sound from waveforms
  *  
@@ -81,4 +83,5 @@ class OscillatorNode : public AudioNode {
     double mPhaseStep;
 };
 
+}
 #endif

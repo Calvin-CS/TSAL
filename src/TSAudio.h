@@ -4,6 +4,8 @@
 #ifndef TSAUDIO_H
 #define TSAUDIO_H
 
+namespace tsal {
+
 /** @class TSAudio
  * @brief The main audio manager that handles the overhead of audio buffers, audio nodes,
  * and sampling
@@ -30,4 +32,5 @@ class TSAudio : public AudioNode {
     unsigned mChannels;
 };
 
+}
 #endif
