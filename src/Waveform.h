@@ -10,7 +10,7 @@ namespace tsal {
  * @brief Defines a waveform that can be sampled
  * 
  * Waveform generates a waveform sample in the range of 1 to -1 which will
- * be properly scaled by OscillatorNode for audio output
+ * be properly scaled by Oscillator for audio output
  */
 class Waveform {
   public:

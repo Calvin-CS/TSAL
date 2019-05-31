@@ -11,20 +11,20 @@ Chord::Chord(unsigned numOscillators, unsigned problemSize, unsigned startNote, 
     // Calculate the the transposing from the current octave
     unsigned noteOctave = octave * 12;
     
-    // Create the OscillatorNode
-    OscillatorNode* osc = new OscillatorNode();
+    // Create the Oscillator
+    Oscillator* osc = new Oscillator();
     // Set the notes based on our chord, and move up an octave if we run out of chord
     osc->setNote(startNote + noteOctave + mNoteDeltas[i % sizeOfChord]);
     osc->setGain(0.4);
 
     // Calculate target pitch
     double pitchChange = 
-      OscillatorNode::getFrequencyFromNote(endNote + noteOctave + mNoteDeltas[i % sizeOfChord])
-        - OscillatorNode::getFrequencyFromNote(startNote + noteOctave + mNoteDeltas[i % sizeOfChord]);
+      Oscillator::getFrequencyFromNote(endNote + noteOctave + mNoteDeltas[i % sizeOfChord])
+        - Oscillator::getFrequencyFromNote(startNote + noteOctave + mNoteDeltas[i % sizeOfChord]);
 
 
     addNode(osc);
-    mOscillatorNodes.push_back(osc);
+    mOscillators.push_back(osc);
     mTotalPitchChanges.push_back(pitchChange);
 
     // Move up an octave for next chord if necessary
@@ -36,11 +36,11 @@ Chord::Chord(unsigned numOscillators, unsigned problemSize, unsigned startNote, 
 
 Chord::~Chord() {
   // Clean up the dynamically allocated nodes
-  for (unsigned i = 0; i < mOscillatorNodes.size(); i++) {
+  for (unsigned i = 0; i < mOscillators.size(); i++) {
     // Remove them from the node list
-    removeNode(mOscillatorNodes[i]);
+    removeNode(mOscillators[i]);
     // free the memory
-    delete mOscillatorNodes[i];
+    delete mOscillators[i];
   }
 }
 
@@ -57,22 +57,22 @@ void Chord::stop() {
 }
 
 void Chord::start(unsigned id) {
-  mOscillatorNodes[id]->start();
+  mOscillators[id]->start();
   std::cout << "Starting osc: " << id << " at frequency: " 
-    << mOscillatorNodes[id]->getFrequency() << std::endl;
+    << mOscillators[id]->getFrequency() << std::endl;
 }
 
 void Chord::stop(unsigned id) {
-  mOscillatorNodes[id]->stop();
+  mOscillators[id]->stop();
   std::cout << "Stopping osc: " << id << " at frequency: " 
-    << mOscillatorNodes[id]->getFrequency() << std::endl;
+    << mOscillators[id]->getFrequency() << std::endl;
 }
 
 void Chord::step(unsigned id) {
-  OscillatorNode* osc = mOscillatorNodes[id];
+  Oscillator* osc = mOscillators[id];
 
   // Calculate the increment amount
-  double inc = 1.0/((double) mProblemSize) * mOscillatorNodes.size();
+  double inc = 1.0/((double) mProblemSize) * mOscillators.size();
   // Update the oscillator
   osc->setFrequency(osc->getFrequency() + inc * mTotalPitchChanges[id]);
 }

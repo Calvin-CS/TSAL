@@ -1,8 +1,8 @@
 
 #include "AudioNode.h"
 
-#ifndef COMPRESSORNODE_H
-#define COMPRESSORNODE_H
+#ifndef COMPRESSOR_H
+#define COMPRESSOR_H
 
 // Using 512 as the buffer size for now, reimplement eventually
 
@@ -10,16 +10,16 @@ namespace tsal {
 
 typedef std::pair<double, double> range;
 
-/** @class CompressorNode
+/** @class Compressor
  * @brief A DSP compressor
  * 
  * A compressor used to reduce clipping. Essentially, if the sound routed through the 
  * compressor is louder than the compressors threshold, it will reduce the loudness.
  * Implementation adapted from https://christianfloisand.wordpress.com/2014/06/09/dynamics-processing-compressorlimiter-part-1/
  */
-class CompressorNode : public AudioNode {
+class Compressor : public AudioNode {
   public:
-    CompressorNode();
+    Compressor();
     virtual double nextBufferSample() override;
 
     /**

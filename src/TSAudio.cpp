@@ -42,8 +42,6 @@ void TSAudio::initalizeStream() {
   if (mSampleRate == 0) {
     mSampleRate = info.sampleRates[info.sampleRates.size() - 1];
   }
-
-  std::cout << "Using sample rate: " << mSampleRate << std::endl;
   
   mRtAudio.showWarnings(true);
 
@@ -57,6 +55,10 @@ void TSAudio::initalizeStream() {
   // Investigate what exactly these flags do
   //options.flags = RTAUDIO_HOG_DEVICE | RTAUDIO_SCHEDULE_REALTIME;
   
+  std::cout << "Sample rate: " << mSampleRate 
+            << "\nBuffer frames: " << mBufferFrames
+            << std::endl;
+
   try {
     mRtAudio.openStream(&oParams, NULL, RTAUDIO_SINT16, mSampleRate, &mBufferFrames, 
       &streamCallback, (void *)this, &options, &errorCallback);

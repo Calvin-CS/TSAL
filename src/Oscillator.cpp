@@ -1,4 +1,4 @@
-#include "OscillatorNode.h"
+#include "Oscillator.h"
 #include "MidiNotes.h"
 #include <iostream>
 
@@ -6,45 +6,45 @@
 
 namespace tsal {
 
-OscillatorNode::OscillatorNode() {
+Oscillator::Oscillator() {
   setMode(SINE);
   setGain(0.5);
   setNote(tsal::C4);
 }
 
-void OscillatorNode::start() {
+void Oscillator::start() {
   mActive = true;
 }
 
-void OscillatorNode::stop() {
+void Oscillator::stop() {
   mActive = false;
 }
 
-void OscillatorNode::setWaveform(Waveform waveform) {
+void Oscillator::setWaveform(Waveform waveform) {
   mCustomWaveform = waveform;
   setMode(CUSTOM);
 }
 
-void OscillatorNode::setNote(unsigned note) {
+void Oscillator::setNote(unsigned note) {
   setFrequency(getFrequencyFromNote(note));
 }
 
-void OscillatorNode::setFrequency(double frequency) {
+void Oscillator::setFrequency(double frequency) {
   mFrequency = frequency;
   mPhaseStep = mFrequency * mPI2 / mSampleRate;
 }
 
-void OscillatorNode::setGain(double gain) {
+void Oscillator::setGain(double gain) {
   mGain = 0.5 * gain;
 }
 
-void OscillatorNode::setMode(OscillatorMode mode) {
+void Oscillator::setMode(OscillatorMode mode) {
   mMode = mode;
 }
 
 // Helpful implementation of ployBLEP
 // http://metafunction.co.uk/all-about-digital-oscillators-part-2-blits-bleps/
-double OscillatorNode::nextBufferSample() {
+double Oscillator::nextBufferSample() {
   if (!mActive) {
     return 0;
   }
@@ -76,15 +76,15 @@ double OscillatorNode::nextBufferSample() {
   return value * SCALE * mGain;
 }
 
-unsigned OscillatorNode::getNoteFromFrequency(double frequency) {
+unsigned Oscillator::getNoteFromFrequency(double frequency) {
   return (12/log(2)) * log(frequency/27.5) + 21;
 }
 
-double OscillatorNode::getFrequencyFromNote(unsigned note) {
+double Oscillator::getFrequencyFromNote(unsigned note) {
   return 27.5 * pow(2.0, (note - 21) / 12.0);
 };
 
-double OscillatorNode::polyBLEP(double t)
+double Oscillator::polyBLEP(double t)
 {
   double dt = mPhaseStep / mPI2;
 
@@ -109,6 +109,6 @@ double OscillatorNode::polyBLEP(double t)
   else return 0.0;
 }
 
-const double OscillatorNode::mPI2 = M_PI * 2;
+const double Oscillator::mPI2 = M_PI * 2;
 
 }

@@ -1,10 +1,10 @@
-#include "CompressorNode.h"
+#include "Compressor.h"
 #include <cmath>
 #include <iostream>
 
 namespace tsal {
 
-CompressorNode::CompressorNode() {
+Compressor::Compressor() {
   setAttackTime(1.0);
   setReleaseTime(10.0);
   mBuffer = new double[mBufferFrames];
@@ -15,7 +15,7 @@ CompressorNode::CompressorNode() {
 
 // This may not be the best implementation, maybe a circular buffer would work better, but 
 // it seems to be fine
-double CompressorNode::nextBufferSample() {
+double Compressor::nextBufferSample() {
   // If the end of the buffer has been reached, more audio samples need to be generated
   if (mCurrentSample == mBufferFrames) {
     mCurrentSample = 0;
@@ -31,7 +31,7 @@ double CompressorNode::nextBufferSample() {
   return mBuffer[mCurrentSample++];
 }
 
-void CompressorNode::getEnvelope() {
+void Compressor::getEnvelope() {
   for (unsigned i = 0; i < mBufferFrames; i++) {
     // Using peak detection since it is faster
     // Maybe implement RMS
@@ -44,7 +44,7 @@ void CompressorNode::getEnvelope() {
   }
 }
 
-void CompressorNode::filterAudio() {
+void Compressor::filterAudio() {
   double postGainAmp = dbToAmp(mPostGain);
 
   // If there is any pregain, apply it to the audio buffer
@@ -67,7 +67,7 @@ void CompressorNode::filterAudio() {
   }
 }
 
-void CompressorNode::setAttackTime(double attackTime) {
+void Compressor::setAttackTime(double attackTime) {
   if (checkInRange(attackTime, mAttackTimeRange)) {
     std::cout << "AttackTime: invalid range" << std::endl;
     return;
@@ -76,27 +76,27 @@ void CompressorNode::setAttackTime(double attackTime) {
   mAttackGain = std::exp(-1.0 / (mSampleRate * mAttackTime));
 }
 
-void CompressorNode::setReleaseTime(double releaseTime) {
+void Compressor::setReleaseTime(double releaseTime) {
   mReleaseTime = releaseTime/1000;
   mReleaseGain = std::exp(-1.0 / (mSampleRate * mReleaseTime));
 }
 
-void CompressorNode::calculateSlope() {
+void Compressor::calculateSlope() {
   mSlope = 1.0 - (1.0 / mRatio);
 }
 
-double CompressorNode::ampToDb(double amplitude) {
+double Compressor::ampToDb(double amplitude) {
   return 20.0 * std::log(amplitude) / M_LN10;
 }
 
-double CompressorNode::dbToAmp(double db) {
+double Compressor::dbToAmp(double db) {
   return std::pow(10.0, db / 20.0);
 }
 
-bool CompressorNode::checkInRange(double parameter, range parameterRange) {
+bool Compressor::checkInRange(double parameter, range parameterRange) {
   return parameterRange.first < parameter && parameter > parameterRange.second;
 }
 
-range CompressorNode::mAttackTimeRange = std::make_pair(0.0, 1000.0);
+range Compressor::mAttackTimeRange = std::make_pair(0.0, 1000.0);
 
 }

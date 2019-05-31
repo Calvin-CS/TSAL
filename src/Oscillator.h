@@ -10,14 +10,14 @@
 
 namespace tsal {
 
-/** @class OscillatorNode
+/** @class Oscillator
  * @brief An audio node that generates sound from waveforms
  *  
- * OscillatorNode is a low level synthesizer that generates samples from
+ * Oscillator is a low level synthesizer that generates samples from
  * algorithmic waveforms. It supports saw, sine, and square waveforms, as well
  * as custom waveforms that can be created by the user.
  */
-class OscillatorNode : public AudioNode {
+class Oscillator : public AudioNode {
   public:
     /**
      * @brief Modes for the oscillator 
@@ -31,7 +31,7 @@ class OscillatorNode : public AudioNode {
       CUSTOM
     };
 
-    OscillatorNode();
+    Oscillator();
 
     /** 
      * @brief Start sampling the waveform 
