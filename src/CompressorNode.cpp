@@ -7,16 +7,20 @@ namespace tsal {
 CompressorNode::CompressorNode() {
   setAttackTime(1.0);
   setReleaseTime(10.0);
+  mBuffer = new double[mBufferFrames];
+  mEnvelope = new double[mBufferFrames];
+  // Set this so that the next buffer sample is immediately calculated
+  mCurrentSample = mBufferFrames;
 }
 
 // This may not be the best implementation, maybe a circular buffer would work better, but 
 // it seems to be fine
 double CompressorNode::nextBufferSample() {
   // If the end of the buffer has been reached, more audio samples need to be generated
-  if (mCurrentSample == mAudioDataSize) {
+  if (mCurrentSample == mBufferFrames) {
     mCurrentSample = 0;
     // Generate new audio data
-    for (unsigned i = 0; i < mAudioDataSize; i++) {
+    for (unsigned i = 0; i < mBufferFrames; i++) {
       mBuffer[i] = getNodeSamples();
     }
     // Filter the generated audio data
@@ -28,7 +32,7 @@ double CompressorNode::nextBufferSample() {
 }
 
 void CompressorNode::getEnvelope() {
-  for (unsigned i = 0; i < mAudioDataSize; i++) {
+  for (unsigned i = 0; i < mBufferFrames; i++) {
     // Using peak detection since it is faster
     // Maybe implement RMS
     double envIn = std::abs(mBuffer[i]);
@@ -46,7 +50,7 @@ void CompressorNode::filterAudio() {
   // If there is any pregain, apply it to the audio buffer
   if (mPreGain != 0.0) {
     double preGainAmp = dbToAmp(mPreGain);
-    for (unsigned i = 0; i < mAudioDataSize; i++) {
+    for (unsigned i = 0; i < mBufferFrames; i++) {
       mBuffer[i] *= preGainAmp;
     }
   }
@@ -55,7 +59,7 @@ void CompressorNode::filterAudio() {
   calculateSlope();
   
   // Apply the adjusted gain and postGain to the audio buffer
-  for (unsigned i = 0; i < mAudioDataSize; i++) {
+  for (unsigned i = 0; i < mBufferFrames; i++) {
     mGain = mSlope * (mThreshold - ampToDb(mEnvelope[i]));
     mGain = std::min(0.0, mGain);
     mGain = dbToAmp(mGain);

@@ -25,5 +25,6 @@ void AudioNode::removeNode(AudioNode* node) {
 
 // Set the sampleRate to zero and let the TSAudio object handle it
 unsigned AudioNode::mSampleRate = 0;
+unsigned AudioNode::mBufferFrames = 0;
 
 }

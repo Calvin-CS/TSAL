@@ -47,7 +47,7 @@ void TSAudio::initalizeStream() {
   
   mRtAudio.showWarnings(true);
 
-  unsigned bufferFrames = 512;
+  mBufferFrames = 512;
   RtAudio::StreamParameters oParams;
   oParams.deviceId = deviceId;
   oParams.nChannels = mChannels;
@@ -58,7 +58,7 @@ void TSAudio::initalizeStream() {
   //options.flags = RTAUDIO_HOG_DEVICE | RTAUDIO_SCHEDULE_REALTIME;
   
   try {
-    mRtAudio.openStream(&oParams, NULL, RTAUDIO_SINT16, mSampleRate, &bufferFrames, 
+    mRtAudio.openStream(&oParams, NULL, RTAUDIO_SINT16, mSampleRate, &mBufferFrames, 
       &streamCallback, (void *)this, &options, &errorCallback);
     mRtAudio.startStream();
   } catch (RtAudioError& e) {

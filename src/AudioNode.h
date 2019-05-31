@@ -46,11 +46,8 @@ class AudioNode {
 
   protected:
     static unsigned mSampleRate;
+    static unsigned mBufferFrames;
     std::vector<AudioNode*> mAudioNodes;
-
-  //private:
-    //static unsgiend mSampleRate
-  //friend class TSAudio;
 };
 
 }

@@ -62,10 +62,9 @@ class CompressorNode : public AudioNode {
     double mEnvelopeSample;
 
     // These values should be configurable
-    unsigned mAudioDataSize = 512;
-    double mBuffer[512];
-    double mEnvelope[512];
-    unsigned mCurrentSample = 511;
+    double* mBuffer;
+    double* mEnvelope;
+    unsigned mCurrentSample;
     
     double mSlope;
     double mGain;
