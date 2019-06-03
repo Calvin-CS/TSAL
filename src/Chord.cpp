@@ -15,7 +15,7 @@ Chord::Chord(unsigned numOscillators, unsigned problemSize, unsigned startNote, 
     Oscillator* osc = new Oscillator();
     // Set the notes based on our chord, and move up an octave if we run out of chord
     osc->setNote(startNote + noteOctave + mNoteDeltas[i % sizeOfChord]);
-    osc->setGain(0.4);
+    osc->setGain(0.2);
 
     // Calculate target pitch
     double pitchChange = 

@@ -66,6 +66,9 @@ void TSAudio::initalizeStream() {
   } catch (RtAudioError& e) {
     e.printMessage();
   }
+
+  // Add a compressor so people don't break their sound cards
+  AudioNode::addNode(&mCompressor);
 }
 
 TSAudio::TSAudio() {

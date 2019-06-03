@@ -24,11 +24,9 @@ int main() {
   omp_set_num_threads(numThreads);
   
   TSAudio audio;
-  Compressor compressor;
-  audio.addNode(&compressor);
 
   Chord chord(numThreads, problemSize, C4, C5);
-  compressor.addNode(&chord);
+  audio.addNode(&chord);
   #pragma omp parallel
   {
     unsigned id = omp_get_thread_num();
@@ -46,8 +44,7 @@ int main() {
   }
 
   chord.stop();
-  audio.removeNode(&compressor);
-  compressor.removeNode(&chord);
+  audio.removeNode(&chord);
 
   return 0;
 }

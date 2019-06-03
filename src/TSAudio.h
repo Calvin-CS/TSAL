@@ -1,5 +1,6 @@
 #include "RtAudio.h"
 #include "AudioNode.h"
+#include "Compressor.h"
 
 #ifndef TSAUDIO_H
 #define TSAUDIO_H
@@ -26,10 +27,18 @@ class TSAudio : public AudioNode {
 
     ~TSAudio();
 
+    void addNode(AudioNode* node) {
+      mCompressor.addNode(node);
+    }
+
+    void removeNode(AudioNode* node) {
+      mCompressor.removeNode(node);
+    }
   private:
     void initalizeStream();
     RtAudio mRtAudio;
     unsigned mChannels;
+    Compressor mCompressor;
 };
 
 }

@@ -100,7 +100,7 @@ class Compressor : public AudioNode {
     double mAttackGain;
     double mReleaseGain;
 
-    double mThreshold = 70.0;
+    double mThreshold = 80.0;
     double mRatio = 2.0;
     double mPreGain = 0.0;
     double mPostGain = 0.0;
