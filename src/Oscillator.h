@@ -33,16 +33,6 @@ class Oscillator : public AudioNode {
 
     Oscillator();
 
-    /** 
-     * @brief Start sampling the waveform 
-     */
-    void start();
-
-    /** 
-     * @brief Stop sampling the waveform 
-     */
-    void stop();
-
     virtual double nextBufferSample() override;
 
     /** 
@@ -55,15 +45,69 @@ class Oscillator : public AudioNode {
      */ 
     void setWaveform(Waveform waveform);
 
+    /**
+     * @brief Set the mode
+     * 
+     * @param mode 
+     */
     void setMode(OscillatorMode mode);
+
+    /**
+     * @brief Set the note 
+     * 
+     * @param note (midi format)
+     */
     void setNote(unsigned note);
+
+    /**
+     * @brief Set the frequncy
+     * 
+     * @param frequency 
+     */
     void setFrequency(double frequency);
+
+    /**
+     * @brief Set the gain
+     * 
+     * @param gain 
+     */
     void setGain(double gain);
+
+    /**
+     * @brief Get the frequency
+     * 
+     * @return double 
+     */
     double getFrequency() const { return mFrequency; };
+
+    /**
+     * @brief Get the note
+     * 
+     * @return unsigned (midi)
+     */
     unsigned getNote() const { return getNoteFromFrequency(mFrequency); };
+
+    /**
+     * @brief Get the gain
+     * 
+     * @return double 
+     */
     double getGain() const { return mGain; };
 
+    /**
+     * @brief Get the note from a corresponding frequency
+     * 
+     * @param frequency 
+     * @return unsigned 
+     */
     static unsigned getNoteFromFrequency(double frequency);
+
+    /**
+     * @brief Get the frequency from a corresponding note
+     * 
+     * @param note 
+     * @return double 
+     */
     static double getFrequencyFromNote(unsigned note);
 
   private:
@@ -71,7 +115,6 @@ class Oscillator : public AudioNode {
     double polyBLEP(double t);
     double mGain;
     double mFrequency;
-    bool mActive;
 
     Waveform mCustomWaveform;
     SineWave mSine;

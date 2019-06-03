@@ -2,8 +2,6 @@
 
 namespace tsal {
 
-typedef signed short MY_TYPE;
-
 void errorCallback( RtAudioError::Type type, const std::string &errorText )
 {
   // This example error handling function does exactly the same thing
@@ -17,14 +15,14 @@ void errorCallback( RtAudioError::Type type, const std::string &errorText )
 
 int streamCallback(void *outputBuffer, void *inputBuffer, unsigned nBufferFrames, 
   double streamTime, RtAudioStreamStatus status, void *data) {
-  MY_TYPE *buffer = (MY_TYPE *) outputBuffer;
+  BIT_DEPTH *buffer = (BIT_DEPTH *) outputBuffer;
   TSAudio *audio = (TSAudio *) data;
 
   if ( status )
     std::cout << "Stream underflow detected!" << std::endl;
 
   for (unsigned i = 0; i < nBufferFrames; i++) {
-    *buffer++ = (MY_TYPE) audio->getNodeSamples();
+    *buffer++ = (BIT_DEPTH) audio->getNodeSamples();
   }
   
   return 0;        
@@ -60,7 +58,7 @@ void TSAudio::initalizeStream() {
             << std::endl;
 
   try {
-    mRtAudio.openStream(&oParams, NULL, RTAUDIO_SINT16, mSampleRate, &mBufferFrames, 
+    mRtAudio.openStream(&oParams, NULL, FORMAT, mSampleRate, &mBufferFrames, 
       &streamCallback, (void *)this, &options, &errorCallback);
     mRtAudio.startStream();
   } catch (RtAudioError& e) {
@@ -76,10 +74,11 @@ TSAudio::TSAudio() {
   initalizeStream();
 }
 
-TSAudio::TSAudio(unsigned channels, unsigned sampleRate) {
+TSAudio::TSAudio(unsigned channels, unsigned sampleRate, bool enableCompressor) {
   mSampleRate = sampleRate;
   mChannels = channels;
   initalizeStream();
+  mCompressor.setActive(enableCompressor);
 }
 
 TSAudio::~TSAudio() {

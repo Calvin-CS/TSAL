@@ -1,6 +1,10 @@
 #include <iostream>
 #include <vector>
 
+typedef signed short BIT_DEPTH;
+#define FORMAT RTAUDIO_SINT16
+#define SCALE 32767.0
+
 #ifndef AUDIONODE_H
 #define AUDIONODE_H
 
@@ -21,7 +25,7 @@ class AudioNode {
      * 
      * @return double the audio sample
      */
-    virtual double nextBufferSample() { return getNodeSamples(); };
+  virtual double nextBufferSample() { return getNodeSamples(); };
 
     /**
      * @brief Add an audio node to be for generating sound
@@ -44,10 +48,23 @@ class AudioNode {
      */
     double getNodeSamples();
 
+    /**
+     * @brief Set active status of an object
+     * 
+     * The implementation details of active are deferred to the child
+     * 
+     * @param active 
+     */
+    void setActive(bool active) {
+      mActive = active;
+    }
+
   protected:
+    bool mActive = true;
+    std::vector<AudioNode*> mAudioNodes;
+
     static unsigned mSampleRate;
     static unsigned mBufferFrames;
-    std::vector<AudioNode*> mAudioNodes;
 };
 
 }

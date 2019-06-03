@@ -2,22 +2,12 @@
 #include "MidiNotes.h"
 #include <iostream>
 
-#define SCALE 32767.0
-
 namespace tsal {
 
 Oscillator::Oscillator() {
   setMode(SINE);
   setGain(0.5);
   setNote(tsal::C4);
-}
-
-void Oscillator::start() {
-  mActive = true;
-}
-
-void Oscillator::stop() {
-  mActive = false;
 }
 
 void Oscillator::setWaveform(Waveform waveform) {
@@ -45,8 +35,9 @@ void Oscillator::setMode(OscillatorMode mode) {
 // Helpful implementation of ployBLEP
 // http://metafunction.co.uk/all-about-digital-oscillators-part-2-blits-bleps/
 double Oscillator::nextBufferSample() {
+  // If not active, just play any sound
   if (!mActive) {
-    return 0;
+    return 0.0;
   }
 
   double value = 0.0;

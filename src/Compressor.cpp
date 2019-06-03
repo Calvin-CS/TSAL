@@ -12,6 +12,11 @@ Compressor::Compressor() {
 // This may not be the best implementation, maybe a circular buffer would work better, but 
 // it seems to be fine
 double Compressor::nextBufferSample() {
+  // If not active, just route the samples through without applying an filtering
+  if (!mActive) {
+    return getNodeSamples();
+  }
+  
   // If the end of the buffer has been reached, more audio samples need to be generated
   if (mCurrentSample == COMPRESSOR_MAX_BUFFER) {
     mCurrentSample = 0;

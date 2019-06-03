@@ -23,7 +23,7 @@ class TSAudio : public AudioNode {
      * @param channels number of channels, ex: 1 = mono, 2 = stereo
      * @param sampleRate if left blank, TSAudio will default to the highest sample rate supported
      */
-    TSAudio(unsigned channels, unsigned sampleRate);
+    TSAudio(unsigned channels, unsigned sampleRate, bool enableCompressor);
 
     ~TSAudio();
 

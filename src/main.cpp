@@ -36,13 +36,11 @@ int main() {
     
     #pragma omp for
     for(unsigned i = 1; i <= problemSize; i++) {
-
-      thread_sleep(10);
+      thread_sleep(10); 
       chord.step(id);
     }
     thread_sleep(1000);
   }
-
   chord.stop();
   audio.removeNode(&chord);
 

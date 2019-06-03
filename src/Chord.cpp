@@ -15,7 +15,7 @@ Chord::Chord(unsigned numOscillators, unsigned problemSize, unsigned startNote, 
     Oscillator* osc = new Oscillator();
     // Set the notes based on our chord, and move up an octave if we run out of chord
     osc->setNote(startNote + noteOctave + mNoteDeltas[i % sizeOfChord]);
-    osc->setGain(0.2);
+    osc->setGain(0.1);
 
     // Calculate target pitch
     double pitchChange = 
@@ -57,13 +57,13 @@ void Chord::stop() {
 }
 
 void Chord::start(unsigned id) {
-  mOscillators[id]->start();
+  mOscillators[id]->setActive(true);
   std::cout << "Starting osc: " << id << " at frequency: " 
     << mOscillators[id]->getFrequency() << std::endl;
 }
 
 void Chord::stop(unsigned id) {
-  mOscillators[id]->stop();
+  mOscillators[id]->setActive(false);
   std::cout << "Stopping osc: " << id << " at frequency: " 
     << mOscillators[id]->getFrequency() << std::endl;
 }
