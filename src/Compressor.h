@@ -1,5 +1,6 @@
-
 #include "AudioNode.h"
+
+#define COMPRESSOR_MAX_BUFFER 512
 
 #ifndef COMPRESSOR_H
 #define COMPRESSOR_H
@@ -8,7 +9,7 @@
 
 namespace tsal {
 
-typedef std::pair<double, double> range;
+typedef std::pair<double, double> ParameterRange;
 
 /** @class Compressor
  * @brief A DSP compressor
@@ -23,18 +24,46 @@ class Compressor : public AudioNode {
     virtual double nextBufferSample() override;
 
     /**
-     * @brief Set the attack time (milliseconds)
+     * @brief Set the attack time (ms)
      * 
      * @param attackTime
      */
     void setAttackTime(double attackTime);
 
     /**
-     * @brief Set the release time (milliseconds)
+     * @brief Set the release time (ms)
      * 
      * @param releaseTime 
      */
     void setReleaseTime(double releaseTime);
+
+    /**
+     * @brief Set the threshold
+     * 
+     * @param threshold (dB)
+     */
+    void setThreshold(double threshold);
+
+    /**
+     * @brief Set the ratio
+     * 
+     * @param ratio (1: n)
+     */
+    void setRatio(double ratio);
+
+    /**
+     * @brief Set the pre gain
+     * 
+     * @param preGain (dB)
+     */
+    void setPreGain(double preGain);
+    
+    /**
+     * @brief Set the post gain
+     * 
+     * @param postGain (dB)
+     */
+    void setPostGain(double postGain);
 
     static double ampToDb(double amplitude);
     static double dbToAmp(double db);
@@ -62,10 +91,10 @@ class Compressor : public AudioNode {
     double mEnvelopeSample;
 
     // These values should be configurable
-    double* mBuffer;
-    double* mEnvelope;
-    unsigned mCurrentSample;
-    
+    double mBuffer[COMPRESSOR_MAX_BUFFER];
+    double mEnvelope[COMPRESSOR_MAX_BUFFER];
+    unsigned mCurrentSample = COMPRESSOR_MAX_BUFFER;
+      
     double mSlope;
     double mGain;
     double mAttackGain;
@@ -75,11 +104,13 @@ class Compressor : public AudioNode {
     double mRatio = 2.0;
     double mPreGain = 0.0;
     double mPostGain = 0.0;
-    double mAttackTime = 1.0;
-    double mReleaseTime = 500.0;
 
-    static bool checkInRange(double parameter, range parameterRange);
-    static range mAttackTimeRange;
+    static bool checkParameterRange(std::string name, double value, ParameterRange parameterRange);
+    static ParameterRange mAttackTimeRange;
+    static ParameterRange mReleaseTimeRange;
+    static ParameterRange mThresholdRange;
+    static ParameterRange mRatioRange;
+    static ParameterRange mGainRange;
 };
 
 }
