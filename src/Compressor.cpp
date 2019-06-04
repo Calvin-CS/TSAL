@@ -6,23 +6,23 @@ namespace tsal {
 
 Compressor::Compressor() {
   setAttackTime(1.0);
-  setReleaseTime(500.0);
+  setReleaseTime(2000.0);
 }
 
 // This may not be the best implementation, maybe a circular buffer would work better, but 
 // it seems to be fine
-double Compressor::nextBufferSample() {
+double Compressor::getOutput() {
   // If not active, just route the samples through without applying an filtering
-  if (!mActive) {
-    return getNodeSamples();
-  }
+  //if (!mActive) {
+    //return getNodeSamples();
+  //}
   
   // If the end of the buffer has been reached, more audio samples need to be generated
   if (mCurrentSample == COMPRESSOR_MAX_BUFFER) {
     mCurrentSample = 0;
     // Generate new audio data
     for (unsigned i = 0; i < COMPRESSOR_MAX_BUFFER; i++) {
-      mBuffer[i] = getNodeSamples();
+      mBuffer[i] = getInput();
     }
     // Filter the generated audio data
     filterAudio();

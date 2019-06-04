@@ -1,5 +1,4 @@
-#include <memory>
-#include "AudioNode.h"
+#include "OutputDevice.h"
 #include "RtAudio.h"
 #include "SineWave.h"
 #include "SawWave.h"
@@ -17,7 +16,7 @@ namespace tsal {
  * algorithmic waveforms. It supports saw, sine, and square waveforms, as well
  * as custom waveforms that can be created by the user.
  */
-class Oscillator : public AudioNode {
+  class Oscillator : public OutputDevice {
   public:
     /**
      * @brief Modes for the oscillator 
@@ -33,7 +32,7 @@ class Oscillator : public AudioNode {
 
     Oscillator();
 
-    virtual double nextBufferSample() override;
+    double getOutput() override;
 
     /** 
      * @brief Set a custom waveform for the oscillator

@@ -1,5 +1,6 @@
 #include "RtAudio.h"
-#include "AudioNode.h"
+#include "InputDevice.h"
+#include "OutputDevice.h"
 #include "Compressor.h"
 
 #ifndef TSAUDIO_H
@@ -14,31 +15,23 @@ namespace tsal {
  * To use TSAL, the TSAudio class needs to be initiliazed at the start of the project.
  * All other audio nodes will be routed through TSAudio
  */
-class TSAudio : public AudioNode {
+class Mixer : public InputDevice, private OutputDevice {
   public:
-    TSAudio();
+    Mixer();
     /**
      * @brief Construct a new TSAudio object
      * 
-     * @param channels number of channels, ex: 1 = mono, 2 = stereo
      * @param sampleRate if left blank, TSAudio will default to the highest sample rate supported
      */
-    TSAudio(unsigned channels, unsigned sampleRate, bool enableCompressor);
+    Mixer(unsigned sampleRate);
 
-    ~TSAudio();
+    ~Mixer();
 
-    void addNode(AudioNode* node) {
-      mCompressor.addNode(node);
-    }
-
-    void removeNode(AudioNode* node) {
-      mCompressor.removeNode(node);
-    }
   private:
     void initalizeStream();
     RtAudio mRtAudio;
     unsigned mChannels;
-    Compressor mCompressor;
+    //Compressor mCompressor;
 };
 
 }

@@ -2,6 +2,7 @@
 #include <algorithm>
 #include "AudioNode.h"
 
+/*
 namespace tsal {
 
 double AudioNode::getNodeSamples() {
@@ -28,3 +29,4 @@ unsigned AudioNode::mSampleRate = 0;
 unsigned AudioNode::mBufferFrames = 0;
 
 }
+*/

@@ -1,4 +1,4 @@
-#include "AudioNode.h"
+#include "Effect.h"
 
 #define COMPRESSOR_MAX_BUFFER 512
 
@@ -18,10 +18,10 @@ typedef std::pair<double, double> ParameterRange;
  * compressor is louder than the compressors threshold, it will reduce the loudness.
  * Implementation adapted from https://christianfloisand.wordpress.com/2014/06/09/dynamics-processing-compressorlimiter-part-1/
  */
-class Compressor : public AudioNode {
+class Compressor : public Effect {
   public:
     Compressor();
-    virtual double nextBufferSample() override;
+    virtual double getOutput() override;
 
     /**
      * @brief Set the attack time (ms)

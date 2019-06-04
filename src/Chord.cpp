@@ -1,5 +1,5 @@
 #include "Chord.h"
-
+/*
 namespace tsal {
 
 Chord::Chord(unsigned numOscillators, unsigned problemSize, unsigned startNote, unsigned endNote) {
@@ -78,3 +78,4 @@ void Chord::step(unsigned id) {
 }
 
 }
+*/

@@ -23,10 +23,14 @@ int main() {
   
   omp_set_num_threads(numThreads);
   
-  TSAudio audio;
+  Mixer mixer;
 
-  Chord chord(numThreads, problemSize, C4, C5);
-  audio.addNode(&chord);
+  // Chord chord(numThreads, problemSize, C4, C5);
+  // mixer.add(&chord);
+  Oscillator osc;
+  mixer.add(&osc);
+  thread_sleep(1000);
+  /*
   #pragma omp parallel
   {
     unsigned id = omp_get_thread_num();
@@ -43,6 +47,6 @@ int main() {
   }
   chord.stop();
   audio.removeNode(&chord);
-
+*/
   return 0;
 }

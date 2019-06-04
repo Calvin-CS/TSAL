@@ -16,19 +16,19 @@ void errorCallback( RtAudioError::Type type, const std::string &errorText )
 int streamCallback(void *outputBuffer, void *inputBuffer, unsigned nBufferFrames, 
   double streamTime, RtAudioStreamStatus status, void *data) {
   BIT_DEPTH *buffer = (BIT_DEPTH *) outputBuffer;
-  TSAudio *audio = (TSAudio *) data;
+  Mixer *audio = (Mixer *) data;
 
   if ( status )
     std::cout << "Stream underflow detected!" << std::endl;
 
   for (unsigned i = 0; i < nBufferFrames; i++) {
-    *buffer++ = (BIT_DEPTH) audio->getNodeSamples();
+    *buffer++ = (BIT_DEPTH) audio->getInput();
   }
   
   return 0;        
 }
 
-void TSAudio::initalizeStream() {
+void Mixer::initalizeStream() {
   if (mRtAudio.getDeviceCount() < 1) {
     std::cout << "\nNo audio devices found!\n";
     exit(1);
@@ -66,22 +66,20 @@ void TSAudio::initalizeStream() {
   }
 
   // Add a compressor so people don't break their sound cards
-  AudioNode::addNode(&mCompressor);
 }
 
-TSAudio::TSAudio() {
+Mixer::Mixer() {
   mChannels = 1;
   initalizeStream();
 }
 
-TSAudio::TSAudio(unsigned channels, unsigned sampleRate, bool enableCompressor) {
+Mixer::Mixer(unsigned sampleRate) {
   mSampleRate = sampleRate;
-  mChannels = channels;
+  mChannels = 1;
   initalizeStream();
-  mCompressor.setActive(enableCompressor);
 }
 
-TSAudio::~TSAudio() {
+Mixer::~Mixer() {
   if (mRtAudio.isStreamOpen())
     mRtAudio.closeStream();
 }

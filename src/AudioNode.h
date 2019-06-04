@@ -25,7 +25,7 @@ class AudioNode {
      * 
      * @return double the audio sample
      */
-  virtual double nextBufferSample() { return getNodeSamples(); };
+    virtual double nextBufferSample() { return 0; };
 
     /**
      * @brief Add an audio node to be for generating sound
@@ -42,13 +42,6 @@ class AudioNode {
     void removeNode(AudioNode* node);
 
     /**
-     * @brief Get the combined audio sample of child nodes
-     * 
-     * @return double the sample
-     */
-    double getNodeSamples();
-
-    /**
      * @brief Set active status of an object
      * 
      * The implementation details of active are deferred to the child
@@ -61,7 +54,6 @@ class AudioNode {
 
   protected:
     bool mActive = true;
-    std::vector<AudioNode*> mAudioNodes;
 
     static unsigned mSampleRate;
     static unsigned mBufferFrames;
