@@ -14,8 +14,4 @@ void InputDevice::add(OutputDevice* output) {
   mOutputDevices.push_back(output);
 }
 
-void InputDevice::remove(OutputDevice* output) {
-  // Implement this method
-}
-
 }

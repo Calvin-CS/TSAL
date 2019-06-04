@@ -2,12 +2,11 @@
 
 namespace tsal {
 
-void Effect::add(Effect* effect) {
-  InputDevice::add(effect);
+double Effect::getInput() {
+  return (mNextEffect == nullptr) ? mOutputDevices[0]->getOutput() : mNextEffect->getOutput();
 }
-
-void Effect::remove(Effect* effect) {
-  InputDevice::remove(effect);
+void Effect::add(Effect* effect) {
+  mNextEffect = effect;
 }
 
 };

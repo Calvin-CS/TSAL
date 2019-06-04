@@ -1,4 +1,4 @@
-#include "OutputDevice.h"
+#include "Instrument.h"
 #include "RtAudio.h"
 #include "SineWave.h"
 #include "SawWave.h"
@@ -16,7 +16,7 @@ namespace tsal {
  * algorithmic waveforms. It supports saw, sine, and square waveforms, as well
  * as custom waveforms that can be created by the user.
  */
-  class Oscillator : public OutputDevice {
+  class Oscillator : public Instrument {
   public:
     /**
      * @brief Modes for the oscillator 

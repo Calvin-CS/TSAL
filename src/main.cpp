@@ -3,6 +3,7 @@
 #include "TSAudio.h"
 #include "MidiNotes.h"
 #include "Compressor.h"
+#include "Channel.h"
 #include <iostream>
 #include <memory>
 
@@ -27,8 +28,18 @@ int main() {
 
   // Chord chord(numThreads, problemSize, C4, C5);
   // mixer.add(&chord);
+  Channel chan;
+  Compressor comp;
+  chan.add(&comp);
   Oscillator osc;
-  mixer.add(&osc);
+  osc.setGain(2.5);
+
+
+  
+  mixer.add(&chan);
+  chan.add(&osc);
+  // mixer.add(&osc);
+
   thread_sleep(1000);
   /*
   #pragma omp parallel

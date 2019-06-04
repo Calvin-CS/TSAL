@@ -6,7 +6,7 @@ namespace tsal {
 
 Compressor::Compressor() {
   setAttackTime(1.0);
-  setReleaseTime(2000.0);
+  setReleaseTime(1500.0);
 }
 
 // This may not be the best implementation, maybe a circular buffer would work better, but 
@@ -134,8 +134,8 @@ bool Compressor::checkParameterRange(std::string name, double value, ParameterRa
   return outOfRange;
 }
 
-ParameterRange Compressor::mAttackTimeRange = std::make_pair(0.0, 1000.0);
-ParameterRange Compressor::mReleaseTimeRange = std::make_pair(0.0, 1000.0);
+ParameterRange Compressor::mAttackTimeRange = std::make_pair(0.0, 2000.0);
+ParameterRange Compressor::mReleaseTimeRange = std::make_pair(0.0, 2000.0);
 ParameterRange Compressor::mThresholdRange = std::make_pair(-30.0, 400.0);
 ParameterRange Compressor::mRatioRange = std::make_pair(1.0, 20.0);
 ParameterRange Compressor::mGainRange = std::make_pair(-30.0, 30.0);

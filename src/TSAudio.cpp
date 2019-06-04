@@ -2,8 +2,7 @@
 
 namespace tsal {
 
-void errorCallback( RtAudioError::Type type, const std::string &errorText )
-{
+void errorCallback( RtAudioError::Type type, const std::string &errorText ) {
   // This example error handling function does exactly the same thing
   // as the embedded RtAudio::error() function.
   std::cout << "in errorCallback" << std::endl;

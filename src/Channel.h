@@ -1,19 +1,22 @@
 #include "Effect.h"
+#include "IODevice.h"
 #include "Instrument.h"
 
 #ifndef CHANNEL_H
 #define CHANNEL_H
 
+
 namespace tsal {
 
-class Channel : public InputDevice, public OutputDevice {
+class Channel : public OutputDevice {
   public:
-    double getOutput();
+    virtual double getOutput() override;
     void add(Effect* effect);
     void remove(Effect* effect);
     void add(Instrument* instrument);
     void remove(Instrument* instrument);
   private:
+    IODevice mChannelIn;
     Effect* mEffectChain = nullptr;
 };
 
