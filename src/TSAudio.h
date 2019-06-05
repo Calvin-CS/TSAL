@@ -2,6 +2,7 @@
 #include "InputDevice.h"
 #include "OutputDevice.h"
 #include "Compressor.h"
+#include "Channel.h"
 
 #ifndef TSAUDIO_H
 #define TSAUDIO_H
@@ -27,6 +28,7 @@ class Mixer : public InputDevice, private OutputDevice {
 
     ~Mixer();
 
+    void add(Channel* channel);
   private:
     void initalizeStream();
     RtAudio mRtAudio;

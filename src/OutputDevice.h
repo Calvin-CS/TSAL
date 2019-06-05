@@ -11,8 +11,11 @@ namespace tsal {
 
 class OutputDevice {
   public:
+    virtual ~OutputDevice() {};
     virtual double getOutput() { return 0.0; };
+    virtual void setActive(bool active) { mActive = active; };
   protected:
+    bool mActive = true;
     static unsigned mSampleRate;
     static unsigned mBufferFrames;
 };

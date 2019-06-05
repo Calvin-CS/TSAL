@@ -8,15 +8,15 @@
 
 namespace tsal {
 
-class Channel : public OutputDevice {
+class Channel : public ChannelDevice {
   public:
-    virtual double getOutput() override;
+    Channel();
     void add(Effect* effect);
     void remove(Effect* effect);
     void add(Instrument* instrument);
     void remove(Instrument* instrument);
   private:
-    IODevice mChannelIn;
+    ChannelDevice mChannelIn;
     Effect* mEffectChain = nullptr;
 };
 

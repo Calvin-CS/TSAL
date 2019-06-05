@@ -1,5 +1,6 @@
 #include "Oscillator.h"
-#include "AudioNode.h"
+#include "Instrument.h"
+#include "MidiNotes.h"
 #include <vector>
 
 #ifndef CHORD_H
@@ -13,7 +14,7 @@ namespace tsal {
  * Chord is an audiolization that starts from one pitch and transitions to another over
  * a period of work or time using the step method in a multithreaded environement
  */
-class Chord : public AudioNode {
+class Chord : public Instrument {
   public:
     /**
      * @brief Construct a new Chord object
@@ -23,7 +24,7 @@ class Chord : public AudioNode {
      * @param startNote the starting note for the chord
      * @param endNote the target note for the chord pitch change
      */
-    Chord(unsigned numOscillators, unsigned problemSize, unsigned startNote, unsigned endNote);
+    Chord(unsigned numOscillators, unsigned problemSize, unsigned startNote = C4, unsigned endNote = C5);
 
     ~Chord();
 
@@ -63,6 +64,8 @@ class Chord : public AudioNode {
      */
     void step(unsigned id);
 
+    virtual double getOutput() { return getInput(); };
+    
   private: 
     std::vector<Oscillator*> mOscillators;
     std::vector<double> mTotalPitchChanges;

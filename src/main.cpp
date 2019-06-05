@@ -26,11 +26,12 @@ int main() {
   
   Mixer mixer;
 
-  // Chord chord(numThreads, problemSize, C4, C5);
-  // mixer.add(&chord);
+ // mixer.add(&chord);
   Channel chan;
   Compressor comp;
+  Compressor comp2;
   chan.add(&comp);
+  chan.add(&comp2);
   Oscillator osc;
   osc.setGain(2.5);
 
@@ -41,7 +42,14 @@ int main() {
   // mixer.add(&osc);
 
   thread_sleep(1000);
-  /*
+  osc.setGain(1);
+  thread_sleep(1000);
+  osc.setMode(Oscillator::SAW);
+  thread_sleep(1000);
+  osc.setActive(false);
+  Chord chord(numThreads, problemSize);
+  chan.add(&chord);
+  
   #pragma omp parallel
   {
     unsigned id = omp_get_thread_num();
@@ -57,7 +65,6 @@ int main() {
     thread_sleep(1000);
   }
   chord.stop();
-  audio.removeNode(&chord);
-*/
+  
   return 0;
 }

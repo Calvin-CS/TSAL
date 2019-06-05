@@ -36,11 +36,9 @@ void Oscillator::setMode(OscillatorMode mode) {
 // http://metafunction.co.uk/all-about-digital-oscillators-part-2-blits-bleps/
   double Oscillator::getOutput() {
   // If not active, just play any sound
-  /*
   if (!mActive) {
     return 0.0;
   }
-  */
  
   double value = 0.0;
   double t = mPhase / (M_PI * 2);

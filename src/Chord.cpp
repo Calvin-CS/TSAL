@@ -1,5 +1,5 @@
 #include "Chord.h"
-/*
+
 namespace tsal {
 
 Chord::Chord(unsigned numOscillators, unsigned problemSize, unsigned startNote, unsigned endNote) {
@@ -15,15 +15,15 @@ Chord::Chord(unsigned numOscillators, unsigned problemSize, unsigned startNote, 
     Oscillator* osc = new Oscillator();
     // Set the notes based on our chord, and move up an octave if we run out of chord
     osc->setNote(startNote + noteOctave + mNoteDeltas[i % sizeOfChord]);
-    osc->setGain(0.1);
+    osc->setGain(0.3);
 
     // Calculate target pitch
     double pitchChange = 
       Oscillator::getFrequencyFromNote(endNote + noteOctave + mNoteDeltas[i % sizeOfChord])
         - Oscillator::getFrequencyFromNote(startNote + noteOctave + mNoteDeltas[i % sizeOfChord]);
+        
 
-
-    addNode(osc);
+    add(osc);
     mOscillators.push_back(osc);
     mTotalPitchChanges.push_back(pitchChange);
 
@@ -38,20 +38,20 @@ Chord::~Chord() {
   // Clean up the dynamically allocated nodes
   for (unsigned i = 0; i < mOscillators.size(); i++) {
     // Remove them from the node list
-    removeNode(mOscillators[i]);
+    //remove(mOscillators[i]);
     // free the memory
     delete mOscillators[i];
   }
 }
 
 void Chord::start() {
-  for(unsigned i = 0; i < mAudioNodes.size(); i++) {
+  for(unsigned i = 0; i < mOscillators.size(); i++) {
     start(i);
   }
 }
 
 void Chord::stop() {
-  for(unsigned i = 0; i < mAudioNodes.size(); i++) {
+  for(unsigned i = 0; i < mOscillators.size(); i++) {
     stop(i);
   }
 }
@@ -78,4 +78,3 @@ void Chord::step(unsigned id) {
 }
 
 }
-*/

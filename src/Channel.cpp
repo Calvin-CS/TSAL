@@ -2,22 +2,28 @@
 
 namespace tsal {
   
-double Channel::getOutput() {
-  return (mEffectChain == nullptr) ? mChannelIn.getOutput() : mEffectChain->getOutput();
+Channel::Channel() {
+  InputDevice::add(&mChannelIn);
 }
 
 void Channel::add(Effect* effect) {
   if (mEffectChain == nullptr) {
-    mEffectChain = effect;
-    effect->InputDevice::add(&mChannelIn);
+    InputDevice::remove(&mChannelIn);
+    effect->add(&mChannelIn);
   } else {
+    InputDevice::remove(mEffectChain);
     effect->add(mEffectChain);
-    mEffectChain = effect;
-  } 
+  }
+  mEffectChain = effect;
+  InputDevice::add(mEffectChain);
 }
 
 void Channel::add(Instrument* instrument) {
   mChannelIn.add(instrument);
+}
+
+void Channel::remove(Instrument* instrument) {
+  mChannelIn.remove(instrument);
 }
 
 };

@@ -8,9 +8,11 @@ namespace tsal {
   
 class InputDevice {
   public:
+    virtual ~InputDevice() {};
     virtual double getInput();
-    void add(OutputDevice* output);
   protected:
+    void add(OutputDevice* output);
+    void remove(OutputDevice* output);
     std::vector<OutputDevice*> mOutputDevices;
 };
 

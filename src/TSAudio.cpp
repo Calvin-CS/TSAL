@@ -83,4 +83,7 @@ Mixer::~Mixer() {
     mRtAudio.closeStream();
 }
 
+void Mixer::add(Channel* channel) {
+  InputDevice::add(channel);
+}
 }

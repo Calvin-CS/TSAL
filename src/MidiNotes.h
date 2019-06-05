@@ -1,3 +1,5 @@
+#ifndef MIDINOTE_H
+#define MIDINOTE_H
 
 namespace tsal {
 enum MidiNotes {
@@ -91,3 +93,5 @@ enum MidiNotes {
   C8
 };
 }
+
+#endif

@@ -13,9 +13,9 @@ Compressor::Compressor() {
 // it seems to be fine
 double Compressor::getOutput() {
   // If not active, just route the samples through without applying an filtering
-  //if (!mActive) {
-    //return getNodeSamples();
-  //}
+  if (!mActive) {
+    return getInput();
+  }
   
   // If the end of the buffer has been reached, more audio samples need to be generated
   if (mCurrentSample == COMPRESSOR_MAX_BUFFER) {
