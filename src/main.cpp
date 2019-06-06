@@ -1,6 +1,6 @@
 #include "Oscillator.h"
 #include "Chord.h"
-#include "TSAudio.h"
+#include "Mixer.h"
 #include "MidiNotes.h"
 #include "Compressor.h"
 #include "Channel.h"

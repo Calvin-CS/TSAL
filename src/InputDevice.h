@@ -13,14 +13,9 @@ namespace tsal {
 class InputDevice {
   public:
     virtual ~InputDevice() {};
-    virtual double getInput();
-  protected:
-    void add(OutputDevice* output);
-    void remove(OutputDevice* output);
-    std::vector<OutputDevice*> mOutputDevices;
+    virtual double getInput() { return 0; };
 };
 
 };
 
 #endif
-  

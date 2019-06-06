@@ -1,4 +1,4 @@
-#include "InputDevice.h"
+#include "RouteDevice.h"
 #include <algorithm>
 
 namespace tsal {
@@ -8,10 +8,10 @@ namespace tsal {
  * 
  * @return double 
  */
-double InputDevice::getInput() {
+double RouteDevice::getInput() {
   double output = 0.0;
-  for (auto device : mOutputDevices) {
-    output += device->getOutput();
+  for (auto d : mOutputDevices) {
+    output += d->getOutput();
   }
   return output;
 }
@@ -21,7 +21,7 @@ double InputDevice::getInput() {
  * 
  * @param output 
  */
-void InputDevice::add(OutputDevice* output) {
+void RouteDevice::add(OutputDevice* output) {
   mOutputDevices.push_back(output);
 }
 
@@ -30,9 +30,8 @@ void InputDevice::add(OutputDevice* output) {
  * 
  * @param output 
  */
-void InputDevice::remove(OutputDevice *output) {
-  mOutputDevices.erase(
-      std::remove(mOutputDevices.begin(), mOutputDevices.end(), output));
+void RouteDevice::remove(OutputDevice* output) {
+  mOutputDevices.erase(std::remove(mOutputDevices.begin(), mOutputDevices.end(), output));
 }
 
 };

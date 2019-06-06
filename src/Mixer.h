@@ -23,6 +23,7 @@ class Mixer : public InputDevice, private OutputDevice {
     ~Mixer();
     void add(Channel* channel);
     void add(Instrument* instrument);
+    virtual double getInput() override;
   private:
     void initalizeStream();
     RtAudio mRtAudio;

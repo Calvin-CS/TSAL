@@ -1,5 +1,6 @@
 #include "Oscillator.h"
 #include "Instrument.h"
+#include "RouteDevice.h"
 #include "MidiNotes.h"
 #include <vector>
 
@@ -16,23 +17,26 @@ namespace tsal {
  */
 class Chord : public Instrument {
   public:
-   Chord(unsigned numOscillators, unsigned problemSize, unsigned startNote = C4, unsigned endNote = C5);
+    Chord(unsigned numOscillators, unsigned problemSize, unsigned startNote = C4, unsigned endNote = C5);
 
-   ~Chord();
+    ~Chord();
 
-   void start();
+    virtual double getOutput() override {
+      return router.getOutput();
+    }
 
-   void stop();
+    void start();
 
-   void start(unsigned id);
+    void stop();
 
-   void stop(unsigned id);
+    void start(unsigned id);
 
-   void step(unsigned id);
+    void stop(unsigned id);
 
-   virtual double getOutput() { return getInput(); };
-    
+    void step(unsigned id);
+
   private: 
+    RouteDevice router;
     std::vector<Oscillator*> mOscillators;
     std::vector<double> mTotalPitchChanges;
     

@@ -1,4 +1,4 @@
-#include "TSAudio.h"
+#include "Mixer.h"
 
 namespace tsal {
 
@@ -67,8 +67,6 @@ void Mixer::initalizeStream() {
     e.printMessage();
   }
 
-  // Add the master channel
-  InputDevice::add(&mMaster);
   // Add a compressor so people don't break their sound cards
   mMaster.add(&mCompressor);  
 }
@@ -93,6 +91,10 @@ Mixer::Mixer(unsigned sampleRate) {
 Mixer::~Mixer() {
   if (mRtAudio.isStreamOpen())
     mRtAudio.closeStream();
+}
+
+double Mixer::getInput() {
+  return mMaster.getOutput();
 }
 
 /**

@@ -1,6 +1,6 @@
 #include "InputDevice.h"
 #include "OutputDevice.h"
-#include "IODevice.h"
+#include "RouteDevice.h"
 
 #ifndef EFFECT_H
 #define EFFECT_H
@@ -18,7 +18,7 @@ namespace tsal {
 class Effect : public InputDevice, public OutputDevice {
   public:
     virtual double getInput() override;
-    void add(ChannelDevice *channel) { mChannelIn = channel; };
+    void add(RouteDevice *channel) { mChannelIn = channel; };
     void removeChannel() { mChannelIn = nullptr; };
     void add(Effect* effect);
     void remove(Effect* effect);
@@ -27,7 +27,7 @@ class Effect : public InputDevice, public OutputDevice {
 
   private:
     Effect* mNextEffect = nullptr;
-    ChannelDevice* mChannelIn = nullptr;
+    RouteDevice* mChannelIn = nullptr;
 };
 
 };

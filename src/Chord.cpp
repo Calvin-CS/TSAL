@@ -31,7 +31,7 @@ Chord::Chord(unsigned numOscillators, unsigned problemSize, unsigned startNote, 
         - Oscillator::getFrequencyFromNote(startNote + noteOctave + mNoteDeltas[i % sizeOfChord]);
         
     // Store everything in vectors
-    add(osc);
+    router.add(osc);
     mOscillators.push_back(osc);
     mTotalPitchChanges.push_back(pitchChange);
 

@@ -1,6 +1,6 @@
 #include "Effect.h"
-#include "IODevice.h"
 #include "Instrument.h"
+#include "OutputDevice.h"
 
 #ifndef CHANNEL_H
 #define CHANNEL_H
@@ -15,9 +15,9 @@ namespace tsal {
  * Instruments, effects, and channels can all be added to a channel. The mixer has one default master channel
  * but more channels can be added to the mixer to increase flexibility
  */
-class Channel : public ChannelDevice {
+class Channel : public OutputDevice {
   public:
-    Channel();
+    virtual double getOutput() override;
     void add(Channel* channel);
     void remove(Channel* channel);
     void add(Effect* effect);
@@ -25,7 +25,7 @@ class Channel : public ChannelDevice {
     void add(Instrument* instrument);
     void remove(Instrument* instrument);
   private:
-    ChannelDevice mChannelIn;
+    RouteDevice mChannelIn;
     Effect* mEffectChainEnd = nullptr;
 };
 
