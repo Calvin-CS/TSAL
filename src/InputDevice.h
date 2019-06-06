@@ -5,7 +5,11 @@
 #define INPUTDEVICE_H
 
 namespace tsal {
-  
+
+/** @class InputDevice
+ * @brief Base class for a device that takes input
+ * 
+ */
 class InputDevice {
   public:
     virtual ~InputDevice() {};

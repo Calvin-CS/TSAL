@@ -8,6 +8,13 @@
 
 namespace tsal {
 
+/** @class Channel
+ * @brief Routes instruments and other channels through an effect chain and to the master channel
+ * on the mixer
+ * 
+ * Instruments, effects, and channels can all be added to a channel. The mixer has one default master channel
+ * but more channels can be added to the mixer to increase flexibility
+ */
 class Channel : public ChannelDevice {
   public:
     Channel();
@@ -19,7 +26,7 @@ class Channel : public ChannelDevice {
     void remove(Instrument* instrument);
   private:
     ChannelDevice mChannelIn;
-    Effect* mEffectChain = nullptr;
+    Effect* mEffectChainEnd = nullptr;
 };
 
 };

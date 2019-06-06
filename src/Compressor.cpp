@@ -32,6 +32,10 @@ double Compressor::getOutput() {
   return mBuffer[mCurrentSample++];
 }
 
+/**
+ * @brief Get the sound envelope for the sample buffer
+ * 
+ */
 void Compressor::getEnvelope() {
   for (unsigned i = 0; i < COMPRESSOR_MAX_BUFFER; i++) {
     // Using peak detection since it is faster
@@ -44,7 +48,10 @@ void Compressor::getEnvelope() {
     mEnvelope[i] = mEnvelopeSample;
   }
 }
-
+/**
+ * @brief Compress the audio in the buffer if necessary
+ * 
+ */
 void Compressor::filterAudio() {
   double postGainAmp = dbToAmp(mPostGain);
 
@@ -67,7 +74,12 @@ void Compressor::filterAudio() {
     mBuffer[i] *= (mGain * postGainAmp);
   }
 }
-
+ 
+/**
+ * 
+ * @brief Get the slope based off the ratio
+ * 
+ */
 void Compressor::calculateSlope() {
   mSlope = 1.0 - (1.0 / mRatio);
 }
@@ -80,6 +92,11 @@ double Compressor::dbToAmp(double db) {
   return std::pow(10.0, db / 20.0);
 }
 
+/**
+ * @brief Set the attack time (ms)
+ * 
+ * @param attackTime
+ */
 void Compressor::setAttackTime(double attackTime) {
   if (checkParameterRange("AttackTime", attackTime, mAttackTimeRange)) {
     return;
@@ -87,6 +104,11 @@ void Compressor::setAttackTime(double attackTime) {
   mAttackGain = attackTime == 0.0 ? 0.0 : std::exp(-1.0 / (mSampleRate * attackTime/1000));
 }
 
+/**
+ * @brief Set the release time (ms)
+ * 
+ * @param releaseTime 
+ */
 void Compressor::setReleaseTime(double releaseTime) {
   if (checkParameterRange("ReleaseTime", releaseTime, mReleaseTimeRange)) {
     return;
@@ -94,6 +116,11 @@ void Compressor::setReleaseTime(double releaseTime) {
   mReleaseGain = releaseTime == 0.0 ? 0.0 : std::exp(-1.0 / (mSampleRate * releaseTime/1000));
 }
 
+/**
+ * @brief Set the threshold
+ * 
+ * @param threshold (dB)
+ */
 void Compressor::setThreshold(double threshold) {
   if (checkParameterRange("Threshold", threshold, mThresholdRange)) {
     return;
@@ -101,6 +128,11 @@ void Compressor::setThreshold(double threshold) {
   mThreshold = threshold;
 }
 
+/**
+ * @brief Set the ratio
+ * 
+ * @param ratio (1: n)
+ */
 void Compressor::setRatio(double ratio) {
   if (checkParameterRange("Ratio", ratio, mRatioRange)) {
     return;
@@ -108,6 +140,11 @@ void Compressor::setRatio(double ratio) {
   mRatio = ratio;
 }
 
+/**
+ * @brief Set the pre gain
+ * 
+ * @param preGain (dB)
+ */
 void Compressor::setPreGain(double preGain) {
   if (checkParameterRange("PreGain", preGain, mGainRange)) {
     return;
@@ -115,6 +152,11 @@ void Compressor::setPreGain(double preGain) {
   mPreGain = preGain;
 }
 
+/**
+ * @brief Set the post gain
+ * 
+ * @param postGain (dB)
+ */
 void Compressor::setPostGain(double postGain) {
   if (checkParameterRange("PostGain", postGain, mGainRange)) {
     return;

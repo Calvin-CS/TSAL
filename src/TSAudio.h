@@ -4,14 +4,14 @@
 #include "Compressor.h"
 #include "Channel.h"
 
-#ifndef TSAUDIO_H
-#define TSAUDIO_H
+#ifndef MIXER_H
+#define MIXER_H
 
 namespace tsal {
 
-/** @class TSAudio
- * @brief The main audio manager that handles the overhead of audio buffers, audio nodes,
- * and sampling
+/** @class Mixer
+ * @brief The main audio manager that handles the overhead of audio buffers 
+ * and channel mixing
  * 
  * To use TSAL, the TSAudio class needs to be initiliazed at the start of the project.
  * All other audio nodes will be routed through TSAudio
@@ -19,15 +19,8 @@ namespace tsal {
 class Mixer : public InputDevice, private OutputDevice {
   public:
     Mixer();
-    /**
-     * @brief Construct a new TSAudio object
-     * 
-     * @param sampleRate if left blank, TSAudio will default to the highest sample rate supported
-     */
     Mixer(unsigned sampleRate);
-
     ~Mixer();
-
     void add(Channel* channel);
     void add(Instrument* instrument);
   private:

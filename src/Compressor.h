@@ -12,7 +12,7 @@ namespace tsal {
 typedef std::pair<double, double> ParameterRange;
 
 /** @class Compressor
- * @brief A DSP compressor
+ * @brief An audio compressor
  * 
  * A compressor used to reduce clipping. Essentially, if the sound routed through the 
  * compressor is louder than the compressors threshold, it will reduce the loudness.
@@ -22,75 +22,23 @@ class Compressor : public Effect {
   public:
     Compressor();
     virtual double getOutput() override;
-
-    /**
-     * @brief Set the attack time (ms)
-     * 
-     * @param attackTime
-     */
     void setAttackTime(double attackTime);
-
-    /**
-     * @brief Set the release time (ms)
-     * 
-     * @param releaseTime 
-     */
     void setReleaseTime(double releaseTime);
-
-    /**
-     * @brief Set the threshold
-     * 
-     * @param threshold (dB)
-     */
     void setThreshold(double threshold);
-
-    /**
-     * @brief Set the ratio
-     * 
-     * @param ratio (1: n)
-     */
     void setRatio(double ratio);
-
-    /**
-     * @brief Set the pre gain
-     * 
-     * @param preGain (dB)
-     */
     void setPreGain(double preGain);
-    
-    /**
-     * @brief Set the post gain
-     * 
-     * @param postGain (dB)
-     */
     void setPostGain(double postGain);
 
     static double ampToDb(double amplitude);
     static double dbToAmp(double db);
 
   private:
-    /**
-     * @brief Compress the audio in the buffer if necessary
-     * 
-     */
     void filterAudio();
-
-    /**
-     * @brief Get the sound envelope for the sample buffer
-     * 
-     */
     void getEnvelope();
-
-    /**
-     * 
-     * @brief Get the slope based off the ratio
-     * 
-     */
     void calculateSlope();
-
     double mEnvelopeSample;
 
-    // These values should be configurable
+    // Figure what an optimal buffer size would be 
     double mBuffer[COMPRESSOR_MAX_BUFFER];
     double mEnvelope[COMPRESSOR_MAX_BUFFER];
     unsigned mCurrentSample = COMPRESSOR_MAX_BUFFER;

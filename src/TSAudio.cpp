@@ -78,6 +78,11 @@ Mixer::Mixer() {
   initalizeStream();
 }
 
+/**
+ * @brief Construct a new TSAudio object
+ * 
+ * @param sampleRate if left blank, TSAudio will default to the highest sample rate supported
+ */
 Mixer::Mixer(unsigned sampleRate) {
   mSampleRate = sampleRate;
   // Eventually it would be nice to play in stereo, but that sounds hard for now
@@ -91,7 +96,7 @@ Mixer::~Mixer() {
 }
 
 /**
- * @brief Add an a channel 
+ * @brief Add a channel 
  *
  * @param channel
  */
@@ -99,6 +104,13 @@ void Mixer::add(Channel* channel) {
   mMaster.add(channel);
 }
 
+/**
+ * @brief Add an instrument
+ * 
+ * Add and instrument to the default master channel
+ *
+ * @param instrument
+ */
 void Mixer::add(Instrument* instrument) {
   mMaster.add(instrument);
 }

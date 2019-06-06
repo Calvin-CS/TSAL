@@ -2,6 +2,14 @@
 
 namespace tsal {
 
+/**
+  * @brief Construct a new Chord object
+  * 
+  * @param numThreads correlates to the number of threads that will be running the chord
+  * @param problemSize the number of iterations or amount of work to compute
+  * @param startNote the starting note for the chord
+  * @param endNote the target note for the chord pitch change
+  */
 Chord::Chord(unsigned numOscillators, unsigned problemSize, unsigned startNote, unsigned endNote) {
   mProblemSize = problemSize;
   unsigned octave = 0;
@@ -22,7 +30,7 @@ Chord::Chord(unsigned numOscillators, unsigned problemSize, unsigned startNote, 
       Oscillator::getFrequencyFromNote(endNote + noteOctave + mNoteDeltas[i % sizeOfChord])
         - Oscillator::getFrequencyFromNote(startNote + noteOctave + mNoteDeltas[i % sizeOfChord]);
         
-
+    // Store everything in vectors
     add(osc);
     mOscillators.push_back(osc);
     mTotalPitchChanges.push_back(pitchChange);
@@ -44,30 +52,56 @@ Chord::~Chord() {
   }
 }
 
+/**
+  * @brief start all the oscillators
+  */
 void Chord::start() {
   for(unsigned i = 0; i < mOscillators.size(); i++) {
     start(i);
   }
 }
 
+/**
+  * @brief stop all the oscillators
+  */
 void Chord::stop() {
   for(unsigned i = 0; i < mOscillators.size(); i++) {
     stop(i);
   }
 }
 
+/**
+  * @brief start a oscillator
+  * 
+  * @param id the id of the thread and correlating oscillator
+  */
 void Chord::start(unsigned id) {
   mOscillators[id]->setActive(true);
   std::cout << "Starting osc: " << id << " at frequency: " 
     << mOscillators[id]->getFrequency() << std::endl;
 }
 
+/**
+  * @brief stop a oscillator
+  * 
+  * @param id the id of the thread and correlating oscillator
+  */
 void Chord::stop(unsigned id) {
   mOscillators[id]->setActive(false);
   std::cout << "Stopping osc: " << id << " at frequency: " 
     << mOscillators[id]->getFrequency() << std::endl;
 }
 
+/**
+  * @brief changes the pitch of the oscillator towards the target note
+  * 
+  * For each bit of work done, the pitch of the oscillator will slowly
+  * move towards the target note until it finishes it work. If done correctly
+  * the oscillator should be at the target pitch once the work is finished
+  * 
+  * @param id the id of the thread and correlationg oscillator
+  * @param inc the fraction of work or time
+  */
 void Chord::step(unsigned id) {
   Oscillator* osc = mOscillators[id];
 

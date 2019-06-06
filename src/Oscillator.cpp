@@ -10,24 +10,52 @@ Oscillator::Oscillator() {
   setNote(tsal::C4);
 }
 
+/** 
+ * @brief Set a custom waveform for the oscillator
+ * 
+ * Given a Waveform class, the oscillator will automatically switch to CUSTOM mode and 
+ * start sampling from the new waveform.
+ * 
+ * @param waveform a Waveform class that implements the getWaveformSample method
+ */ 
 void Oscillator::setWaveform(Waveform waveform) {
   mCustomWaveform = waveform;
   setMode(CUSTOM);
 }
 
+/**
+ * @brief Set the note 
+ * 
+ * @param note (midi format)
+ */
 void Oscillator::setNote(unsigned note) {
   setFrequency(getFrequencyFromNote(note));
 }
 
+/**
+ * @brief Set the frequncy
+ * 
+ * @param frequency 
+ */
 void Oscillator::setFrequency(double frequency) {
   mFrequency = frequency;
   mPhaseStep = mFrequency * mPI2 / mSampleRate;
 }
 
+/**
+ * @brief Set the gain
+ * 
+ * @param gain 
+ */
 void Oscillator::setGain(double gain) {
   mGain = 0.5 * gain;
 }
 
+/**
+ * @brief Set the mode
+ * 
+ * @param mode 
+ */
 void Oscillator::setMode(OscillatorMode mode) {
   mMode = mode;
 }
@@ -67,10 +95,22 @@ void Oscillator::setMode(OscillatorMode mode) {
   return value * SCALE * mGain;
 }
 
+/**
+ * @brief Get the note from a corresponding frequency
+ * 
+ * @param frequency 
+ * @return unsigned 
+ */
 unsigned Oscillator::getNoteFromFrequency(double frequency) {
   return (12/log(2)) * log(frequency/27.5) + 21;
 }
 
+/**
+ * @brief Get the frequency from a corresponding note
+ * 
+ * @param note 
+ * @return double 
+ */
 double Oscillator::getFrequencyFromNote(unsigned note) {
   return 27.5 * pow(2.0, (note - 21) / 12.0);
 };
