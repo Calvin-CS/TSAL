@@ -12,6 +12,9 @@ void errorCallback( RtAudioError::Type type, const std::string &errorText ) {
     throw( RtAudioError( errorText, type ) );
 }
 
+/* This is the main function that we give to the audio buffer to call for sampling
+ * Depending on how it's configured, this will usually get called 44100 per second
+ */
 int streamCallback(void *outputBuffer, void *inputBuffer, unsigned nBufferFrames, 
   double streamTime, RtAudioStreamStatus status, void *data) {
   BIT_DEPTH *buffer = (BIT_DEPTH *) outputBuffer;
@@ -64,7 +67,10 @@ void Mixer::initalizeStream() {
     e.printMessage();
   }
 
+  // Add the master channel
+  InputDevice::add(&mMaster);
   // Add a compressor so people don't break their sound cards
+  mMaster.add(&mCompressor);  
 }
 
 Mixer::Mixer() {
@@ -74,6 +80,7 @@ Mixer::Mixer() {
 
 Mixer::Mixer(unsigned sampleRate) {
   mSampleRate = sampleRate;
+  // Eventually it would be nice to play in stereo, but that sounds hard for now
   mChannels = 1;
   initalizeStream();
 }
@@ -83,7 +90,17 @@ Mixer::~Mixer() {
     mRtAudio.closeStream();
 }
 
+/**
+ * @brief Add an a channel 
+ *
+ * @param channel
+ */
 void Mixer::add(Channel* channel) {
-  InputDevice::add(channel);
+  mMaster.add(channel);
 }
+
+void Mixer::add(Instrument* instrument) {
+  mMaster.add(instrument);
+}
+
 }

@@ -28,6 +28,7 @@ int main() {
 
  // mixer.add(&chord);
   Channel chan;
+  Channel chan2;
   Compressor comp;
   Compressor comp2;
   chan.add(&comp);
@@ -36,10 +37,14 @@ int main() {
   osc.setGain(2.5);
 
 
+  Oscillator osc2;
+  osc.setNote(C5);
   
   mixer.add(&chan);
+  mixer.add(&chan2);
+  chan2.add(&osc2);
+  
   chan.add(&osc);
-  // mixer.add(&osc);
 
   thread_sleep(1000);
   osc.setGain(1);

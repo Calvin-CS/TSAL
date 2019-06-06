@@ -14,18 +14,18 @@ double Effect::getInput() {
   return input;
 }
 
-void Effect::add(ChannelDevice* channel) {
-  mChannelIn = channel;
+void Effect::add(Effect* effect) {
+  mNextEffect = effect;
 }
 
-void Effect::add(Effect* effect) {
-  if (mNextEffect != nullptr) {
-    effect->add(mNextEffect);
-  } else if (mChannelIn != nullptr) {
-    effect->add(mChannelIn);
-    mChannelIn = nullptr;
+void Effect::remove(Effect* effect) {
+  if (effect == mNextEffect) {
+    effect->removeChannel();
+    mNextEffect = effect->getNextEffect();
+    effect->setNextEffect(nullptr);
+  } else {
+    mNextEffect->remove(effect);
   }
-  mNextEffect = effect;
 }
 
 };

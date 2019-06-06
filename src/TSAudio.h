@@ -29,11 +29,13 @@ class Mixer : public InputDevice, private OutputDevice {
     ~Mixer();
 
     void add(Channel* channel);
+    void add(Instrument* instrument);
   private:
     void initalizeStream();
     RtAudio mRtAudio;
     unsigned mChannels;
-    //Compressor mCompressor;
+    Channel mMaster;
+    Compressor mCompressor;
 };
 
 }

@@ -11,6 +11,8 @@ namespace tsal {
 class Channel : public ChannelDevice {
   public:
     Channel();
+    void add(Channel* channel);
+    void remove(Channel* channel);
     void add(Effect* effect);
     void remove(Effect* effect);
     void add(Instrument* instrument);

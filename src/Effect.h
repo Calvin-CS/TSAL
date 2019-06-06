@@ -10,8 +10,13 @@ namespace tsal {
 class Effect : public InputDevice, public OutputDevice {
   public:
     virtual double getInput() override;
-    void add(ChannelDevice* channel);
+    void add(ChannelDevice *channel) { mChannelIn = channel; };
+    void removeChannel() { mChannelIn = nullptr; };
     void add(Effect* effect);
+    void remove(Effect* effect);
+    Effect* getNextEffect() { return mNextEffect; };
+    void setNextEffect(Effect* effect) { mNextEffect = effect; };
+
   private:
     Effect* mNextEffect = nullptr;
     ChannelDevice* mChannelIn = nullptr;
