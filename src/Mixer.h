@@ -1,8 +1,8 @@
 #include "RtAudio.h"
 #include "InputDevice.h"
 #include "OutputDevice.h"
-#include "Compressor.h"
 #include "Channel.h"
+#include "Compressor.h"
 
 #ifndef MIXER_H
 #define MIXER_H
@@ -13,8 +13,8 @@ namespace tsal {
  * @brief The main audio manager that handles the overhead of audio buffers 
  * and channel mixing
  * 
- * To use TSAL, the TSAudio class needs to be initiliazed at the start of the project.
- * All other audio nodes will be routed through TSAudio
+ * To use TSAL, the Mixer class needs to be initiliazed at the start of the project.
+ * All other audio devices will be routed through the Mixer
  */
 class Mixer : public InputDevice, private OutputDevice {
   public:
@@ -22,7 +22,12 @@ class Mixer : public InputDevice, private OutputDevice {
     Mixer(unsigned sampleRate);
     ~Mixer();
     void add(Channel* channel);
+    void remove(Channel* channel);
     void add(Instrument* instrument);
+    void remove(Instrument* instrument);
+
+    static unsigned getSampleRate() { return mSampleRate; };
+    static unsigned getBufferFrames() { return mBufferFrames; };
     virtual double getInput() override;
   private:
     void initalizeStream();
@@ -30,6 +35,9 @@ class Mixer : public InputDevice, private OutputDevice {
     unsigned mChannels;
     Channel mMaster;
     Compressor mCompressor;
+
+    static unsigned mSampleRate;
+    static unsigned mBufferFrames;
 };
 
 }

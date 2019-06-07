@@ -49,7 +49,7 @@ class Compressor : public Effect {
     double mReleaseGain;
 
     double mThreshold = 80.0;
-    double mRatio = 2.0;
+    double mRatio = 1.5;
     double mPreGain = 0.0;
     double mPostGain = 0.0;
 

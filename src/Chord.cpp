@@ -23,7 +23,7 @@ Chord::Chord(unsigned numOscillators, unsigned problemSize, unsigned startNote, 
     Oscillator* osc = new Oscillator();
     // Set the notes based on our chord, and move up an octave if we run out of chord
     osc->setNote(startNote + noteOctave + mNoteDeltas[i % sizeOfChord]);
-    osc->setGain(0.4);
+    osc->setGain(0.2);
 
     // Calculate target pitch
     double pitchChange = 
@@ -32,7 +32,6 @@ Chord::Chord(unsigned numOscillators, unsigned problemSize, unsigned startNote, 
         
     // Store everything in vectors
     router.add(osc);
-    mOscillators.push_back(osc);
     mTotalPitchChanges.push_back(pitchChange);
 
     // Move up an octave for next chord if necessary
@@ -43,12 +42,13 @@ Chord::Chord(unsigned numOscillators, unsigned problemSize, unsigned startNote, 
 }
 
 Chord::~Chord() {
+  const std::vector<Oscillator*> oscillators = router.getInputDevices();
   // Clean up the dynamically allocated nodes
-  for (unsigned i = 0; i < mOscillators.size(); i++) {
+  for (unsigned i = 0; i < oscillators.size(); i++) {
     // Remove them from the node list
     //remove(mOscillators[i]);
     // free the memory
-    delete mOscillators[i];
+    delete oscillators[i];
   }
 }
 
@@ -56,7 +56,7 @@ Chord::~Chord() {
   * @brief start all the oscillators
   */
 void Chord::start() {
-  for(unsigned i = 0; i < mOscillators.size(); i++) {
+  for(unsigned i = 0; i < router.getInputDevices().size(); i++) {
     start(i);
   }
 }
@@ -65,7 +65,7 @@ void Chord::start() {
   * @brief stop all the oscillators
   */
 void Chord::stop() {
-  for(unsigned i = 0; i < mOscillators.size(); i++) {
+  for(unsigned i = 0; i < router.getInputDevices().size(); i++) {
     stop(i);
   }
 }
@@ -76,9 +76,10 @@ void Chord::stop() {
   * @param id the id of the thread and correlating oscillator
   */
 void Chord::start(unsigned id) {
-  mOscillators[id]->setActive(true);
+  const std::vector<Oscillator*> oscillators = router.getInputDevices();
+  oscillators[id]->setActive(true);
   std::cout << "Starting osc: " << id << " at frequency: " 
-    << mOscillators[id]->getFrequency() << std::endl;
+    << oscillators[id]->getFrequency() << std::endl;
 }
 
 /**
@@ -87,9 +88,10 @@ void Chord::start(unsigned id) {
   * @param id the id of the thread and correlating oscillator
   */
 void Chord::stop(unsigned id) {
-  mOscillators[id]->setActive(false);
+  const std::vector<Oscillator*> oscillators = router.getInputDevices();
+  oscillators[id]->setActive(false);
   std::cout << "Stopping osc: " << id << " at frequency: " 
-    << mOscillators[id]->getFrequency() << std::endl;
+    << oscillators[id]->getFrequency() << std::endl;
 }
 
 /**
@@ -103,10 +105,10 @@ void Chord::stop(unsigned id) {
   * @param inc the fraction of work or time
   */
 void Chord::step(unsigned id) {
-  Oscillator* osc = mOscillators[id];
+  Oscillator* osc = router.getInputDevices()[id];
 
   // Calculate the increment amount
-  double inc = 1.0/((double) mProblemSize) * mOscillators.size();
+  double inc = 1.0/((double) mProblemSize) * router.getInputDevices().size();
   // Update the oscillator
   osc->setFrequency(osc->getFrequency() + inc * mTotalPitchChanges[id]);
 }

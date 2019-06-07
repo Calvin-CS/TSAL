@@ -26,21 +26,16 @@ class Chord : public Instrument {
     }
 
     void start();
-
     void stop();
-
     void start(unsigned id);
-
     void stop(unsigned id);
-
     void step(unsigned id);
 
   private: 
-    RouteDevice router;
-    std::vector<Oscillator*> mOscillators;
+    RouteDevice<Oscillator> router;
     std::vector<double> mTotalPitchChanges;
     
-    unsigned mNoteDeltas[3] = {0, 4, 7};
+    unsigned mNoteDeltas[4] = {0, 4, 7, 11};
     unsigned mProblemSize;
 };
 

@@ -32,8 +32,6 @@ class OutputDevice {
     virtual void setActive(bool active) { mActive = active; };
   protected:
     bool mActive = true;
-    static unsigned mSampleRate;
-    static unsigned mBufferFrames;
 };
 
 };

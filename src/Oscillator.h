@@ -1,8 +1,8 @@
 #include "Instrument.h"
-#include "RtAudio.h"
 #include "SineWave.h"
 #include "SawWave.h"
 #include "SquareWave.h"
+#include "Mixer.h"
 
 #ifndef OSCILLATORNODE_H
 #define OSCILLATORNODE_H
@@ -33,37 +33,15 @@ class Oscillator : public Instrument {
     Oscillator();
 
     double getOutput() override;
-
     void setWaveform(Waveform waveform);
-
     void setMode(OscillatorMode mode);
-
     void setNote(unsigned note);
-
     void setFrequency(double frequency);
-
     void setGain(double gain);
 
-    /**
-     * @brief Get the frequency
-     * 
-     * @return double 
-     */
-    double getFrequency() const { return mFrequency; };
-
-    /**
-     * @brief Get the note
-     * 
-     * @return unsigned (midi)
-     */
-    unsigned getNote() const { return getNoteFromFrequency(mFrequency); };
-
-    /**
-     * @brief Get the gain
-     * 
-     * @return double 
-     */
-    double getGain() const { return mGain; };
+    double getFrequency() const;
+    unsigned getNote() const;
+    double getGain() const;
 
     static unsigned getNoteFromFrequency(double frequency);
 

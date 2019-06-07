@@ -68,7 +68,7 @@ void Mixer::initalizeStream() {
   }
 
   // Add a compressor so people don't break their sound cards
-  mMaster.add(&mCompressor);  
+  mMaster.add(&mCompressor); 
 }
 
 Mixer::Mixer() {
@@ -77,7 +77,7 @@ Mixer::Mixer() {
 }
 
 /**
- * @brief Construct a new TSAudio object
+ * @brief Construct a new Mixer
  * 
  * @param sampleRate if left blank, TSAudio will default to the highest sample rate supported
  */
@@ -107,6 +107,14 @@ void Mixer::add(Channel* channel) {
 }
 
 /**
+ * @brief Remove a channel
+ * @param channel
+ */
+void Mixer::remove(Channel* channel) {
+  mMaster.remove(channel);
+}
+
+/**
  * @brief Add an instrument
  * 
  * Add and instrument to the default master channel
@@ -117,4 +125,17 @@ void Mixer::add(Instrument* instrument) {
   mMaster.add(instrument);
 }
 
+/**
+ * @brief Remove an instrument
+ * 
+ * Remove an instrument that was added to the default master channel
+ * 
+ *@param instrument
+ */
+void Mixer::remove(Instrument* instrument) {
+  mMaster.remove(instrument);
+}
+
+unsigned Mixer::mSampleRate = 0;
+unsigned Mixer::mBufferFrames = 0;
 }

@@ -28,26 +28,20 @@ int main() {
 
  // mixer.add(&chord);
   Channel chan;
-  Channel chan2;
-  Compressor comp;
-  Compressor comp2;
-  chan.add(&comp);
-  chan.add(&comp2);
+  
   Oscillator osc;
-  osc.setGain(2.5);
+  osc.setGain(1);
 
 
   Oscillator osc2;
-  osc.setNote(C5);
+  osc.setNote(C4);
   
   mixer.add(&chan);
-  mixer.add(&chan2);
-  chan2.add(&osc2);
   
   chan.add(&osc);
 
   thread_sleep(1000);
-  osc.setGain(1);
+  osc.setGain(0.2);
   thread_sleep(1000);
   osc.setMode(Oscillator::SAW);
   thread_sleep(1000);

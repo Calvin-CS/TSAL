@@ -41,10 +41,10 @@ void Channel::remove(Effect* effect) {
 /**
  * @brief Add an instrument to the channel
  * 
- * @param instrument 
+* @param instrument 
  */
 void Channel::add(Instrument* instrument) {
-  mChannelIn.add(instrument);
+  mChannelIn.add((OutputDevice*) instrument);
 }
 
 /**
@@ -53,7 +53,7 @@ void Channel::add(Instrument* instrument) {
  * @param instrument 
  */
 void Channel::remove(Instrument* instrument) {
-  mChannelIn.remove(instrument);
+  mChannelIn.remove((OutputDevice*) instrument);
 }
 
 /**
@@ -63,7 +63,7 @@ void Channel::remove(Instrument* instrument) {
  */
 void Channel::add(Channel* channel) {
   if (channel != this) {
-    mChannelIn.add(channel);  
+    mChannelIn.add((OutputDevice*) channel);  
   }
 }
 
@@ -73,7 +73,7 @@ void Channel::add(Channel* channel) {
  * @param channel 
  */
 void Channel::remove(Channel* channel) {
-  mChannelIn.remove(channel);
+  mChannelIn.remove((OutputDevice*) channel);
 }
 
 };

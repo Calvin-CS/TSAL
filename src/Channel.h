@@ -5,7 +5,6 @@
 #ifndef CHANNEL_H
 #define CHANNEL_H
 
-
 namespace tsal {
 
 /** @class Channel
@@ -25,7 +24,7 @@ class Channel : public OutputDevice {
     void add(Instrument* instrument);
     void remove(Instrument* instrument);
   private:
-    RouteDevice mChannelIn;
+    RouteDevice<OutputDevice> mChannelIn;
     Effect* mEffectChainEnd = nullptr;
 };
 
