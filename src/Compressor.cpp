@@ -1,4 +1,5 @@
 #include "Compressor.h"
+#include "Mixer.h"
 #include <cmath>
 #include <iostream>
 
@@ -101,7 +102,7 @@ void Compressor::setAttackTime(double attackTime) {
   if (checkParameterRange("AttackTime", attackTime, mAttackTimeRange)) {
     return;
   }
-  mAttackGain = attackTime == 0.0 ? 0.0 : std::exp(-1.0 / (96000 * attackTime/1000));
+  mAttackGain = attackTime == 0.0 ? 0.0 : std::exp(-1.0 / (Mixer::getSampleRate() * attackTime/1000));
 }
 
 /**
@@ -113,7 +114,7 @@ void Compressor::setReleaseTime(double releaseTime) {
   if (checkParameterRange("ReleaseTime", releaseTime, mReleaseTimeRange)) {
     return;
   }
-  mReleaseGain = releaseTime == 0.0 ? 0.0 : std::exp(-1.0 / (96000 * releaseTime/1000));
+  mReleaseGain = releaseTime == 0.0 ? 0.0 : std::exp(-1.0 / (Mixer::getSampleRate() * releaseTime/1000));
 }
 
 /**
