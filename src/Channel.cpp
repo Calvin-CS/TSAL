@@ -2,26 +2,29 @@
 
 namespace tsal {
   
+Channel::Channel() {
+  mChannelIn.add(&mRoutedInstruments);
+  mChannelIn.add(&mRoutedChannels);
+}
+
 double Channel::getOutput() {
   return (mEffectChainEnd == nullptr) ? mChannelIn.getOutput() : mEffectChainEnd->getOutput();
 }
 
 /**
- * @brief Add an effect to the effect chain
+ * @brief Add an effect to the end of the effect chain
  * 
  * @param effect 
  */
 void Channel::add(Effect* effect) {
-  effect->add(&mChannelIn);
-  if (mEffectChainEnd == nullptr) {
-  } else {
-    // Remove the last effect and add it to the new one
-    effect->add(mEffectChainEnd);
+  effect->setChannel(&mChannelIn);
+  if (mEffectChainEnd != nullptr) {
+    // Set the last effect to be the second to last effect
+    effect->setNextEffect(mEffectChainEnd);
   }
   // Add the new effect as the last one in the chain
   mEffectChainEnd = effect;
 }
-
 /**
  * @brief Remove an effect from the effect chain 
  * 
@@ -30,8 +33,9 @@ void Channel::add(Effect* effect) {
 void Channel::remove(Effect* effect) {
   // If the effect is the last in the chain
   if (effect == mEffectChainEnd) {
-    // Get the next effect in the chain
+    // Get the next effect in the chain and set it as the end effect
     mEffectChainEnd = effect->getNextEffect();
+    effect->clear();
   } else {
     // The effect is not the last one, so pass up the chain
     mEffectChainEnd->remove(effect);
@@ -44,7 +48,7 @@ void Channel::remove(Effect* effect) {
 * @param instrument 
  */
 void Channel::add(Instrument* instrument) {
-  mChannelIn.add((OutputDevice*) instrument);
+  mRoutedInstruments.add(instrument);
 }
 
 /**
@@ -53,7 +57,7 @@ void Channel::add(Instrument* instrument) {
  * @param instrument 
  */
 void Channel::remove(Instrument* instrument) {
-  mChannelIn.remove((OutputDevice*) instrument);
+  mRoutedInstruments.remove(instrument);
 }
 
 /**
@@ -63,7 +67,7 @@ void Channel::remove(Instrument* instrument) {
  */
 void Channel::add(Channel* channel) {
   if (channel != this) {
-    mChannelIn.add((OutputDevice*) channel);  
+    mRoutedChannels.add(channel);
   }
 }
 
@@ -73,7 +77,7 @@ void Channel::add(Channel* channel) {
  * @param channel 
  */
 void Channel::remove(Channel* channel) {
-  mChannelIn.remove((OutputDevice*) channel);
+  mRoutedChannels.remove(channel);
 }
 
 };

@@ -35,7 +35,7 @@ double RouteDevice<DeviceType>::getInput() {
 
 template <typename DeviceType>
 double RouteDevice<DeviceType>::getOutput() {
-  return this->getInput();
+  return getInput();
 }
 
 /**
@@ -55,8 +55,13 @@ void RouteDevice<DeviceType>::add(DeviceType* output) {
  */
 template <typename DeviceType>
 void RouteDevice<DeviceType>::remove(DeviceType* output) {
-//  mInputDevices.erase(std::remove(mInputDevices.begin(), mInputDevices.end(), output));
+  for (auto it = mInputDevices.begin(); it != mInputDevices.end(); it++) {
+    if (output == (*it)) {
+      mInputDevices.erase(it);
+      break;
+    }
+  }
 }
 
-}
+} // namespace tsal
 #endif

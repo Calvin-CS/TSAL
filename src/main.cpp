@@ -43,7 +43,13 @@ int main() {
   thread_sleep(1000);
   osc.setGain(0.2);
   thread_sleep(1000);
+  
+  chan.remove(&osc);
+  
+  thread_sleep(1000);
+  
   osc.setMode(Oscillator::SAW);
+
   thread_sleep(1000);
   osc.setActive(false);
   Chord chord(numThreads, problemSize);

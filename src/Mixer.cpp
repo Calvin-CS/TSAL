@@ -117,7 +117,7 @@ void Mixer::remove(Channel* channel) {
 /**
  * @brief Add an instrument
  * 
- * Add and instrument to the default master channel
+ * Add an instrument to the default master channel
  *
  * @param instrument
  */
@@ -130,10 +130,33 @@ void Mixer::add(Instrument* instrument) {
  * 
  * Remove an instrument that was added to the default master channel
  * 
- *@param instrument
+ * @param instrument
  */
 void Mixer::remove(Instrument* instrument) {
   mMaster.remove(instrument);
+}
+
+/**
+ * @brief Add an effect
+ * 
+ * Add an effect to the default master channel
+ *
+ * @param effect
+ */
+void Mixer::add(Effect* effect) {
+  mMaster.add(effect);
+}
+
+
+/**
+ * @brief Remove an effect
+ * 
+ * Remove an effect that was added to the default master channel
+ * 
+ * @param effect
+ */
+void Mixer::remove(Effect* effect) {
+  mMaster.remove(effect);
 }
 
 unsigned Mixer::mSampleRate = 0;

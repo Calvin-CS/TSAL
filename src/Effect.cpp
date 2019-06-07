@@ -14,8 +14,7 @@ double Effect::getInput() {
   return input;
 }
 
-// Fix this eventually 
-void Effect::add(Effect* effect) {
+void Effect::setNextEffect(Effect* effect) {
   mNextEffect = effect;
 }
 
@@ -29,9 +28,8 @@ void Effect::add(Effect* effect) {
  */
 void Effect::remove(Effect* effect) {
   if (effect == mNextEffect) {
-    effect->removeChannel();
     mNextEffect = effect->getNextEffect();
-    effect->setNextEffect(nullptr);
+    effect->clear();
   } else {
     mNextEffect->remove(effect);
   }
