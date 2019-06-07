@@ -1,8 +1,9 @@
 #include "Oscillator.h"
 #include "Chord.h"
-#include "TSAudio.h"
+#include "Mixer.h"
 #include "MidiNotes.h"
 #include "Compressor.h"
+#include "Channel.h"
 #include <iostream>
 #include <memory>
 
@@ -23,12 +24,31 @@ int main() {
   
   omp_set_num_threads(numThreads);
   
-  TSAudio audio;
-  Compressor compressor;
-  audio.addNode(&compressor);
+  Mixer mixer;
 
-  Chord chord(numThreads, problemSize, C4, C5);
-  compressor.addNode(&chord);
+ // mixer.add(&chord);
+  Channel chan;
+  
+  Oscillator osc;
+  osc.setGain(1);
+
+
+  Oscillator osc2;
+  osc.setNote(C4);
+  
+  mixer.add(&chan);
+  
+  chan.add(&osc);
+
+  thread_sleep(1000);
+  osc.setGain(0.2);
+  thread_sleep(1000);
+  osc.setMode(Oscillator::SAW);
+  thread_sleep(1000);
+  osc.setActive(false);
+  Chord chord(numThreads, problemSize);
+  chan.add(&chord);
+  
   #pragma omp parallel
   {
     unsigned id = omp_get_thread_num();
@@ -38,16 +58,12 @@ int main() {
     
     #pragma omp for
     for(unsigned i = 1; i <= problemSize; i++) {
-
-      thread_sleep(10);
+      thread_sleep(10); 
       chord.step(id);
     }
     thread_sleep(1000);
   }
-
   chord.stop();
-  audio.removeNode(&compressor);
-  compressor.removeNode(&chord);
-
+  
   return 0;
 }

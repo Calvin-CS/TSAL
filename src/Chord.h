@@ -1,5 +1,7 @@
 #include "Oscillator.h"
-#include "AudioNode.h"
+#include "Instrument.h"
+#include "RouteDevice.h"
+#include "MidiNotes.h"
 #include <vector>
 
 #ifndef CHORD_H
@@ -13,61 +15,27 @@ namespace tsal {
  * Chord is an audiolization that starts from one pitch and transitions to another over
  * a period of work or time using the step method in a multithreaded environement
  */
-class Chord : public AudioNode {
+class Chord : public Instrument {
   public:
-    /**
-     * @brief Construct a new Chord object
-     * 
-     * @param numThreads correlates to the number of threads that will be running the chord
-     * @param problemSize the number of iterations or amount of work to compute
-     * @param startNote the starting note for the chord
-     * @param endNote the target note for the chord pitch change
-     */
-    Chord(unsigned numOscillators, unsigned problemSize, unsigned startNote, unsigned endNote);
+    Chord(unsigned numOscillators, unsigned problemSize, unsigned startNote = C4, unsigned endNote = C5);
 
     ~Chord();
 
-    /**
-     * @brief start all the oscillators
-     */
+    virtual double getOutput() override {
+      return router.getOutput();
+    }
+
     void start();
-
-    /**
-     * @brief stop all the oscillators
-     */
     void stop();
-
-    /**
-     * @brief start a oscillator
-     * 
-     * @param id the id of the thread and correlating oscillator
-     */
     void start(unsigned id);
-
-    /**
-     * @brief stop a oscillator
-     * 
-     * @param id the id of the thread and correlating oscillator
-     */
     void stop(unsigned id);
-
-    /**
-     * @brief changes the pitch of the oscillator towards the target note
-     * 
-     * For each bit of work done, the pitch of the oscillator will slowly
-     * move towards the target note until it finishes it work. If done correctly
-     * the oscillator should be at the target pitch once the work is finished
-     * 
-     * @param id the id of the thread and correlationg oscillator
-     * @param inc the fraction of work or time
-     */
     void step(unsigned id);
 
   private: 
-    std::vector<Oscillator*> mOscillators;
+    RouteDevice<Oscillator> router;
     std::vector<double> mTotalPitchChanges;
     
-    unsigned mNoteDeltas[3] = {0, 4, 7};
+    unsigned mNoteDeltas[4] = {0, 4, 7, 11};
     unsigned mProblemSize;
 };
 

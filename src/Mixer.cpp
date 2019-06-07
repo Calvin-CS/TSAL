@@ -1,11 +1,8 @@
-#include "TSAudio.h"
+#include "Mixer.h"
 
 namespace tsal {
 
-typedef signed short MY_TYPE;
-
-void errorCallback( RtAudioError::Type type, const std::string &errorText )
-{
+void errorCallback( RtAudioError::Type type, const std::string &errorText ) {
   // This example error handling function does exactly the same thing
   // as the embedded RtAudio::error() function.
   std::cout << "in errorCallback" << std::endl;
@@ -15,22 +12,25 @@ void errorCallback( RtAudioError::Type type, const std::string &errorText )
     throw( RtAudioError( errorText, type ) );
 }
 
+/* This is the main function that we give to the audio buffer to call for sampling
+ * Depending on how it's configured, this will usually get called 44100 per second
+ */
 int streamCallback(void *outputBuffer, void *inputBuffer, unsigned nBufferFrames, 
   double streamTime, RtAudioStreamStatus status, void *data) {
-  MY_TYPE *buffer = (MY_TYPE *) outputBuffer;
-  TSAudio *audio = (TSAudio *) data;
+  BIT_DEPTH *buffer = (BIT_DEPTH *) outputBuffer;
+  Mixer *audio = (Mixer *) data;
 
   if ( status )
     std::cout << "Stream underflow detected!" << std::endl;
 
   for (unsigned i = 0; i < nBufferFrames; i++) {
-    *buffer++ = (MY_TYPE) audio->getNodeSamples();
+    *buffer++ = (BIT_DEPTH) audio->getInput();
   }
   
   return 0;        
 }
 
-void TSAudio::initalizeStream() {
+void Mixer::initalizeStream() {
   if (mRtAudio.getDeviceCount() < 1) {
     std::cout << "\nNo audio devices found!\n";
     exit(1);
@@ -60,28 +60,82 @@ void TSAudio::initalizeStream() {
             << std::endl;
 
   try {
-    mRtAudio.openStream(&oParams, NULL, RTAUDIO_SINT16, mSampleRate, &mBufferFrames, 
+    mRtAudio.openStream(&oParams, NULL, FORMAT, mSampleRate, &mBufferFrames, 
       &streamCallback, (void *)this, &options, &errorCallback);
     mRtAudio.startStream();
   } catch (RtAudioError& e) {
     e.printMessage();
   }
+
+  // Add a compressor so people don't break their sound cards
+  mMaster.add(&mCompressor); 
 }
 
-TSAudio::TSAudio() {
+Mixer::Mixer() {
   mChannels = 1;
   initalizeStream();
 }
 
-TSAudio::TSAudio(unsigned channels, unsigned sampleRate) {
+/**
+ * @brief Construct a new Mixer
+ * 
+ * @param sampleRate if left blank, TSAudio will default to the highest sample rate supported
+ */
+Mixer::Mixer(unsigned sampleRate) {
   mSampleRate = sampleRate;
-  mChannels = channels;
+  // Eventually it would be nice to play in stereo, but that sounds hard for now
+  mChannels = 1;
   initalizeStream();
 }
 
-TSAudio::~TSAudio() {
+Mixer::~Mixer() {
   if (mRtAudio.isStreamOpen())
     mRtAudio.closeStream();
 }
 
+double Mixer::getInput() {
+  return mMaster.getOutput();
+}
+
+/**
+ * @brief Add a channel 
+ *
+ * @param channel
+ */
+void Mixer::add(Channel* channel) {
+  mMaster.add(channel);
+}
+
+/**
+ * @brief Remove a channel
+ * @param channel
+ */
+void Mixer::remove(Channel* channel) {
+  mMaster.remove(channel);
+}
+
+/**
+ * @brief Add an instrument
+ * 
+ * Add and instrument to the default master channel
+ *
+ * @param instrument
+ */
+void Mixer::add(Instrument* instrument) {
+  mMaster.add(instrument);
+}
+
+/**
+ * @brief Remove an instrument
+ * 
+ * Remove an instrument that was added to the default master channel
+ * 
+ *@param instrument
+ */
+void Mixer::remove(Instrument* instrument) {
+  mMaster.remove(instrument);
+}
+
+unsigned Mixer::mSampleRate = 0;
+unsigned Mixer::mBufferFrames = 0;
 }

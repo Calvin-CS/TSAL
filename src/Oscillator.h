@@ -1,9 +1,8 @@
-#include <memory>
-#include "AudioNode.h"
-#include "RtAudio.h"
+#include "Instrument.h"
 #include "SineWave.h"
 #include "SawWave.h"
 #include "SquareWave.h"
+#include "Mixer.h"
 
 #ifndef OSCILLATORNODE_H
 #define OSCILLATORNODE_H
@@ -11,13 +10,13 @@
 namespace tsal {
 
 /** @class Oscillator
- * @brief An audio node that generates sound from waveforms
+ * @brief A device that generates sound from a waveform
  *  
  * Oscillator is a low level synthesizer that generates samples from
  * algorithmic waveforms. It supports saw, sine, and square waveforms, as well
  * as custom waveforms that can be created by the user.
  */
-class Oscillator : public AudioNode {
+class Oscillator : public Instrument {
   public:
     /**
      * @brief Modes for the oscillator 
@@ -33,37 +32,19 @@ class Oscillator : public AudioNode {
 
     Oscillator();
 
-    /** 
-     * @brief Start sampling the waveform 
-     */
-    void start();
-
-    /** 
-     * @brief Stop sampling the waveform 
-     */
-    void stop();
-
-    virtual double nextBufferSample() override;
-
-    /** 
-     * @brief Set a custom waveform for the oscillator
-     * 
-     * Given a Waveform class, the oscillator will automatically switch to CUSTOM mode and 
-     * start sampling from the new waveform.
-     * 
-     * @param waveform a Waveform class that implements the getWaveformSample method
-     */ 
+    double getOutput() override;
     void setWaveform(Waveform waveform);
-
     void setMode(OscillatorMode mode);
     void setNote(unsigned note);
     void setFrequency(double frequency);
     void setGain(double gain);
-    double getFrequency() const { return mFrequency; };
-    unsigned getNote() const { return getNoteFromFrequency(mFrequency); };
-    double getGain() const { return mGain; };
+
+    double getFrequency() const;
+    unsigned getNote() const;
+    double getGain() const;
 
     static unsigned getNoteFromFrequency(double frequency);
+
     static double getFrequencyFromNote(unsigned note);
 
   private:
@@ -71,7 +52,6 @@ class Oscillator : public AudioNode {
     double polyBLEP(double t);
     double mGain;
     double mFrequency;
-    bool mActive;
 
     Waveform mCustomWaveform;
     SineWave mSine;

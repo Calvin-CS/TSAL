@@ -1,5 +1,6 @@
+#include "Effect.h"
 
-#include "AudioNode.h"
+#define COMPRESSOR_MAX_BUFFER 512
 
 #ifndef COMPRESSOR_H
 #define COMPRESSOR_H
@@ -8,78 +9,56 @@
 
 namespace tsal {
 
-typedef std::pair<double, double> range;
+typedef std::pair<double, double> ParameterRange;
 
 /** @class Compressor
- * @brief A DSP compressor
+ * @brief An audio compressor
  * 
  * A compressor used to reduce clipping. Essentially, if the sound routed through the 
  * compressor is louder than the compressors threshold, it will reduce the loudness.
  * Implementation adapted from https://christianfloisand.wordpress.com/2014/06/09/dynamics-processing-compressorlimiter-part-1/
  */
-class Compressor : public AudioNode {
+class Compressor : public Effect {
   public:
     Compressor();
-    virtual double nextBufferSample() override;
-
-    /**
-     * @brief Set the attack time (milliseconds)
-     * 
-     * @param attackTime
-     */
+    virtual double getOutput() override;
     void setAttackTime(double attackTime);
-
-    /**
-     * @brief Set the release time (milliseconds)
-     * 
-     * @param releaseTime 
-     */
     void setReleaseTime(double releaseTime);
+    void setThreshold(double threshold);
+    void setRatio(double ratio);
+    void setPreGain(double preGain);
+    void setPostGain(double postGain);
 
     static double ampToDb(double amplitude);
     static double dbToAmp(double db);
 
   private:
-    /**
-     * @brief Compress the audio in the buffer if necessary
-     * 
-     */
     void filterAudio();
-
-    /**
-     * @brief Get the sound envelope for the sample buffer
-     * 
-     */
     void getEnvelope();
-
-    /**
-     * 
-     * @brief Get the slope based off the ratio
-     * 
-     */
     void calculateSlope();
-
     double mEnvelopeSample;
 
-    // These values should be configurable
-    double* mBuffer;
-    double* mEnvelope;
-    unsigned mCurrentSample;
-    
+    // Figure what an optimal buffer size would be 
+    double mBuffer[COMPRESSOR_MAX_BUFFER];
+    double mEnvelope[COMPRESSOR_MAX_BUFFER];
+    unsigned mCurrentSample = COMPRESSOR_MAX_BUFFER;
+      
     double mSlope;
     double mGain;
     double mAttackGain;
     double mReleaseGain;
 
-    double mThreshold = 70.0;
-    double mRatio = 2.0;
+    double mThreshold = 80.0;
+    double mRatio = 1.5;
     double mPreGain = 0.0;
     double mPostGain = 0.0;
-    double mAttackTime = 1.0;
-    double mReleaseTime = 500.0;
 
-    static bool checkInRange(double parameter, range parameterRange);
-    static range mAttackTimeRange;
+    static bool checkParameterRange(std::string name, double value, ParameterRange parameterRange);
+    static ParameterRange mAttackTimeRange;
+    static ParameterRange mReleaseTimeRange;
+    static ParameterRange mThresholdRange;
+    static ParameterRange mRatioRange;
+    static ParameterRange mGainRange;
 };
 
 }

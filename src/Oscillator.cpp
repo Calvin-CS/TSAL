@@ -2,8 +2,6 @@
 #include "MidiNotes.h"
 #include <iostream>
 
-#define SCALE 32767.0
-
 namespace tsal {
 
 Oscillator::Oscillator() {
@@ -12,43 +10,14 @@ Oscillator::Oscillator() {
   setNote(tsal::C4);
 }
 
-void Oscillator::start() {
-  mActive = true;
-}
-
-void Oscillator::stop() {
-  mActive = false;
-}
-
-void Oscillator::setWaveform(Waveform waveform) {
-  mCustomWaveform = waveform;
-  setMode(CUSTOM);
-}
-
-void Oscillator::setNote(unsigned note) {
-  setFrequency(getFrequencyFromNote(note));
-}
-
-void Oscillator::setFrequency(double frequency) {
-  mFrequency = frequency;
-  mPhaseStep = mFrequency * mPI2 / mSampleRate;
-}
-
-void Oscillator::setGain(double gain) {
-  mGain = 0.5 * gain;
-}
-
-void Oscillator::setMode(OscillatorMode mode) {
-  mMode = mode;
-}
-
-// Helpful implementation of ployBLEP
+// Helpful implementation of ployBLEP to reduce aliasing
 // http://metafunction.co.uk/all-about-digital-oscillators-part-2-blits-bleps/
-double Oscillator::nextBufferSample() {
+double Oscillator::getOutput() {
+  // If not active, just play any sound
   if (!mActive) {
-    return 0;
+    return 0.0;
   }
-
+ 
   double value = 0.0;
   double t = mPhase / (M_PI * 2);
 
@@ -76,10 +45,22 @@ double Oscillator::nextBufferSample() {
   return value * SCALE * mGain;
 }
 
+/**
+ * @brief Get the note from a corresponding frequency
+ * 
+ * @param frequency 
+ * @return unsigned 
+ */
 unsigned Oscillator::getNoteFromFrequency(double frequency) {
   return (12/log(2)) * log(frequency/27.5) + 21;
 }
 
+/**
+ * @brief Get the frequency from a corresponding note
+ * 
+ * @param note 
+ * @return double 
+ */
 double Oscillator::getFrequencyFromNote(unsigned note) {
   return 27.5 * pow(2.0, (note - 21) / 12.0);
 };
@@ -107,6 +88,83 @@ double Oscillator::polyBLEP(double t)
   // no discontinuities 
   // 0 otherwise
   else return 0.0;
+}
+
+/** 
+ * @brief Set a custom waveform for the oscillator
+ * 
+ * Given a Waveform class, the oscillator will automatically switch to CUSTOM mode and 
+ * start sampling from the new waveform.
+ * 
+ * @param waveform a Waveform class that implements the getWaveformSample method
+ */ 
+void Oscillator::setWaveform(Waveform waveform) {
+  mCustomWaveform = waveform;
+  setMode(CUSTOM);
+}
+
+/**
+ * @brief Set the note 
+ * 
+ * @param note (midi format)
+ */
+void Oscillator::setNote(unsigned note) {
+  setFrequency(getFrequencyFromNote(note));
+}
+
+/**
+ * @brief Set the frequncy
+ * 
+ * @param frequency 
+ */
+void Oscillator::setFrequency(double frequency) {
+  mFrequency = frequency;
+  mPhaseStep = mFrequency * mPI2 / ((double) Mixer::getSampleRate());
+}
+
+/**
+ * @brief Set the gain
+ * 
+ * @param gain 
+ */
+void Oscillator::setGain(double gain) {
+  mGain = 0.5 * gain;
+}
+
+/**
+ * @brief Set the mode
+ * 
+ * @param mode 
+ */
+void Oscillator::setMode(OscillatorMode mode) {
+  mMode = mode;
+}
+
+/**
+ * @brief Get the frequency
+ * 
+ * @return double 
+ */
+double Oscillator::getFrequency() const {
+  return mFrequency;
+}
+
+/**
+ * @brief Get the note
+ * 
+ * @return unsigned (midi)
+ */
+unsigned Oscillator::getNote() const {
+  return getNoteFromFrequency(mFrequency);
+}
+
+/**
+ * @brief Get the gain
+ * 
+ * @return double 
+ */
+double Oscillator::getGain() const {
+  return mGain;
 }
 
 const double Oscillator::mPI2 = M_PI * 2;
