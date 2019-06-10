@@ -29,7 +29,7 @@ class OutputDevice {
      * 
      * @param active 
      */
-    virtual void setActive(bool active) { mActive = active; };
+    virtual void setActive(bool active = true) { mActive = active; };
   protected:
     bool mActive = true;
 };
