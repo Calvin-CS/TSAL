@@ -2,7 +2,7 @@
 #define MIDINOTE_H
 
 namespace tsal {
-enum MidiNotes {
+enum MidiNote {
   A0 = 21,
   As0,
   B0,

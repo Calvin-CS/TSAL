@@ -10,39 +10,54 @@ Oscillator::Oscillator() {
   setNote(tsal::C4);
 }
 
+void Oscillator::start() {
+  envelope.start();
+}
+
+void Oscillator::stop() {
+  envelope.stop();
+}
+
 // Helpful implementation of ployBLEP to reduce aliasing
 // http://metafunction.co.uk/all-about-digital-oscillators-part-2-blits-bleps/
 double Oscillator::getOutput() {
-  // If not active, just play any sound
+  // If not active, move value to 0
   if (!mActive) {
-    return 0.0;
-  }
- 
-  double value = 0.0;
-  double t = mPhase / (M_PI * 2);
+    mPhase = 0.0;
+    // If we have interpolated close to 0, just return 0
+    if (-0.001 < mWaveFormValue && mWaveFormValue < 0.001) {
+      return 0.0;
+    }
+    // Move the value to zero to reduce clipping
+    mWaveFormValue += (mWaveFormValue > 0.0) ? -0.001 : 0.001;
+  } else {
+    double t = mPhase / (M_PI * 2);
 
-  switch (mMode) {
-    case SINE:
-      value = mSine.getWaveformSample(mPhase);
-      break;
-    case SAW:
-      value = mSaw.getWaveformSample(mPhase);
-      value -= polyBLEP(t); // Layer output of Poly BLEP on top
-      break;
-    case SQUARE:
-      value = mSquare.getWaveformSample(mPhase);
-      value += polyBLEP(t); // Layer output of Poly BLEP on top (flip)
-      value -= polyBLEP(fmod(t + 0.5, 1.0)); // Layer output of Poly BLEP on top (flop)
-      break;
-    case CUSTOM:
-      value = mCustomWaveform.getWaveformSample(mPhase);
-      break;
+    switch (mMode) {
+      case SINE:
+        mWaveFormValue = mSine.getWaveformSample(mPhase);
+        break;
+      case SAW:
+        mWaveFormValue = mSaw.getWaveformSample(mPhase);
+        mWaveFormValue -= polyBLEP(t); // Layer output of Poly BLEP on top
+        break;
+      case SQUARE:
+        mWaveFormValue = mSquare.getWaveformSample(mPhase);
+        mWaveFormValue += polyBLEP(t); // Layer output of Poly BLEP on top (flip)
+        mWaveFormValue -= polyBLEP(fmod(t + 0.5, 1.0)); // Layer output of Poly BLEP on top (flop)
+        break;
+      case CUSTOM:
+        mWaveFormValue = mCustomWaveform.getWaveformSample(mPhase);
+        break;
+    }
+
+    mPhase += mPhaseStep;  
+    if (mPhase >= mPI2)
+      mPhase = 0;
   }
 
-  mPhase += mPhaseStep;  
-  if (mPhase >= mPI2)
-    mPhase = 0;
-  return value * SCALE * mGain;
+  double env = envelope.getEnvelope();
+  return mWaveFormValue * SCALE * mGain * env;
 }
 
 /**
@@ -128,7 +143,7 @@ void Oscillator::setFrequency(double frequency) {
  * @param gain 
  */
 void Oscillator::setGain(double gain) {
-  mGain = 0.5 * gain;
+  mGain = gain;
 }
 
 /**

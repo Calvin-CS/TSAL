@@ -1,4 +1,5 @@
 #include "Instrument.h"
+#include "Envelope.h"
 #include "SineWave.h"
 #include "SawWave.h"
 #include "SquareWave.h"
@@ -31,8 +32,11 @@ class Oscillator : public Instrument {
     };
 
     Oscillator();
-
     double getOutput() override;
+
+    void start();
+    void stop();
+    
     void setWaveform(Waveform waveform);
     void setMode(OscillatorMode mode);
     void setNote(unsigned note);
@@ -61,6 +65,10 @@ class Oscillator : public Instrument {
     OscillatorMode mMode;
     double mPhase;
     double mPhaseStep;
+    double mWaveFormValue = 0.0;
+
+    // Just testing
+    Envelope envelope;
 };
 
 }

@@ -27,16 +27,21 @@ int main() {
   Mixer mixer;
   vector<Oscillator> osc(numThreads);
   for (unsigned i = 0; i < osc.size(); i++) {
-    osc[i].setGain(0.5);
+    osc[i].setGain(0.2);
     mixer.add(&osc[i]);
   }
+  osc[0].start();
+  thread_sleep(1000);
+  osc[0].stop();
+  thread_sleep(3000);
+
   MidiFile midifile;
   midifile.read("/home/mark/Downloads/test.mid");
   midifile.joinTracks();
 
   omp_set_num_threads(numThreads);
 
-  vector<int> eventStamps = {0, 191, midifile[0].size() - 1};
+  int eventStamps[] = {0, 191, midifile[0].size() - 1};
   double secondsPerTick = ((double) midifile.getFileDurationInSeconds()) / midifile.getFileDurationInTicks();
   #pragma omp parallel
   {
@@ -44,10 +49,11 @@ int main() {
     MidiEvent* me;
     for (int event = eventStamps[id]; event < eventStamps[id+1]; event++) {
       me = &midifile[0][event];   
-      osc[id].setActive(me->isNoteOn());
+      me->isNoteOn() ? osc[id].start() : osc[id].stop();
       osc[id].setNote(me->getKeyNumber());
       thread_sleep((midifile[0][event + 1].tick - me->tick) * secondsPerTick * 1000);
     }
   }
+  
   return 0;
 }
