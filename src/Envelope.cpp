@@ -10,6 +10,11 @@ Envelope::Envelope() {
   mStateValue[RELEASE] = 1.0; 
 }
 
+/**
+ * @brief Increments the current state
+ * 
+ * Each state has its own set of unique properties. Those properties are updated here
+ */
 void Envelope::updateState() {
   mState = static_cast<EnvelopeState>((mState + 1) % 5);
   mCurrentStateIndex = 0;
@@ -36,6 +41,11 @@ void Envelope::updateState() {
   }  
 }
 
+/**
+ * @brief Gets the current sample of the envelope
+ * 
+ * @return double A sample of the envelope
+ */
 double Envelope::getEnvelope() {
   if (stateIsTimed()) {
     if (mCurrentStateIndex == mNextStateIndex) {
@@ -47,22 +57,46 @@ double Envelope::getEnvelope() {
   return mEnvelopeValue;
 }
 
-void Envelope::calculateMultiplier(double startLevel, double endLevel, unsigned long long lengthInSamples) {
-  mMultiplier = 1.0 + (log(endLevel) - log(startLevel)) / (lengthInSamples);
+/**
+ * @brief Calculate the multiplier that will be used to update the envelope value
+ * 
+ * Human sense are logarithmic, the envelope needs to change exponentially
+ * This function calculates an appropriate multiplier that gets the envelope value 
+ * from a start level to an end level in the number of specified samples (time)
+ * @param startLevel 
+ * @param endLevel 
+ * @param lengthInSamples
+ */
+void Envelope::calculateMultiplier(double startLevel, double endLevel, unsigned lengthInSamples) {
+  mMultiplier = 1.0 + (log(endLevel) - log(startLevel)) / lengthInSamples;
 }
 
+/**
+ * @brief starts the envelope in the attack state 
+ * 
+ */
 void Envelope::start() {
   // Start the envelope in the attack state
   mState = OFF;
   updateState();
 }
 
+/**
+ * @brief stops the envelope by transitioning into the release state
+ * 
+ */
 void Envelope::stop() {
-  if (mState != OFF) {
-    updateState();
-  }
+  mState = SUSTAIN;
+  updateState();
 }
 
+/**
+ * @brief Checks if the current state is one that is timed
+ * 
+ * Both off and sustain states can last indefinitely, while the others are timed
+ * @return true 
+ * @return false 
+ */
 bool Envelope::stateIsTimed() {
   return mState != OFF && mState != SUSTAIN;
 }

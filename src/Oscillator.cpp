@@ -23,13 +23,7 @@ void Oscillator::stop() {
 double Oscillator::getOutput() {
   // If not active, move value to 0
   if (!mActive) {
-    mPhase = 0.0;
-    // If we have interpolated close to 0, just return 0
-    if (-0.001 < mWaveFormValue && mWaveFormValue < 0.001) {
-      return 0.0;
-    }
-    // Move the value to zero to reduce clipping
-    mWaveFormValue += (mWaveFormValue > 0.0) ? -0.001 : 0.001;
+    return 0.0;
   } else {
     double t = mPhase / (M_PI * 2);
 

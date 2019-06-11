@@ -6,6 +6,13 @@
 
 namespace tsal {
 
+/** @class Envelope
+ * @brief An sound envelope that can be used to change a sound over time
+ * 
+ * A 4 stage envelope transitions from attack, to decay, to sustain, and then to release. It achieves
+ * a smoother sound when overlayed on an instrument
+ * Implementation adapted from http://www.martin-finke.de/blog/articles/audio-plugins-011-envelopes/
+ */
 class Envelope {
   public:
     enum EnvelopeState {
@@ -21,7 +28,7 @@ class Envelope {
     void start();
     void stop();
   private:
-    void calculateMultiplier(double startLevel, double endLevel, unsigned long long lengthInSamples);
+    void calculateMultiplier(double startLevel, double endLevel, unsigned lengthInSamples);
     bool stateIsTimed(); 
     EnvelopeState mState = OFF; 
     double mStateValue[5];

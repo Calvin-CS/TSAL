@@ -20,6 +20,7 @@ void thread_sleep(unsigned milliseconds) {
   std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
 }
 
+
 unsigned problemSize = 500;
 unsigned numThreads = 2;
 
@@ -30,11 +31,7 @@ int main() {
     osc[i].setGain(0.2);
     mixer.add(&osc[i]);
   }
-  osc[0].start();
-  thread_sleep(1000);
-  osc[0].stop();
-  thread_sleep(3000);
-
+    
   MidiFile midifile;
   midifile.read("/home/mark/Downloads/test.mid");
   midifile.joinTracks();
