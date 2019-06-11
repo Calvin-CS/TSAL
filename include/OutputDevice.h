@@ -6,6 +6,7 @@
 typedef signed short BIT_DEPTH;
 #define FORMAT RTAUDIO_SINT16
 #define SCALE 32767.0
+#define PI2 M_PI * 2
 
 namespace tsal {
 

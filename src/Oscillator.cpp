@@ -24,34 +24,29 @@ double Oscillator::getOutput() {
   // If not active, move value to 0
   if (!mActive) {
     return 0.0;
-  } else {
-    double t = mPhase / (M_PI * 2);
+  } 
+  double t = mPhase / (M_PI * 2);
 
-    switch (mMode) {
-      case SINE:
-        mWaveFormValue = mSine.getWaveformSample(mPhase);
-        break;
-      case SAW:
-        mWaveFormValue = mSaw.getWaveformSample(mPhase);
-        mWaveFormValue -= polyBLEP(t); // Layer output of Poly BLEP on top
-        break;
-      case SQUARE:
-        mWaveFormValue = mSquare.getWaveformSample(mPhase);
-        mWaveFormValue += polyBLEP(t); // Layer output of Poly BLEP on top (flip)
-        mWaveFormValue -= polyBLEP(fmod(t + 0.5, 1.0)); // Layer output of Poly BLEP on top (flop)
-        break;
-      case CUSTOM:
-        mWaveFormValue = mCustomWaveform.getWaveformSample(mPhase);
-        break;
-    }
-
-    mPhase += mPhaseStep;  
-    if (mPhase >= mPI2)
-      mPhase = 0;
+  switch (mMode) {
+    case SINE:
+      mWaveFormValue = sin(mPhase);
+      break;
+    case SAW:
+      mWaveFormValue = (2.0 * mPhase / (2 * M_PI) ) - 1.0;
+      mWaveFormValue -= polyBLEP(t); // Layer output of Poly BLEP on top
+      break;
+    case SQUARE:
+      mWaveFormValue = mPhase < M_PI ? 1 : -1;
+      mWaveFormValue += polyBLEP(t); // Layer output of Poly BLEP on top (flip)
+      mWaveFormValue -= polyBLEP(fmod(t + 0.5, 1.0)); // Layer output of Poly BLEP on top (flop)
+      break;
   }
 
-  double env = envelope.getEnvelope();
-  return mWaveFormValue * SCALE * mGain * env;
+  mPhase += mPhaseStep;  
+  if (mPhase >= PI2)
+    mPhase = 0;
+
+  return mWaveFormValue * SCALE * mGain * envelope.getEnvelope();
 }
 
 /**
@@ -76,7 +71,7 @@ double Oscillator::getFrequencyFromNote(unsigned note) {
 
 double Oscillator::polyBLEP(double t)
 {
-  double dt = mPhaseStep / mPI2;
+  double dt = mPhaseStep / PI2;
 
   // t-t^2/2 +1/2
   // 0 < t <= 1
@@ -99,19 +94,6 @@ double Oscillator::polyBLEP(double t)
   else return 0.0;
 }
 
-/** 
- * @brief Set a custom waveform for the oscillator
- * 
- * Given a Waveform class, the oscillator will automatically switch to CUSTOM mode and 
- * start sampling from the new waveform.
- * 
- * @param waveform a Waveform class that implements the getWaveformSample method
- */ 
-void Oscillator::setWaveform(Waveform waveform) {
-  mCustomWaveform = waveform;
-  setMode(CUSTOM);
-}
-
 /**
  * @brief Set the note 
  * 
@@ -128,7 +110,7 @@ void Oscillator::setNote(unsigned note) {
  */
 void Oscillator::setFrequency(double frequency) {
   mFrequency = frequency;
-  mPhaseStep = mFrequency * mPI2 / ((double) Mixer::getSampleRate());
+  mPhaseStep = mFrequency * PI2 / ((double) Mixer::getSampleRate());
 }
 
 /**
@@ -175,7 +157,5 @@ unsigned Oscillator::getNote() const {
 double Oscillator::getGain() const {
   return mGain;
 }
-
-const double Oscillator::mPI2 = M_PI * 2;
 
 }

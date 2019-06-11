@@ -47,7 +47,11 @@ int main() {
     for (int event = eventStamps[id]; event < eventStamps[id+1]; event++) {
       me = &midifile[0][event];   
       me->isNoteOn() ? osc[id].start() : osc[id].stop();
-      osc[id].setNote(me->getKeyNumber());
+      if (me->isNote()) {
+        osc[id].setNote(me->getKeyNumber());
+        osc[id].setGain(0.5 * (((double) me->getVelocity())/127.0));
+      }
+      
       thread_sleep((midifile[0][event + 1].tick - me->tick) * secondsPerTick * 1000);
     }
   }

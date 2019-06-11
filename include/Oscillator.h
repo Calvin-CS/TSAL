@@ -1,8 +1,5 @@
 #include "Instrument.h"
 #include "Envelope.h"
-#include "SineWave.h"
-#include "SawWave.h"
-#include "SquareWave.h"
 #include "Mixer.h"
 
 #ifndef OSCILLATORNODE_H
@@ -14,8 +11,7 @@ namespace tsal {
  * @brief A device that generates sound from a waveform
  *  
  * Oscillator is a low level synthesizer that generates samples from
- * algorithmic waveforms. It supports saw, sine, and square waveforms, as well
- * as custom waveforms that can be created by the user.
+ * algorithmic waveforms. It supports saw, sine, and square waveforms
  */
 class Oscillator : public Instrument {
   public:
@@ -27,8 +23,7 @@ class Oscillator : public Instrument {
     enum OscillatorMode {
       SAW,
       SINE,
-      SQUARE,
-      CUSTOM
+      SQUARE
     };
 
     Oscillator();
@@ -37,7 +32,6 @@ class Oscillator : public Instrument {
     void start();
     void stop();
     
-    void setWaveform(Waveform waveform);
     void setMode(OscillatorMode mode);
     void setNote(unsigned note);
     void setFrequency(double frequency);
@@ -52,15 +46,9 @@ class Oscillator : public Instrument {
     static double getFrequencyFromNote(unsigned note);
 
   private:
-    static const double mPI2;
     double polyBLEP(double t);
     double mGain;
     double mFrequency;
-
-    Waveform mCustomWaveform;
-    SineWave mSine;
-    SawWave mSaw;
-    SquareWave mSquare;
 
     OscillatorMode mMode;
     double mPhase;
