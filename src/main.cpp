@@ -22,22 +22,38 @@ void thread_sleep(unsigned milliseconds) {
 
 
 unsigned problemSize = 500;
-unsigned numThreads = 2;
+unsigned numThreads = 4;
 
 int main() {  
   Mixer mixer;
   vector<Oscillator> osc(numThreads);
   for (unsigned i = 0; i < osc.size(); i++) {
-    osc[i].setGain(0.2);
+    osc[i].setGain(0.05);
     mixer.add(&osc[i]);
   }
     
   MidiParser midiParser;
-  midiParser.setNumThreads(2);
-  midiParser.read("/home/mark/Downloads/test.mid");
+  midiParser.setNumThreads(1);
+  midiParser.read("/home/mark/Downloads/jub.mid");
 
   omp_set_num_threads(numThreads);
 
+  #pragma omp parallel
+  {
+    int id = omp_get_thread_num();
+    thread_sleep(id * midiParser.quaterNoteMs(4));
+    for (unsigned i = 0; i < midiParser.size() - 1; i++) {
+      auto me = midiParser[i];  
+      if (me.isNoteOn()) {
+        osc[id].start();
+        osc[id].setNote(me.getKeyNumber());
+        //osc[id].setGain(0.5 * (((double) me.getVelocity())/127.0));
+      }
+      
+      thread_sleep(midiParser.ticksToMs(midiParser[i + 1].tick - me.tick));
+    }
+  }
+  /*
   #pragma omp parallel
   {
     int id = omp_get_thread_num();
@@ -53,6 +69,6 @@ int main() {
       thread_sleep(midiParser.ticksToMs(midiParser[i + 1].tick - me.tick));
     }
   }
-  
+  */
   return 0;
 }

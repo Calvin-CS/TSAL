@@ -36,12 +36,17 @@ void MidiParser::read(const std::string& filename) {
 
   mMidiFile.sortTracks();
   mMsPerTick = 1000 * mMidiFile.getFileDurationInSeconds()/((double) totalTicks);
+  mMsPerQuater = 1000 * mMidiFile.getFileDurationInSeconds()/((double) mMidiFile.getFileDurationInQuarters());
+  std::cout << mMsPerQuater << std::endl;
 }
 
 double MidiParser::ticksToMs(unsigned ticks) const {
   return ticks * mMsPerTick;
 }
 
+double MidiParser::quaterNoteMs(unsigned ticks) const {
+  return ticks * mMsPerQuater;
+}
 const smf::MidiEvent& MidiParser::operator[] (int aEvent) const {
   return mMidiFile[0][aEvent];
 }
