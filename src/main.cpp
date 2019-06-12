@@ -35,9 +35,7 @@ int main() {
   MidiParser midiParser;
   midiParser.setNumThreads(1);
   midiParser.read("/home/mark/Downloads/jub.mid");
-
   omp_set_num_threads(numThreads);
-  /*
   #pragma omp parallel
   {
     int id = omp_get_thread_num();
@@ -53,7 +51,6 @@ int main() {
       thread_sleep(midiParser.ticksToMs(midiParser[i + 1].tick - me.tick));
     }
   }
-  */
   /*
   #pragma omp parallel
   {
@@ -72,6 +69,7 @@ int main() {
   }
   */
   for (unsigned i = 0; i < osc.size(); i++) {
+    mixer.remove(&osc[i]);
   }
   return 0;
 }

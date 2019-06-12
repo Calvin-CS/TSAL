@@ -68,7 +68,7 @@ void Compressor::filterAudio() {
   
   // Apply the adjusted gain and postGain to the audio buffer
   for (unsigned i = 0; i < COMPRESSOR_MAX_BUFFER; i++) {
-    mGain = mSlope * (mThreshold - mEnvelope[i]);
+    mGain = mSlope * (mThreshold - ampToDb(mEnvelope[i]));
     mGain = std::min(0.0, mGain);
     mGain = dbToAmp(mGain);
     mBuffer[i] *= (mGain * postGainAmp);

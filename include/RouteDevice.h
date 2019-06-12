@@ -58,6 +58,7 @@ void RouteDevice<DeviceType>::remove(DeviceType* output) {
   for (auto it = mInputDevices.begin(); it != mInputDevices.end(); it++) {
     if (output == (*it)) {
       mInputDevices.erase(it);
+      //std::cout << "Removing device" << std::endl;  
       break;
     }
   }
