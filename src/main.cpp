@@ -26,7 +26,7 @@ unsigned numThreads = 4;
 
 int main() {  
   Mixer mixer;
-  vector<Oscillator> osc(numThreads);
+  vector<Oscillator> osc(numThreads); 
   for (unsigned i = 0; i < osc.size(); i++) {
     osc[i].setGain(0.05);
     mixer.add(&osc[i]);
@@ -37,7 +37,7 @@ int main() {
   midiParser.read("/home/mark/Downloads/jub.mid");
 
   omp_set_num_threads(numThreads);
-
+  /*
   #pragma omp parallel
   {
     int id = omp_get_thread_num();
@@ -53,6 +53,7 @@ int main() {
       thread_sleep(midiParser.ticksToMs(midiParser[i + 1].tick - me.tick));
     }
   }
+  */
   /*
   #pragma omp parallel
   {
@@ -70,5 +71,7 @@ int main() {
     }
   }
   */
+  for (unsigned i = 0; i < osc.size(); i++) {
+  }
   return 0;
 }

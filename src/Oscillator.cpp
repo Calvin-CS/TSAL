@@ -44,9 +44,9 @@ double Oscillator::getOutput() {
 
   mPhase += mPhaseStep;  
   if (mPhase >= PI2)
-    mPhase = 0;
+    mPhase = 0.0;
 
-  return mWaveFormValue * SCALE * mGain * envelope.getEnvelope();
+  return mWaveFormValue * SCALE * mGain;
 }
 
 /**

@@ -36,17 +36,18 @@ class Compressor : public Effect {
     void filterAudio();
     void getEnvelope();
     void calculateSlope();
-    double mEnvelopeSample;
+    double mEnvelopeSample = 0.0;
 
     // Figure what an optimal buffer size would be 
-    double mBuffer[COMPRESSOR_MAX_BUFFER];
-    double mEnvelope[COMPRESSOR_MAX_BUFFER];
+    double mBuffer[COMPRESSOR_MAX_BUFFER] = { 0 };
+
+    double mEnvelope[COMPRESSOR_MAX_BUFFER] = { 0 };
     unsigned mCurrentSample = COMPRESSOR_MAX_BUFFER;
       
-    double mSlope;
-    double mGain;
-    double mAttackGain;
-    double mReleaseGain;
+    double mSlope = 0.0;
+    double mGain = 0.0;
+    double mAttackGain = 0.0;
+    double mReleaseGain = 0.0;
 
     double mThreshold = 80.0;
     double mRatio = 2.0;

@@ -51,8 +51,8 @@ class Oscillator : public Instrument {
     double mFrequency;
 
     OscillatorMode mMode;
-    double mPhase;
-    double mPhaseStep;
+    double mPhase = 0.0;
+    double mPhaseStep = 0.0;
     double mWaveFormValue = 0.0;
 
     // Just testing

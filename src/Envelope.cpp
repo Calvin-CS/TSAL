@@ -68,7 +68,7 @@ double Envelope::getEnvelope() {
  * @param lengthInSamples
  */
 void Envelope::calculateMultiplier(double startLevel, double endLevel, unsigned lengthInSamples) {
-  mMultiplier = 1.0 + (log(endLevel) - log(startLevel)) / lengthInSamples;
+  mMultiplier = 1.0 + (std::log(endLevel) - std::log(startLevel)) / lengthInSamples;
 }
 
 /**

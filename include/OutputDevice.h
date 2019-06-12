@@ -1,4 +1,6 @@
 #include <iostream>
+#define _USE_MATH_DEFINES 
+#include <cmath>
 
 #ifndef OUTPUTDEVICE_H
 #define OUTPUTDEVICE_H
