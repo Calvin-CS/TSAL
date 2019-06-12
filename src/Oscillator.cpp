@@ -7,7 +7,7 @@ namespace tsal {
 Oscillator::Oscillator() {
   setMode(SINE);
   setGain(0.5);
-  setNote(tsal::C4);
+  setNote(C4);
 }
 
 void Oscillator::start() {
@@ -25,7 +25,7 @@ double Oscillator::getOutput() {
   if (!mActive) {
     return 0.0;
   } 
-  double t = mPhase / (M_PI * 2);
+  double t = mPhase / PI2;
 
   switch (mMode) {
     case SINE:

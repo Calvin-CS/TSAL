@@ -11,7 +11,7 @@ typedef signed short BIT_DEPTH;
 namespace tsal {
 
 /** @class OutputDevice
- * @brief Base class for a device that produces output
+ * @brief Base class for a device that produces audio output
  * 
  */
 class OutputDevice {
