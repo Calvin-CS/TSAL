@@ -8,6 +8,7 @@ Oscillator::Oscillator() {
   setMode(SINE);
   setGain(0.5);
   setNote(C4);
+  mVelocity = 127.0;
 }
 
 void Oscillator::start() {
@@ -46,7 +47,7 @@ double Oscillator::getOutput() {
   if (mPhase >= PI2)
     mPhase = 0.0;
 
-  return mWaveFormValue * SCALE * mGain;
+  return mWaveFormValue * SCALE * mGain * (mVelocity / 127.0);
 }
 
 /**
@@ -92,6 +93,18 @@ double Oscillator::polyBLEP(double t)
   // no discontinuities 
   // 0 otherwise
   else return 0.0;
+}
+
+/**
+ * @brief Play a note with a velocity
+ * 
+ * @param note 
+ * @param velocity
+ */
+void Oscillator::playNote(unsigned note, double velocity) {
+  setFrequency(getFrequencyFromNote(note));
+  mVelocity = velocity;
+  start();
 }
 
 /**

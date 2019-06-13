@@ -22,7 +22,7 @@ void thread_sleep(unsigned milliseconds) {
 
 
 unsigned problemSize = 500;
-unsigned numThreads = 4;
+unsigned numThreads = 1;
 
 int main() {  
   Mixer mixer;
@@ -34,7 +34,7 @@ int main() {
     
   MidiParser midiParser;
   midiParser.setNumThreads(1);
-  midiParser.read("/home/mark/Downloads/jub.mid");
+  midiParser.read("/home/mark/Downloads/velocity.mid");
   omp_set_num_threads(numThreads);
   #pragma omp parallel
   {
@@ -43,12 +43,12 @@ int main() {
     for (unsigned i = 0; i < midiParser.size() - 1; i++) {
       auto me = midiParser[i];  
       if (me.isNoteOn()) {
-        osc[id].start();
-        osc[id].setNote(me.getKeyNumber());
+        osc[id].playNote(me.getKeyNumber(), me.getVelocity());
         //osc[id].setGain(0.5 * (((double) me.getVelocity())/127.0));
       }
       
       thread_sleep(midiParser.ticksToMs(midiParser[i + 1].tick - me.tick));
+      osc[id].stop();
     }
   }
   /*

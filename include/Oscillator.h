@@ -31,7 +31,8 @@ class Oscillator : public Instrument {
 
     void start();
     void stop();
-    
+    void playNote(unsigned note, double velocity);
+
     void setMode(OscillatorMode mode);
     void setNote(unsigned note);
     void setFrequency(double frequency);
@@ -42,14 +43,14 @@ class Oscillator : public Instrument {
     double getGain() const;
 
     static unsigned getNoteFromFrequency(double frequency);
-
     static double getFrequencyFromNote(unsigned note);
 
   private:
     double polyBLEP(double t);
     double mGain;
     double mFrequency;
-
+    double mVelocity;
+    
     OscillatorMode mMode;
     double mPhase = 0.0;
     double mPhaseStep = 0.0;
