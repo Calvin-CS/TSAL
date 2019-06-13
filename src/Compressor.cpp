@@ -1,5 +1,6 @@
 #include "Compressor.h"
 #include "Mixer.h"
+#include "Util.h"
 #include <iostream>
   
 namespace tsal {
@@ -98,9 +99,7 @@ double Compressor::dbToAmp(double db) {
  * @param attackTime
  */
 void Compressor::setAttackTime(double attackTime) {
-  if (checkParameterRange("AttackTime", attackTime, mAttackTimeRange)) {
-    return;
-  }
+  attackTime = checkParameterRange("AttackTime", attackTime, mAttackTimeRange);
   mAttackGain = attackTime == 0.0 ? 0.0 : std::exp(-1.0 / (Mixer::getSampleRate() * attackTime/1000));
 }
 
@@ -110,9 +109,7 @@ void Compressor::setAttackTime(double attackTime) {
  * @param releaseTime 
  */
 void Compressor::setReleaseTime(double releaseTime) {
-  if (checkParameterRange("ReleaseTime", releaseTime, mReleaseTimeRange)) {
-    return;
-  }
+  releaseTime = checkParameterRange("ReleaseTime", releaseTime, mReleaseTimeRange);
   mReleaseGain = releaseTime == 0.0 ? 0.0 : std::exp(-1.0 / (Mixer::getSampleRate() * releaseTime/1000));
 }
 
@@ -122,10 +119,7 @@ void Compressor::setReleaseTime(double releaseTime) {
  * @param threshold (dB)
  */
 void Compressor::setThreshold(double threshold) {
-  if (checkParameterRange("Threshold", threshold, mThresholdRange)) {
-    return;
-  }
-  mThreshold = threshold;
+  mThreshold = checkParameterRange("Threshold", threshold, mThresholdRange);
 }
 
 /**
@@ -134,10 +128,7 @@ void Compressor::setThreshold(double threshold) {
  * @param ratio (1: n)
  */
 void Compressor::setRatio(double ratio) {
-  if (checkParameterRange("Ratio", ratio, mRatioRange)) {
-    return;
-  }
-  mRatio = ratio;
+  mRatio = checkParameterRange("Ration", ratio, mRatioRange); 
 }
 
 /**
@@ -146,10 +137,7 @@ void Compressor::setRatio(double ratio) {
  * @param preGain (dB)
  */
 void Compressor::setPreGain(double preGain) {
-  if (checkParameterRange("PreGain", preGain, mGainRange)) {
-    return;
-  }
-  mPreGain = preGain;
+  mPreGain = checkParameterRange("PreGain", preGain, mGainRange);
 }
 
 /**
@@ -158,27 +146,12 @@ void Compressor::setPreGain(double preGain) {
  * @param postGain (dB)
  */
 void Compressor::setPostGain(double postGain) {
-  if (checkParameterRange("PostGain", postGain, mGainRange)) {
-    return;
-  }
-  mPostGain = postGain;
+  mPostGain = checkParameterRange("PostGain", postGain, mGainRange);
 }
 
-// This should probably be replaced by an exception, so make an exception class
-bool Compressor::checkParameterRange(std::string name, double value, ParameterRange range) {
-  bool outOfRange = range.first <= value && value >= range.second;
-  if (outOfRange) {
-    std::cout << name << ": not in range [" 
-              << range.first << ", " 
-              << range.second 
-              << "]" << std::endl;
-  }
-  return outOfRange;
-}
-
-ParameterRange Compressor::mAttackTimeRange = std::make_pair(0.0, 2000.0);
-ParameterRange Compressor::mReleaseTimeRange = std::make_pair(0.0, 2000.0);
-ParameterRange Compressor::mThresholdRange = std::make_pair(-30.0, 400.0);
-ParameterRange Compressor::mRatioRange = std::make_pair(1.0, 20.0);
-ParameterRange Compressor::mGainRange = std::make_pair(-30.0, 30.0);
+ParameterRange<double> Compressor::mAttackTimeRange = std::make_pair(0.0, 2000.0);
+ParameterRange<double> Compressor::mReleaseTimeRange = std::make_pair(0.0, 2000.0);
+ParameterRange<double> Compressor::mThresholdRange = std::make_pair(-30.0, 400.0);
+ParameterRange<double> Compressor::mRatioRange = std::make_pair(1.0, 20.0);
+ParameterRange<double> Compressor::mGainRange = std::make_pair(-30.0, 30.0);
 }

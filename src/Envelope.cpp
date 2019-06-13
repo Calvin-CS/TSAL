@@ -2,8 +2,13 @@
 
 namespace tsal {
 
+template <typename Item>
+Item checkParameterRangeWithMax(const std::string& name, Item value, std::pair<Item, Item> range) {
+  return std::max(checkParameterRange(name, value, range), MIN_VALUE);
+}
+
 Envelope::Envelope() {
-  mStateValue[OFF] = 0.0001;
+  mStateValue[OFF] = MIN_VALUE;
   mStateValue[ATTACK] = 0.001;
   mStateValue[DECAY] = 0.5;
   mStateValue[SUSTAIN] = 0.5;
@@ -100,5 +105,44 @@ void Envelope::stop() {
 bool Envelope::stateIsTimed() {
   return mState != OFF && mState != SUSTAIN;
 }
+
+/**
+ * @brief Set the attck time
+ * 
+ * @param attackTime 
+ */
+void Envelope::setAttackTime(double attackTime) {
+  mStateValue[ATTACK] = checkParameterRangeWithMax("AttackTime", attackTime, mTimeRange);
+}
+
+/**
+ * @brief Set the decay time
+ * 
+ * @param decayTime 
+ */
+void Envelope::setDecayTime(double decayTime) {
+  mStateValue[DECAY] = checkParameterRangeWithMax("DecayTime", decayTime, mTimeRange);
+}
+
+/**
+ * @brief Set the release time
+ * 
+ * @param releaseTime 
+ */
+void Envelope::setReleaseTime(double releaseTime) {
+  mStateValue[RELEASE] = checkParameterRangeWithMax("ReleaseTime", releaseTime, mTimeRange);
+}
+
+/**
+ * @brief Set the sustain level
+ * 
+ * @param level 
+ */
+void Envelope::setSustainLevel(double level) {
+  mStateValue[SUSTAIN] = checkParameterRange("SustainLevel", level, mSustainRange);
+}
+
+ParameterRange<double> Envelope::mTimeRange = std::make_pair(0.0, 2000.0);
+ParameterRange<double> Envelope::mSustainRange = std::make_pair(0.0, 1.0);
 
 }

@@ -37,6 +37,7 @@ class Oscillator : public Instrument {
     void setNote(unsigned note);
     void setFrequency(double frequency);
     void setGain(double gain);
+    void setVelocity(double velocity);
 
     double getFrequency() const;
     unsigned getNote() const;
@@ -58,6 +59,10 @@ class Oscillator : public Instrument {
 
     // Just testing
     Envelope envelope;
+
+    static ParameterRange<unsigned> mNoteRange;
+    static ParameterRange<double> mVelocityRange;
+    static ParameterRange<double> mFrequencyRange;
 };
 
 }

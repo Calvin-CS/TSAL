@@ -1,4 +1,5 @@
 #include "Oscillator.h"
+#include "Util.h"
 #include "MidiNotes.h"
 #include <iostream>
 
@@ -8,7 +9,8 @@ Oscillator::Oscillator() {
   setMode(SINE);
   setGain(0.5);
   setNote(C4);
-  mVelocity = 127.0;
+  setVelocity(127.0);
+  envelope.setAttackTime(0.0);
 }
 
 void Oscillator::start() {
@@ -103,7 +105,7 @@ double Oscillator::polyBLEP(double t)
  */
 void Oscillator::playNote(unsigned note, double velocity) {
   setFrequency(getFrequencyFromNote(note));
-  mVelocity = velocity;
+  setVelocity(velocity);
   start();
 }
 
@@ -113,7 +115,7 @@ void Oscillator::playNote(unsigned note, double velocity) {
  * @param note (midi format)
  */
 void Oscillator::setNote(unsigned note) {
-  setFrequency(getFrequencyFromNote(note));
+  setFrequency(getFrequencyFromNote(checkParameterRange("Note", note, mNoteRange)));
 }
 
 /**
@@ -122,8 +124,17 @@ void Oscillator::setNote(unsigned note) {
  * @param frequency 
  */
 void Oscillator::setFrequency(double frequency) {
-  mFrequency = frequency;
+  mFrequency = checkParameterRange("Frequency", frequency, mFrequencyRange);
   mPhaseStep = mFrequency * PI2 / ((double) Mixer::getSampleRate());
+}
+
+/**
+ * @brief Set the velocity
+ * 
+ * @param velocity
+ */
+void Oscillator::setVelocity(double velocity) {
+  mVelocity = checkParameterRange("Velocity", velocity, mVelocityRange);
 }
 
 /**
@@ -137,7 +148,7 @@ void Oscillator::setGain(double gain) {
 
 /**
  * @brief Set the mode
- * 
+ *  
  * @param mode 
  */
 void Oscillator::setMode(OscillatorMode mode) {
@@ -170,5 +181,9 @@ unsigned Oscillator::getNote() const {
 double Oscillator::getGain() const {
   return mGain;
 }
+
+ParameterRange<unsigned> Oscillator::mNoteRange = std::make_pair(21, 108);
+ParameterRange<double> Oscillator::mVelocityRange = std::make_pair(0.0, 127.0);
+ParameterRange<double> Oscillator::mFrequencyRange = std::make_pair(27.5, 4186.0);
 
 }

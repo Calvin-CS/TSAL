@@ -1,4 +1,5 @@
 #include "Effect.h"
+#include "Util.h"
 
 #define COMPRESSOR_MAX_BUFFER 512
 
@@ -8,8 +9,6 @@
 // Using 512 as the buffer size for now, reimplement eventually
 
 namespace tsal {
-
-typedef std::pair<double, double> ParameterRange;
 
 /** @class Compressor
  * @brief An audio compressor
@@ -53,12 +52,11 @@ class Compressor : public Effect {
     double mPreGain = 0.0;
     double mPostGain = 0.0;
 
-    static bool checkParameterRange(std::string name, double value, ParameterRange parameterRange);
-    static ParameterRange mAttackTimeRange;
-    static ParameterRange mReleaseTimeRange;
-    static ParameterRange mThresholdRange;
-    static ParameterRange mRatioRange;
-    static ParameterRange mGainRange;
+    static ParameterRange<double> mAttackTimeRange;
+    static ParameterRange<double> mReleaseTimeRange;
+    static ParameterRange<double> mThresholdRange;
+    static ParameterRange<double> mRatioRange;
+    static ParameterRange<double> mGainRange;
 };
 
 }
