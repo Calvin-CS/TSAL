@@ -3,9 +3,48 @@
 
 namespace tsal {
 
+/**
+ * @brief Construct a new MidiParser
+ * 
+ */
+MidiParser::MidiParser() {
+  setNumThreads(1);
+}
+
+/**
+ * @brief Construct a new MidiParser 
+ * 
+ * @param threads 
+ */
+MidiParser::MidiParser(unsigned threads) {
+  setNumThreads(threads);
+}
+
+/**
+ * @brief Construct a new MidiParser and reads in a midi file
+ * 
+ * @param threads 
+ * @param filename 
+ */
+MidiParser::MidiParser(unsigned threads, const std::string& filename) {
+  setNumThreads(threads);
+  read(filename);
+}
+
+/**
+ * @brief Read a midi file from disk
+ * 
+ * A midi file is read and parsed by the midifile library. Useless events are also added 
+ * to the events stored in memory so that portions of the song can be equally processed
+ * by the number of threads previously specified
+ * 
+ * @param filename 
+ */
 void MidiParser::read(const std::string& filename) {
   mMidiFile.read(filename);
+
   mMidiFile.joinTracks();
+
   smf::MidiEventList midiTrack = mMidiFile[0];
 
   std::vector<unsigned> eventRegions;
@@ -37,20 +76,44 @@ void MidiParser::read(const std::string& filename) {
   mMidiFile.sortTracks();
   mMsPerTick = 1000 * mMidiFile.getFileDurationInSeconds()/((double) totalTicks);
   mMsPerQuater = 1000 * mMidiFile.getFileDurationInSeconds()/((double) mMidiFile.getFileDurationInQuarters());
-  std::cout << mMsPerQuater << std::endl;
 }
 
+/**
+ * @brief Convert midi ticks into milliseconds based on midi file
+ * 
+ * @param ticks 
+ * @return double 
+ */
 double MidiParser::ticksToMs(unsigned ticks) const {
   return ticks * mMsPerTick;
 }
 
+/**
+ * @brief Convert quarter notes into milliseconds based on midi file 
+ * 
+ * @param ticks 
+ * @return double 
+ */
 double MidiParser::quaterNoteMs(unsigned ticks) const {
   return ticks * mMsPerQuater;
 }
+
+/**
+ * @brief Get a MidiEvent
+ * 
+ * @param aEvent 
+ * @return const smf::MidiEvent& 
+ */
 const smf::MidiEvent& MidiParser::operator[] (int aEvent) const {
   return mMidiFile[0][aEvent];
 }
 
+/**
+ * @brief Set a MidiEvent
+ * 
+ * @param aEvent 
+ * @return smf::MidiEvent& 
+ */
 smf::MidiEvent& MidiParser::operator[] (int aEvent) {
   return mMidiFile[0][aEvent];
 }

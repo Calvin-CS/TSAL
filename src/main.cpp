@@ -22,29 +22,29 @@ void thread_sleep(unsigned milliseconds) {
 
 
 unsigned problemSize = 500;
-unsigned numThreads = 1;
+unsigned numThreads = 3;
 
 int main() {  
   Mixer mixer;
   vector<Oscillator> osc(numThreads); 
   for (unsigned i = 0; i < osc.size(); i++) {
+    osc[i].setActive(false);
     osc[i].setGain(0.05);
     mixer.add(&osc[i]);
   }
     
-  MidiParser midiParser;
-  midiParser.setNumThreads(1);
-  midiParser.read("/home/mark/Downloads/velocity.mid");
+  MidiParser midiParser(1, "/home/mark/Downloads/velocity.mid");
+
   omp_set_num_threads(numThreads);
   #pragma omp parallel
   {
     int id = omp_get_thread_num();
     thread_sleep(id * midiParser.quaterNoteMs(4));
+    osc[id].setActive();
     for (unsigned i = 0; i < midiParser.size() - 1; i++) {
       auto me = midiParser[i];  
       if (me.isNoteOn()) {
         osc[id].playNote(me.getKeyNumber(), me.getVelocity());
-        //osc[id].setGain(0.5 * (((double) me.getVelocity())/127.0));
       }
       
       thread_sleep(midiParser.ticksToMs(midiParser[i + 1].tick - me.tick));
