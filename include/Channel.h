@@ -18,14 +18,14 @@ class Channel : public OutputDevice {
   public:
     Channel();
     virtual double getOutput() override;
-    void add(Channel* channel);
-    void add(Effect* effect, unsigned position);
-    void add(Effect* effect);
-    void add(Instrument* instrument);
+    void add(Channel& channel);
+    void add(Effect& effect, unsigned position);
+    void add(Effect& effect);
+    void add(Instrument& instrument);
 
-    void remove(Effect* effect);
-    void remove(Channel* channel);
-    void remove(Instrument* instrument);
+    void remove(Effect& effect);
+    void remove(Channel& channel);
+    void remove(Instrument& instrument);
   private:
     RouteDevice<OutputDevice> mChannelIn;
     RouteDevice<Instrument> mRoutedInstruments;

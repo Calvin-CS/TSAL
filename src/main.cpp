@@ -30,7 +30,7 @@ int main() {
   for (unsigned i = 0; i < osc.size(); i++) {
     osc[i].setActive(false);
     osc[i].setGain(0.05);
-    mixer.add(&osc[i]);
+    mixer.add(osc[i]);
   }
     
   MidiParser midiParser(1, "/home/mark/Downloads/velocity.mid");
@@ -69,7 +69,7 @@ int main() {
   }
   */
   for (unsigned i = 0; i < osc.size(); i++) {
-    mixer.remove(&osc[i]);
+    mixer.remove(osc[i]);
   }
   return 0;
 }

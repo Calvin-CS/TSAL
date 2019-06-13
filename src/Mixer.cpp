@@ -68,7 +68,7 @@ void Mixer::initalizeStream() {
   }
 
   // Add a compressor so people don't break their sound cards
-  mMaster.add(&mCompressor); 
+  mMaster.add(mCompressor); 
 }
 
 Mixer::Mixer() {
@@ -102,7 +102,7 @@ double Mixer::getInput() {
  *
  * @param channel
  */
-void Mixer::add(Channel* channel) {
+void Mixer::add(Channel& channel) {
   mMaster.add(channel);
 }
 
@@ -110,7 +110,7 @@ void Mixer::add(Channel* channel) {
  * @brief Remove a channel
  * @param channel
  */
-void Mixer::remove(Channel* channel) {
+void Mixer::remove(Channel& channel) {
   mMaster.remove(channel);
 }
 
@@ -121,7 +121,7 @@ void Mixer::remove(Channel* channel) {
  *
  * @param instrument
  */
-void Mixer::add(Instrument* instrument) {
+void Mixer::add(Instrument& instrument) {
   mMaster.add(instrument);
 }
 
@@ -132,7 +132,7 @@ void Mixer::add(Instrument* instrument) {
  * 
  * @param instrument
  */
-void Mixer::remove(Instrument* instrument) {
+void Mixer::remove(Instrument& instrument) {
   mMaster.remove(instrument);
 }
 
@@ -143,7 +143,7 @@ void Mixer::remove(Instrument* instrument) {
  *
  * @param effect
  */
-void Mixer::add(Effect* effect) {
+void Mixer::add(Effect& effect) {
   mMaster.add(effect);
 }
 
@@ -155,7 +155,7 @@ void Mixer::add(Effect* effect) {
  * 
  * @param effect
  */
-void Mixer::remove(Effect* effect) {
+void Mixer::remove(Effect& effect) {
   mMaster.remove(effect);
 }
 

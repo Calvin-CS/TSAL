@@ -11,8 +11,8 @@ class RouteDevice : public InputDevice, public OutputDevice {
   public:
     virtual double getInput() override;
     virtual double getOutput() override;
-    void add(DeviceType* output);
-    void remove(DeviceType* output);
+    void add(DeviceType& output);
+    void remove(DeviceType& output);
     std::vector<DeviceType*>& getInputDevices() { return mInputDevices; };
 
   protected:
@@ -44,8 +44,8 @@ double RouteDevice<DeviceType>::getOutput() {
  * @param output 
  */
 template <typename DeviceType>
-void RouteDevice<DeviceType>::add(DeviceType* output) {
-  mInputDevices.push_back(output);
+void RouteDevice<DeviceType>::add(DeviceType& output) {
+  mInputDevices.push_back(&output);
 }
 
 /**
@@ -54,9 +54,9 @@ void RouteDevice<DeviceType>::add(DeviceType* output) {
  * @param output 
  */
 template <typename DeviceType>
-void RouteDevice<DeviceType>::remove(DeviceType* output) {
+void RouteDevice<DeviceType>::remove(DeviceType& output) {
   for (auto it = mInputDevices.begin(); it != mInputDevices.end(); it++) {
-    if (output == (*it)) {
+    if (&output == (*it)) {
       mInputDevices.erase(it);
       //std::cout << "Removing device" << std::endl;  
       break;

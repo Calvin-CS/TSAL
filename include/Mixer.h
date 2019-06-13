@@ -22,13 +22,13 @@ class Mixer : public InputDevice, private OutputDevice {
     Mixer(unsigned sampleRate);
     ~Mixer();
 
-    void add(Channel* channel);
-    void add(Instrument* instrument);
-    void add(Effect* effect);
+    void add(Channel& channel);
+    void add(Instrument& instrument);
+    void add(Effect& effect);
 
-    void remove(Channel* channel);
-    void remove(Instrument* instrument);
-    void remove(Effect* effect);
+    void remove(Channel& channel);
+    void remove(Instrument& instrument);
+    void remove(Effect& effect);
 
     static unsigned getSampleRate() { return mSampleRate; };
     static unsigned getBufferFrames() { return mBufferFrames; };

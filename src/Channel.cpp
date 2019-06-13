@@ -3,8 +3,8 @@
 namespace tsal {
   
 Channel::Channel() {
-  mChannelIn.add(&mRoutedInstruments);
-  mChannelIn.add(&mRoutedChannels);
+  mChannelIn.add(mRoutedInstruments);
+  mChannelIn.add(mRoutedChannels);
 }
 
 double Channel::getOutput() {
@@ -16,29 +16,31 @@ double Channel::getOutput() {
  * 
  * @param effect 
  */
-void Channel::add(Effect* effect) {
-  effect->setChannel(&mChannelIn);
+void Channel::add(Effect& effect) {
+  Effect* effectPtr = &effect;
+  effectPtr->setChannel(&mChannelIn);
   if (mEffectChainEnd != nullptr) {
     // Set the last effect to be the second to last effect
-    effect->setNextEffect(mEffectChainEnd);
+    effectPtr->setNextEffect(mEffectChainEnd);
   }
   // Add the new effect as the last one in the chain
-  mEffectChainEnd = effect;
+  mEffectChainEnd = effectPtr;
 }
 /**
  * @brief Remove an effect from the effect chain 
  * 
  * @param effect 
  */
-void Channel::remove(Effect* effect) {
+void Channel::remove(Effect& effect) {
+  Effect* effectPtr = &effect;
   // If the effect is the last in the chain
-  if (effect == mEffectChainEnd) {
+  if (effectPtr == mEffectChainEnd) {
     // Get the next effect in the chain and set it as the end effect
-    mEffectChainEnd = effect->getNextEffect();
-    effect->clear();
+    mEffectChainEnd = effectPtr->getNextEffect();
+    effectPtr->clear();
   } else {
     // The effect is not the last one, so pass up the chain
-    mEffectChainEnd->remove(effect);
+    mEffectChainEnd->remove(effectPtr);
   } 
 }
 
@@ -47,7 +49,7 @@ void Channel::remove(Effect* effect) {
  * 
 * @param instrument 
  */
-void Channel::add(Instrument* instrument) {
+void Channel::add(Instrument& instrument) {
   mRoutedInstruments.add(instrument);
 }
 
@@ -56,7 +58,7 @@ void Channel::add(Instrument* instrument) {
  * 
  * @param instrument 
  */
-void Channel::remove(Instrument* instrument) {
+void Channel::remove(Instrument& instrument) {
   mRoutedInstruments.remove(instrument);
 }
 
@@ -65,8 +67,8 @@ void Channel::remove(Instrument* instrument) {
  * 
  * @param channel 
  */
-void Channel::add(Channel* channel) {
-  if (channel != this) {
+void Channel::add(Channel& channel) {
+  if (&channel != this) {
     mRoutedChannels.add(channel);
   }
 }
@@ -76,7 +78,7 @@ void Channel::add(Channel* channel) {
  * 
  * @param channel 
  */
-void Channel::remove(Channel* channel) {
+void Channel::remove(Channel& channel) {
   mRoutedChannels.remove(channel);
 }
 
