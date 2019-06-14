@@ -1,3 +1,4 @@
+#include "Util.h"
 #include <iostream>
 #define _USE_MATH_DEFINES 
 #include <cmath>
@@ -19,22 +20,17 @@ namespace tsal {
 class OutputDevice {
   public:
     virtual ~OutputDevice() {};
-    /**
-     * @brief Get the output for the device
-     * 
-     * @return double 
-     */
-    virtual double getOutput() { return 0.0; };
-    /**
-     * @brief Set the active status of the device
-     * 
-     * It is up to the class how to implement the active status
-     * 
-     * @param active 
-     */
-    virtual void setActive(bool active = true) { mActive = active; };
+
+    virtual double getOutput();
+  
+    virtual void setActive(bool active = true);
+    virtual void setGain(double gain);
+
+    double getGain() const;
   protected:
     bool mActive = true;
+    double mGain = 1.0;
+    static ParameterRange<double> mGainRange;
 };
 
 };

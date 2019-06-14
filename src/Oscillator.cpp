@@ -138,15 +138,6 @@ void Oscillator::setVelocity(double velocity) {
 }
 
 /**
- * @brief Set the gain
- * 
- * @param gain 
- */
-void Oscillator::setGain(double gain) {
-  mGain = gain;
-}
-
-/**
  * @brief Set the mode
  *  
  * @param mode 
@@ -171,15 +162,6 @@ double Oscillator::getFrequency() const {
  */
 unsigned Oscillator::getNote() const {
   return getNoteFromFrequency(mFrequency);
-}
-
-/**
- * @brief Get the gain
- * 
- * @return double 
- */
-double Oscillator::getGain() const {
-  return mGain;
 }
 
 ParameterRange<unsigned> Oscillator::mNoteRange = std::make_pair(21, 108);

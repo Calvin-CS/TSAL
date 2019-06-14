@@ -69,6 +69,7 @@ void Mixer::initalizeStream() {
 
   // Add a compressor so people don't break their sound cards
   mMaster.add(mCompressor); 
+  mMaster.setGain(0.75);
 }
 
 Mixer::Mixer() {

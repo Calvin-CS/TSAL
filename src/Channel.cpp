@@ -8,7 +8,10 @@ Channel::Channel() {
 }
 
 double Channel::getOutput() {
-  return (mEffectChainEnd == nullptr) ? mChannelIn.getOutput() : mEffectChainEnd->getOutput();
+  if (!mActive) {
+    return 0.0;
+  }
+  return ((mEffectChainEnd == nullptr) ? mChannelIn.getOutput() : mEffectChainEnd->getOutput()) * mGain;
 }
 
 /**
