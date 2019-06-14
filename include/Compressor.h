@@ -1,11 +1,11 @@
 #include "Effect.h"
 #include "Util.h"
 
-#define COMPRESSOR_MAX_BUFFER 512
 
 #ifndef COMPRESSOR_H
 #define COMPRESSOR_H
 
+#define COMPRESSOR_MAX_BUFFER 512
 // Using 512 as the buffer size for now, reimplement eventually
 
 namespace tsal {

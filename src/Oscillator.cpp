@@ -47,7 +47,7 @@ double Oscillator::getOutput() {
 
   mPhase += mPhaseStep;  
   if (mPhase >= PI2)
-    mPhase = 0.0;
+    mPhase -= PI2;
 
   return mWaveFormValue * SCALE * mGain * (mVelocity / 127.0);
 }

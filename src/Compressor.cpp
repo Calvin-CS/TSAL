@@ -19,8 +19,8 @@ double Compressor::getOutput() {
   }
   
   // If the end of the buffer has been reached, more audio samples need to be generated
-  if (mCurrentSample == COMPRESSOR_MAX_BUFFER) {
-    mCurrentSample = 0;
+  if (mCurrentSample >= COMPRESSOR_MAX_BUFFER) {
+    mCurrentSample -= COMPRESSOR_MAX_BUFFER;
     // Generate new audio data
     for (unsigned i = 0; i < COMPRESSOR_MAX_BUFFER; i++) {
       mBuffer[i] = getInput();
