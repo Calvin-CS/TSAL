@@ -112,7 +112,7 @@ bool Envelope::stateIsTimed() {
  * @param attackTime 
  */
 void Envelope::setAttackTime(double attackTime) {
-  mStateValue[ATTACK] = checkParameterRangeWithMax("AttackTime", attackTime, mTimeRange);
+  mStateValue[ATTACK] = checkParameterRangeWithMax("Envelope: AttackTime", attackTime, mTimeRange);
 }
 
 /**
@@ -121,7 +121,7 @@ void Envelope::setAttackTime(double attackTime) {
  * @param decayTime 
  */
 void Envelope::setDecayTime(double decayTime) {
-  mStateValue[DECAY] = checkParameterRangeWithMax("DecayTime", decayTime, mTimeRange);
+  mStateValue[DECAY] = checkParameterRangeWithMax("Envelope: DecayTime", decayTime, mTimeRange);
 }
 
 /**
@@ -130,7 +130,7 @@ void Envelope::setDecayTime(double decayTime) {
  * @param releaseTime 
  */
 void Envelope::setReleaseTime(double releaseTime) {
-  mStateValue[RELEASE] = checkParameterRangeWithMax("ReleaseTime", releaseTime, mTimeRange);
+  mStateValue[RELEASE] = checkParameterRangeWithMax("Envelope: ReleaseTime", releaseTime, mTimeRange);
 }
 
 /**
@@ -139,7 +139,7 @@ void Envelope::setReleaseTime(double releaseTime) {
  * @param level 
  */
 void Envelope::setSustainLevel(double level) {
-  mStateValue[SUSTAIN] = checkParameterRange("SustainLevel", level, mSustainRange);
+  mStateValue[SUSTAIN] = checkParameterRange("Envelope: SustainLevel", level, mSustainRange);
 }
 
 ParameterRange<double> Envelope::mTimeRange = std::make_pair(0.0, 2000.0);

@@ -115,7 +115,7 @@ void Oscillator::playNote(unsigned note, double velocity) {
  * @param note (midi format)
  */
 void Oscillator::setNote(unsigned note) {
-  setFrequency(getFrequencyFromNote(checkParameterRange("Note", note, mNoteRange)));
+  setFrequency(getFrequencyFromNote(checkParameterRange("Oscillator: Note", note, mNoteRange)));
 }
 
 /**
@@ -124,7 +124,7 @@ void Oscillator::setNote(unsigned note) {
  * @param frequency 
  */
 void Oscillator::setFrequency(double frequency) {
-  mFrequency = checkParameterRange("Frequency", frequency, mFrequencyRange);
+  mFrequency = checkParameterRange("Oscillator: Frequency", frequency, mFrequencyRange);
   mPhaseStep = mFrequency * PI2 / ((double) Mixer::getSampleRate());
 }
 
@@ -134,7 +134,7 @@ void Oscillator::setFrequency(double frequency) {
  * @param velocity
  */
 void Oscillator::setVelocity(double velocity) {
-  mVelocity = checkParameterRange("Velocity", velocity, mVelocityRange);
+  mVelocity = checkParameterRange("Oscillator: Velocity", velocity, mVelocityRange);
 }
 
 /**

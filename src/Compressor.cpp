@@ -99,7 +99,7 @@ double Compressor::dbToAmp(double db) {
  * @param attackTime
  */
 void Compressor::setAttackTime(double attackTime) {
-  attackTime = checkParameterRange("AttackTime", attackTime, mAttackTimeRange);
+  attackTime = checkParameterRange("Compressor: AttackTime", attackTime, mAttackTimeRange);
   mAttackGain = attackTime == 0.0 ? 0.0 : std::exp(-1.0 / (Mixer::getSampleRate() * attackTime/1000));
 }
 
@@ -109,7 +109,7 @@ void Compressor::setAttackTime(double attackTime) {
  * @param releaseTime 
  */
 void Compressor::setReleaseTime(double releaseTime) {
-  releaseTime = checkParameterRange("ReleaseTime", releaseTime, mReleaseTimeRange);
+  releaseTime = checkParameterRange("Compressor: ReleaseTime", releaseTime, mReleaseTimeRange);
   mReleaseGain = releaseTime == 0.0 ? 0.0 : std::exp(-1.0 / (Mixer::getSampleRate() * releaseTime/1000));
 }
 
@@ -119,7 +119,7 @@ void Compressor::setReleaseTime(double releaseTime) {
  * @param threshold (dB)
  */
 void Compressor::setThreshold(double threshold) {
-  mThreshold = checkParameterRange("Threshold", threshold, mThresholdRange);
+  mThreshold = checkParameterRange("Compressor: Threshold", threshold, mThresholdRange);
 }
 
 /**
@@ -128,7 +128,7 @@ void Compressor::setThreshold(double threshold) {
  * @param ratio (1: n)
  */
 void Compressor::setRatio(double ratio) {
-  mRatio = checkParameterRange("Ration", ratio, mRatioRange); 
+  mRatio = checkParameterRange("Compressor: Ratio", ratio, mRatioRange); 
 }
 
 /**
@@ -137,7 +137,7 @@ void Compressor::setRatio(double ratio) {
  * @param preGain (dB)
  */
 void Compressor::setPreGain(double preGain) {
-  mPreGain = checkParameterRange("PreGain", preGain, mGainRange);
+  mPreGain = checkParameterRange("Compressor: PreGain", preGain, mGainRange);
 }
 
 /**
@@ -146,7 +146,7 @@ void Compressor::setPreGain(double preGain) {
  * @param postGain (dB)
  */
 void Compressor::setPostGain(double postGain) {
-  mPostGain = checkParameterRange("PostGain", postGain, mGainRange);
+  mPostGain = checkParameterRange("Compressor: PostGain", postGain, mGainRange);
 }
 
 ParameterRange<double> Compressor::mAttackTimeRange = std::make_pair(0.0, 2000.0);

@@ -42,7 +42,7 @@ MidiParser::MidiParser(unsigned threads, const std::string& filename) {
  */
 void MidiParser::read(const std::string& filename) {
   mMidiFile.read(filename);
-
+  mHasRead = true;
   mMidiFile.joinTracks();
 
   smf::MidiEventList midiTrack = mMidiFile[0];
@@ -85,6 +85,9 @@ void MidiParser::read(const std::string& filename) {
  * @return double 
  */
 double MidiParser::ticksToMs(unsigned ticks) const {
+  if (!mHasRead) {
+    std::cout << "MidiParser: No file has been read" << std::endl;
+  }
   return ticks * mMsPerTick;
 }
 
@@ -95,6 +98,9 @@ double MidiParser::ticksToMs(unsigned ticks) const {
  * @return double 
  */
 double MidiParser::quaterNoteMs(unsigned ticks) const {
+  if (!mHasRead) {
+    std::cout << "MidiParser: No file has been read" << std::endl;
+  }
   return ticks * mMsPerQuater;
 }
 
