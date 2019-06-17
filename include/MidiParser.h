@@ -34,6 +34,7 @@ class MidiParser {
     double quaterNoteMs(unsigned ticks) const;
 
   private:
+    bool validPath(const std::string& filename); 
     double mMsPerTick = 0.0;
     double mMsPerQuater = 0.0;
     unsigned mNumThreads = 1;

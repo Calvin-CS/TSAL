@@ -41,6 +41,10 @@ MidiParser::MidiParser(unsigned threads, const std::string& filename) {
  * @param filename 
  */
 void MidiParser::read(const std::string& filename) {
+  if (!validPath(filename)) {
+    std::cout << "MidiParser: Invalid path to file: " << filename << std::endl;
+    return;
+  }
   mMidiFile.read(filename);
   mHasRead = true;
   mMidiFile.joinTracks();
@@ -69,7 +73,7 @@ void MidiParser::read(const std::string& filename) {
   for (unsigned i = 0; i < eventRegions.size(); i++) {
     int tick = i * totalTicks/eventRegions.size();
     for (unsigned j = eventRegions[i]; j < maxRegion; j++) {
-      mMidiFile.addNoteOff(0, tick, 0, 0);
+      mMidiFile.addNoteOff(0, tick, 0, 21);
     }
   }
 
@@ -122,6 +126,13 @@ const smf::MidiEvent& MidiParser::operator[] (int aEvent) const {
  */
 smf::MidiEvent& MidiParser::operator[] (int aEvent) {
   return mMidiFile[0][aEvent];
+}
+
+bool MidiParser::validPath(const std::string& filename) { 
+  std::ifstream test(filename); 
+  bool isValid = (bool) test;
+  test.close();
+  return isValid;
 }
 
 } 
