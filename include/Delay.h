@@ -1,4 +1,5 @@
 #include "Effect.h"
+#include "Buffer.h"
 #include "Util.h"
 
 #ifndef DELAY_H
@@ -15,11 +16,12 @@ namespace tsal {
  */
 class Delay : public Effect {
   public:
+    Delay();
     virtual double getOutput() override;
     void setDelay(unsigned delay);
     void setFeedback(double feedback);
   private:
-    double mBuffer[DELAY_MAX_BUFFER] = { 0 }; 
+    Buffer<double> mBuffer;
     unsigned mCounter = 0;
     unsigned mDelay = 48000;
     double mFeedback = 0.5;

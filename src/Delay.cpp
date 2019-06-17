@@ -3,6 +3,9 @@
 
 namespace tsal {
   
+Delay::Delay() : mBuffer(DELAY_MAX_BUFFER) {
+}
+
 double Delay::getOutput() {
   if (!mActive) {
     return getInput();

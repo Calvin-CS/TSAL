@@ -1,4 +1,5 @@
 #include "Effect.h"
+#include "Buffer.h"
 #include "Util.h"
 
 
@@ -38,8 +39,8 @@ class Compressor : public Effect {
     double mEnvelopeSample = 0.0;
 
     // Figure what an optimal buffer size would be 
-    double mBuffer[COMPRESSOR_MAX_BUFFER] = { 0 };
-    double mEnvelope[COMPRESSOR_MAX_BUFFER] = { 0 };
+    Buffer<double> mBuffer;
+    Buffer<double> mEnvelope;
     unsigned mCurrentSample = COMPRESSOR_MAX_BUFFER;
       
     double mSlope = 0.0;
