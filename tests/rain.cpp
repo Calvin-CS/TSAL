@@ -18,7 +18,7 @@ void thread_sleep(unsigned milliseconds) {
 int main(int argc, char* argv[]) {
   if (argc != 3) {
     std::cout << "Invalid arguments\n\n"
-              << "jubilate <midifile> <tracks>\n" 
+              << "rain <midifile> <tracks>\n" 
               << "\tmidifile = a path to a midifile\n" 
               << "\ttracks = the number of tracks in the midifile (<6)\n"
               << std::endl;

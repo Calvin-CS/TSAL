@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
     std::cout << "Invalid arguments\n\n"
               << "jubilate <midifile> <voices>\n" 
               << "\tmidifile = a path to a midifile\n" 
-              << "\tvoices = the number of voices to sing (<6)\n"
+              << "\tvoices = the number of voices (<6)\n"
               << std::endl;
     return 0;
   }
