@@ -35,7 +35,7 @@ double Oscillator::getOutput() {
       mWaveFormValue = sin(mPhase);
       break;
     case SAW:
-      mWaveFormValue = (2.0 * mPhase / (2 * M_PI) ) - 1.0;
+      mWaveFormValue = (2.0 * mPhase / PI2) - 1.0;
       mWaveFormValue -= polyBLEP(t); // Layer output of Poly BLEP on top
       break;
     case SQUARE:
