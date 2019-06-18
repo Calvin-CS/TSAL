@@ -25,9 +25,10 @@ struct ThreadData {
 
 void* ThreadFunction(void* ptr) {
   ThreadData data = *((ThreadData*) ptr);
-
+  auto& voices = *data.voices;
+  
   for (unsigned i = data.start; i < data.end; i++) {
-    (*data.voices)[data.tid].setFrequency((*data.voices)[data.tid].getFrequency() + 10);
+    voices[data.tid].setFrequency(voices[data.tid].getFrequency() + 10);
     thread_sleep(100);
   }
   pthread_exit(NULL);
@@ -35,7 +36,7 @@ void* ThreadFunction(void* ptr) {
 
 int main(int argc, char* argv[]) {
   pthread_t threads[NUM_THREADS];
-
+  ThreadData* threadData[NUM_THREADS];
   tsal::Mixer mixer;
   std::vector<tsal::Oscillator> voices(NUM_THREADS);  
 
@@ -47,18 +48,13 @@ int main(int argc, char* argv[]) {
   }
 
   for(unsigned i = 0; i < NUM_THREADS; i++ ) {
-    ThreadData* data = new ThreadData {
-      &voices,
-      i,
-      0,
-      100/NUM_THREADS
-    };  
-
-    pthread_create(&threads[i], NULL, ThreadFunction, (void *) data);
+    threadData[i] = new ThreadData { &voices, i, 0, 100/NUM_THREADS };  
+    pthread_create(&threads[i], NULL, ThreadFunction, (void *) threadData[i]);
   }
 
-  for (unsigned i = 0; i < 1; i++) {
+  for (unsigned i = 0; i < NUM_THREADS; i++) {
     pthread_join(threads[i], NULL);
+    delete threadData[i];
   }
 
   return 0;

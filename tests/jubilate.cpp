@@ -31,6 +31,7 @@ int main(int argc, char* argv[]) {
   std::vector<tsal::Oscillator> voices(numVoices);  
   for (unsigned i = 0; i < voices.size(); i++) {
     voices[i].setGain(0.1);
+    voices[i].setActive(false);
     mixer.add(voices[i]);
   }
 
@@ -40,7 +41,6 @@ int main(int argc, char* argv[]) {
   {
     int id = omp_get_thread_num();
     
-    voices[id].setActive(false);
     thread_sleep(id * midiParser.quaterNoteMs(4));
     voices[id].setActive();
 

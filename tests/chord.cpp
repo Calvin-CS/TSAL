@@ -8,7 +8,7 @@
 // Temporary fix
 #include <chrono>
 #include <thread>
-
+#define NUM_THREADS 3
 void thread_sleep(unsigned milliseconds) {
   std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
 }
@@ -16,7 +16,7 @@ void thread_sleep(unsigned milliseconds) {
 
 int main(int argc, char* argv[]) {
   tsal::Mixer mixer;
-  std::vector<tsal::Oscillator> voices(3);  
+  std::vector<tsal::Oscillator> voices(NUM_THREADS);  
 
   tsal::MidiNote chord[] = {tsal::C4, tsal::E4, tsal::G4};
   for (unsigned i = 0; i < voices.size(); i++) {
@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
     mixer.add(voices[i]);
   }
 
-  omp_set_num_threads(3);
+  omp_set_num_threads(NUM_THREADS);
 
   #pragma omp parallel
   {
