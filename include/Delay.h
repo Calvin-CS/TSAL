@@ -5,8 +5,6 @@
 #ifndef DELAY_H
 #define DELAY_H
 
-// Calculate this dynamically at runtime
-#define DELAY_MAX_BUFFER 96000 * 2
 namespace tsal {
 
 /** @class Delay
@@ -21,12 +19,12 @@ class Delay : public Effect {
     void setDelay(unsigned delay);
     void setFeedback(double feedback);
   private:
-    Buffer<double> mBuffer;
+    std::unique_ptr<Buffer<double>> mBuffer;
     unsigned mCounter = 0;
     unsigned mDelay = 48000;
     double mFeedback = 0.5;
 
-    static ParameterRange<unsigned> mDelayRange;
+    ParameterRange<unsigned> mDelayRange;
     static ParameterRange<double> mFeedbackRange;
 };
 

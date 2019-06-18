@@ -3,7 +3,9 @@
 
 namespace tsal {
   
-Delay::Delay() : mBuffer(DELAY_MAX_BUFFER) {
+Delay::Delay() {
+  mBuffer = std::make_unique<Buffer<double>>(Mixer::getSampleRate() * 2);
+  Delay::mDelayRange = std::make_pair(0, mBuffer->size());
 }
 
 double Delay::getOutput() {
@@ -11,19 +13,20 @@ double Delay::getOutput() {
     return getInput();
   }
 
+  auto& buffer = *mBuffer;
   int offset = mCounter - mDelay;
 
   // Clip lookback buffer-bound
   if (offset < 0)
-    offset = DELAY_MAX_BUFFER + offset;
+    offset = buffer.size() + offset;
 
-  double output = mBuffer[offset];
+  double const output = buffer[offset];
   double const bufferValue = getInput() + output * mFeedback;
-  mBuffer[mCounter++] = bufferValue;
+  buffer[mCounter++] = bufferValue;
 
   // Clip delay counter
-  if(mCounter >= DELAY_MAX_BUFFER)
-    mCounter -= DELAY_MAX_BUFFER;
+  if(mCounter >= buffer.size())
+    mCounter -= buffer.size();
 
   return output;
 }
@@ -47,6 +50,5 @@ void Delay::setFeedback(double feedback) {
   mFeedback = checkParameterRange("Delay: Feedback", feedback, mFeedbackRange);
 }
 
-ParameterRange<unsigned> Delay::mDelayRange = std::make_pair(0, DELAY_MAX_BUFFER);
 ParameterRange<double> Delay::mFeedbackRange = std::make_pair(0.0, 1.0);
 }
