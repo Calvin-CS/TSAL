@@ -54,9 +54,6 @@ class Oscillator : public Instrument {
     double mPhaseStep = 0.0;
     double mWaveFormValue = 0.0;
 
-    // Just testing
-    Envelope envelope;
-
     static ParameterRange<unsigned> mNoteRange;
     static ParameterRange<double> mVelocityRange;
     static ParameterRange<double> mFrequencyRange;

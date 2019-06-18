@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
     voices[id].setActive();
 
     for (unsigned i = 0; i < midiParser.size() - 1; i++) {
-      auto me = midiParser[i];
+      auto& me = midiParser[i];
       if (me.isNoteOn())
         voices[id].playNote(me.getKeyNumber(), me.getVelocity());
 

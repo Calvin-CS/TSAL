@@ -10,15 +10,15 @@ Oscillator::Oscillator() {
   setGain(0.5);
   setNote(C4);
   setVelocity(127.0);
-  envelope.setAttackTime(0.0);
+  //envelope.setAttackTime(0.0);
 }
 
 void Oscillator::start() {
-  envelope.start();
+  //envelope.start();
 }
 
 void Oscillator::stop() {
-  envelope.stop();
+  //envelope.stop();
 }
 
 // Helpful implementation of ployBLEP to reduce aliasing

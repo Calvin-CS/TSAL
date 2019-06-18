@@ -32,7 +32,7 @@ void* ThreadFunction(void* ptr) {
   voices[data.tid].setActive();
   
   for (unsigned i = data.start; i < data.end; i++) {
-    auto me = midiParser[i];  
+    auto& me = midiParser[i];  
     if (me.isNote())
       voices[data.tid].playNote(me.getKeyNumber(), me.getVelocity());
     

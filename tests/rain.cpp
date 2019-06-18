@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {
     int id = omp_get_thread_num();
     #pragma omp for
     for (unsigned i = 0; i < midiParser.size() - 1; i++) {
-      auto me = midiParser[i];  
+      auto& me = midiParser[i];  
       if (me.isNote())
         voices[id].playNote(me.getKeyNumber(), me.getVelocity());
       

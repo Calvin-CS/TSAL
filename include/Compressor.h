@@ -6,8 +6,11 @@
 #ifndef COMPRESSOR_H
 #define COMPRESSOR_H
 
+/* I still don't know if buffer size should be sample rate dependent
+ * If it turns out to be the case then dynamically allocate things 
+ * Similar to what is done in Delay
+ */
 #define COMPRESSOR_MAX_BUFFER 512
-// Using 512 as the buffer size for now, reimplement eventually
 
 namespace tsal {
 
