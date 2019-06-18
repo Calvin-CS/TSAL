@@ -97,3 +97,4 @@ flycheck_*.el
 .vscode
 todo.txt
 /external
+/bin
