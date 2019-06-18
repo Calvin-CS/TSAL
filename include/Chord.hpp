@@ -1,7 +1,7 @@
-#include "Oscillator.h"
-#include "Instrument.h"
-#include "RouteDevice.h"
-#include "MidiNotes.h"
+#include "Oscillator.hpp"
+#include "Instrument.hpp"
+#include "RouteDevice.hpp"
+#include "MidiNotes.hpp"
 #include <vector>
 
 #ifndef CHORD_H

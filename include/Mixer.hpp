@@ -1,8 +1,8 @@
 #include "RtAudio.h"
-#include "InputDevice.h"
-#include "OutputDevice.h"
-#include "Channel.h"
-#include "Compressor.h"
+#include "InputDevice.hpp"
+#include "OutputDevice.hpp"
+#include "Channel.hpp"
+#include "Compressor.hpp"
 
 #ifndef MIXER_H
 #define MIXER_H

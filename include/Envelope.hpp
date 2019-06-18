@@ -1,5 +1,5 @@
-#include "Mixer.h"
-#include "Util.h"
+#include "Mixer.hpp"
+#include "Util.hpp"
 #include <cmath>
 
 #ifndef ENVELOPE_H

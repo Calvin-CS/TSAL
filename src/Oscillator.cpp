@@ -1,6 +1,6 @@
-#include "Oscillator.h"
-#include "Util.h"
-#include "MidiNotes.h"
+#include "Oscillator.hpp"
+#include "Util.hpp"
+#include "MidiNotes.hpp"
 #include <iostream>
 
 namespace tsal {

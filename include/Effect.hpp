@@ -1,7 +1,7 @@
-#include "InputDevice.h"
-#include "OutputDevice.h"
-#include "RouteDevice.h"
-#include "Instrument.h"
+#include "InputDevice.hpp"
+#include "OutputDevice.hpp"
+#include "RouteDevice.hpp"
+#include "Instrument.hpp"
 
 #ifndef EFFECT_H
 #define EFFECT_H

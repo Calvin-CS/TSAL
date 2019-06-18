@@ -1,6 +1,6 @@
-#include "Effect.h"
-#include "Buffer.h"
-#include "Util.h"
+#include "Effect.hpp"
+#include "Buffer.hpp"
+#include "Util.hpp"
 
 
 #ifndef COMPRESSOR_H

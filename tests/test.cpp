@@ -1,8 +1,8 @@
-#include "Mixer.h"
-#include "Oscillator.h"
-#include "Delay.h"
-#include "MidiNotes.h"
-#include "MidiParser.h"
+#include "Mixer.hpp"
+#include "Oscillator.hpp"
+#include "Delay.hpp"
+#include "MidiNotes.hpp"
+#include "MidiParser.hpp"
 
 #include <chrono>
 #include <thread>

@@ -1,4 +1,4 @@
-#include "OutputDevice.h"
+#include "OutputDevice.hpp"
 
 namespace tsal {
 /**

@@ -1,6 +1,6 @@
-#include "Mixer.h"
-#include "Oscillator.h"
-#include "MidiParser.h"
+#include "Mixer.hpp"
+#include "Oscillator.hpp"
+#include "MidiParser.hpp"
 #include <omp.h>
 #include <vector>
 

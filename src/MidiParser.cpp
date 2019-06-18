@@ -1,4 +1,4 @@
-#include "MidiParser.h"
+#include "MidiParser.hpp"
 #include <iostream>
 
 namespace tsal {

@@ -1,4 +1,4 @@
-#include "OutputDevice.h"
+#include "OutputDevice.hpp"
 
 #ifndef INSTRUMENT_H
 #define INSTRUMENT_H

@@ -1,4 +1,4 @@
-#include "Effect.h"
+#include "Effect.hpp"
 
 namespace tsal {
 

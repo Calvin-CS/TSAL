@@ -1,4 +1,4 @@
-#include "OutputDevice.h"
+#include "OutputDevice.hpp"
 #include <vector>
 
 #ifndef INPUTDEVICE_H

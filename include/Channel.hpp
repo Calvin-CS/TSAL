@@ -1,6 +1,6 @@
-#include "Effect.h"
-#include "Instrument.h"
-#include "OutputDevice.h"
+#include "Effect.hpp"
+#include "Instrument.hpp"
+#include "OutputDevice.hpp"
 
 #ifndef CHANNEL_H
 #define CHANNEL_H

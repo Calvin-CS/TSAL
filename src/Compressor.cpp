@@ -1,6 +1,6 @@
-#include "Compressor.h"
-#include "Mixer.h"
-#include "Util.h"
+#include "Compressor.hpp"
+#include "Mixer.hpp"
+#include "Util.hpp"
 #include <iostream>
   
 namespace tsal {

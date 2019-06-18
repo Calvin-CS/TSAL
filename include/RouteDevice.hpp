@@ -1,5 +1,5 @@
-#include "InputDevice.h"
-#include "OutputDevice.h"
+#include "InputDevice.hpp"
+#include "OutputDevice.hpp"
 
 #ifndef ROUTEDEVICE_H
 #define ROUTEDEVICE_H

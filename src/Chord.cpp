@@ -1,4 +1,4 @@
-#include "Chord.h"
+#include "Chord.hpp"
 
 namespace tsal {
 

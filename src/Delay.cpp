@@ -1,5 +1,5 @@
-#include "Delay.h"
-#include "Mixer.h"
+#include "Delay.hpp"
+#include "Mixer.hpp"
 
 namespace tsal {
   
