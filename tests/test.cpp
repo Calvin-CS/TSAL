@@ -1,8 +1,4 @@
-#include "Mixer.hpp"
-#include "Oscillator.hpp"
-#include "Delay.hpp"
-#include "MidiNotes.hpp"
-#include "MidiParser.hpp"
+#include "tsal.hpp"
 
 #include <chrono>
 #include <thread>
