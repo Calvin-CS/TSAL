@@ -34,7 +34,6 @@ int main() {
       std::cout << me.getDurationInSeconds() << std::endl;
      
   }
-  std::cout << "ree" << std::endl;
 
   return 0;
 }
