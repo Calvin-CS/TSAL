@@ -1,9 +1,9 @@
+#ifndef ENVELOPE_H
+#define ENVELOPE_H
+
 #include "Mixer.hpp"
 #include "Util.hpp"
 #include <cmath>
-
-#ifndef ENVELOPE_H
-#define ENVELOPE_H
 
 #define MIN_VALUE 0.0001
 

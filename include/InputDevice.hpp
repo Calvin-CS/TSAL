@@ -1,8 +1,8 @@
-#include "OutputDevice.hpp"
-#include <vector>
-
 #ifndef INPUTDEVICE_H
 #define INPUTDEVICE_H
+
+#include "OutputDevice.hpp"
+#include <vector>
 
 namespace tsal {
 

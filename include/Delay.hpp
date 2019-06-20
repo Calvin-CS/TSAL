@@ -1,9 +1,9 @@
+#ifndef DELAY_H
+#define DELAY_H
+
 #include "Effect.hpp"
 #include "Buffer.hpp"
 #include "Util.hpp"
-
-#ifndef DELAY_H
-#define DELAY_H
 
 namespace tsal {
 

@@ -49,7 +49,7 @@ void MidiParser::read(const std::string& filename) {
   mHasRead = true;
   mMidiFile.joinTracks();
 
-  smf::MidiEventList midiTrack = mMidiFile[0];
+  smf::MidiEventList& midiTrack = mMidiFile[0];
 
   std::vector<unsigned> eventRegions;
   int previousRegionBound = 0;

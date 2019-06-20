@@ -1,10 +1,9 @@
+#ifndef COMPRESSOR_H
+#define COMPRESSOR_H
+
 #include "Effect.hpp"
 #include "Buffer.hpp"
 #include "Util.hpp"
-
-
-#ifndef COMPRESSOR_H
-#define COMPRESSOR_H
 
 /* I still don't know if buffer size should be sample rate dependent
  * If it turns out to be the case then dynamically allocate things 

@@ -1,4 +1,5 @@
 #include "Mixer.hpp"
+#include <time.h>
 
 namespace tsal {
 
@@ -26,7 +27,7 @@ int streamCallback(void *outputBuffer, void *inputBuffer, unsigned nBufferFrames
   for (unsigned i = 0; i < nBufferFrames; i++) {
     *buffer++ = (BIT_DEPTH) audio->getInput();
   }
-  
+
   return 0;        
 }
 
@@ -59,16 +60,19 @@ void Mixer::initalizeStream() {
             << "\nBuffer frames: " << mBufferFrames
             << std::endl;
 
+
+  // Set the default BPM
+  mMidiSequencer.setBPM(120);
+  // Add a compressor so people don't break their sound cards
+  mMaster.add(mCompressor); 
+
   try {
     mRtAudio.openStream(&oParams, NULL, FORMAT, mSampleRate, &mBufferFrames, 
       &streamCallback, (void *)this, &options, &errorCallback);
     mRtAudio.startStream();
   } catch (RtAudioError& e) {
     e.printMessage();
-  }
-
-  // Add a compressor so people don't break their sound cards
-  mMaster.add(mCompressor); 
+  } 
 }
 
 Mixer::Mixer() {
@@ -94,6 +98,7 @@ Mixer::~Mixer() {
 }
 
 double Mixer::getInput() {
+  mMidiSequencer.tick();
   return mMaster.getOutput();
 }
 

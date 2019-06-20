@@ -1,8 +1,8 @@
-#include "MidiFile.h"
-#include <algorithm>
-
 #ifndef MIDIPARSER_H
 #define MIDIPARSER_H
+
+#include "MidiFile.h"
+#include <algorithm>
 
 namespace tsal {
 

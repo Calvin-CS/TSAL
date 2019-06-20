@@ -1,11 +1,12 @@
+#ifndef MIXER_H
+#define MIXER_H
+
 #include "RtAudio.h"
 #include "InputDevice.hpp"
 #include "OutputDevice.hpp"
 #include "Channel.hpp"
 #include "Compressor.hpp"
-
-#ifndef MIXER_H
-#define MIXER_H
+#include "MidiSequencer.hpp"
 
 namespace tsal {
 
@@ -33,13 +34,15 @@ class Mixer : public InputDevice, private OutputDevice {
     static unsigned getSampleRate() { return mSampleRate; };
     static unsigned getBufferFrames() { return mBufferFrames; };
     virtual double getInput() override;
+
   private:
     void initalizeStream();
     RtAudio mRtAudio;
     unsigned mChannels;
     Channel mMaster;
     Compressor mCompressor;
-
+    MidiSequencer mMidiSequencer;
+    
     static unsigned mSampleRate;
     static unsigned mBufferFrames;
 };

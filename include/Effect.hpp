@@ -1,10 +1,10 @@
+#ifndef EFFECT_H
+#define EFFECT_H
+
 #include "InputDevice.hpp"
 #include "OutputDevice.hpp"
 #include "RouteDevice.hpp"
 #include "Instrument.hpp"
-
-#ifndef EFFECT_H
-#define EFFECT_H
 
 namespace tsal {
 

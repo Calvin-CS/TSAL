@@ -1,9 +1,9 @@
+#ifndef CHANNEL_H
+#define CHANNEL_H
+
 #include "Effect.hpp"
 #include "Instrument.hpp"
 #include "OutputDevice.hpp"
-
-#ifndef CHANNEL_H
-#define CHANNEL_H
 
 namespace tsal {
 

@@ -1,10 +1,10 @@
+#ifndef OUTPUTDEVICE_H
+#define OUTPUTDEVICE_H
+
 #include "Util.hpp"
 #include <iostream>
 #define _USE_MATH_DEFINES 
 #include <cmath>
-
-#ifndef OUTPUTDEVICE_H
-#define OUTPUTDEVICE_H
 
 typedef signed short BIT_DEPTH;
 #define FORMAT RTAUDIO_SINT16

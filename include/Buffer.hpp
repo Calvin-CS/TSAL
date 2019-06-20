@@ -1,7 +1,7 @@
-#include <memory>
-
 #ifndef BUFFER_H
 #define BUFFER_H
+
+#include <memory>
 
 namespace tsal {
 

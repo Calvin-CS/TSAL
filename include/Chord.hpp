@@ -1,11 +1,11 @@
+#ifndef CHORD_H
+#define CHORD_H
+
 #include "Oscillator.hpp"
 #include "Instrument.hpp"
 #include "RouteDevice.hpp"
 #include "MidiNotes.hpp"
 #include <vector>
-
-#ifndef CHORD_H
-#define CHORD_H
 
 namespace tsal {
   

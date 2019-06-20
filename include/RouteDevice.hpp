@@ -1,8 +1,8 @@
-#include "InputDevice.hpp"
-#include "OutputDevice.hpp"
-
 #ifndef ROUTEDEVICE_H
 #define ROUTEDEVICE_H
+
+#include "InputDevice.hpp"
+#include "OutputDevice.hpp"
 
 namespace tsal {
 

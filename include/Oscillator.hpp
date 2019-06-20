@@ -1,9 +1,9 @@
+#ifndef OSCILLATORNODE_H
+#define OSCILLATORNODE_H
+
 #include "Instrument.hpp"
 #include "Envelope.hpp"
 #include "Mixer.hpp"
-
-#ifndef OSCILLATORNODE_H
-#define OSCILLATORNODE_H
 
 namespace tsal {
 
