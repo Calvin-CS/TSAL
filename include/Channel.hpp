@@ -1,7 +1,7 @@
 #ifndef CHANNEL_H
 #define CHANNEL_H
 
-#include "Effect.hpp"
+#include "EffectChain.hpp"
 #include "Instrument.hpp"
 #include "OutputDevice.hpp"
 
@@ -30,7 +30,7 @@ class Channel : public OutputDevice {
     RouteDevice<OutputDevice> mChannelIn;
     RouteDevice<Instrument> mRoutedInstruments;
     RouteDevice<Channel> mRoutedChannels;
-    Effect* mEffectChainEnd = nullptr;
+    EffectChain mEffectChain;
 };
 
 };

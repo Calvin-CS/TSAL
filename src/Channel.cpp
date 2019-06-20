@@ -5,13 +5,14 @@ namespace tsal {
 Channel::Channel() {
   mChannelIn.add(mRoutedInstruments);
   mChannelIn.add(mRoutedChannels);
+  mEffectChain.setInput(mChannelIn);
 }
 
 double Channel::getOutput() {
   if (!mActive) {
     return 0.0;
   }
-  return ((mEffectChainEnd == nullptr) ? mChannelIn.getOutput() : mEffectChainEnd->getOutput()) * mGain;
+  return mEffectChain.getOutput();
 }
 
 /**
@@ -20,14 +21,7 @@ double Channel::getOutput() {
  * @param effect 
  */
 void Channel::add(Effect& effect) {
-  Effect* effectPtr = &effect;
-  effectPtr->setChannel(&mChannelIn);
-  if (mEffectChainEnd != nullptr) {
-    // Set the last effect to be the second to last effect
-    effectPtr->setNextEffect(mEffectChainEnd);
-  }
-  // Add the new effect as the last one in the chain
-  mEffectChainEnd = effectPtr;
+  mEffectChain.add(effect);
 }
 /**
  * @brief Remove an effect from the effect chain 
@@ -35,16 +29,7 @@ void Channel::add(Effect& effect) {
  * @param effect 
  */
 void Channel::remove(Effect& effect) {
-  Effect* effectPtr = &effect;
-  // If the effect is the last in the chain
-  if (effectPtr == mEffectChainEnd) {
-    // Get the next effect in the chain and set it as the end effect
-    mEffectChainEnd = effectPtr->getNextEffect();
-    effectPtr->clear();
-  } else {
-    // The effect is not the last one, so pass up the chain
-    mEffectChainEnd->remove(effectPtr);
-  } 
+  mEffectChain.remove(effect);
 }
 
 /**

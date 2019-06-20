@@ -61,8 +61,6 @@ void Mixer::initalizeStream() {
             << std::endl;
 
 
-  // Set the default BPM
-  mMidiSequencer.setBPM(120);
   // Add a compressor so people don't break their sound cards
   mMaster.add(mCompressor); 
 
@@ -98,7 +96,6 @@ Mixer::~Mixer() {
 }
 
 double Mixer::getInput() {
-  mMidiSequencer.tick();
   return mMaster.getOutput();
 }
 

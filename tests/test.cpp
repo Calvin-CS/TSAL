@@ -11,7 +11,7 @@ int main() {
   tsal::Oscillator oscillator;
   tsal::Delay delay;
 
-  oscillator.setMode(tsal::Oscillator::SAW);
+  oscillator.setMode(tsal::Oscillator::SINE);
   oscillator.setGain(0.1);
 
   mixer.add(oscillator);
@@ -23,13 +23,10 @@ int main() {
 
   thread_sleep(2000);
 
-  tsal::MidiParser midiParser(1, "/home/mark/Downloads/velocity.mid");
-  for (unsigned i = 0; i < midiParser.size(); i++) {
-    auto& me = midiParser[i];
-    if (me.isNoteOn())
-      std::cout << me.getDurationInSeconds() << std::endl;
-     
-  }
-
+  mixer.remove(delay);
+  
+  oscillator.setActive();
+  thread_sleep(1000);
+  
   return 0;
 }

@@ -41,7 +41,6 @@ class Mixer : public InputDevice, private OutputDevice {
     unsigned mChannels;
     Channel mMaster;
     Compressor mCompressor;
-    MidiSequencer mMidiSequencer;
     
     static unsigned mSampleRate;
     static unsigned mBufferFrames;

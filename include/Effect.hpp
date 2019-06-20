@@ -19,15 +19,10 @@ namespace tsal {
 class Effect : public InputDevice, public OutputDevice {
   public:
     virtual double getInput() override;
-    void remove(Effect* effect);
-    void setChannel(RouteDevice<OutputDevice> *channel) { mChannelIn = channel; };
-    void setNextEffect(Effect* effect);
-    Effect* getNextEffect() { return mNextEffect; };
-    void clear() { mNextEffect = nullptr; mChannelIn = nullptr; };
+    void setInput(OutputDevice* input);
 
   private:
-    Effect* mNextEffect = nullptr;
-    RouteDevice<OutputDevice>* mChannelIn = nullptr;
+    OutputDevice* mInput = nullptr;
 };
 
 };
