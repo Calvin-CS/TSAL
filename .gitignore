@@ -98,3 +98,6 @@ flycheck_*.el
 todo.txt
 /external
 /bin
+/build
+compile_commands.json
+.cquery_cached_index
