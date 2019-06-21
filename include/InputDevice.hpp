@@ -16,6 +16,6 @@ class InputDevice {
     virtual double getInput() { return 0; };
 };
 
-};
+}
 
 #endif

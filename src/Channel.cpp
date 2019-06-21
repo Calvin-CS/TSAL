@@ -70,4 +70,4 @@ void Channel::remove(Channel& channel) {
   mRoutedChannels.remove(channel);
 }
 
-};
+}

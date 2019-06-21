@@ -70,7 +70,7 @@ unsigned Oscillator::getNoteFromFrequency(double frequency) {
  */
 double Oscillator::getFrequencyFromNote(unsigned note) {
   return 27.5 * pow(2.0, (note - 21) / 12.0);
-};
+}
 
 double Oscillator::polyBLEP(double t)
 {

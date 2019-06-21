@@ -33,6 +33,6 @@ class Channel : public OutputDevice {
     EffectChain mEffectChain;
 };
 
-};
+}
 
 #endif

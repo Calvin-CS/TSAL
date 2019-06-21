@@ -33,6 +33,6 @@ class OutputDevice {
     static ParameterRange<double> mGainRange;
 };
 
-};
+}
 
 #endif

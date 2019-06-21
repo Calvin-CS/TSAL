@@ -8,6 +8,6 @@ namespace tsal {
 class Instrument : public OutputDevice {
 };
 
-};
+}
 
 #endif

@@ -1,6 +1,6 @@
-CXX      := -g++
-#CXXFLAGS := -pedantic-errors -Wall -Wextra -Werror -std=c++11
-CXXFLAGS := -Wall
+CXX      := g++
+CXXFLAGS := -pedantic-errors -Wall -Wextra -Werror -std=c++14
+#CXXFLAGS := -Wall
 LDFLAGS  := -L/usr/local/lib/ -lrtaudio -lmidifile 
 BUILD    := ./build
 OBJ_DIR  := $(BUILD)/objects

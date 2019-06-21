@@ -16,8 +16,13 @@ void errorCallback( RtAudioError::Type type, const std::string &errorText ) {
 /* This is the main function that we give to the audio buffer to call for sampling
  * Depending on how it's configured, this will usually get called 44100 per second
  */
-int streamCallback(void *outputBuffer, void *inputBuffer, unsigned nBufferFrames, 
-  double streamTime, RtAudioStreamStatus status, void *data) {
+int streamCallback(void *outputBuffer,
+                   __attribute__((unused)) void *inputBuffer,
+                   unsigned nBufferFrames, 
+                   __attribute__((unused)) double streamTime,
+                   RtAudioStreamStatus status,
+                   void *data) {
+  
   BIT_DEPTH *buffer = (BIT_DEPTH *) outputBuffer;
   Mixer *audio = (Mixer *) data;
 

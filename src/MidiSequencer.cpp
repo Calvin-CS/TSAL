@@ -11,6 +11,7 @@ void MidiSequencer::tick() {
 }
 
 void MidiSequencer::setBPM(unsigned bpm) {
+  std::cout << bpm << std::endl;
 }
 
 

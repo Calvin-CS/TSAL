@@ -10,4 +10,4 @@ void Effect::setInput(OutputDevice* input) {
   mInput = input;
 }
 
-};
+}

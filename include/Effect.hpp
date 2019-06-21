@@ -25,5 +25,6 @@ class Effect : public InputDevice, public OutputDevice {
     OutputDevice* mInput = nullptr;
 };
 
-};
+}
+
 #endif
