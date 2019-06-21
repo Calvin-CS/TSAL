@@ -108,7 +108,7 @@ struct sortData {
  * \details Different colors represent different sections being sorted.
  * \details Once all items have been sorted and merged, the animation stops and all lines are colored white.
  */
-void smartSortFunction(std::vector<Oscillator>& oscillators, int threads, int size) {
+void mergeSortFunction(std::vector<Oscillator>& oscillators, int threads, int size) {
   const int IPF = 1;      // Iterations per frame
   int* numbers = new int[size];       // Array to store the data
   for (int i = 0; i < size; i++)
@@ -181,5 +181,5 @@ int main() {
       oscillators[i].setGain(0.05);
       mixer.add(oscillators[i]);
     } 
-    smartSortFunction(oscillators, threads, 1000);
+    mergeSortFunction(oscillators, threads, 1000);
 }
