@@ -170,7 +170,7 @@ void smartSortFunction(std::vector<Oscillator>& oscillators, int threads, int si
 
 //Takes in command line arguments for the window width and height
 //as well as for the number of threads to use
-int main(int argc, char* argv[]) {
+int main() {
 
     int threads, t = 4;
     for (threads = 1; threads < t; threads *=2);  //Force threads to be a power of 2

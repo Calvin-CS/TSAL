@@ -1,33 +1,44 @@
-CXX      := g++
-CXXFLAGS := -pedantic-errors -Wall -Wextra -Werror -std=c++14
-#CXXFLAGS := -Wall
-LDFLAGS  := -L/usr/local/lib/ -lrtaudio -lmidifile 
-BUILD    := ./build
-OBJ_DIR  := $(BUILD)/objects
-APP_DIR  := $(BUILD)/apps
-TARGET   := program
-INCLUDE  := -Iinclude/ -Iexternal/rtaudio/ -Iexternal/midifile/include/
-SRC      :=                      \
-   $(wildcard tests/test.cpp)    \
-   $(wildcard src/*.cpp)         \
+CXX       := g++
+CXXFLAGS  := -pedantic-errors -Wall -Wextra -Werror -std=c++14 -fopenmp -pthread
+LDFLAGS   := -L/usr/local/lib/ -lrtaudio -lmidifile 
+# Target directories
+BUILD_DIR := build
+OBJ_DIR   := $(BUILD_DIR)/.objects
+TEST_DIR  := $(BUILD_DIR)/tests
+LIB_DIR   := $(BUILD_DIR)/lib
+LIB_NAME  := libtsal
+# Source directories
+SRC       := src
+TEST      := tests
+INCLUDE   := -Iinclude/ -Iexternal/rtaudio/ -Iexternal/midifile/include/
 
-OBJECTS := $(SRC:%.cpp=$(OBJ_DIR)/%.o)
 
-all: build $(APP_DIR)/$(TARGET)
+# Generated variables
+SRC_FILES  := $(notdir $(wildcard $(SRC)/*.cpp))
+TEST_FILES := $(notdir $(wildcard $(TEST)/*.cpp))
 
-$(OBJ_DIR)/%.o: %.cpp
+TESTS	     := $(TEST_FILES:%.cpp=$(TEST_DIR)/%)
+OBJECTS    := $(SRC_FILES:%.cpp=$(OBJ_DIR)/%.o)
+
+
+all: test tsal
+
+$(OBJ_DIR)/%.o: $(SRC)/%.cpp
 	@mkdir -p $(@D)
-	$(CXX) $(CXXFLAGS) $(INCLUDE) -o $@ -c $<
+	$(CXX) $(CXXFLAGS) -fPIC -o $@ -c $< $(INCLUDE)
 
-$(APP_DIR)/$(TARGET): $(OBJECTS)
+.PHONY: all clean debug release docs test
+
+test: $(OBJECTS) $(TESTS)
+
+tsal: $(OBJECTS)
+	@mkdir -p $(LIB_DIR)
+	$(CXX) -shared -o $(LIB_DIR)/$(LIB_NAME).so $?
+	@ar -r $(LIB_DIR)/$(LIB_NAME).a $?
+
+$(TEST_DIR)/%: $(TEST)/%.cpp
 	@mkdir -p $(@D)
-	$(CXX) $(CXXFLAGS) -o $(APP_DIR)/$(TARGET) $(OBJECTS) $(INCLUDE) $(LDFLAGS) 
-
-.PHONY: all build clean debug release
-
-build:
-	@mkdir -p $(APP_DIR)
-	@mkdir -p $(OBJ_DIR)
+	$(CXX) $(CXXFLAGS) -o $@ $< $(OBJECTS) $(INCLUDE) $(LDFLAGS)
 
 debug: CXXFLAGS += -DDEBUG -g
 debug: all
@@ -37,4 +48,7 @@ release: all
 
 clean:
 	-@rm -rvf $(OBJ_DIR)/*
-	-@rm -rvf $(APP_DIR)/*
+	-@rm -rvf $(TEST_DIR)/*
+
+docs:
+	@doxygen Doxyfile

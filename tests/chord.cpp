@@ -11,7 +11,7 @@ void thread_sleep(unsigned milliseconds) {
 }
 // Temporary fix
 
-int main(int argc, char* argv[]) {
+int main() {
   tsal::Mixer mixer;
   std::vector<tsal::Oscillator> voices(NUM_THREADS);  
 

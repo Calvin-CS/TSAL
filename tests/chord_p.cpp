@@ -31,7 +31,7 @@ void* ThreadFunction(void* ptr) {
   pthread_exit(NULL);
 }
 
-int main(int argc, char* argv[]) {
+int main() {
   pthread_t threads[NUM_THREADS];
   ThreadData* threadData[NUM_THREADS];
   tsal::Mixer mixer;

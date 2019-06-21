@@ -5,7 +5,7 @@
 // Temporary fix
 #include <chrono>
 #include <thread>
-#define NUM_THREADS 3
+#define NUM_THREADS 2
 
 void thread_sleep(unsigned milliseconds) {
   std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
@@ -51,10 +51,10 @@ int main(int argc, char* argv[]) {
   const unsigned numTracks = atoi(argv[2]);
   tsal::MidiParser midiParser(numTracks, argv[1]);
 
-  pthread_t threads[numTracks];
-  ThreadData* threadData[numTracks];
+  pthread_t threads[NUM_THREADS];
+  ThreadData* threadData[NUM_THREADS];
   tsal::Mixer mixer;
-  std::vector<tsal::Oscillator> voices(numTracks);  
+  std::vector<tsal::Oscillator> voices(NUM_THREADS);  
 
   for (unsigned i = 0; i < voices.size(); i++) {
     voices[i].setGain(0.1);
@@ -63,14 +63,14 @@ int main(int argc, char* argv[]) {
   }
 
   unsigned blockSize = midiParser.size() / numTracks;
-  for(unsigned i = 0; i < numTracks; i++ ) {
+  for(unsigned i = 0; i < NUM_THREADS; i++ ) {
     unsigned start = i * blockSize;
     unsigned end = start + blockSize;
     threadData[i] = new ThreadData { &midiParser, &voices, i, start, end };  
     pthread_create(&threads[i], NULL, ThreadFunction, (void *) threadData[i]);
   }
 
-  for (unsigned i = 0; i < numTracks; i++) {
+  for (unsigned i = 0; i < NUM_THREADS; i++) {
     pthread_join(threads[i], NULL);
     delete threadData[i];
   }
