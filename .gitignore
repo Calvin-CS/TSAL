@@ -192,7 +192,7 @@ flycheck_*.el
 
 # End of https://www.gitignore.io/api/c++,emacs
 
-# Tests
+# Test binaries
 chord
 chord_p
 jubilate
@@ -216,3 +216,4 @@ todo.txt
 /build
 compile_commands.json
 .cquery_cached_index
+RtAudio.h
