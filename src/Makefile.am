@@ -1,4 +1,33 @@
 AM_CXXFLAGS = -Wall -I$(top_srcdir)/include -I/usr/local/include/rtaudio -lrtaudio
 
 lib_LTLIBRARIES = libtsal.la
-libtsal_la_SOURCES = Binasc.cpp Channel.cpp Chord.cpp Compressor.cpp Delay.cpp Effect.cpp EffectChain.cpp Envelope.cpp MidiEvent.cpp MidiEventList.cpp MidiFile.cpp MidiMessage.cpp MidiParser.cpp MidiSequencer.cpp Mixer.cpp Oscillator.cpp OutputDevice.cpp
+libtsal_la_SOURCES = \
+  Binasc.cpp \
+  Channel.cpp \
+  Chord.cpp \
+  Compressor.cpp \
+  Delay.cpp \
+  Effect.cpp \
+  EffectChain.cpp \
+  Envelope.cpp \
+  MidiEvent.cpp \
+  MidiEventList.cpp \
+  MidiFile.cpp \
+  MidiMessage.cpp \
+  MidiParser.cpp \
+  MidiSequencer.cpp \
+  Mixer.cpp \
+  Oscillator.cpp \
+  OutputDevice.cpp
+
+includedir=${prefix}/include/tsal
+include_HEADERS = \
+  $(top_srcdir)/include/tsal.hpp \
+  $(top_srcdir)/include/Channel.hpp \
+  $(top_srcdir)/include/Compressor.hpp \
+  $(top_srcdir)/include/Delay.hpp \
+  $(top_srcdir)/include/MidiNotes.hpp \
+  $(top_srcdir)/include/Mixer.hpp \
+  $(top_srcdir)/include/MidiParser.hpp \
+  $(top_srcdir)/include/Oscillator.hpp
+

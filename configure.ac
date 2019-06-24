@@ -4,6 +4,7 @@
 AC_PREREQ([2.69])
 AC_INIT([FULL-PACKAGE-NAME], [VERSION], [BUG-REPORT-ADDRESS])
 AC_CONFIG_SRCDIR([src])
+AC_CONFIG_FILES([Makefile src/Makefile tests/Makefile])
 # I may need this but not right now
 # AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
@@ -56,7 +57,4 @@ AC_CHECK_FUNCS([atexit btowc clock_gettime getdelim isascii iswprint localeconv 
 
 AC_CONFIG_MACRO_DIR([m4])
 
-AC_CONFIG_FILES([Makefile
-                 src/Makefile
-                 tests/Makefile])
 AC_OUTPUT
