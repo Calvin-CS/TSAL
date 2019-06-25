@@ -100,6 +100,9 @@ m4/lt~obsolete.m4
 .libs
 libtool
 Makefile
+test-suite.log
+test.log
+test.trs
 
 # End of https://www.gitignore.io/api/autotools
 # End of https://www.gitignore.io/api/autotools
