@@ -1,3 +1,108 @@
+# Created by https://www.gitignore.io/api/autotools
+# Edit at https://www.gitignore.io/?templates=autotools
+
+### Autotools ###
+# http://www.gnu.org/software/automake
+
+Makefile.in
+/ar-lib
+/mdate-sh
+/py-compile
+/test-driver
+/ylwrap
+
+# http://www.gnu.org/software/autoconf
+
+autom4te.cache
+/autoscan.log
+/autoscan-*.log
+/aclocal.m4
+/compile
+/config.guess
+/config.h.in
+/config.log
+/config.status
+/config.sub
+/configure
+/configure.scan
+/depcomp
+/install-sh
+/missing
+/stamp-h1
+
+# https://www.gnu.org/software/libtool/
+
+/ltmain.sh
+
+# http://www.gnu.org/software/texinfo
+
+/texinfo.tex
+
+# http://www.gnu.org/software/m4/
+
+m4/libtool.m4
+m4/ltoptions.m4
+m4/ltsugar.m4
+m4/ltversion.m4
+m4/lt~obsolete.m4
+
+### Autotools Patch ###
+# Created by https://www.gitignore.io/api/autotools
+# Edit at https://www.gitignore.io/?templates=autotools
+
+### Autotools ###
+# http://www.gnu.org/software/automake
+
+Makefile.in
+/ar-lib
+/mdate-sh
+/py-compile
+/test-driver
+/ylwrap
+
+# http://www.gnu.org/software/autoconf
+
+autom4te.cache
+/autoscan.log
+/autoscan-*.log
+/aclocal.m4
+/compile
+/config.guess
+/config.h.in
+/config.log
+/config.status
+/config.sub
+/configure
+/configure.scan
+/depcomp
+/install-sh
+/missing
+/stamp-h1
+
+# https://www.gnu.org/software/libtool/
+
+/ltmain.sh
+
+# http://www.gnu.org/software/texinfo
+
+/texinfo.tex
+
+# http://www.gnu.org/software/m4/
+
+m4/libtool.m4
+m4/ltoptions.m4
+m4/ltsugar.m4
+m4/ltversion.m4
+m4/lt~obsolete.m4
+
+### Autotools Patch ###
+.deps
+.libs
+libtool
+Makefile
+
+# End of https://www.gitignore.io/api/autotools
+# End of https://www.gitignore.io/api/autotools
 # Created by https://www.gitignore.io/api/c++,emacs
 # Edit at https://www.gitignore.io/?templates=c++,emacs
 
@@ -87,6 +192,16 @@ flycheck_*.el
 
 # End of https://www.gitignore.io/api/c++,emacs
 
+# Test binaries
+chord
+chord_p
+jubilate
+jubilate_p
+merge_sort
+rain
+rain_p
+test
+
 # Doxygen
 /html
 /latex
@@ -101,3 +216,4 @@ todo.txt
 /build
 compile_commands.json
 .cquery_cached_index
+RtAudio.h
