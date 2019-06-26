@@ -37,4 +37,4 @@ Use `make check` to run the tests
   
 ## License
 
-TODO license
+This project is licensed under the GNU General Public License - see the [LICENSE](LICENSE) file for details
