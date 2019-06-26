@@ -1,3 +1,5 @@
+// Copyright (c) 1999-2018, Craig Stuart Sapp
+// All rights reserved.
 //
 // Programmer:    Craig Stuart Sapp <craig@ccrma.stanford.edu>
 // Creation Date: Fri Nov 26 14:12:01 PST 1999

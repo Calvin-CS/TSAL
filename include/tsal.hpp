@@ -9,5 +9,6 @@
 #include "Mixer.hpp"
 #include "MidiParser.hpp"
 #include "Oscillator.hpp"
+#include "ProgressOctave.hpp"
 
 #endif

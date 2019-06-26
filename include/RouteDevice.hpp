@@ -13,6 +13,8 @@ class RouteDevice : public InputDevice, public OutputDevice {
     virtual double getOutput() override;
     void add(DeviceType& output);
     void remove(DeviceType& output);
+    DeviceType& operator[](const int index);
+    const DeviceType& operator[](const int index) const;
     std::vector<DeviceType*>& getInputDevices() { return mInputDevices; };
 
   protected:
@@ -62,6 +64,16 @@ void RouteDevice<DeviceType>::remove(DeviceType& output) {
       break;
     }
   }
+}
+
+template <typename DeviceType>
+DeviceType& RouteDevice<DeviceType>::operator[](const int index) {
+  return *mInputDevices[index];
+}
+
+template <typename DeviceType>
+const DeviceType& RouteDevice<DeviceType>::operator[](const int index) const {
+  return *mInputDevices[index];
 }
 
 } // namespace tsal

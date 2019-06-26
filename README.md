@@ -4,7 +4,7 @@ A Thread Safe Audio Library that uses audiolizations to assist in the understand
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine. TSAL uses the Autotools build system.
+TSAL uses the GNU Autotools build system to build and install the library.
 
 ### Prerequisites
 

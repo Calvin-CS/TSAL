@@ -18,7 +18,8 @@ libtsal_la_SOURCES = \
   MidiSequencer.cpp \
   Mixer.cpp \
   Oscillator.cpp \
-  OutputDevice.cpp
+  OutputDevice.cpp \
+	ProgressOctave.cpp 
 
 includedir=${prefix}/include/tsal
 include_HEADERS = \
@@ -43,6 +44,7 @@ include_HEADERS = \
   $(top_srcdir)/include/Mixer.hpp \
   $(top_srcdir)/include/Oscillator.hpp \
   $(top_srcdir)/include/OutputDevice.hpp \
+  $(top_srcdir)/include/ProgressOctave.hpp \
   $(top_srcdir)/include/RouteDevice.hpp \
   $(top_srcdir)/include/Util.hpp
 
