@@ -204,6 +204,7 @@ merge_sort
 rain
 rain_p
 test
+progress
 
 # Doxygen
 /html
@@ -218,5 +219,6 @@ todo.txt
 /bin
 /build
 compile_commands.json
+.cquery
 .cquery_cached_index
 RtAudio.h

@@ -4,7 +4,6 @@ lib_LTLIBRARIES = libtsal.la
 libtsal_la_SOURCES = \
   Binasc.cpp \
   Channel.cpp \
-  Chord.cpp \
   Compressor.cpp \
   Delay.cpp \
   Effect.cpp \
