@@ -1,6 +1,16 @@
 #include "tsal.hpp"
+#include "MidiFile.h"
 #include <omp.h>
 #include <vector>
+
+// Temporary fix
+#include <chrono>
+#include <thread>
+
+void thread_sleep(unsigned milliseconds) {
+  std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
+}
+// Temporary fix
 
 
 int main(int argc, char* argv[]) {
@@ -18,7 +28,6 @@ int main(int argc, char* argv[]) {
   tsal::Mixer mixer;
   std::vector<tsal::ThreadSynth> voices(numTracks);  
   for (unsigned i = 0; i < voices.size(); i++) {
-    voices[i].setGain(-20);
     // Testing
     voices[i].seq = &mixer.mSequencer;
     mixer.add(voices[i]);
@@ -32,16 +41,17 @@ int main(int argc, char* argv[]) {
   {
     int id = omp_get_thread_num();
     int timeOffset = midiParser[id * midiParser.size()/omp_get_num_threads()].tick;
-
+ 
     #pragma omp for
     for (unsigned i = 0; i < midiParser.size() - 1; i++) {
       auto& me = midiParser[i];  
-      if (me.isNote())
+
+      if (me.isNoteOn())
         voices[id].noteOn(me.getKeyNumber(), me.tick - timeOffset);
+
       
-      if (me.isNoteOff()) {
+      if (me.isNoteOff())
         voices[id].noteOff(me.getKeyNumber(), me.tick - timeOffset);
-      }
     }
   }
   return 0;

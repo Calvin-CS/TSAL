@@ -29,10 +29,6 @@ class Oscillator : public Instrument {
     Oscillator();
     double getOutput() override;
 
-    void start();
-    void stop();
-    void playNote(unsigned note, double velocity);
-
     void setMode(OscillatorMode mode);
     void setNote(unsigned note);
     void setFrequency(double frequency);

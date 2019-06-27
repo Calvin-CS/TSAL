@@ -12,7 +12,7 @@ Envelope::Envelope() {
   mStateValue[ATTACK] = 0.001;
   mStateValue[DECAY] = 0.5;
   mStateValue[SUSTAIN] = 0.5;
-  mStateValue[RELEASE] = 1.0; 
+  mStateValue[RELEASE] = 2.0;
 }
 
 /**

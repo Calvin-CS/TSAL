@@ -7,17 +7,9 @@ namespace tsal {
 
 Oscillator::Oscillator() {
   setMode(SINE);
-  setGain(-10.0);
+  setGain(-20.0);
   setNote(C4);
   setVelocity(127.0);
-}
-
-void Oscillator::start() {
-  //envelope.start();
-}
-
-void Oscillator::stop() {
-  //envelope.stop();
 }
 
 // Helpful implementation of ployBLEP to reduce aliasing
@@ -48,7 +40,7 @@ double Oscillator::getOutput() {
   while (mPhase >= PI2)
     mPhase -= PI2;
 
-  return mWaveFormValue * SCALE * mGainAmp * (mVelocity / 127.0);
+  return mWaveFormValue * SCALE * mGainAmp;
 }
 
 /**
@@ -94,18 +86,6 @@ double Oscillator::polyBLEP(double t)
   // no discontinuities 
   // 0 otherwise
   else return 0.0;
-}
-
-/**
- * @brief Play a note with a velocity
- * 
- * @param note 
- * @param velocity
- */
-void Oscillator::playNote(unsigned note, double velocity) {
-  setFrequency(getFrequencyFromNote(note));
-  setVelocity(velocity);
-  start();
 }
 
 /**

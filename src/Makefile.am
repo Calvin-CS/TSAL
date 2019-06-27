@@ -19,6 +19,7 @@ libtsal_la_SOURCES = \
   Oscillator.cpp \
   OutputDevice.cpp \
 	ProgressOctave.cpp \
+  Synth.cpp \
 	ThreadSynth.cpp \
   Util.cpp
 
@@ -47,6 +48,7 @@ include_HEADERS = \
   $(top_srcdir)/include/OutputDevice.hpp \
   $(top_srcdir)/include/ProgressOctave.hpp \
   $(top_srcdir)/include/RouteDevice.hpp \
+	$(top_srcdir)/include/Synth.hpp \
 	$(top_srcdir)/include/ThreadSynth.hpp \
   $(top_srcdir)/include/Util.hpp
 

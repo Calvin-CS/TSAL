@@ -3,20 +3,14 @@
 
 namespace tsal {
 
-ThreadSynth::ThreadSynth() {
-  setActive(false);
-}
-
 void ThreadSynth::noteOn(unsigned note, unsigned tick) {
   waitForEvent(tick);
-  setNote(note);
-  
-  setActive();
+  Synth::noteOn(note);
 }
 
 void ThreadSynth::noteOff(unsigned note, unsigned tick) {
   waitForEvent(tick);
-  setActive(false);
+  Synth::noteOff(note);
 }
 
 void ThreadSynth::waitForEvent(unsigned tick) {

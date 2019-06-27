@@ -10,6 +10,7 @@
 #include "MidiParser.hpp"
 #include "Oscillator.hpp"
 #include "ProgressOctave.hpp"
+#include "Synth.hpp"
 #include "ThreadSynth.hpp"
 
 #endif
