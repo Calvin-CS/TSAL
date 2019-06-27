@@ -39,7 +39,7 @@ int main() {
 
   tsal::MidiNote chord[3] = {tsal::C4, tsal::E4, tsal::G4};
   for (unsigned i = 0; i < voices.size(); i++) {
-    voices[i].setGain(0.1);
+    voices[i].setGain(-20);
     voices[i].setNote(chord[i]);
     mixer.add(voices[i]);
   }

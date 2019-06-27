@@ -21,24 +21,4 @@ void OutputDevice::setActive(bool active) {
   mActive = active; 
 }
 
-/**
- * @brief Set the gain
- * 
- * @param gain 
- */
-void OutputDevice::setGain(double gain) { 
-  mGain = checkParameterRange("OutputDevice:: Gain", gain, mGainRange);
-}
-
-/**
- * @brief Get the gain
- * 
- * @return double 
- */
-double OutputDevice::getGain() const { 
-  return mGain; 
-}
-
-ParameterRange<double> OutputDevice::mGainRange = std::make_pair(0.0, 2.0);
-
 }

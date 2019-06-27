@@ -85,14 +85,6 @@ void Compressor::calculateSlope() {
   mSlope = 1.0 - (1.0 / mRatio);
 }
 
-double Compressor::ampToDb(double amplitude) {
-  return 20.0 * std::log(amplitude) / M_LN10;
-}
-
-double Compressor::dbToAmp(double db) {
-  return std::pow(10.0, db / 20.0);
-}
-
 /**
  * @brief Set the attack time (ms)
  * 

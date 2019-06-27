@@ -31,9 +31,6 @@ class Compressor : public Effect {
     void setPreGain(double preGain);
     void setPostGain(double postGain);
 
-    static double ampToDb(double amplitude);
-    static double dbToAmp(double db);
-
   private:
     void filterAudio();
     void getEnvelope();

@@ -2,6 +2,8 @@
 #define UTIL_H
 
 #include <iostream>
+#define _USE_MATH_DEFINES 
+#include <cmath>
 
 namespace tsal {
 
@@ -19,6 +21,9 @@ Item checkParameterRange(const std::string& name, Item value, std::pair<Item, It
   }
   return std::min(std::max(value, range.first), range.second);
 }
+
+double ampToDb(double amplitude);
+double dbToAmp(double db);
 
 }
 

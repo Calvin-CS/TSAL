@@ -3,7 +3,7 @@
 
 namespace tsal {
 
-void errorCallback( RtAudioError::Type type, const std::string &errorText ) {
+void Mixer::errorCallback( RtAudioError::Type type, const std::string &errorText ) {
   // This example error handling function does exactly the same thing
   // as the embedded RtAudio::error() function.
   std::cout << "in errorCallback" << std::endl;
@@ -16,7 +16,7 @@ void errorCallback( RtAudioError::Type type, const std::string &errorText ) {
 /* This is the main function that we give to the audio buffer to call for sampling
  * Depending on how it's configured, this will usually get called 44100 per second
  */
-int streamCallback(void *outputBuffer,
+int Mixer::streamCallback(void *outputBuffer,
                    __attribute__((unused)) void *inputBuffer,
                    unsigned nBufferFrames, 
                    __attribute__((unused)) double streamTime,
@@ -65,6 +65,7 @@ void Mixer::initalizeStream() {
             << "\nBuffer frames: " << mBufferFrames
             << std::endl;
 
+  mSequencer.setBPM(100);
 
   // Add a compressor so people don't break their sound cards
   mMaster.add(mCompressor); 
@@ -101,6 +102,8 @@ Mixer::~Mixer() {
 }
 
 double Mixer::getInput() {
+  mSequencer.tick();
+  mCurrentTick = mSequencer.getTick();
   return mMaster.getOutput();
 }
 
@@ -166,6 +169,7 @@ void Mixer::remove(Effect& effect) {
   mMaster.remove(effect);
 }
 
+unsigned Mixer::mCurrentTick = 0;
 unsigned Mixer::mSampleRate = 0;
 unsigned Mixer::mBufferFrames = 0;
 }

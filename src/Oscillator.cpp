@@ -7,10 +7,9 @@ namespace tsal {
 
 Oscillator::Oscillator() {
   setMode(SINE);
-  setGain(0.5);
+  setGain(-10.0);
   setNote(C4);
   setVelocity(127.0);
-  //envelope.setAttackTime(0.0);
 }
 
 void Oscillator::start() {
@@ -49,7 +48,7 @@ double Oscillator::getOutput() {
   while (mPhase >= PI2)
     mPhase -= PI2;
 
-  return mWaveFormValue * SCALE * mGain * (mVelocity / 127.0);
+  return mWaveFormValue * SCALE * mGainAmp * (mVelocity / 127.0);
 }
 
 /**
@@ -147,6 +146,24 @@ void Oscillator::setMode(OscillatorMode mode) {
 }
 
 /**
+ * @brief Set the gain
+ * 
+ * @param gain 
+ */
+void Oscillator::setGain(double gain) {
+  mGainAmp = dbToAmp(checkParameterRange("Oscillator: Gain", gain, mGainRange));
+}
+
+/**
+ * @brief Get the gain
+ * 
+ * @return double 
+ */
+double Oscillator::getGain() const {
+  return ampToDb(mGainAmp);
+}
+
+/**
  * @brief Get the frequency
  * 
  * @return double 
@@ -167,5 +184,6 @@ unsigned Oscillator::getNote() const {
 ParameterRange<unsigned> Oscillator::mNoteRange = std::make_pair(21, 108);
 ParameterRange<double> Oscillator::mVelocityRange = std::make_pair(0.0, 127.0);
 ParameterRange<double> Oscillator::mFrequencyRange = std::make_pair(27.5, 4186.0);
+ParameterRange<double> Oscillator::mGainRange = std::make_pair(-50.0, 50.0);
 
 }

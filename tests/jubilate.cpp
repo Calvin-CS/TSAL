@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
   tsal::Mixer mixer;
   std::vector<tsal::Oscillator> voices(numVoices);  
   for (unsigned i = 0; i < voices.size(); i++) {
-    voices[i].setGain(0.1);
+    voices[i].setGain(-20);
     voices[i].setActive(false);
     mixer.add(voices[i]);
   }

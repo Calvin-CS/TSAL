@@ -178,7 +178,7 @@ int main() {
     Mixer mixer;
     std::vector<Oscillator> oscillators(threads);
     for (unsigned i = 0; i < oscillators.size(); i++) {
-      oscillators[i].setGain(0.05);
+      oscillators[i].setGain(-20);
       mixer.add(oscillators[i]);
     } 
     mergeSortFunction(oscillators, threads, 1000);

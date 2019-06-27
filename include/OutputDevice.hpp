@@ -3,8 +3,6 @@
 
 #include "Util.hpp"
 #include <iostream>
-#define _USE_MATH_DEFINES 
-#include <cmath>
 
 typedef signed short BIT_DEPTH;
 #define FORMAT RTAUDIO_SINT16
@@ -24,13 +22,9 @@ class OutputDevice {
     virtual double getOutput();
   
     virtual void setActive(bool active = true);
-    virtual void setGain(double gain);
 
-    double getGain() const;
   protected:
     bool mActive = true;
-    double mGain = 1.0;
-    static ParameterRange<double> mGainRange;
 };
 
 }
