@@ -8,7 +8,13 @@ void MidiSequencer::tick() {
   // But it seems to work well enough, maybe in the future it would be better to change to a more consistent timing method
   if (++mSampleTime > mSamplesPerTick) {
     mTick++;
-    cond.notify_all();
+    //if (mTickEvents.size() > 0 && (mTickEvents[mTickEvents.back()] <= mTick || mTickEvents[mTickEvents.back()] >= mTick)) {
+    for (unsigned i = 0; i < mTickEvents.size(); i++) {
+      if (mTick >= mTickEvents[i]) {
+        mTickEvents.erase(mTickEvents.begin() + i);
+        cond.notify_all();
+      } 
+    }
     mSampleTime = 0;
   }
 }
@@ -33,7 +39,6 @@ unsigned MidiSequencer::getTick() const {
 
 void MidiSequencer::waitForTick(unsigned tick) {
   mTickEvents.push_back(tick);
-  std::sort(mTickEvents.begin(), mTickEvents.end()); 
   std::unique_lock<std::mutex> lk(mutex);
   cond.wait(lk, [this, tick]{return mTick >= tick;}); 
 }
