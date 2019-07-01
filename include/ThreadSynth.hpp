@@ -11,10 +11,8 @@ class ThreadSynth : public Synth {
   public:
     void noteOn(unsigned note, unsigned tick);
     void noteOff(unsigned note, unsigned tick);
-    MidiSequencer* seq;
   private:
     void waitForEvent(unsigned tick);
-    bool proceed();
 };
 
 }

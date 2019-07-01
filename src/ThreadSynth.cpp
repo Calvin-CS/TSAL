@@ -14,8 +14,8 @@ void ThreadSynth::noteOff(unsigned note, unsigned tick) {
 }
 
 void ThreadSynth::waitForEvent(unsigned tick) {
-  std::unique_lock<std::mutex> lk(seq->mutex);
-  seq->cond.wait(lk, [tick]{return MidiSequencer::mTick >= tick;}); 
+  std::unique_lock<std::mutex> lk(mSequencer->mutex);
+  mSequencer->cond.wait(lk, [this, tick]{return mSequencer->getTick() >= tick;}); 
 }
 
 }

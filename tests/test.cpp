@@ -9,25 +9,25 @@ void thread_sleep(unsigned milliseconds) {
 
 int main() {
   tsal::Mixer mixer;
-  tsal::Oscillator oscillator;
+  tsal::Synth synth;
   tsal::Delay delay;
-  oscillator.setMode(tsal::Oscillator::SINE);
-  oscillator.setGain(-20);
 
-  mixer.add(oscillator);
+  mixer.add(synth);
   mixer.add(delay);
+
+  synth.noteOn(tsal::C4);
 
   thread_sleep(500);
 
-  oscillator.setActive(false);
+  synth.noteOff(tsal::C4);
 
   thread_sleep(2000);
 
   mixer.remove(delay);
+  synth.noteOn(tsal::C4);
   
-  oscillator.setActive();
   thread_sleep(1000);
-  oscillator.setActive(false);
+  synth.noteOff(tsal::C4);
   thread_sleep(10000);
   return 0;
 }

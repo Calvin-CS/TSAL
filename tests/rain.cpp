@@ -28,12 +28,8 @@ int main(int argc, char* argv[]) {
   tsal::Mixer mixer;
   std::vector<tsal::ThreadSynth> voices(numTracks);  
   for (unsigned i = 0; i < voices.size(); i++) {
-    // Testing
-    voices[i].seq = &mixer.mSequencer;
     mixer.add(voices[i]);
   }
-
-  mixer.mSequencer.setBPM(70);
 
   omp_set_num_threads(numTracks);
 
@@ -43,7 +39,7 @@ int main(int argc, char* argv[]) {
     int timeOffset = midiParser[id * midiParser.size()/omp_get_num_threads()].tick;
  
     #pragma omp for
-    for (unsigned i = 0; i < midiParser.size() - 1; i++) {
+    for (unsigned i = 0; i < midiParser.size(); i++) {
       auto& me = midiParser[i];  
 
       if (me.isNoteOn())

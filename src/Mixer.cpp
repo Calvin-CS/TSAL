@@ -65,7 +65,8 @@ void Mixer::initalizeStream() {
             << "\nBuffer frames: " << mBufferFrames
             << std::endl;
 
-  mSequencer.setBPM(100);
+  mSequencer.setBPM(60);
+  mSequencer.setPPQ(240);
 
   // Add a compressor so people don't break their sound cards
   mMaster.add(mCompressor); 
@@ -133,6 +134,7 @@ void Mixer::remove(Channel& channel) {
  */
 void Mixer::add(Instrument& instrument) {
   mMaster.add(instrument);
+  instrument.setSequencer(&mSequencer);
 }
 
 /**
@@ -144,6 +146,7 @@ void Mixer::add(Instrument& instrument) {
  */
 void Mixer::remove(Instrument& instrument) {
   mMaster.remove(instrument);
+  instrument.setSequencer(nullptr);
 }
 
 /**

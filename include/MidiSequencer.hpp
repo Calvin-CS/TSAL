@@ -4,6 +4,8 @@
 #include "Util.hpp"
 #include <condition_variable>
 #include <functional>
+#include <vector>
+#include <algorithm>
 
 namespace tsal {
 
@@ -15,17 +17,19 @@ class MidiSequencer {
     void setBPM(unsigned bpm);
     void setPPQ(unsigned ppq);
     unsigned getTick() const;
+    void waitForTick(unsigned tick);
     // Testings
-    std::mutex mutex;
+    std::mutex mutex; 
     std::condition_variable cond;
-    static unsigned mTick;
   private:
+    std::vector<unsigned> mTickEvents;
     void setSamplesPerTick();
     unsigned mSampleTime = 0;
+    unsigned mTick;
 
 
-    unsigned mPPQ = 240;
-    unsigned mBPM = 120;
+    unsigned mPPQ;
+    unsigned mBPM;
     double mSamplesPerTick;
 
     static ParameterRange<unsigned> mBPMRange;

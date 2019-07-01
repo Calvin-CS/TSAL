@@ -46,6 +46,7 @@ void MidiParser::read(const std::string& filename) {
     return;
   }
   mMidiFile.read(filename);
+  
   mHasRead = true;
   mMidiFile.joinTracks();
 
@@ -80,32 +81,6 @@ void MidiParser::read(const std::string& filename) {
   mMidiFile.sortTracks();
   mMsPerTick = 1000 * mMidiFile.getFileDurationInSeconds()/((double) totalTicks);
   mMsPerQuater = 1000 * mMidiFile.getFileDurationInSeconds()/((double) mMidiFile.getFileDurationInQuarters());
-}
-
-/**
- * @brief Convert midi ticks into milliseconds based on midi file
- * 
- * @param ticks 
- * @return double 
- */
-double MidiParser::ticksToMs(unsigned ticks) const {
-  if (!mHasRead) {
-    std::cout << "MidiParser: No file has been read" << std::endl;
-  }
-  return ticks * mMsPerTick;
-}
-
-/**
- * @brief Convert quarter notes into milliseconds based on midi file 
- * 
- * @param ticks 
- * @return double 
- */
-double MidiParser::quaterNoteMs(unsigned ticks) const {
-  if (!mHasRead) {
-    std::cout << "MidiParser: No file has been read" << std::endl;
-  }
-  return ticks * mMsPerQuater;
 }
 
 /**

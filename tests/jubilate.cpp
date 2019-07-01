@@ -26,10 +26,8 @@ int main(int argc, char* argv[]) {
   const int numVoices = atoi(argv[2]);
 
   tsal::Mixer mixer;
-  std::vector<tsal::Oscillator> voices(numVoices);  
+  std::vector<tsal::ThreadSynth> voices(numVoices);  
   for (unsigned i = 0; i < voices.size(); i++) {
-    voices[i].setGain(-20);
-    voices[i].setActive(false);
     mixer.add(voices[i]);
   }
 
@@ -39,16 +37,16 @@ int main(int argc, char* argv[]) {
   {
     int id = omp_get_thread_num();
     
-    thread_sleep(id * midiParser.quaterNoteMs(4));
+    int timeOffset = id * 4 * midiParser.getPPQ();
     voices[id].setActive();
 
-    for (unsigned i = 0; i < midiParser.size() - 1; i++) {
+    for (unsigned i = 0; i < midiParser.size(); i++) {
       auto& me = midiParser[i];
       if (me.isNoteOn())
-        voices[id].playNote(me.getKeyNumber(), me.getVelocity());
+        voices[id].noteOn(me.getKeyNumber(), me.tick + timeOffset);
 
-      thread_sleep(midiParser.ticksToMs(midiParser[i + 1].tick - me.tick));
-      voices[id].stop();
+      if (me.isNoteOff())
+        voices[id].noteOff(me.getKeyNumber(), me.tick + timeOffset);
     }
   }
   return 0;

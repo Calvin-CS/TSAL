@@ -30,8 +30,7 @@ class MidiParser {
     const smf::MidiEvent& operator[] (int aEvent) const;
 		smf::MidiEvent& operator[] (int aEvent);
     unsigned size() { return mMidiFile[0].size(); };
-    double ticksToMs(unsigned ticks) const;
-    double quaterNoteMs(unsigned ticks) const;
+    unsigned getPPQ() const { return mMidiFile.getTicksPerQuarterNote(); };
 
   private:
     bool validPath(const std::string& filename); 

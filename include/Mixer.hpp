@@ -36,13 +36,14 @@ class Mixer : public InputDevice, private OutputDevice {
     static unsigned getBufferFrames() { return mBufferFrames; };
 
     virtual double getInput() override;
-MidiSequencer mSequencer;
+
   private:
     void initalizeStream();
     RtAudio mRtAudio;
     unsigned mChannels;
     Channel mMaster;
     Compressor mCompressor;
+    MidiSequencer mSequencer;
     
     static unsigned mCurrentTick;
     static unsigned mSampleRate;
