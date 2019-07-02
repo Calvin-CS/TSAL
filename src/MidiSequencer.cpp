@@ -12,18 +12,28 @@ void MidiSequencer::tick() {
     for (unsigned i = 0; i < mTickEvents.size(); i++) {
       if (mTick >= mTickEvents[i]) {
         mTickEvents.erase(mTickEvents.begin() + i);
-        mCondition.notify_all();
+        mEventCondition.notify_all();
       } 
     }
     mSampleTime = 0;
   }
 }
 
+/**
+ * @brief Set the BPM (beats pre minute)
+ * 
+ * @param bpm 
+ */
 void MidiSequencer::setBPM(unsigned bpm) {
   mBPM = bpm;
   setSamplesPerTick();
 }
 
+/**
+ * @brief Set the PPQ (pulses per quater)
+ * 
+ * @param ppq 
+ */
 void MidiSequencer::setPPQ(unsigned ppq) {
   mPPQ = ppq;
   setSamplesPerTick();
@@ -37,10 +47,21 @@ unsigned MidiSequencer::getTick() const {
   return mTick;
 }
 
+/**
+ * @brief Put a thread to sleep for the given tick time
+ * 
+ * @param tick 
+ */
 void MidiSequencer::waitForTick(unsigned tick) {
-  mTickEvents.push_back(tick);
-  std::unique_lock<std::mutex> lk(mMutex);
-  mCondition.wait(lk, [this, tick]{return mTick >= tick;}); 
+  // We are potentionally adding to this vector from multiple threads so make sure it's thread safe
+  // We have to block this or else the guard waits till the thread is done sleeping to release the mutex
+  {
+    std::lock_guard<std::mutex> guard(mVectorMutex); 
+    mTickEvents.push_back(tick);
+  }
+  
+  std::unique_lock<std::mutex> lk(mEventMutex);
+  mEventCondition.wait(lk, [this, tick]{return mTick >= tick;}); 
 }
 
 

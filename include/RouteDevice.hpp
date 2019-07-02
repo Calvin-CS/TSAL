@@ -3,6 +3,7 @@
 
 #include "InputDevice.hpp"
 #include "OutputDevice.hpp"
+#include <mutex>
 
 namespace tsal {
 
@@ -19,6 +20,7 @@ class RouteDevice : public InputDevice, public OutputDevice {
 
   protected:
     std::vector<DeviceType*> mInputDevices;
+    std::mutex mVectorMutex;
 };
 
 /**
@@ -47,6 +49,7 @@ double RouteDevice<DeviceType>::getOutput() {
  */
 template <typename DeviceType>
 void RouteDevice<DeviceType>::add(DeviceType& output) {
+  std::lock_guard<std::mutex> guard(mVectorMutex); 
   mInputDevices.push_back(&output);
 }
 
@@ -59,8 +62,8 @@ template <typename DeviceType>
 void RouteDevice<DeviceType>::remove(DeviceType& output) {
   for (auto it = mInputDevices.begin(); it != mInputDevices.end(); it++) {
     if (&output == (*it)) {
+      std::lock_guard<std::mutex> guard(mVectorMutex);
       mInputDevices.erase(it);
-      //std::cout << "Removing device" << std::endl;  
       break;
     }
   }
