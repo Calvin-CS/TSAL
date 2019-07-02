@@ -8,7 +8,6 @@ namespace tsal {
 Oscillator::Oscillator() {
   setMode(SINE);
   setNote(C4);
-  setVelocity(127.0);
 }
 
 // Helpful implementation of ployBLEP to reduce aliasing
@@ -49,7 +48,7 @@ double Oscillator::getOutput() {
  * @return unsigned 
  */
 unsigned Oscillator::getNoteFromFrequency(double frequency) {
-  return (12/log(2)) * log(frequency/27.5) + 21;
+  return (12/log(2)) * std::log(frequency/27.5) + 21;
 }
 
 /**
@@ -107,15 +106,6 @@ void Oscillator::setFrequency(double frequency) {
 }
 
 /**
- * @brief Set the velocity
- * 
- * @param velocity
- */
-void Oscillator::setVelocity(double velocity) {
-  mVelocity = checkParameterRange("Oscillator: Velocity", velocity, mVelocityRange);
-}
-
-/**
  * @brief Set the mode
  *  
  * @param mode 
@@ -143,7 +133,6 @@ unsigned Oscillator::getNote() const {
 }
 
 ParameterRange<unsigned> Oscillator::mNoteRange = std::make_pair(21, 108);
-ParameterRange<double> Oscillator::mVelocityRange = std::make_pair(0.0, 127.0);
 ParameterRange<double> Oscillator::mFrequencyRange = std::make_pair(27.5, 4186.0);
 
 }

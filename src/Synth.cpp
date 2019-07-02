@@ -3,7 +3,7 @@
 namespace tsal {
 
 double Synth::getOutput() {
-  return mOscillator.getOutput() * mEnvelope.getEnvelope() * mAmp;
+  return mOscillator.getOutput() * mEnvelope.getEnvelope() * mAmp * (mVelocity / 127.0);
 }
   
 /**
@@ -14,6 +14,7 @@ double Synth::getOutput() {
  */
 void Synth::noteOn(unsigned note, double velocity) {
   mEnvelope.start();
+  setVelocity(velocity); 
   mOscillator.setNote(note);
 }
 
@@ -26,4 +27,9 @@ void Synth::noteOff(unsigned note) {
   mEnvelope.stop();
 }
 
+void Synth::setVelocity(double velocity) {
+  mVelocity = checkParameterRange("Synth: Velocity", velocity, mVelocityRange);
+}
+
+ParameterRange<double> Synth::mVelocityRange = std::make_pair(0.0, 127.0);
 }

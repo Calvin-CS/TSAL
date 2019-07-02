@@ -32,8 +32,6 @@ class Oscillator : public Instrument {
     void setMode(OscillatorMode mode);
     void setNote(unsigned note);
     void setFrequency(double frequency);
-    void setVelocity(double velocity);
-
 
     double getFrequency() const;
     unsigned getNote() const;
@@ -44,7 +42,6 @@ class Oscillator : public Instrument {
   private:
     double polyBLEP(double t);
     double mFrequency;
-    double mVelocity;
     
     OscillatorMode mMode;
     double mPhase = 0.0;
@@ -52,7 +49,6 @@ class Oscillator : public Instrument {
     double mWaveFormValue = 0.0;
 
     static ParameterRange<unsigned> mNoteRange;
-    static ParameterRange<double> mVelocityRange;
     static ParameterRange<double> mFrequencyRange;
 };
 

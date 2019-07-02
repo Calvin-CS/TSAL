@@ -19,9 +19,14 @@ class Synth : public Instrument {
     virtual double getOutput() override;
     virtual void noteOn(unsigned note, double velocity = 100.0) override;
     virtual void noteOff(unsigned note = A0) override;
+    void setVelocity(double velocity);
+
   private:
     Oscillator mOscillator;
     Envelope mEnvelope;
+    double mVelocity;
+    
+    static ParameterRange<double> mVelocityRange;
 }; 
 
 }
