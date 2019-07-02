@@ -3,7 +3,7 @@
 namespace tsal {
 
 double Synth::getOutput() {
-  return mOscillator.getOutput() * mEnvelope.getEnvelope();
+  return mOscillator.getOutput() * mEnvelope.getEnvelope() * mAmp;
 }
   
 /**

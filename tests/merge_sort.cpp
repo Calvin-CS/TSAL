@@ -112,7 +112,7 @@ void mergeSortFunction(std::vector<Oscillator>& oscillators, int threads, int si
   const int IPF = 1;      // Iterations per frame
   int* numbers = new int[size];       // Array to store the data
   for (int i = 0; i < size; i++)
-    numbers[i] = rand() % 700;
+    numbers[i] = rand() % 1000;
 
   int bs = size / threads;
   int ex = size % threads;
@@ -172,13 +172,13 @@ void mergeSortFunction(std::vector<Oscillator>& oscillators, int threads, int si
 //as well as for the number of threads to use
 int main() {
 
-    int threads, t = 4;
+    int threads, t = 1;
     for (threads = 1; threads < t; threads *=2);  //Force threads to be a power of 2
 
     Mixer mixer;
     std::vector<Oscillator> oscillators(threads);
     for (unsigned i = 0; i < oscillators.size(); i++) {
-      oscillators[i].setGain(-20);
+      oscillators[i].setVolume(0.2);
       mixer.add(oscillators[i]);
     } 
     mergeSortFunction(oscillators, threads, 1000);

@@ -24,7 +24,8 @@ Item checkParameterRange(const std::string& name, Item value, std::pair<Item, It
 
 double ampToDb(double amplitude);
 double dbToAmp(double db);
-
+double volumeToDb(double volume);
+double dbToVolume(double db);
 }
 
 #endif

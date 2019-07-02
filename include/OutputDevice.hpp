@@ -22,9 +22,17 @@ class OutputDevice {
     virtual double getOutput();
   
     virtual void setActive(bool active = true);
+    void setGain(double gain);
+    void setVolume(double volume);
+
+    double getGain() const;
+    double getVolume() const;
 
   protected:
     bool mActive = true;
+    double mAmp = 1.0;
+    static ParameterRange<double> mGainRange;
+    static ParameterRange<double> mVolumeRange;
 };
 
 }

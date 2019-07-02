@@ -12,7 +12,7 @@ double Channel::getOutput() {
   if (!mActive) {
     return 0.0;
   }
-  return mEffectChain.getOutput();
+  return mEffectChain.getOutput() * mAmp;
 }
 
 /**
