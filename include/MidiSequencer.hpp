@@ -9,6 +9,12 @@
 
 namespace tsal {
 
+/** @class MidiSequencer
+ * @brief A sequencer that handles the scheduling of events
+ * 
+ * MidiSequencer handles the real-time scheduling of the process
+ * based upon BPM and PPQ parameters
+ */
 class MidiSequencer {
   public:
     void tick();
@@ -18,10 +24,9 @@ class MidiSequencer {
     void setPPQ(unsigned ppq);
     unsigned getTick() const;
     void waitForTick(unsigned tick);
-    // Testings
-    std::mutex mutex; 
-    std::condition_variable cond;
   private:
+    std::mutex mMutex; 
+    std::condition_variable mCondition;
     std::vector<unsigned> mTickEvents;
     void setSamplesPerTick();
     unsigned mSampleTime = 0;

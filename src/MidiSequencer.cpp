@@ -12,7 +12,7 @@ void MidiSequencer::tick() {
     for (unsigned i = 0; i < mTickEvents.size(); i++) {
       if (mTick >= mTickEvents[i]) {
         mTickEvents.erase(mTickEvents.begin() + i);
-        cond.notify_all();
+        mCondition.notify_all();
       } 
     }
     mSampleTime = 0;
@@ -39,8 +39,8 @@ unsigned MidiSequencer::getTick() const {
 
 void MidiSequencer::waitForTick(unsigned tick) {
   mTickEvents.push_back(tick);
-  std::unique_lock<std::mutex> lk(mutex);
-  cond.wait(lk, [this, tick]{return mTick >= tick;}); 
+  std::unique_lock<std::mutex> lk(mMutex);
+  mCondition.wait(lk, [this, tick]{return mTick >= tick;}); 
 }
 
 
