@@ -79,8 +79,6 @@ void MidiParser::read(const std::string& filename) {
   }
 
   mMidiFile.sortTracks();
-  mMsPerTick = 1000 * mMidiFile.getFileDurationInSeconds()/((double) totalTicks);
-  mMsPerQuater = 1000 * mMidiFile.getFileDurationInSeconds()/((double) mMidiFile.getFileDurationInQuarters());
 }
 
 /**

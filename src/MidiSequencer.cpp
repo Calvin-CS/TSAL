@@ -19,6 +19,10 @@ void MidiSequencer::tick() {
   }
 }
 
+void MidiSequencer::setTick(unsigned tick) {
+  mTick = tick;
+}
+
 /**
  * @brief Set the BPM (beats pre minute)
  * 

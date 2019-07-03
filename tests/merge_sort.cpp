@@ -168,8 +168,20 @@ void mergeSortFunction(std::vector<Oscillator>& oscillators, int threads, int si
   delete [] numbers;
 }
 
-//Takes in command line arguments for the window width and height
-//as well as for the number of threads to use
+/** @example merge_sort.cpp
+ * 
+ * Merge sort is a sorting algorithm that can be done in parallel. As a result,
+ * each thread involved in the algorithm is assigned an oscillator which plays
+ * the pitch of the processed item plus a constant. Each thread has its own base
+ * pitch so you can differentiate between them near the end of the sorting process.
+ *
+ * Parse the parameters\n
+ * Create the mixer and oscillators\n
+ * Start the merge sort algorithm
+ * For each thread:
+ * - Process an item in the merge step and set the oscillator pitch accordingly
+ * - When complete with job, mute the oscillator 
+ */
 int main() {
 
     int threads, t = 1;

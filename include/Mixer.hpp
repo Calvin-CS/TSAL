@@ -37,6 +37,7 @@ class Mixer : public InputDevice, private OutputDevice {
 
     virtual double getInput() override;
 
+    void test() { mSequencer.setTick(0); };
   private:
     void initalizeStream();
     RtAudio mRtAudio;

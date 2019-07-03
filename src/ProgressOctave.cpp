@@ -10,7 +10,7 @@ ProgressOctave::ProgressOctave(unsigned startNote, unsigned problemSize, unsigne
   mStepValue = octavePortion / problemSize;
   for (unsigned i = 0; i < numWorkers; i++) {
     oscillatorPtr = new Oscillator();
-    oscillatorPtr->setGain(-20);
+    oscillatorPtr->setVolume(0.5/numWorkers);
     oscillatorPtr->setFrequency(startingFrequency + octavePortion * i);
     mOscillators.add(*oscillatorPtr);
   }

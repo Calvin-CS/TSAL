@@ -20,6 +20,7 @@ class MidiSequencer {
     void tick();
     void start();
     void stop();
+    void setTick(unsigned tick);
     void setBPM(unsigned bpm);
     void setPPQ(unsigned ppq);
     unsigned getTick() const;
