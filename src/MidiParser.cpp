@@ -52,17 +52,25 @@ void MidiParser::read(const std::string& filename) {
 
   smf::MidiEventList& midiTrack = mMidiFile[0];
 
+  /* Basically, divide up the track time between the number fo threads
+   * Each time segment has to identify the midi note that corresponds
+   * to its tick.
+   */
   std::vector<unsigned> eventRegions;
   int previousRegionBound = 0;
   int totalTicks = mMidiFile.getFileDurationInTicks();
   for (unsigned i = 0; i < mNumThreads; i++) {
     // Set the new bound for the region
+    // Equally divided time between threads
     int tick = (i + 1) * totalTicks/mNumThreads;
     for (int j = 0; j < midiTrack.size(); j++) {
-      if (midiTrack[j].tick == tick) {
+      // Find the events that corresponds to the bound time
+      if (midiTrack[j].tick >= tick) {
+        // If there are multiple notes at the same tick time, make sure to include them all
         if (j < midiTrack.size() - 1 && midiTrack[j + 1].tick == tick) {
           continue;
         }
+        // Add the new midi event region
         eventRegions.push_back(j - previousRegionBound);
         previousRegionBound = j;
         break;
@@ -70,6 +78,7 @@ void MidiParser::read(const std::string& filename) {
     }
   }
 
+  // Find the biggest region and make sure all other regions match it in midi events size
   unsigned maxRegion = *std::max_element(eventRegions.begin(), eventRegions.end());
   for (unsigned i = 0; i < eventRegions.size(); i++) {
     int tick = i * totalTicks/eventRegions.size();

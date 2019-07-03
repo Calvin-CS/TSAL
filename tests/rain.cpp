@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
     voices[i].setVolume(0.3);
     mixer.add(voices[i]);
   }
-/* 
+  
   for (unsigned i = 0; i < midiParser.size(); i++) {
     auto& me = midiParser[i];  
     if (me.isNoteOn())
@@ -40,7 +40,6 @@ int main(int argc, char* argv[]) {
     if (me.isNoteOff())
       voices[0].noteOff(me.getKeyNumber(), me.tick);
   }
-  */
 
   //mixer.mSequencer.setTick(0);
   mixer.test();
@@ -51,14 +50,10 @@ int main(int argc, char* argv[]) {
   {
     int id = omp_get_thread_num();
     int timeOffset = midiParser[id * std::floor(midiParser.size()/omp_get_num_threads())].tick;
-    std::cout << "OFFSET: " << timeOffset << std::endl;
  
     #pragma omp for
     for (unsigned i = 0; i < midiParser.size(); i++) {
       auto& me = midiParser[i];  
-      if (me.isNote())
-        std::cout << i << " " << me.tick - timeOffset << " " << me.getKeyNumber() << std::endl;
-
       if (me.isNoteOn())
         voices[id].noteOn(me.getKeyNumber(), me.tick - timeOffset);
       
