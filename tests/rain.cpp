@@ -3,16 +3,22 @@
 #include <omp.h>
 #include <vector>
 
-// Temporary fix
-#include <chrono>
-#include <thread>
-
-void thread_sleep(unsigned milliseconds) {
-  std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
-}
-// Temporary fix
-
-
+/** @example rain.cpp
+ * 
+ * One use of multithreaded is to speed up the processing of data. However, in the case of audio,
+ * processing a song at twice the speed doesn't really make sense. As a result, this example was created
+ * as the next best thing. To make use of the speed up from multithreading, this example parses
+ * MIDI files that store the entire song on one track. When processed with a single ThreadSynth, 
+ * the song will play its parts separately. But when processed with the right number of threads. The
+ * ThreadSynths will be playing in unison, and the song will be completed properly.
+ * 
+ * Parse the parameters\n
+ * Create the mixer and synths\n
+ * Play the song through once with only one thread\n
+ * Run parallel block
+ * - Calculate a time offset so the later notes get scheduled at the right time
+ * - Play the midi events 
+ */
 int main(int argc, char* argv[]) {
   if (argc != 3) {
     std::cout << "Invalid arguments\n\n"
@@ -31,11 +37,11 @@ int main(int argc, char* argv[]) {
     voices[i].setVolume(0.3);
     mixer.add(voices[i]);
   }
-  
+
   for (unsigned i = 0; i < midiParser.size(); i++) {
     auto& me = midiParser[i];  
     if (me.isNoteOn())
-      voices[0].noteOn(me.getKeyNumber(), me.tick);
+      voices[0].noteOn(me.getKeyNumber(), me.getVelocity(), me.tick);
     
     if (me.isNoteOff())
       voices[0].noteOff(me.getKeyNumber(), me.tick);
@@ -55,7 +61,7 @@ int main(int argc, char* argv[]) {
     for (unsigned i = 0; i < midiParser.size(); i++) {
       auto& me = midiParser[i];  
       if (me.isNoteOn())
-        voices[id].noteOn(me.getKeyNumber(), me.tick - timeOffset);
+        voices[id].noteOn(me.getKeyNumber(), me.getVelocity(), me.tick - timeOffset);
       
       if (me.isNoteOff())
         voices[id].noteOff(me.getKeyNumber(), me.tick - timeOffset);

@@ -9,9 +9,9 @@ namespace tsal {
  * @param note 
  * @param tick 
  */
-void ThreadSynth::noteOn(unsigned note, unsigned tick) {
+void ThreadSynth::noteOn(unsigned note, double velocity, unsigned tick) {
   mSequencer->waitForTick(tick);
-  Synth::noteOn(note);
+  Synth::noteOn(note, velocity);
 }
 
 /**
