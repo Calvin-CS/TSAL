@@ -12,7 +12,7 @@ void MidiSequencer::tick() {
     for (unsigned i = 0; i < mTickEvents.size(); i++) {
       if (mTick >= mTickEvents[i]) {
         mTickEvents.erase(mTickEvents.begin() + i);
-        mEventCondition.notify_all();
+        mCondition.notify_all();
       } 
     }
     mSampleTime = 0;
@@ -57,15 +57,9 @@ unsigned MidiSequencer::getTick() const {
  * @param tick 
  */
 void MidiSequencer::waitForTick(unsigned tick) {
-  // We are potentionally adding to this vector from multiple threads so make sure it's thread safe
-  // We have to block this or else the guard waits till the thread is done sleeping to release the mutex
-  {
-    std::lock_guard<std::mutex> guard(mVectorMutex); 
-    mTickEvents.push_back(tick);
-  }
-  
-  std::unique_lock<std::mutex> lk(mEventMutex);
-  mEventCondition.wait(lk, [this, tick]{return mTick >= tick;}); 
+  std::unique_lock<std::mutex> lk(mMutex);
+  mTickEvents.push_back(tick);
+  mCondition.wait(lk, [this, tick]{return mTick >= tick;}); 
 }
 
 

@@ -26,9 +26,8 @@ class MidiSequencer {
     unsigned getTick() const;
     void waitForTick(unsigned tick);
   private:
-    std::mutex mEventMutex; 
-    std::condition_variable mEventCondition;
-    std::mutex mVectorMutex;
+    std::mutex mMutex; 
+    std::condition_variable mCondition;
     std::vector<unsigned> mTickEvents;
     void setSamplesPerTick();
     unsigned mSampleTime = 0;

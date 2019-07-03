@@ -184,7 +184,7 @@ void mergeSortFunction(std::vector<Oscillator>& oscillators, int threads, int si
  */
 int main() {
 
-    int threads, t = 1;
+    int threads, t = 4;
     for (threads = 1; threads < t; threads *=2);  //Force threads to be a power of 2
 
     Mixer mixer;

@@ -20,6 +20,7 @@ class Synth : public Instrument {
     virtual void noteOn(unsigned note, double velocity = 100.0) override;
     virtual void noteOff(unsigned note = A0) override;
     void setVelocity(double velocity);
+    void setMode(Oscillator::OscillatorMode mode) { mOscillator.setMode(mode); };
 
   private:
     Oscillator mOscillator;
