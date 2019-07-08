@@ -1,6 +1,6 @@
 noinst_PROGRAMS = jubilate rain merge_sort test chord progress producer_consumer
 
-AM_CXXFLAGS = -Wall -I$(top_srcdir)/include -I/usr/local/include/rtaudio -lrtaudio -fopenmp -pthread
+AM_CXXFLAGS = -Wall -I$(top_srcdir)/include -lrtaudio -fopenmp -pthread
 
 jubilate_SOURCES = jubilate.cpp
 jubilate_LDADD = $(top_builddir)/src/libtsal.la

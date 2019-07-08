@@ -1,4 +1,4 @@
-AM_CXXFLAGS = -Wall -I$(top_srcdir)/include -I/usr/local/include/rtaudio -lrtaudio
+AM_CXXFLAGS = -Wall -I$(top_srcdir)/include -lrtaudio
 
 lib_LTLIBRARIES = libtsal.la
 libtsal_la_SOURCES = \

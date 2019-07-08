@@ -140,6 +140,7 @@ test.trs
 
 # Executables
 *.exe
+*.exe.*
 *.out
 *.app
 
@@ -223,3 +224,4 @@ compile_commands.json
 .cquery
 .cquery_cached_index
 RtAudio.h
+NUL

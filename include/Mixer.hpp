@@ -1,12 +1,12 @@
 #ifndef MIXER_H
 #define MIXER_H
 
-#include "RtAudio.h"
 #include "InputDevice.hpp"
 #include "OutputDevice.hpp"
 #include "Channel.hpp"
 #include "Compressor.hpp"
 #include "MidiSequencer.hpp"
+#include <rtaudio/RtAudio.h>
 
 namespace tsal {
 
