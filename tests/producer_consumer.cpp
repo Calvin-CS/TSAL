@@ -34,7 +34,7 @@ class SharedQueue {
       mCondition.notify_all();
       return front;  
     };
-    tsal::Synth* getSynth() { return &synth; };
+    tsal::Synth& getSynth() { return synth; };
   private:
     tsal::Synth synth;
     unsigned mNote = 60;
@@ -79,6 +79,27 @@ void consume(SharedQueue* queue, tsal::Mixer* mixer) {
   }
 }
 
+/** @example producer_consumer.cpp
+ * 
+ * Producer and consumer is a common example of synchonization between multiple processes or threads.
+ * The SharedQueue class acts as a monitor between the producers and consumers. The sine wave 
+ * pitch corresponds to the fullness of the queue, the square wave blips correspond to a production,
+ * and the saw wave blips correspond to consumption
+ * 
+ * Parse the parameter\n
+ * Create the mixer and the SharedQueue
+ * Start the producer and consumer threads
+ * Producer threads:
+ * - Make a random item
+ * - Add the item to the queue
+ * - Play a square wave with pitch based on item
+ * Consumer threads:
+ * - Consume an item from the queue
+ * - Play a saw wave with pitch based on item
+ * SharedQueue:
+ * - Provide the synchronized access to the underlying queue
+ * - Change the pitch of the sine wave whenever a item is added or removed
+ */
 int main(int argc, char* argv[]) {
   if (argc != 3) {
     std::cout << "Invalid arguments\n\n"
@@ -92,7 +113,7 @@ int main(int argc, char* argv[]) {
   const int numConsumers = atoi(argv[2]);
   tsal::Mixer mixer;
   SharedQueue queue;
-  mixer.add(*queue.getSynth());
+  mixer.add(queue.getSynth());
 
 
   std::thread producers[numProducers];

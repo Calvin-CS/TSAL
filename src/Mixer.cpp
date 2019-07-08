@@ -69,7 +69,7 @@ void Mixer::initalizeStream() {
   mSequencer.setPPQ(240);
 
   // Add a compressor so people don't break their sound cards
-  // mMaster.add(mCompressor); 
+  mMaster.add(mCompressor); 
 
   try {
     mRtAudio.openStream(&oParams, NULL, FORMAT, mSampleRate, &mBufferFrames, 

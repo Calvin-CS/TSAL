@@ -17,20 +17,17 @@ double Compressor::getOutput() {
   if (!mActive) {
     return getInput();
   }
-  
-  // If the end of the buffer has been reached, more audio samples need to be generated
+
+  // Add a new sample into the buffer
+  mBuffer[++mCurrentSample] = getInput();
   if (mCurrentSample >= COMPRESSOR_MAX_BUFFER) {
     mCurrentSample = 0;
-    // Generate new audio data
-    for (unsigned i = 0; i < COMPRESSOR_MAX_BUFFER; i++) {
-      mBuffer[i] = getInput();
-    }
-    // Filter the generated audio data
+    // Filter the generated audio data since the buffer is full
     filterAudio();
   }
 
-  // Get an audio sample
-  return mBuffer[mCurrentSample++];
+  // Get an audio sample from the audio that has been processed in front
+  return mBuffer[(mCurrentSample + 1) % COMPRESSOR_MAX_BUFFER];
 }
 
 /**
@@ -39,8 +36,7 @@ double Compressor::getOutput() {
  */
 void Compressor::getEnvelope() {
   for (unsigned i = 0; i < COMPRESSOR_MAX_BUFFER; i++) {
-    // Using peak detection since it is faster
-    // Maybe implement RMS
+    // Peak detection
     double envIn = std::abs(mBuffer[i]);
 
     double gain = mEnvelopeSample < envIn ? mAttackGain : mReleaseGain;
