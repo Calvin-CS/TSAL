@@ -19,6 +19,7 @@ class RouteDevice : public InputDevice, public OutputDevice {
     std::vector<DeviceType*>& getInputDevices() { return mInputDevices; };
 
   protected:
+    bool outOfRange(const int index) const;
     std::vector<DeviceType*> mInputDevices;
     std::mutex mVectorMutex;
 };
@@ -71,13 +72,24 @@ void RouteDevice<DeviceType>::remove(DeviceType& output) {
 
 template <typename DeviceType>
 DeviceType& RouteDevice<DeviceType>::operator[](const int index) {
+  if (outOfRange(index)) {
+    throw "RouteDevice: Index out of range";
+  }
   return *mInputDevices[index];
 }
 
 template <typename DeviceType>
 const DeviceType& RouteDevice<DeviceType>::operator[](const int index) const {
+  if (outOfRange(index)) {
+    throw "RouteDevice: Index out of range";
+  }
   return *mInputDevices[index];
 }
 
+template <typename DeviceType>
+bool RouteDevice<DeviceType>::outOfRange(const int index) const {
+  return index < 0 || index > mInputDevices.size();
+}
+    
 } // namespace tsal
 #endif

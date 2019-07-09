@@ -208,6 +208,7 @@ test
 progress
 producer_consumer
 hello_tsal
+hello_tsal_threads
 
 # Doxygen
 /html

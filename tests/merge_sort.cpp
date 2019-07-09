@@ -1,12 +1,6 @@
 #include "tsal.hpp"
 #include <omp.h>
 
-#include <chrono>
-#include <thread>
-void thread_sleep(unsigned milliseconds) {
-  std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
-}
-
 using namespace tsal;
 
 enum MergeState {
@@ -155,7 +149,7 @@ void mergeSortFunction(std::vector<Oscillator>& oscillators, int threads, int si
           if (i == sd[tid]->left) {
             oscillator.setActive();
             oscillator.setFrequency(100 + (tid * 100) + height);
-            thread_sleep(10);
+            tsal::thread_sleep(10);
             oscillator.setActive(false);
           }
         }

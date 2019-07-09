@@ -1,6 +1,12 @@
 #include "Util.hpp"
+#include <chrono>
+#include <thread>
 
 namespace tsal {
+
+void thread_sleep(unsigned milliseconds) {
+  std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
+}
 
 double ampToDb(double amplitude) {
   return 20.0 * std::log(amplitude) / M_LN10;

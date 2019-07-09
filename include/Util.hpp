@@ -26,6 +26,8 @@ double ampToDb(double amplitude);
 double dbToAmp(double db);
 double volumeToDb(double volume);
 double dbToVolume(double db);
+void thread_sleep(unsigned milliseconds);
+
 }
 
 #endif

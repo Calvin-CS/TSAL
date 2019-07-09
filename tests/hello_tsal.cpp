@@ -30,4 +30,5 @@ int main() {
   
   // Stop the synth
   synth.noteOff();
+  return 0;
 }
