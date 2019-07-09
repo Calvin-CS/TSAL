@@ -4,7 +4,7 @@
 AC_PREREQ([2.69])
 AC_INIT([TSAL], [1.0.0])
 AC_CONFIG_SRCDIR([src])
-AC_CONFIG_FILES([Makefile src/Makefile tests/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile tests/Makefile examples/Makefile])
 # I may need this but not right now
 # AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
