@@ -28,9 +28,7 @@ void PolySynth::noteOn(unsigned note, double velocity) {
 
 void PolySynth::noteOff(unsigned note) {
   for (unsigned i = 0; i < NUM_VOICES; i++) {
-    std::cout << mVoices[i].getNote() << " " << note << std::endl;
     if (mVoices[i].getNote() == note) {
-      std::cout << "Note Off" << std::endl;
       mVoices[i].noteOff();
       mVoices[i].setActive(false);
     }

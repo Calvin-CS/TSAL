@@ -1,8 +1,6 @@
 #include "tsal.hpp"
 #include <omp.h>
 
-
-
 int main() {
   tsal::Mixer mixer;
   tsal::PolySynth polySynth;
@@ -24,6 +22,7 @@ int main() {
   polySynth.noteOff(tsal::G4);
 
   tsal::thread_sleep(3000);
-  
+
+  mixer.remove(polySynth);
   return 0;
 }

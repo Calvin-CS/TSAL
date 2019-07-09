@@ -101,8 +101,8 @@ m4/lt~obsolete.m4
 libtool
 Makefile
 test-suite.log
-test.log
-test.trs
+*.log
+*.trs
 
 # End of https://www.gitignore.io/api/autotools
 # End of https://www.gitignore.io/api/autotools
@@ -196,7 +196,7 @@ flycheck_*.el
 
 # End of https://www.gitignore.io/api/c++,emacs
 
-# Test binaries (wrapper scripts)
+# Example binaries (wrapper scripts)
 chord
 chord_p
 jubilate
@@ -204,11 +204,14 @@ jubilate_p
 merge_sort
 rain
 rain_p
-test
 progress
 producer_consumer
 hello_tsal
 hello_tsal_threads
+
+# Test binaries
+test
+mixer
 
 # Doxygen
 /html

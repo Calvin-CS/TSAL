@@ -48,7 +48,8 @@ int main(int argc, char* argv[]) {
   }
 
   //mixer.mSequencer.setTick(0);
-  mixer.test();
+  // TODO figure out what to do with sequencer
+  // mixer.test();
 
   omp_set_num_threads(numTracks);
 
