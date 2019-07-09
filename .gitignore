@@ -196,7 +196,7 @@ flycheck_*.el
 
 # End of https://www.gitignore.io/api/c++,emacs
 
-# Test binaries
+# Test binaries (wrapper scripts)
 chord
 chord_p
 jubilate
@@ -207,6 +207,7 @@ rain_p
 test
 progress
 producer_consumer
+hello_tsal
 
 # Doxygen
 /html

@@ -29,7 +29,7 @@ void MidiSequencer::setTick(unsigned tick) {
  * @param bpm 
  */
 void MidiSequencer::setBPM(unsigned bpm) {
-  mBPM = bpm;
+  mBPM = checkParameterRange("MidiSequencer: BPM", bpm, mBPMRange);
   setSamplesPerTick();
 }
 
@@ -39,7 +39,7 @@ void MidiSequencer::setBPM(unsigned bpm) {
  * @param ppq 
  */
 void MidiSequencer::setPPQ(unsigned ppq) {
-  mPPQ = ppq;
+  mPPQ = checkParameterRange("MidiSequencer: PPQ", ppq, mPPQRange);
   setSamplesPerTick();
 }
 
@@ -62,5 +62,7 @@ void MidiSequencer::waitForTick(unsigned tick) {
   mCondition.wait(lk, [this, tick]{return mTick >= tick;}); 
 }
 
+ParameterRange<unsigned> MidiSequencer::mBPMRange = std::make_pair(1, 1000);
+ParameterRange<unsigned> MidiSequencer::mPPQRange = std::make_pair(1, 1000);
 
 }

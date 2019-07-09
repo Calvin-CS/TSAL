@@ -34,11 +34,12 @@ class MidiSequencer {
     unsigned mTick;
 
 
-    unsigned mPPQ;
-    unsigned mBPM;
+    unsigned mPPQ = 240;
+    unsigned mBPM = 100;
     double mSamplesPerTick;
 
     static ParameterRange<unsigned> mBPMRange;
+    static ParameterRange<unsigned> mPPQRange;
 };
 
 }
