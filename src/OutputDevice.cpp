@@ -47,6 +47,10 @@ double OutputDevice::getVolume() const {
   return dbToVolume(getGain());
 }
 
+bool OutputDevice::isActive() const {
+  return mActive;
+}
+
 ParameterRange<double> OutputDevice::mGainRange = std::make_pair(-50.0, 50.0);
 ParameterRange<double> OutputDevice::mVolumeRange = std::make_pair(0.0, 2.0);
 

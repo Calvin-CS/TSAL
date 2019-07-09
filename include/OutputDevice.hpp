@@ -27,6 +27,7 @@ class OutputDevice {
 
     double getGain() const;
     double getVolume() const;
+    bool isActive() const;
 
   protected:
     bool mActive = true;

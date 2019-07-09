@@ -21,11 +21,13 @@ class Synth : public Instrument {
     virtual void noteOff(unsigned note = A0) override;
     void setVelocity(double velocity);
     void setMode(Oscillator::OscillatorMode mode) { mOscillator.setMode(mode); };
+    unsigned getNote() const;
 
   private:
     Oscillator mOscillator;
     Envelope mEnvelope;
     double mVelocity;
+    unsigned mNote = 0;
     
     static ParameterRange<double> mVelocityRange;
 }; 

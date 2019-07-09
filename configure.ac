@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([FULL-PACKAGE-NAME], [VERSION], [BUG-REPORT-ADDRESS])
+AC_INIT([TSAL], [1.0.0])
 AC_CONFIG_SRCDIR([src])
 AC_CONFIG_FILES([Makefile src/Makefile tests/Makefile])
 # I may need this but not right now

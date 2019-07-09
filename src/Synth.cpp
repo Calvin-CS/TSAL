@@ -13,6 +13,7 @@ double Synth::getOutput() {
  * @param velocity 
  */
 void Synth::noteOn(unsigned note, double velocity) {
+  mNote = note;
   mEnvelope.start();
   setVelocity(velocity); 
   mOscillator.setNote(note);
@@ -25,6 +26,10 @@ void Synth::noteOn(unsigned note, double velocity) {
  */
 void Synth::noteOff(unsigned note) {
   mEnvelope.stop();
+}
+
+unsigned Synth::getNote() const {
+  return mNote;
 }
 
 void Synth::setVelocity(double velocity) {
