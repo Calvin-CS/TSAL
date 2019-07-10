@@ -31,6 +31,7 @@ class Mixer : public InputDevice, private OutputDevice {
     void remove(Instrument& instrument);
     void remove(Effect& effect);
 
+    Channel &getMaster() { return mMaster; };
     static unsigned getSampleRate() { return mSampleRate; };
     static unsigned getCurrentTick() { return mCurrentTick; };
     static unsigned getBufferFrames() { return mBufferFrames; };

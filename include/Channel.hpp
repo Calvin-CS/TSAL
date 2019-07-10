@@ -26,6 +26,11 @@ class Channel : public OutputDevice {
     void remove(Effect& effect);
     void remove(Channel& channel);
     void remove(Instrument& instrument);
+
+    int getChannelCount() { return mRoutedChannels.size(); };
+    int getInstrumentCount() { return mRoutedInstruments.size(); };
+    int getEffectCount() { return mEffectChain.size(); };
+
   private:
     RouteDevice<OutputDevice> mChannelIn;
     RouteDevice<Instrument> mRoutedInstruments;

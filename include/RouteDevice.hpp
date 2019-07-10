@@ -12,10 +12,14 @@ class RouteDevice : public InputDevice, public OutputDevice {
   public:
     virtual double getInput() override;
     virtual double getOutput() override;
+    
     void add(DeviceType& output);
     void remove(DeviceType& output);
+    int size() { return mInputDevices.size(); };
+    
     DeviceType& operator[](const int index);
     const DeviceType& operator[](const int index) const;
+    
     std::vector<DeviceType*>& getInputDevices() { return mInputDevices; };
 
   protected:
@@ -32,6 +36,7 @@ class RouteDevice : public InputDevice, public OutputDevice {
 template <typename DeviceType>
 double RouteDevice<DeviceType>::getInput() {
   double output = 0.0;
+  std::lock_guard<std::mutex> guard(mVectorMutex); 
   for (auto d : mInputDevices) {
     output += d->getOutput();
   }
@@ -88,7 +93,7 @@ const DeviceType& RouteDevice<DeviceType>::operator[](const int index) const {
 
 template <typename DeviceType>
 bool RouteDevice<DeviceType>::outOfRange(const int index) const {
-  return index < 0 || index > mInputDevices.size();
+  return index < 0 || index > (int) mInputDevices.size();
 }
     
 } // namespace tsal

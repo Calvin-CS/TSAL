@@ -13,16 +13,12 @@ int main() {
   polySynth.noteOn(tsal::C5);
   polySynth.noteOn(tsal::G4);
 
-  tsal::thread_sleep(1000);
-
   polySynth.noteOff(tsal::C5);
- 
-  tsal::thread_sleep(3000);
 
   polySynth.noteOff(tsal::G4);
 
-  tsal::thread_sleep(3000);
 
-  mixer.remove(polySynth);
+  channel.remove(polySynth);
+  mixer.remove(channel);
   return 0;
 }

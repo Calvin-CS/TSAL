@@ -212,6 +212,7 @@ hello_tsal_threads
 # Test binaries
 test
 mixer
+effects
 
 # Doxygen
 /html

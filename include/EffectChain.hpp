@@ -13,8 +13,8 @@ class EffectChain : public OutputDevice {
     virtual double getOutput() override;
     void add(Effect& effect);
     void remove(Effect& effect);
+    int size() { return mEffects.size(); };
   private:
-    unsigned mSize;
     std::vector<Effect*> mEffects;
     OutputDevice* mInput;
 };
