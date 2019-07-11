@@ -9,7 +9,7 @@
 namespace tsal {
 
 /** @class Synth
- * @brief An audio synth 
+ * @brief A monophnoic synthesizer
  * 
  * Synth uses the oscillator and envelope classes to create a basic 
  * monophonic synthesizer that can be used to play midinotes

@@ -22,6 +22,7 @@
  * - Play the midi events
  */
 int main(int argc, char* argv[]) {
+  /*
   if (argc != 3) {
     std::cout << "Invalid arguments\n\n"
               << "jubilate <midifile> <voices>\n" 
@@ -32,19 +33,22 @@ int main(int argc, char* argv[]) {
   }
   tsal::MidiParser midiParser(1, argv[1]);
   const int numVoices = atoi(argv[2]);
+  */
+
+  tsal::MidiParser midiParser(1, "./jubilate.mid");
+  const int numVoices = 3;
 
   tsal::Mixer mixer;
   std::vector<tsal::ThreadSynth> voices(numVoices);  
-  for (unsigned i = 0; i < voices.size(); i++) {
-    voices[i].setVolume(0.3);
-    mixer.add(voices[i]);
-  }
 
   omp_set_num_threads(numVoices);
 
   #pragma omp parallel
   {
     int id = omp_get_thread_num();
+    
+    voices[id].setVolume(0.0);
+    mixer.add(voices[id]);
     
     // Get a ith measure offset into the song
     int timeOffset = id * 4 * midiParser.getPPQ();
@@ -57,6 +61,7 @@ int main(int argc, char* argv[]) {
       if (me.isNoteOff())
         voices[id].noteOff(me.getKeyNumber(), me.tick + timeOffset);
     }
+    mixer.remove(voices[id]);
   }
   return 0;
 }

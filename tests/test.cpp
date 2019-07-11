@@ -3,22 +3,14 @@
 
 int main() {
   tsal::Mixer mixer;
-  tsal::PolySynth polySynth;
-  tsal::Channel channel;
+  tsal::SoundFont soundfont("/usr/share/soundfonts/FluidR3_GM.sf2");
 
-  mixer.add(channel);
-  channel.add(polySynth);
+  mixer.add(soundfont);
 
-  polySynth.noteOn(tsal::C4);
-  polySynth.noteOn(tsal::C5);
-  polySynth.noteOn(tsal::G4);
-
-  polySynth.noteOff(tsal::C5);
-
-  polySynth.noteOff(tsal::G4);
-
-
-  channel.remove(polySynth);
-  mixer.remove(channel);
+  soundfont.noteOn(tsal::C4);
+  tsal::thread_sleep(1000);
+  soundfont.noteOff(tsal::C4);
+  
+  mixer.remove(soundfont);
   return 0;
 }

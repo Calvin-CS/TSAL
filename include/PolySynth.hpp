@@ -1,3 +1,6 @@
+#ifndef POLYSYNTH_H
+#define POLYSYNTH_H
+
 #include "Synth.hpp"
 #include "Oscillator.hpp"
 #include "Instrument.hpp"
@@ -6,6 +9,13 @@
 
 namespace tsal {
 
+/** @class PolySynth
+ * @brief A polyphonic synthesizer
+ *
+ * PolySynth uses multiple Synths to create a polyphonic 
+ * synthesizer that can handle multiple notes being played
+ * at the same time
+ */
 class PolySynth : public Instrument {
   public:
     PolySynth();
@@ -20,3 +30,5 @@ class PolySynth : public Instrument {
 };
   
 }
+
+#endif
