@@ -1,4 +1,3 @@
-
 #ifndef TSAL_H
 #define TSAL_H
 

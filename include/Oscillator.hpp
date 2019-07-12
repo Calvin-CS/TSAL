@@ -26,7 +26,6 @@ class Oscillator : public Instrument {
       SQUARE
     };
 
-    Oscillator();
     double getOutput() override;
 
     void setMode(OscillatorMode mode);
@@ -43,7 +42,7 @@ class Oscillator : public Instrument {
     double polyBLEP(double t);
     double mFrequency;
     
-    OscillatorMode mMode;
+    OscillatorMode mMode = SINE;
     double mPhase = 0.0;
     double mPhaseStep = 0.0;
     double mWaveFormValue = 0.0;

@@ -5,11 +5,6 @@
 
 namespace tsal {
 
-Oscillator::Oscillator() {
-  setMode(SINE);
-  setNote(C4);
-}
-
 // Helpful implementation of ployBLEP to reduce aliasing
 // http://metafunction.co.uk/all-about-digital-oscillators-part-2-blits-bleps/
 double Oscillator::getOutput() {
@@ -38,7 +33,7 @@ double Oscillator::getOutput() {
   while (mPhase >= PI2)
     mPhase -= PI2;
 
-  return mWaveFormValue * mAmp;
+  return mWaveFormValue * mAmp * SCALE;
 }
 
 /**
@@ -102,7 +97,7 @@ void Oscillator::setNote(unsigned note) {
  */
 void Oscillator::setFrequency(double frequency) {
   mFrequency = checkParameterRange("Oscillator: Frequency", frequency, mFrequencyRange);
-  mPhaseStep = mFrequency * PI2 / ((double) Mixer::getSampleRate());
+  mPhaseStep = mFrequency * PI2 / mMixer->getSampleRate();
 }
 
 /**

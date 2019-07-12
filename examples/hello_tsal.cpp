@@ -25,7 +25,7 @@ int main() {
   
   // Wait for the user to stop the synth
   char input;
-  std::cout << "Press any <enter> to quit:" << std::flush;
+  std::cout << "Press <enter> to quit:" << std::flush;
   std::cin.get(input);
   
   // Stop the synth

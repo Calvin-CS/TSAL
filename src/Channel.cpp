@@ -1,8 +1,10 @@
 #include "Channel.hpp"
+#include "Mixer.hpp"
 
 namespace tsal {
   
 Channel::Channel() {
+  std::cout << mMixer->getSampleRate() << std::endl;
   mChannelIn.add(mRoutedInstruments);
   mChannelIn.add(mRoutedChannels);
   mEffectChain.setInput(mChannelIn);

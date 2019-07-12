@@ -4,6 +4,7 @@
 #include <iostream>
 #define _USE_MATH_DEFINES 
 #include <cmath>
+#define PI2 (M_PI * 2)
 
 namespace tsal {
 

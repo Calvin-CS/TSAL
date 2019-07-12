@@ -2,6 +2,7 @@
 #define ENVELOPE_H
 
 #include "Mixer.hpp"
+#include "OutputDevice.hpp"
 #include "Util.hpp"
 #include <cmath>
 
@@ -16,7 +17,7 @@ namespace tsal {
  * a smoother sound when overlayed on an instrument
  * Implementation adapted from http://www.martin-finke.de/blog/articles/audio-plugins-011-envelopes/
  */
-class Envelope {
+class Envelope : public OutputDevice {
   public:
     enum EnvelopeState {
       OFF,
@@ -26,7 +27,7 @@ class Envelope {
       RELEASE
     };
     Envelope();
-    double getEnvelope();
+    double getOutput();
     void updateState();
     void start();
     void stop();

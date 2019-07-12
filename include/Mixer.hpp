@@ -22,7 +22,7 @@ namespace tsal {
  * To use TSAL, the Mixer class needs to be initiliazed at the start of the project.
  * All other audio devices will be routed through the Mixer
  */
-class Mixer : public InputDevice, private OutputDevice {
+class Mixer : public InputDevice {
   public:
     Mixer();
     Mixer(unsigned sampleRate);
@@ -36,7 +36,7 @@ class Mixer : public InputDevice, private OutputDevice {
     void remove(Instrument& instrument);
     void remove(Effect& effect);
 
-    Channel &getMaster() { return mMaster; };
+    Channel& getMaster() { return mMaster; };
     static unsigned getSampleRate() { return mSampleRate; };
     static unsigned getCurrentTick() { return mCurrentTick; };
     static unsigned getBufferFrames() { return mBufferFrames; };

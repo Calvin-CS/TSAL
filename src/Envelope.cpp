@@ -24,7 +24,7 @@ void Envelope::updateState() {
   mState = static_cast<EnvelopeState>((mState + 1) % 5);
   mCurrentStateIndex = 0;
   // OFF and SUSTAIN are indefinite so no need to set mNextStateIndex
-  mNextStateIndex = stateIsTimed() ? mStateValue[mState] * Mixer::getSampleRate() : 0;
+  mNextStateIndex = stateIsTimed() ? mStateValue[mState] * mMixer->getSampleRate() : 0;
   switch(mState) {
     case OFF:
       mEnvelopeValue = 0.0;
@@ -51,7 +51,7 @@ void Envelope::updateState() {
  * 
  * @return double A sample of the envelope
  */
-double Envelope::getEnvelope() {
+double Envelope::getOutput() {
   if (stateIsTimed()) {
     if (mCurrentStateIndex == mNextStateIndex) {
       updateState();

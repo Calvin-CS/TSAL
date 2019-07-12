@@ -1,4 +1,5 @@
 #include "Mixer.hpp"
+#include "Channel.hpp"
 
 namespace tsal {
 
@@ -68,7 +69,9 @@ void Mixer::initalizeStream() {
   mSequencer.setPPQ(240);
 
   // Add a compressor so people don't break their sound cards
-  mMaster.add(mCompressor); 
+  mMaster.setMixer(this);
+  mCompressor.setMixer(this);
+  mMaster.add(mCompressor);
 
   try {
     mRtAudio.openStream(&oParams, NULL, FORMAT, mSampleRate, &mBufferFrames, 
@@ -114,6 +117,7 @@ double Mixer::getInput() {
  */
 void Mixer::add(Channel& channel) {
   mMaster.add(channel);
+  channel.setMixer(this);
 }
 
 /**
@@ -122,6 +126,7 @@ void Mixer::add(Channel& channel) {
  */
 void Mixer::remove(Channel& channel) {
   mMaster.remove(channel);
+  channel.setMixer(nullptr);
 }
 
 /**
@@ -134,6 +139,7 @@ void Mixer::remove(Channel& channel) {
 void Mixer::add(Instrument& instrument) {
   mMaster.add(instrument);
   instrument.setSequencer(&mSequencer);
+  instrument.setMixer(this);
 }
 
 /**
@@ -146,6 +152,7 @@ void Mixer::add(Instrument& instrument) {
 void Mixer::remove(Instrument& instrument) {
   mMaster.remove(instrument);
   instrument.setSequencer(nullptr);
+  instrument.setMixer(nullptr);
 }
 
 /**
@@ -157,6 +164,7 @@ void Mixer::remove(Instrument& instrument) {
  */
 void Mixer::add(Effect& effect) {
   mMaster.add(effect);
+  effect.setMixer(this);
 }
 
 
@@ -169,6 +177,7 @@ void Mixer::add(Effect& effect) {
  */
 void Mixer::remove(Effect& effect) {
   mMaster.remove(effect);
+  effect.setMixer(nullptr);
 }
 
 unsigned Mixer::mCurrentTick = 0;

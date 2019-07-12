@@ -88,7 +88,7 @@ void Compressor::calculateSlope() {
  */
 void Compressor::setAttackTime(double attackTime) {
   attackTime = checkParameterRange("Compressor: AttackTime", attackTime, mAttackTimeRange);
-  mAttackGain = attackTime == 0.0 ? 0.0 : std::exp(-1.0 / (Mixer::getSampleRate() * attackTime/1000));
+  mAttackGain = attackTime == 0.0 ? 0.0 : std::exp(-1.0 / (mMixer->getSampleRate() * attackTime/1000));
 }
 
 /**
@@ -98,7 +98,7 @@ void Compressor::setAttackTime(double attackTime) {
  */
 void Compressor::setReleaseTime(double releaseTime) {
   releaseTime = checkParameterRange("Compressor: ReleaseTime", releaseTime, mReleaseTimeRange);
-  mReleaseGain = releaseTime == 0.0 ? 0.0 : std::exp(-1.0 / (Mixer::getSampleRate() * releaseTime/1000));
+  mReleaseGain = releaseTime == 0.0 ? 0.0 : std::exp(-1.0 / (mMixer->getSampleRate() * releaseTime/1000));
 }
 
 /**

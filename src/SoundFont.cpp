@@ -9,12 +9,16 @@ SoundFont::SoundFont(std::string filename) {
     std::cout << "Failed to load SoundFont: " << filename << std::endl;
     return;
   }
-  tsf_set_output(mSoundFont, TSF_MONO, Mixer::getSampleRate(), 0);
   mPresetRange = std::make_pair(0, getPresetCount());
 }
 
 SoundFont::~SoundFont() {
   tsf_close(mSoundFont);
+}
+
+void SoundFont::setMixer(Mixer* mixer) {
+  OutputDevice::setMixer(mixer);
+  tsf_set_output(mSoundFont, TSF_MONO, mMixer->getSampleRate(), 0);
 }
 
 double SoundFont::getOutput() {

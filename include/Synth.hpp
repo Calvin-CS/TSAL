@@ -22,6 +22,11 @@ class Synth : public Instrument {
     void setVelocity(double velocity);
     void setMode(Oscillator::OscillatorMode mode) { mOscillator.setMode(mode); };
     unsigned getNote() const;
+    
+    virtual void setMixer(Mixer* mixer) override {
+      OutputDevice::setMixer(mixer);
+      mOscillator.setMixer(mixer);
+    }
 
   private:
     Oscillator mOscillator;

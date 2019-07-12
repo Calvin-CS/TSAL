@@ -4,9 +4,10 @@
 #include "Util.hpp"
 #include <iostream>
 
-#define PI2 (M_PI * 2)
-
 namespace tsal {
+
+// Foward declaration of the Mixer
+class Mixer;
 
 /** @class OutputDevice
  * @brief Base class for a device that produces audio output
@@ -14,6 +15,8 @@ namespace tsal {
  */
 class OutputDevice {
   public:
+    OutputDevice(){};
+    OutputDevice(Mixer* mixer) { mMixer = mixer; };
     virtual ~OutputDevice() {};
 
     virtual double getOutput();
@@ -21,6 +24,7 @@ class OutputDevice {
     virtual void setActive(bool active = true);
     void setGain(double gain);
     void setVolume(double volume);
+    virtual void setMixer(Mixer *mixer) { mMixer = mixer; };
 
     double getGain() const;
     double getVolume() const;
@@ -29,8 +33,12 @@ class OutputDevice {
   protected:
     bool mActive = true;
     double mAmp = 1.0;
+    Mixer* mMixer = nullptr;
+    
     static ParameterRange<double> mGainRange;
     static ParameterRange<double> mVolumeRange;
+  private:
+    friend class OutputDevice;
 };
 
 }
