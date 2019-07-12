@@ -1,7 +1,7 @@
 #include "tsal.hpp"
 #include <omp.h>
 
-#define NUM_THREADS 4
+#define NUM_THREADS 2
 
 /** @example hello_tsal_threads.cpp
  *
@@ -23,7 +23,7 @@ int main() {
     int id = omp_get_thread_num();
     // Add the synth to the mixer
     mixer.add(synths[id]);
-    synths[id].setVolume(0.3);
+    synths[id].setVolume(.5);
     
     // Start playing a pitch based on thread number
     synths[id].noteOn(tsal::C4 + 5 * id);

@@ -38,7 +38,7 @@ double Oscillator::getOutput() {
   while (mPhase >= PI2)
     mPhase -= PI2;
 
-  return mWaveFormValue * SCALE * mAmp;
+  return mWaveFormValue * mAmp;
 }
 
 /**

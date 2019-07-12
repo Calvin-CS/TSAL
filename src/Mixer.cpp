@@ -1,5 +1,4 @@
 #include "Mixer.hpp"
-#include <time.h>
 
 namespace tsal {
 

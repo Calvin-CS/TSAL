@@ -5,24 +5,67 @@ namespace tsal {
 
 SoundFont::SoundFont(std::string filename) {
   mSoundFont = tsf_load_filename(filename.c_str());
-  tsf_set_output(mSoundFont, TSF_MONO, Mixer::getSampleRate(), 0); //sample rate
+  if (mSoundFont == NULL) {
+    std::cout << "Failed to load SoundFont: " << filename << std::endl;
+    return;
+  }
+  tsf_set_output(mSoundFont, TSF_MONO, Mixer::getSampleRate(), 0);
+  mPresetRange = std::make_pair(0, getPresetCount());
+}
+
+SoundFont::~SoundFont() {
+  tsf_close(mSoundFont);
 }
 
 double SoundFont::getOutput() {
   float buffer[1];
   tsf_render_float(mSoundFont, buffer, 1, 0);
-  if (buffer[0] > 1.0) 
-    std::cout << buffer[0] << std::endl;
-
-  return buffer[0] * SCALE;
+  return buffer[0] * mAmp * SCALE;
 }
 
 void SoundFont::noteOn(unsigned note, double velocity) {
-  tsf_note_on(mSoundFont, 1, note, velocity/127.0);
+  tsf_note_on(mSoundFont, mPresetIndex, note, velocity/127.0);
 }
 
 void SoundFont::noteOff(unsigned note) {
-  tsf_note_off(mSoundFont, 1, note);
+  tsf_note_off(mSoundFont, mPresetIndex, note);
+}
+
+void SoundFont::reset() {
+  tsf_reset(mSoundFont);
+}
+
+void SoundFont::setPreset(int presetIndex) {
+  mPresetIndex = checkParameterRange("SoundFont: setPreset", presetIndex, mPresetRange);
+}
+
+void SoundFont::setPreset(std::string presetName) {
+  setPreset(getPresetIndex(presetName));
+}
+
+int SoundFont::getPresetIndex(int bank, int presetNumber) {
+  return tsf_get_presetindex(mSoundFont, bank, presetNumber);
+}
+
+int SoundFont::getPresetIndex(std::string presetName) {
+  for (int i = 0; i < getPresetCount(); i++) {
+    if (presetName == getPresetName(i)) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+int SoundFont::getPresetCount() {
+  return tsf_get_presetcount(mSoundFont);
+}
+    
+std::string SoundFont::getPresetName(int presetIndex) {
+  return std::string(tsf_get_presetname(mSoundFont, presetIndex));
+}
+
+std::string SoundFont::getPresetName(int bank, int presetNumber) {
+  return std::string(tsf_bank_get_presetname(mSoundFont, bank, presetNumber));
 }
 
 } // namespace tsal

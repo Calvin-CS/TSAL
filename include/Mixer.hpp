@@ -8,6 +8,11 @@
 #include "MidiSequencer.hpp"
 #include <rtaudio/RtAudio.h>
 
+
+typedef signed short BIT_DEPTH;
+#define FORMAT RTAUDIO_SINT16
+#define SCALE 32767.0
+
 namespace tsal {
 
 /** @class Mixer

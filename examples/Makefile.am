@@ -6,7 +6,8 @@ noinst_PROGRAMS = \
 	merge_sort \
 	chord \
 	progress \
-	producer_consumer
+	producer_consumer \
+	producer_consumer_percussion
 
 
 AM_CXXFLAGS = -g -Wall -I$(top_srcdir)/include -I/usr/lib/gcc/x86_64-pc-linux-gnu/9.1.0/include -lrtaudio -fopenmp -pthread
@@ -34,3 +35,6 @@ progress_LDADD = $(top_builddir)/src/libtsal.la
 
 producer_consumer_SOURCES = producer_consumer.cpp
 producer_consumer_LDADD = $(top_builddir)/src/libtsal.la
+
+producer_consumer_percussion_SOURCES = producer_consumer_percussion.cpp
+producer_consumer_percussion_LDADD = $(top_builddir)/src/libtsal.la

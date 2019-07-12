@@ -4,23 +4,13 @@
 #include <iostream>
 #include <queue>
 
-#include <chrono>
-#include <thread>
-void thread_sleep(unsigned milliseconds) {
-  std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
-}
-
 class SharedQueue {
   public:
-    SharedQueue() {
-      synth.setVolume(0.3);
-      synth.noteOn(mNote);
-    };
     void produce(int item) {
       std::unique_lock<std::mutex> lk(mMutex);
-      mCondition.wait(lk, [this]{return mQueue.size() < mMaxQueueSize;}); 
+      mCondition.wait(lk, [this]{return mQueue.size() < MaxQueueSize;}); 
       mQueue.push(item);
-      synth.noteOn(++mNote);
+      tsal::thread_sleep(rand() % 1000);
       lk.unlock();
       mCondition.notify_all();
     };
@@ -29,53 +19,59 @@ class SharedQueue {
       mCondition.wait(lk, [this]{return mQueue.size() > 0;});
       const int front = mQueue.front();
       mQueue.pop();
-      synth.noteOn(--mNote);
       lk.unlock();
       mCondition.notify_all();
       return front;  
     };
-    tsal::Synth& getSynth() { return synth; };
+    unsigned size() {
+      return mQueue.size();
+    }
+    unsigned MaxQueueSize = 12;
   private:
-    tsal::Synth synth;
-    unsigned mNote = 60;
     std::condition_variable mCondition;
     std::mutex mMutex;
     std::queue<int> mQueue;
-    unsigned mMaxQueueSize = 12;
 };
 
+void monitor(SharedQueue* queue, tsal::Mixer* mixer) {
+  tsal::SoundFont sf("/usr/share/soundfonts/FluidR3_GM.sf2");
+  sf.setPreset("Jazz");
+  mixer->add(sf);
+
+  int size;
+  while(true) {
+    size = queue->size();
+    sf.noteOn(42);
+    tsal::thread_sleep((queue->MaxQueueSize + 1 - size) * 100);
+  }
+}
+
 void produce(SharedQueue* queue, tsal::Mixer* mixer) {
-  tsal::Synth synth;
-  synth.setVolume(0.2);
-  synth.setMode(tsal::Oscillator::SQUARE);
-  mixer->add(synth);
+  tsal::SoundFont sf("/usr/share/soundfonts/FluidR3_GM.sf2");
+  sf.setPreset("Jazz");
+  mixer->add(sf);
 
   int item;
   while (true) {
-    thread_sleep(rand() % 5000);
-    item = rand() % 10;
+    tsal::thread_sleep(rand() % 2000);
+    item = rand() % 50;
     std::cout << "producing: " << item << std::endl;
     queue->produce(item);
-    synth.noteOn(30 + item);
-    thread_sleep(100);
-    synth.noteOff();
+    sf.noteOn(36);
   }
 }
 
 void consume(SharedQueue* queue, tsal::Mixer* mixer) {
-  tsal::Synth synth;
-  synth.setVolume(0.2);
-  synth.setMode(tsal::Oscillator::SAW);
-  mixer->add(synth);
+  tsal::SoundFont sf("/usr/share/soundfonts/FluidR3_GM.sf2");
+  sf.setPreset("Jazz");
+  mixer->add(sf);
 
   int item;
   while (true) {
-    thread_sleep(rand() % 5000);
+    tsal::thread_sleep(rand() % 2000);
     item = queue->consume();
     std::cout << "consuming: " << item << std::endl;
-    synth.noteOn(80 + item);
-    thread_sleep(100);
-    synth.noteOff();
+    sf.noteOn(38);
   }
 }
 
@@ -113,8 +109,6 @@ int main(int argc, char* argv[]) {
   const int numConsumers = atoi(argv[2]);
   tsal::Mixer mixer;
   SharedQueue queue;
-  mixer.add(queue.getSynth());
-
 
   std::thread producers[numProducers];
   std::thread consumers[numConsumers];
@@ -124,6 +118,7 @@ int main(int argc, char* argv[]) {
   for (int i = 0; i < numConsumers; i++) {
     consumers[i] = std::thread(consume, &queue, &mixer);
   }
+  std::thread monitor_thread = std::thread(monitor, &queue, &mixer);
 
   for (int i = 0; i < numProducers; i++) {
     producers[i].join();
@@ -131,6 +126,7 @@ int main(int argc, char* argv[]) {
   for (int i = 0; i < numConsumers; i++) {
     consumers[i].join();
   }
+  monitor_thread.join();
 
   return 0;
 }
