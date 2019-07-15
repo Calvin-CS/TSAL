@@ -7,7 +7,7 @@
 #include <thread>
 #define NUM_THREADS 3
 
-void thread_sleep(unsigned milliseconds) {
+void Util::thread_sleep(unsigned milliseconds) {
   std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
 }
 // Temporary fix
@@ -26,7 +26,7 @@ void* ThreadFunction(void* ptr) {
   
   for (unsigned i = data.start; i < data.end; i++) {
     voices[data.tid].setFrequency(voices[data.tid].getFrequency() + 10);
-    thread_sleep(100);
+    Util::thread_sleep(100);
   }
   pthread_exit(NULL);
 }

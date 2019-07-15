@@ -4,10 +4,14 @@
 namespace tsal {
   
 Channel::Channel() {
-  std::cout << mMixer->getSampleRate() << std::endl;
   mChannelIn.add(mRoutedInstruments);
   mChannelIn.add(mRoutedChannels);
   mEffectChain.setInput(mChannelIn);
+}
+
+void Channel::setMixer(Mixer* mixer) {
+  mChannelIn.setMixer(mixer);
+  mEffectChain.setMixer(mixer);
 }
 
 double Channel::getOutput() {

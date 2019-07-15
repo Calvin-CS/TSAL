@@ -149,7 +149,7 @@ void mergeSortFunction(std::vector<Oscillator>& oscillators, int threads, int si
           if (i == sd[tid]->left) {
             oscillator.setActive();
             oscillator.setFrequency(100 + (tid * 100) + height);
-            tsal::thread_sleep(10);
+            tsal::Util::thread_sleep(10);
             oscillator.setActive(false);
           }
         }

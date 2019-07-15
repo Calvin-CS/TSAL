@@ -12,6 +12,7 @@ class RouteDevice : public InputDevice, public OutputDevice {
   public:
     virtual double getInput() override;
     virtual double getOutput() override;
+    virtual void setMixer(Mixer* mixer) override;
     
     void add(DeviceType& output);
     void remove(DeviceType& output);
@@ -48,6 +49,15 @@ double RouteDevice<DeviceType>::getOutput() {
   return getInput();
 }
 
+template <typename DeviceType>
+void RouteDevice<DeviceType>::setMixer(Mixer* mixer) {
+  OutputDevice::setMixer(mixer);
+  for (auto d : mInputDevices) {
+    d->setMixer(mixer);
+  }
+}
+  
+
 /**
  * @brief Add an output device as input
  * 
@@ -56,6 +66,7 @@ double RouteDevice<DeviceType>::getOutput() {
 template <typename DeviceType>
 void RouteDevice<DeviceType>::add(DeviceType& output) {
   std::lock_guard<std::mutex> guard(mVectorMutex); 
+  output.setMixer(mMixer);
   mInputDevices.push_back(&output);
 }
 
@@ -69,6 +80,7 @@ void RouteDevice<DeviceType>::remove(DeviceType& output) {
   for (auto it = mInputDevices.begin(); it != mInputDevices.end(); it++) {
     if (&output == (*it)) {
       std::lock_guard<std::mutex> guard(mVectorMutex);
+      output.setMixer(nullptr);
       mInputDevices.erase(it);
       break;
     }

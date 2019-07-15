@@ -48,8 +48,8 @@ class Envelope : public OutputDevice {
     double mEnvelopeValue = 0.0;
     double mMultiplier = 0.0;
 
-    static ParameterRange<double> mTimeRange;
-    static ParameterRange<double> mSustainRange;
+    static Util::ParameterRange<double> mTimeRange;
+    static Util::ParameterRange<double> mSustainRange;
 };
 
 }

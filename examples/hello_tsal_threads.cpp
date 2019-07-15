@@ -28,7 +28,7 @@ int main() {
     // Start playing a pitch based on thread number
     synths[id].noteOn(tsal::C4 + 5 * id);
     // Wait for a second
-    tsal::thread_sleep(1000);
+    tsal::Util::thread_sleep(1000);
     // Stop playing 
     synths[id].noteOff();
   }

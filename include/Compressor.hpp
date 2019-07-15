@@ -22,8 +22,10 @@ namespace tsal {
  */
 class Compressor : public Effect {
   public:
-    Compressor();
+    Compressor()
+        : mBuffer(COMPRESSOR_MAX_BUFFER), mEnvelope(COMPRESSOR_MAX_BUFFER){};
     virtual double getOutput() override;
+    virtual void setMixer(Mixer* mixer) override;
     void setAttackTime(double attackTime);
     void setReleaseTime(double releaseTime);
     void setThreshold(double threshold);
@@ -52,11 +54,11 @@ class Compressor : public Effect {
     double mPreGain = 0.0;
     double mPostGain = 0.0;
 
-    static ParameterRange<double> mAttackTimeRange;
-    static ParameterRange<double> mReleaseTimeRange;
-    static ParameterRange<double> mThresholdRange;
-    static ParameterRange<double> mRatioRange;
-    static ParameterRange<double> mGainRange;
+    static Util::ParameterRange<double> mAttackTimeRange;
+    static Util::ParameterRange<double> mReleaseTimeRange;
+    static Util::ParameterRange<double> mThresholdRange;
+    static Util::ParameterRange<double> mRatioRange;
+    static Util::ParameterRange<double> mGainRange;
 };
 
 }

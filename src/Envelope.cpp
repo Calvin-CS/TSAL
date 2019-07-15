@@ -4,7 +4,7 @@ namespace tsal {
 
 template <typename Item>
 Item checkParameterRangeWithMax(const std::string& name, Item value, std::pair<Item, Item> range) {
-  return std::max(checkParameterRange(name, value, range), MIN_VALUE);
+  return std::max(Util::checkParameterRange(name, value, range), MIN_VALUE);
 }
 
 Envelope::Envelope() {
@@ -24,7 +24,7 @@ void Envelope::updateState() {
   mState = static_cast<EnvelopeState>((mState + 1) % 5);
   mCurrentStateIndex = 0;
   // OFF and SUSTAIN are indefinite so no need to set mNextStateIndex
-  mNextStateIndex = stateIsTimed() ? mStateValue[mState] * mMixer->getSampleRate() : 0;
+  mNextStateIndex = stateIsTimed() ? mStateValue[mState] * getSampleRate() : 0;
   switch(mState) {
     case OFF:
       mEnvelopeValue = 0.0;
@@ -139,10 +139,10 @@ void Envelope::setReleaseTime(double releaseTime) {
  * @param level 
  */
 void Envelope::setSustainLevel(double level) {
-  mStateValue[SUSTAIN] = checkParameterRange("Envelope: SustainLevel", level, mSustainRange);
+  mStateValue[SUSTAIN] = Util::checkParameterRange("Envelope: SustainLevel", level, mSustainRange);
 }
 
-ParameterRange<double> Envelope::mTimeRange = std::make_pair(0.0, 2000.0);
-ParameterRange<double> Envelope::mSustainRange = std::make_pair(0.0, 1.0);
+Util::ParameterRange<double> Envelope::mTimeRange = std::make_pair(0.0, 2000.0);
+Util::ParameterRange<double> Envelope::mSustainRange = std::make_pair(0.0, 1.0);
 
 }

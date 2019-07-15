@@ -42,7 +42,7 @@ class SoundFont : public Instrument {
   private:
     tsf* mSoundFont;
     int mPresetIndex = 0;
-    ParameterRange<int> mPresetRange;
+    Util::ParameterRange<int> mPresetRange;
 };
 
 }

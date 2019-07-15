@@ -27,7 +27,7 @@ void OutputDevice::setActive(bool active) {
  * @param gain 
  */
 void OutputDevice::setGain(double gain) {
-  mAmp = dbToAmp(checkParameterRange("Oscillator: Gain", gain, mGainRange));
+  mAmp = Util::dbToAmp(Util::checkParameterRange("Oscillator: Gain", gain, mGainRange));
 }
 
 /**
@@ -36,22 +36,24 @@ void OutputDevice::setGain(double gain) {
  * @return double 
  */
 double OutputDevice::getGain() const {
-  return ampToDb(mAmp);
+  return Util::ampToDb(mAmp);
 }
 
 void OutputDevice::setVolume(double volume) {
-  mAmp = dbToAmp(volumeToDb(volume));
+  mAmp = Util::dbToAmp(Util::volumeToDb(volume));
 }
 
 double OutputDevice::getVolume() const {
-  return dbToVolume(getGain());
+  return Util::dbToVolume(getGain());
 }
 
 bool OutputDevice::isActive() const {
   return mActive;
 }
 
-ParameterRange<double> OutputDevice::mGainRange = std::make_pair(-50.0, 50.0);
-ParameterRange<double> OutputDevice::mVolumeRange = std::make_pair(0.0, 2.0);
+
+
+Util::ParameterRange<double> OutputDevice::mGainRange = std::make_pair(-50.0, 50.0);
+Util::ParameterRange<double> OutputDevice::mVolumeRange = std::make_pair(0.0, 2.0);
 
 }

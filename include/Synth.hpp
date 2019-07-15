@@ -34,7 +34,7 @@ class Synth : public Instrument {
     double mVelocity;
     unsigned mNote = 0;
     
-    static ParameterRange<double> mVelocityRange;
+    static Util::ParameterRange<double> mVelocityRange;
 }; 
 
 }

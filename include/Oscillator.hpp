@@ -47,8 +47,8 @@ class Oscillator : public Instrument {
     double mPhaseStep = 0.0;
     double mWaveFormValue = 0.0;
 
-    static ParameterRange<unsigned> mNoteRange;
-    static ParameterRange<double> mFrequencyRange;
+    static Util::ParameterRange<unsigned> mNoteRange;
+    static Util::ParameterRange<double> mFrequencyRange;
 };
 
 }

@@ -37,9 +37,9 @@ class Mixer : public InputDevice {
     void remove(Effect& effect);
 
     Channel& getMaster() { return mMaster; };
-    static unsigned getSampleRate() { return mSampleRate; };
-    static unsigned getCurrentTick() { return mCurrentTick; };
-    static unsigned getBufferFrames() { return mBufferFrames; };
+    unsigned getSampleRate() { return mSampleRate; };
+    unsigned getCurrentTick() { return mCurrentTick; };
+    unsigned getBufferFrames() { return mBufferFrames; };
 
     virtual double getInput() override;
 
@@ -51,9 +51,9 @@ class Mixer : public InputDevice {
     Compressor mCompressor;
     MidiSequencer mSequencer;
     
-    static unsigned mCurrentTick;
-    static unsigned mSampleRate;
-    static unsigned mBufferFrames;
+    unsigned mCurrentTick = 0;
+    unsigned mSampleRate = 0;
+    unsigned mBufferFrames = 0;
     static void errorCallback(RtAudioError::Type type, const std::string &errorText);
     static int streamCallback(void *outputBuffer,
                       __attribute__((unused)) void *inputBuffer,

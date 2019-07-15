@@ -2,14 +2,7 @@
 #include <omp.h>
 #include <vector>
 
-// Temporary fix
-#include <chrono>
-#include <thread>
 #define NUM_THREADS 3
-void thread_sleep(unsigned milliseconds) {
-  std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
-}
-// Temporary fix
 
 int main() {
   tsal::Mixer mixer;
@@ -31,7 +24,7 @@ int main() {
     #pragma omp for
     for (unsigned i = 0; i < 100; i++) {
       voices[id].setFrequency(voices[id].getFrequency() + 10);
-      thread_sleep(100);
+      tsal::Util::thread_sleep(100);
     }
 
   }

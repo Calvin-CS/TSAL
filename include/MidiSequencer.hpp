@@ -38,8 +38,8 @@ class MidiSequencer {
     unsigned mBPM = 100;
     double mSamplesPerTick;
 
-    static ParameterRange<unsigned> mBPMRange;
-    static ParameterRange<unsigned> mPPQRange;
+    static Util::ParameterRange<unsigned> mBPMRange;
+    static Util::ParameterRange<unsigned> mPPQRange;
 };
 
 }

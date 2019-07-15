@@ -33,8 +33,8 @@ unsigned Synth::getNote() const {
 }
 
 void Synth::setVelocity(double velocity) {
-  mVelocity = checkParameterRange("Synth: Velocity", velocity, mVelocityRange);
+  mVelocity = Util::checkParameterRange("Synth: Velocity", velocity, mVelocityRange);
 }
 
-ParameterRange<double> Synth::mVelocityRange = std::make_pair(0.0, 127.0);
+Util::ParameterRange<double> Synth::mVelocityRange = std::make_pair(0.0, 127.0);
 }

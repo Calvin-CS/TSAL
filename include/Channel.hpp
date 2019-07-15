@@ -18,6 +18,7 @@ class Channel : public OutputDevice {
   public:
     Channel();
     virtual double getOutput() override;
+    virtual void setMixer(Mixer* mixer) override;
     void add(Channel& channel);
     void add(Effect& effect, unsigned position);
     void add(Effect& effect);

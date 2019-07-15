@@ -45,8 +45,10 @@ void Mixer::initalizeStream() {
   unsigned deviceId = mRtAudio.getDefaultOutputDevice(); 
   RtAudio::DeviceInfo info = mRtAudio.getDeviceInfo(deviceId);
   // If the sample rate hasn't been set, use the highest sample rate supported
+    std::cout << "TEST2" << mSampleRate << std::endl;
   if (mSampleRate == 0) {
     mSampleRate = info.sampleRates[info.sampleRates.size() - 1];
+    std::cout << "TEST" << mSampleRate << std::endl;
   }
   
   mRtAudio.showWarnings(true);
@@ -180,7 +182,11 @@ void Mixer::remove(Effect& effect) {
   effect.setMixer(nullptr);
 }
 
-unsigned Mixer::mCurrentTick = 0;
-unsigned Mixer::mSampleRate = 0;
-unsigned Mixer::mBufferFrames = 0;
+unsigned OutputDevice::getSampleRate() const {
+  // the default sample rate is to prevent the instrument from breaking until
+  // It is added to an actual mixer. Since it won't be sampled until it's added
+  // to a mixer, the value of the default sample rate doesn't really matter
+  return (mMixer == nullptr) ? 44100 : mMixer->getSampleRate();
+}
+
 }

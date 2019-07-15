@@ -4,12 +4,6 @@
 #include <iostream>
 #include <queue>
 
-#include <chrono>
-#include <thread>
-void thread_sleep(unsigned milliseconds) {
-  std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
-}
-
 class SharedQueue {
   public:
     SharedQueue() {
@@ -52,12 +46,12 @@ void produce(SharedQueue* queue, tsal::Mixer* mixer) {
 
   int item;
   while (true) {
-    thread_sleep(rand() % 5000);
+    tsal::Util::thread_sleep(rand() % 5000);
     item = rand() % 10;
     std::cout << "producing: " << item << std::endl;
     queue->produce(item);
     synth.noteOn(30 + item);
-    thread_sleep(100);
+    tsal::Util::thread_sleep(100);
     synth.noteOff();
   }
 }
@@ -70,11 +64,11 @@ void consume(SharedQueue* queue, tsal::Mixer* mixer) {
 
   int item;
   while (true) {
-    thread_sleep(rand() % 5000);
+    tsal::Util::thread_sleep(rand() % 5000);
     item = queue->consume();
     std::cout << "consuming: " << item << std::endl;
     synth.noteOn(80 + item);
-    thread_sleep(100);
+    tsal::Util::thread_sleep(100);
     synth.noteOff();
   }
 }

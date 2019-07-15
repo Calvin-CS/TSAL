@@ -24,8 +24,8 @@ class Delay : public Effect {
     unsigned mDelay = 48000;
     double mFeedback = 0.5;
 
-    ParameterRange<unsigned> mDelayRange;
-    static ParameterRange<double> mFeedbackRange;
+    Util::ParameterRange<unsigned> mDelayRange;
+    static Util::ParameterRange<double> mFeedbackRange;
 };
 
 }

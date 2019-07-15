@@ -42,6 +42,7 @@ int main(int argc, char* argv[]) {
   #pragma omp parallel
   {
     int id = omp_get_thread_num();
+    std::cout << id << std::endl;
     
     voices[id].setVolume(0.3);
     mixer.add(voices[id]);

@@ -18,7 +18,7 @@ SoundFont::~SoundFont() {
 
 void SoundFont::setMixer(Mixer* mixer) {
   OutputDevice::setMixer(mixer);
-  tsf_set_output(mSoundFont, TSF_MONO, mMixer->getSampleRate(), 0);
+  tsf_set_output(mSoundFont, TSF_MONO, getSampleRate(), 0);
 }
 
 double SoundFont::getOutput() {
@@ -40,7 +40,7 @@ void SoundFont::reset() {
 }
 
 void SoundFont::setPreset(int presetIndex) {
-  mPresetIndex = checkParameterRange("SoundFont: setPreset", presetIndex, mPresetRange);
+  mPresetIndex = Util::checkParameterRange("SoundFont: setPreset", presetIndex, mPresetRange);
 }
 
 void SoundFont::setPreset(std::string presetName) {

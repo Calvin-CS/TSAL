@@ -87,7 +87,7 @@ double Oscillator::polyBLEP(double t)
  * @param note (midi format)
  */
 void Oscillator::setNote(unsigned note) {
-  setFrequency(getFrequencyFromNote(checkParameterRange("Oscillator: Note", note, mNoteRange)));
+  setFrequency(getFrequencyFromNote(Util::checkParameterRange("Oscillator: Note", note, mNoteRange)));
 }
 
 /**
@@ -96,8 +96,8 @@ void Oscillator::setNote(unsigned note) {
  * @param frequency 
  */
 void Oscillator::setFrequency(double frequency) {
-  mFrequency = checkParameterRange("Oscillator: Frequency", frequency, mFrequencyRange);
-  mPhaseStep = mFrequency * PI2 / mMixer->getSampleRate();
+  mFrequency = Util::checkParameterRange("Oscillator: Frequency", frequency, mFrequencyRange);
+  mPhaseStep = mFrequency * PI2 / getSampleRate();
 }
 
 /**
@@ -127,7 +127,7 @@ unsigned Oscillator::getNote() const {
   return getNoteFromFrequency(mFrequency);
 }
 
-ParameterRange<unsigned> Oscillator::mNoteRange = std::make_pair(21, 108);
-ParameterRange<double> Oscillator::mFrequencyRange = std::make_pair(27.5, 4186.0);
+Util::ParameterRange<unsigned> Oscillator::mNoteRange = std::make_pair(21, 108);
+Util::ParameterRange<double> Oscillator::mFrequencyRange = std::make_pair(27.5, 4186.0);
 
 }

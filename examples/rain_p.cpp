@@ -7,7 +7,7 @@
 #include <thread>
 #define NUM_THREADS 2
 
-void thread_sleep(unsigned milliseconds) {
+void Util::thread_sleep(unsigned milliseconds) {
   std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
 }
 // Temporary fix
@@ -33,7 +33,7 @@ void* ThreadFunction(void* ptr) {
     if (me.isNote())
       voices[data.tid].playNote(me.getKeyNumber(), me.getVelocity());
     
-    thread_sleep(midiParser.ticksToMs(midiParser[i + 1].tick - me.tick));
+    Util::thread_sleep(midiParser.ticksToMs(midiParser[i + 1].tick - me.tick));
   }
   pthread_exit(NULL);
 }

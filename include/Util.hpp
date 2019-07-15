@@ -8,26 +8,29 @@
 
 namespace tsal {
 
-// I want to figure this thing out
-template <typename Item>
-using ParameterRange = std::pair<Item, Item>;
+class Util {
+  public:
+    static double ampToDb(double amplitude);
+    static double dbToAmp(double db);
+    static double volumeToDb(double volume);
+    static double dbToVolume(double db);
+    static void thread_sleep(unsigned milliseconds);
+    
+    template <typename Item>
+    using ParameterRange = std::pair<Item, Item>;
+    
+    template <typename Item>
+    static Item checkParameterRange(const std::string& name, Item value, std::pair<Item, Item> range) {
+      if (value < range.first || value > range.second) {
+        std::cout << name << ": not in range["
+                  << range.first << ", " 
+                  << range.second
+                  << "]" << std::endl;
+      }
+      return std::min(std::max(value, range.first), range.second);
+    }
+};
 
-template <typename Item>
-Item checkParameterRange(const std::string& name, Item value, std::pair<Item, Item> range) {
-  if (value < range.first || value > range.second) {
-    std::cout << name << ": not in range["
-              << range.first << ", " 
-              << range.second
-              << "]" << std::endl;
-  }
-  return std::min(std::max(value, range.first), range.second);
-}
-
-double ampToDb(double amplitude);
-double dbToAmp(double db);
-double volumeToDb(double volume);
-double dbToVolume(double db);
-void thread_sleep(unsigned milliseconds);
 
 }
 

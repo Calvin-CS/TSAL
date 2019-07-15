@@ -5,11 +5,6 @@
   
 namespace tsal {
 
-Compressor::Compressor() : mBuffer(COMPRESSOR_MAX_BUFFER), mEnvelope(COMPRESSOR_MAX_BUFFER) {
-  setAttackTime(1.0);
-  setReleaseTime(1500.0);
-}
-
 // This may not be the best implementation, maybe a circular buffer would work better, but 
 // it seems to be fine
 double Compressor::getOutput() {
@@ -28,6 +23,12 @@ double Compressor::getOutput() {
 
   // Get an audio sample from the audio that has been processed in front
   return mBuffer[(mCurrentSample + 1) % COMPRESSOR_MAX_BUFFER];
+}
+
+void Compressor::setMixer(Mixer *mixer) {
+  OutputDevice::setMixer(mixer);
+  setAttackTime(1.0);
+  setReleaseTime(1500.0);
 }
 
 /**
@@ -50,11 +51,11 @@ void Compressor::getEnvelope() {
  * 
  */
 void Compressor::filterAudio() {
-  double postGainAmp = dbToAmp(mPostGain);
+  double postGainAmp = Util::dbToAmp(mPostGain);
 
   // If there is any pregain, apply it to the audio buffer
   if (mPreGain != 0.0) {
-    double preGainAmp = dbToAmp(mPreGain);
+    double preGainAmp = Util::dbToAmp(mPreGain);
     for (unsigned i = 0; i < COMPRESSOR_MAX_BUFFER; i++) {
       mBuffer[i] *= preGainAmp;
     }
@@ -65,9 +66,9 @@ void Compressor::filterAudio() {
   
   // Apply the adjusted gain and postGain to the audio buffer
   for (unsigned i = 0; i < COMPRESSOR_MAX_BUFFER; i++) {
-    mGain = mSlope * (mThreshold - ampToDb(mEnvelope[i]));
+    mGain = mSlope * (mThreshold - Util::ampToDb(mEnvelope[i]));
     mGain = std::min(0.0, mGain);
-    mGain = dbToAmp(mGain);
+    mGain = Util::dbToAmp(mGain);
     mBuffer[i] *= (mGain * postGainAmp);
   }
 }
@@ -87,8 +88,8 @@ void Compressor::calculateSlope() {
  * @param attackTime
  */
 void Compressor::setAttackTime(double attackTime) {
-  attackTime = checkParameterRange("Compressor: AttackTime", attackTime, mAttackTimeRange);
-  mAttackGain = attackTime == 0.0 ? 0.0 : std::exp(-1.0 / (mMixer->getSampleRate() * attackTime/1000));
+  attackTime = Util::checkParameterRange("Compressor: AttackTime", attackTime, mAttackTimeRange);
+  mAttackGain = attackTime == 0.0 ? 0.0 : std::exp(-1.0 / (getSampleRate() * attackTime/1000));
 }
 
 /**
@@ -97,8 +98,8 @@ void Compressor::setAttackTime(double attackTime) {
  * @param releaseTime 
  */
 void Compressor::setReleaseTime(double releaseTime) {
-  releaseTime = checkParameterRange("Compressor: ReleaseTime", releaseTime, mReleaseTimeRange);
-  mReleaseGain = releaseTime == 0.0 ? 0.0 : std::exp(-1.0 / (mMixer->getSampleRate() * releaseTime/1000));
+  releaseTime = Util::checkParameterRange("Compressor: ReleaseTime", releaseTime, mReleaseTimeRange);
+  mReleaseGain = releaseTime == 0.0 ? 0.0 : std::exp(-1.0 / (getSampleRate() * releaseTime/1000));
 }
 
 /**
@@ -107,7 +108,7 @@ void Compressor::setReleaseTime(double releaseTime) {
  * @param threshold (dB)
  */
 void Compressor::setThreshold(double threshold) {
-  mThreshold = checkParameterRange("Compressor: Threshold", threshold, mThresholdRange);
+  mThreshold = Util::checkParameterRange("Compressor: Threshold", threshold, mThresholdRange);
 }
 
 /**
@@ -116,7 +117,7 @@ void Compressor::setThreshold(double threshold) {
  * @param ratio (1: n)
  */
 void Compressor::setRatio(double ratio) {
-  mRatio = checkParameterRange("Compressor: Ratio", ratio, mRatioRange); 
+  mRatio = Util::checkParameterRange("Compressor: Ratio", ratio, mRatioRange); 
 }
 
 /**
@@ -125,7 +126,7 @@ void Compressor::setRatio(double ratio) {
  * @param preGain (dB)
  */
 void Compressor::setPreGain(double preGain) {
-  mPreGain = checkParameterRange("Compressor: PreGain", preGain, mGainRange);
+  mPreGain = Util::checkParameterRange("Compressor: PreGain", preGain, mGainRange);
 }
 
 /**
@@ -134,12 +135,12 @@ void Compressor::setPreGain(double preGain) {
  * @param postGain (dB)
  */
 void Compressor::setPostGain(double postGain) {
-  mPostGain = checkParameterRange("Compressor: PostGain", postGain, mGainRange);
+  mPostGain = Util::checkParameterRange("Compressor: PostGain", postGain, mGainRange);
 }
 
-ParameterRange<double> Compressor::mAttackTimeRange = std::make_pair(0.0, 2000.0);
-ParameterRange<double> Compressor::mReleaseTimeRange = std::make_pair(0.0, 2000.0);
-ParameterRange<double> Compressor::mThresholdRange = std::make_pair(-30.0, 400.0);
-ParameterRange<double> Compressor::mRatioRange = std::make_pair(1.0, 20.0);
-ParameterRange<double> Compressor::mGainRange = std::make_pair(-30.0, 30.0);
+Util::ParameterRange<double> Compressor::mAttackTimeRange = std::make_pair(0.0, 2000.0);
+Util::ParameterRange<double> Compressor::mReleaseTimeRange = std::make_pair(0.0, 2000.0);
+Util::ParameterRange<double> Compressor::mThresholdRange = std::make_pair(-30.0, 400.0);
+Util::ParameterRange<double> Compressor::mRatioRange = std::make_pair(1.0, 20.0);
+Util::ParameterRange<double> Compressor::mGainRange = std::make_pair(-30.0, 30.0);
 }
