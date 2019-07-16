@@ -7,7 +7,7 @@ void Delay::setMixer(Mixer* mixer) {
   OutputDevice::setMixer(mixer);
   mBuffer = std::make_unique<Buffer<double>>(getSampleRate() * 2);
   Delay::mDelayRange = std::make_pair(0, mBuffer->size());
-  std::cout << mBuffer->size() << std::endl;
+  setDelay(1000);
 }
 
 double Delay::getOutput() {

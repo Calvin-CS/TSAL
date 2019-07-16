@@ -118,7 +118,6 @@ double Mixer::getInput() {
  */
 void Mixer::add(Channel& channel) {
   mMaster.add(channel);
-  channel.setMixer(this);
 }
 
 /**
@@ -127,7 +126,6 @@ void Mixer::add(Channel& channel) {
  */
 void Mixer::remove(Channel& channel) {
   mMaster.remove(channel);
-  channel.setMixer(nullptr);
 }
 
 /**
@@ -139,7 +137,6 @@ void Mixer::remove(Channel& channel) {
  */
 void Mixer::add(Instrument& instrument) {
   mMaster.add(instrument);
-  instrument.setMixer(this);
 }
 
 /**
@@ -151,7 +148,6 @@ void Mixer::add(Instrument& instrument) {
  */
 void Mixer::remove(Instrument& instrument) {
   mMaster.remove(instrument);
-  instrument.setMixer(nullptr);
 }
 
 /**
@@ -163,7 +159,6 @@ void Mixer::remove(Instrument& instrument) {
  */
 void Mixer::add(Effect& effect) {
   mMaster.add(effect);
-  effect.setMixer(this);
 }
 
 
@@ -176,7 +171,6 @@ void Mixer::add(Effect& effect) {
  */
 void Mixer::remove(Effect& effect) {
   mMaster.remove(effect);
-  effect.setMixer(nullptr);
 }
 
 unsigned OutputDevice::getSampleRate() const {

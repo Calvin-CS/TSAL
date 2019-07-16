@@ -11,6 +11,7 @@ class EffectChain : public OutputDevice {
   public:
     void setInput(OutputDevice& input);
     virtual double getOutput() override;
+    virtual void setMixer(Mixer* mixer) override;
     void add(Effect& effect);
     void remove(Effect& effect);
     int size() { return mEffects.size(); };

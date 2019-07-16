@@ -19,9 +19,9 @@ class Delay : public Effect {
     void setDelay(unsigned delay);
     void setFeedback(double feedback);
   private:
-    std::unique_ptr<Buffer<double>> mBuffer;
+    std::unique_ptr<Buffer<double>> mBuffer = nullptr;
     unsigned mCounter = 0;
-    unsigned mDelay = 48000;
+    unsigned mDelay = 0;
     double mFeedback = 0.5;
 
     Util::ParameterRange<unsigned> mDelayRange;

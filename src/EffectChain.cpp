@@ -10,7 +10,15 @@ double EffectChain::getOutput() {
   return (mEffects.size() == 0) ? mInput->getOutput() : mEffects.back()->getOutput();
 }
 
+void EffectChain::setMixer(Mixer* mixer) {
+  OutputDevice::setMixer(mixer);
+  for (auto effect : mEffects) {
+    effect->setMixer(mixer);
+  }
+} 
+
 void EffectChain::add(Effect& effect) {
+   effect.setMixer(mMixer);
   if (mEffects.size() == 0) {
     effect.setInput(mInput);
     mEffects.push_back(&effect);
@@ -30,18 +38,21 @@ void EffectChain::remove(Effect& effect) {
   if (mEffects.front() == effectPtr) {
     // Front case
     mEffects.erase(mEffects.begin());
+    effectPtr->setMixer(nullptr);
     if (mEffects.size() > 0) {
       mEffects.front()->setInput(mInput);
     }
   } else if (mEffects.back() == effectPtr) {
     // Back case
     mEffects.pop_back();
+    effectPtr->setMixer(nullptr);
   } else {
     // Middle case
     for (unsigned i = 1; i < mEffects.size() - 1; i++) {
       if (mEffects[i] == &effect) {
         mEffects[i + 1]->setInput(mEffects[i - 1]);
         mEffects.erase(mEffects.begin() + i);
+        effectPtr->setMixer(nullptr);
       }
     }
   }

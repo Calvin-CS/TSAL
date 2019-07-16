@@ -10,7 +10,7 @@ class SharedQueue {
       std::unique_lock<std::mutex> lk(mMutex);
       mCondition.wait(lk, [this]{return mQueue.size() < MaxQueueSize;}); 
       mQueue.push(item);
-      tsal::Util::thread_sleep(rand() % 1000);
+      tsal::Util::thread_sleep(rand() % 2000);
       lk.unlock();
       mCondition.notify_all();
     };
@@ -19,6 +19,7 @@ class SharedQueue {
       mCondition.wait(lk, [this]{return mQueue.size() > 0;});
       const int front = mQueue.front();
       mQueue.pop();
+      tsal::Util::thread_sleep(rand() % 2000);
       lk.unlock();
       mCondition.notify_all();
       return front;  
@@ -41,8 +42,10 @@ void monitor(SharedQueue* queue, tsal::Mixer* mixer) {
   int size;
   while(true) {
     size = queue->size();
-    sf.noteOn(42);
-    tsal::Util::thread_sleep((queue->MaxQueueSize + 1 - size) * 100);
+    tsal::Util::thread_sleep(size + 1 * 1000);
+    sf.noteOn(30 + size);
+    tsal::Util::thread_sleep(2000);
+    sf.noteOff(30 + size);
   }
 }
 
@@ -58,6 +61,9 @@ void produce(SharedQueue* queue, tsal::Mixer* mixer) {
     std::cout << "producing: " << item << std::endl;
     queue->produce(item);
     sf.noteOn(36);
+    tsal::Util::thread_sleep(500);
+    sf.noteOff(36);
+    
   }
 }
 
@@ -72,6 +78,8 @@ void consume(SharedQueue* queue, tsal::Mixer* mixer) {
     item = queue->consume();
     std::cout << "consuming: " << item << std::endl;
     sf.noteOn(38);
+    tsal::Util::thread_sleep(500);
+    sf.noteOff(38);
   }
 }
 
@@ -110,6 +118,7 @@ int main(int argc, char* argv[]) {
   tsal::Mixer mixer;
   tsal::Delay delay;
   mixer.add(delay);
+  
   SharedQueue queue;
 
   std::thread producers[numProducers];
