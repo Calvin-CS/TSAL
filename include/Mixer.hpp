@@ -5,7 +5,7 @@
 #include "OutputDevice.hpp"
 #include "Channel.hpp"
 #include "Compressor.hpp"
-#include "MidiSequencer.hpp"
+#include "Sequencer.hpp"
 #include <rtaudio/RtAudio.h>
 
 
@@ -37,7 +37,7 @@ class Mixer : public InputDevice {
     void remove(Effect& effect);
 
     Channel& getMaster() { return mMaster; };
-    MidiSequencer& getSequencer() { return mSequencer; };
+    Sequencer& getSequencer() { return mSequencer; };
     unsigned getSampleRate() { return mSampleRate; };
     unsigned getCurrentTick() { return mCurrentTick; };
     unsigned getBufferFrames() { return mBufferFrames; };
@@ -50,7 +50,7 @@ class Mixer : public InputDevice {
     unsigned mChannels;
     Channel mMaster;
     Compressor mCompressor;
-    MidiSequencer mSequencer;
+    Sequencer mSequencer;
     
     unsigned mCurrentTick = 0;
     unsigned mSampleRate = 0;

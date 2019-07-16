@@ -1,9 +1,9 @@
-#include "MidiSequencer.hpp"
+#include "Sequencer.hpp"
 #include "Mixer.hpp"
 
 namespace tsal {
 
-void MidiSequencer::tick() {
+void Sequencer::tick() {
   // This has some margin of error since mSamplesPerTick is a floating point number
   // But it seems to work well enough, maybe in the future it would be better to change to a more consistent timing method
   if (++mSampleTime > mSamplesPerTick) {
@@ -19,7 +19,7 @@ void MidiSequencer::tick() {
   }
 }
 
-void MidiSequencer::setTick(unsigned tick) {
+void Sequencer::setTick(unsigned tick) {
   mTick = tick;
 }
 
@@ -28,8 +28,8 @@ void MidiSequencer::setTick(unsigned tick) {
  * 
  * @param bpm 
  */
-void MidiSequencer::setBPM(unsigned bpm) {
-  mBPM = Util::checkParameterRange("MidiSequencer: BPM", bpm, mBPMRange);
+void Sequencer::setBPM(unsigned bpm) {
+  mBPM = Util::checkParameterRange("Sequencer: BPM", bpm, mBPMRange);
   setSamplesPerTick();
 }
 
@@ -38,16 +38,16 @@ void MidiSequencer::setBPM(unsigned bpm) {
  * 
  * @param ppq 
  */
-void MidiSequencer::setPPQ(unsigned ppq) {
-  mPPQ = Util::checkParameterRange("MidiSequencer: PPQ", ppq, mPPQRange);
+void Sequencer::setPPQ(unsigned ppq) {
+  mPPQ = Util::checkParameterRange("Sequencer: PPQ", ppq, mPPQRange);
   setSamplesPerTick();
 }
 
-void MidiSequencer::setSamplesPerTick() {
+void Sequencer::setSamplesPerTick() {
   mSamplesPerTick = mSampleRate / ((mBPM * mPPQ) / 60);
 }
 
-unsigned MidiSequencer::getTick() const {
+unsigned Sequencer::getTick() const {
   return mTick;
 }
 
@@ -56,13 +56,13 @@ unsigned MidiSequencer::getTick() const {
  * 
  * @param tick 
  */
-void MidiSequencer::waitForTick(unsigned tick) {
+void Sequencer::waitForTick(unsigned tick) {
   std::unique_lock<std::mutex> lk(mMutex);
   mTickEvents.push_back(tick);
   mCondition.wait(lk, [this, tick]{return mTick >= tick;}); 
 }
 
-Util::ParameterRange<unsigned> MidiSequencer::mBPMRange = std::make_pair(1, 1000);
-Util::ParameterRange<unsigned> MidiSequencer::mPPQRange = std::make_pair(1, 1000);
+Util::ParameterRange<unsigned> Sequencer::mBPMRange = std::make_pair(1, 1000);
+Util::ParameterRange<unsigned> Sequencer::mPPQRange = std::make_pair(1, 1000);
 
 }

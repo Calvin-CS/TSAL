@@ -2,7 +2,7 @@
 #define INSTRUMENT_H
 
 #include "OutputDevice.hpp"
-#include "MidiSequencer.hpp"
+#include "Sequencer.hpp"
 
 namespace tsal {
 

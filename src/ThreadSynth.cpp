@@ -1,5 +1,5 @@
 #include "ThreadSynth.hpp"
-#include "MidiSequencer.hpp"
+#include "Sequencer.hpp"
 
 namespace tsal {
 

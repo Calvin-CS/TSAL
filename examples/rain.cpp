@@ -47,11 +47,7 @@ int main(int argc, char* argv[]) {
       voices[0].noteOff(me.getKeyNumber(), me.tick);
   }
 
-  //mixer.mSequencer.setTick(0);
-  // TODO figure out what to do with sequencer
-  // mixer.test();
   mixer.getSequencer().setTick(0);
-
   omp_set_num_threads(numTracks);
 
   #pragma omp parallel

@@ -9,13 +9,13 @@
 
 namespace tsal {
 
-/** @class MidiSequencer
+/** @class Sequencer
  * @brief A sequencer that handles the scheduling of events
  * 
- * MidiSequencer handles the real-time scheduling of the process
+ * Sequencer handles the real-time scheduling of the process
  * based upon BPM and PPQ parameters
  */
-class MidiSequencer {
+class Sequencer {
   public:
     void tick();
     void start();

@@ -1,7 +1,7 @@
 noinst_PROGRAMS = \
 	hello_tsal \
 	hello_tsal_threads \
-	jubilate \
+	canon \
 	rain \
 	merge_sort \
 	chord \
@@ -18,8 +18,8 @@ hello_tsal_LDADD = $(top_builddir)/src/libtsal.la
 hello_tsal_threads_SOURCES = hello_tsal_threads.cpp
 hello_tsal_threads_LDADD = $(top_builddir)/src/libtsal.la
 
-jubilate_SOURCES = jubilate.cpp
-jubilate_LDADD = $(top_builddir)/src/libtsal.la
+canon_SOURCES = canon.cpp
+canon_LDADD = $(top_builddir)/src/libtsal.la
 
 rain_SOURCES = rain.cpp
 rain_LDADD = $(top_builddir)/src/libtsal.la

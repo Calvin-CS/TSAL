@@ -199,8 +199,8 @@ flycheck_*.el
 # Example binaries (wrapper scripts)
 chord
 chord_p
-jubilate
-jubilate_p
+canon
+canon_p
 merge_sort
 rain
 rain_p

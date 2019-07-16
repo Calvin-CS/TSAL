@@ -1,7 +1,7 @@
 #ifndef THREADSYNTH_H
 #define THREADSYNTH_H
 
-#include "MidiSequencer.hpp"
+#include "Sequencer.hpp"
 #include "Synth.hpp"
 #include <condition_variable>
 

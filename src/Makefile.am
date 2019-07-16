@@ -14,7 +14,7 @@ libtsal_la_SOURCES = \
   MidiFile.cpp \
   MidiMessage.cpp \
   MidiParser.cpp \
-  MidiSequencer.cpp \
+  Sequencer.cpp \
   Mixer.cpp \
   Oscillator.cpp \
   OutputDevice.cpp \
@@ -44,7 +44,7 @@ include_HEADERS = \
   $(top_srcdir)/include/MidiMessage.h \
   $(top_srcdir)/include/MidiNotes.hpp \
   $(top_srcdir)/include/MidiParser.hpp \
-  $(top_srcdir)/include/MidiSequencer.hpp \
+  $(top_srcdir)/include/Sequencer.hpp \
   $(top_srcdir)/include/Mixer.hpp \
   $(top_srcdir)/include/Oscillator.hpp \
   $(top_srcdir)/include/OutputDevice.hpp \
