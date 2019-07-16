@@ -45,10 +45,8 @@ void Mixer::initalizeStream() {
   unsigned deviceId = mRtAudio.getDefaultOutputDevice(); 
   RtAudio::DeviceInfo info = mRtAudio.getDeviceInfo(deviceId);
   // If the sample rate hasn't been set, use the highest sample rate supported
-    std::cout << "TEST2" << mSampleRate << std::endl;
   if (mSampleRate == 0) {
     mSampleRate = info.sampleRates[info.sampleRates.size() - 1];
-    std::cout << "TEST" << mSampleRate << std::endl;
   }
   
   mRtAudio.showWarnings(true);
@@ -67,6 +65,7 @@ void Mixer::initalizeStream() {
             << "\nBuffer frames: " << mBufferFrames
             << std::endl;
 
+  mSequencer.setSampleRate(mSampleRate);
   mSequencer.setBPM(60);
   mSequencer.setPPQ(240);
 
@@ -140,7 +139,6 @@ void Mixer::remove(Channel& channel) {
  */
 void Mixer::add(Instrument& instrument) {
   mMaster.add(instrument);
-  instrument.setSequencer(&mSequencer);
   instrument.setMixer(this);
 }
 
@@ -153,7 +151,6 @@ void Mixer::add(Instrument& instrument) {
  */
 void Mixer::remove(Instrument& instrument) {
   mMaster.remove(instrument);
-  instrument.setSequencer(nullptr);
   instrument.setMixer(nullptr);
 }
 

@@ -37,6 +37,7 @@ class Mixer : public InputDevice {
     void remove(Effect& effect);
 
     Channel& getMaster() { return mMaster; };
+    MidiSequencer& getSequencer() { return mSequencer; };
     unsigned getSampleRate() { return mSampleRate; };
     unsigned getCurrentTick() { return mCurrentTick; };
     unsigned getBufferFrames() { return mBufferFrames; };

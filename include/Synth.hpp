@@ -26,6 +26,7 @@ class Synth : public Instrument {
     virtual void setMixer(Mixer* mixer) override {
       OutputDevice::setMixer(mixer);
       mOscillator.setMixer(mixer);
+      mEnvelope.setMixer(mixer);
     }
 
   private:

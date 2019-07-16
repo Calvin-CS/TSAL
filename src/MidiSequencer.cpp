@@ -8,7 +8,7 @@ void MidiSequencer::tick() {
   // But it seems to work well enough, maybe in the future it would be better to change to a more consistent timing method
   if (++mSampleTime > mSamplesPerTick) {
     mTick++;
-    //if (mTickEvents.size() > 0 && (mTickEvents[mTickEvents.back()] <= mTick || mTickEvents[mTickEvents.back()] >= mTick)) {
+    // if (mTickEvents.size() > 0 && (mTickEvents[mTickEvents.back()] <= mTick || mTickEvents[mTickEvents.back()] >= mTick)) {
     for (unsigned i = 0; i < mTickEvents.size(); i++) {
       if (mTick >= mTickEvents[i]) {
         mTickEvents.erase(mTickEvents.begin() + i);
@@ -44,7 +44,7 @@ void MidiSequencer::setPPQ(unsigned ppq) {
 }
 
 void MidiSequencer::setSamplesPerTick() {
-  mSamplesPerTick = 96000 / ((mBPM * mPPQ) / 60);
+  mSamplesPerTick = mSampleRate / ((mBPM * mPPQ) / 60);
 }
 
 unsigned MidiSequencer::getTick() const {

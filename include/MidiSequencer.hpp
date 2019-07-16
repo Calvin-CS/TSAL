@@ -20,6 +20,7 @@ class MidiSequencer {
     void tick();
     void start();
     void stop();
+    void setSampleRate(unsigned sampleRate) { mSampleRate = sampleRate; };
     void setTick(unsigned tick);
     void setBPM(unsigned bpm);
     void setPPQ(unsigned ppq);
@@ -31,11 +32,12 @@ class MidiSequencer {
     std::vector<unsigned> mTickEvents;
     void setSamplesPerTick();
     unsigned mSampleTime = 0;
-    unsigned mTick;
+    unsigned mTick = 0;
 
 
     unsigned mPPQ = 240;
     unsigned mBPM = 100;
+    unsigned mSampleRate = 0;
     double mSamplesPerTick;
 
     static Util::ParameterRange<unsigned> mBPMRange;
