@@ -8,13 +8,25 @@
 
 namespace tsal {
 
+/** @class ProgressOctave
+ * @brief An instrument that is the equivalent of a progress bar
+ *
+ * A very basic instrument that when given a starting note, problem size, and number
+ * of workers, outputs audio based upon the calculated progress.
+ */
 class ProgressOctave : public Instrument {
   public:
     ProgressOctave(unsigned startNote, unsigned problemSize, unsigned numWorkers);
     virtual double getOutput() override;
+    virtual void setMixer(Mixer* mixer) override;
     void update(unsigned id);
   private:
-    RouteDevice<Oscillator> mOscillators;
+    unsigned mStartNote;
+    unsigned mProblemSize;
+    unsigned mNumWorkers;
+
+    std::vector<std::unique_ptr<Oscillator>> mOscillators;
+    RouteDevice<Oscillator> mRoutedOscillators;
     double mStepValue;
 };
   
