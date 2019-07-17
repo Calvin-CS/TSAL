@@ -80,7 +80,6 @@ void RouteDevice<DeviceType>::remove(DeviceType& output) {
   for (auto it = mInputDevices.begin(); it != mInputDevices.end(); it++) {
     if (&output == (*it)) {
       std::lock_guard<std::mutex> guard(mVectorMutex);
-      output.setMixer(nullptr);
       mInputDevices.erase(it);
       break;
     }

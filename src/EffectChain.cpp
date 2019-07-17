@@ -38,21 +38,18 @@ void EffectChain::remove(Effect& effect) {
   if (mEffects.front() == effectPtr) {
     // Front case
     mEffects.erase(mEffects.begin());
-    effectPtr->setMixer(nullptr);
     if (mEffects.size() > 0) {
       mEffects.front()->setInput(mInput);
     }
   } else if (mEffects.back() == effectPtr) {
     // Back case
     mEffects.pop_back();
-    effectPtr->setMixer(nullptr);
   } else {
     // Middle case
     for (unsigned i = 1; i < mEffects.size() - 1; i++) {
       if (mEffects[i] == &effect) {
         mEffects[i + 1]->setInput(mEffects[i - 1]);
         mEffects.erase(mEffects.begin() + i);
-        effectPtr->setMixer(nullptr);
       }
     }
   }

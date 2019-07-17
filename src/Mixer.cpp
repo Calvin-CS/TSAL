@@ -30,7 +30,7 @@ int Mixer::streamCallback(void *outputBuffer,
     std::cout << "Stream underflow detected!" << std::endl;
 
   for (unsigned i = 0; i < nBufferFrames; i++) {
-    *buffer++ = (BIT_DEPTH) audio->getInput();
+    *buffer++ = (BIT_DEPTH) (audio->getInput() * SCALE);
   }
 
   return 0;        
@@ -173,11 +173,5 @@ void Mixer::remove(Effect& effect) {
   mMaster.remove(effect);
 }
 
-unsigned OutputDevice::getSampleRate() const {
-  // the default sample rate is to prevent the instrument from breaking until
-  // It is added to an actual mixer. Since it won't be sampled until it's added
-  // to a mixer, the value of the default sample rate doesn't really matter
-  return (mMixer == nullptr) ? 44100 : mMixer->getSampleRate();
-}
 
 }

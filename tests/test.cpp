@@ -7,11 +7,17 @@ int main() {
   tsal::Channel channel2;
   tsal::SoundFont soundfont("/usr/share/soundfonts/FluidR3_GM.sf2");
 
-  channel2.add(soundfont);
-  channel.add(channel2);
 
   mixer.add(channel);
   
+
+  channel.add(channel2);
+  
+  channel2.add(soundfont);
+  
+  for (unsigned i = 0; i < soundfont.getPresetCount(); i++) {
+    std::cout << i << " " << soundfont.getPresetName(i) << std::endl;
+  }
   soundfont.setVolume(0.5);
   soundfont.setPreset(4);
   soundfont.noteOn(tsal::C4);

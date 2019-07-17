@@ -33,7 +33,7 @@ double Oscillator::getOutput() {
   while (mPhase >= PI2)
     mPhase -= PI2;
 
-  return mWaveFormValue * mAmp * SCALE;
+  return mWaveFormValue * mAmp;
 }
 
 /**
@@ -97,7 +97,7 @@ void Oscillator::setNote(unsigned note) {
  */
 void Oscillator::setFrequency(double frequency) {
   mFrequency = Util::checkParameterRange("Oscillator: Frequency", frequency, mFrequencyRange);
-  mPhaseStep = mFrequency * PI2 / getSampleRate();
+  mPhaseStep = mFrequency * PI2 / getMixer()->getSampleRate();
 }
 
 /**

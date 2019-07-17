@@ -15,8 +15,6 @@ class Mixer;
  */
 class OutputDevice {
   public:
-    OutputDevice(){};
-    OutputDevice(Mixer* mixer) { mMixer = mixer; };
     virtual ~OutputDevice() {};
     virtual double getOutput();
     virtual void setActive(bool active = true);
@@ -31,7 +29,7 @@ class OutputDevice {
 
   protected:
     Mixer* mMixer = nullptr;
-    unsigned getSampleRate() const;
+    Mixer* getMixer();
     bool mActive = true;
     double mAmp = 1.0;
     

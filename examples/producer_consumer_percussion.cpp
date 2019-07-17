@@ -36,7 +36,7 @@ class SharedQueue {
 
 void monitor(SharedQueue* queue, tsal::Mixer* mixer) {
   tsal::SoundFont sf("/usr/share/soundfonts/FluidR3_GM.sf2");
-  sf.setPreset(20);
+  sf.setPreset(103);
   mixer->add(sf);
 
   int size;
@@ -51,7 +51,7 @@ void monitor(SharedQueue* queue, tsal::Mixer* mixer) {
 
 void produce(SharedQueue* queue, tsal::Mixer* mixer) {
   tsal::SoundFont sf("/usr/share/soundfonts/FluidR3_GM.sf2");
-  sf.setPreset(10);
+  sf.setPreset(22);
   mixer->add(sf);
 
   int item;
@@ -60,9 +60,9 @@ void produce(SharedQueue* queue, tsal::Mixer* mixer) {
     item = rand() % 50;
     std::cout << "producing: " << item << std::endl;
     queue->produce(item);
-    sf.noteOn(36);
+    sf.noteOn(30 + item);
     tsal::Util::thread_sleep(500);
-    sf.noteOff(36);
+    sf.noteOff(30 + item);
     
   }
 }
@@ -77,9 +77,9 @@ void consume(SharedQueue* queue, tsal::Mixer* mixer) {
     tsal::Util::thread_sleep(rand() % 2000);
     item = queue->consume();
     std::cout << "consuming: " << item << std::endl;
-    sf.noteOn(38);
+    sf.noteOn(50 + item);
     tsal::Util::thread_sleep(500);
-    sf.noteOff(38);
+    sf.noteOff(50 + item);
   }
 }
 

@@ -1,4 +1,5 @@
 #include "OutputDevice.hpp"
+#include "Mixer.hpp"
 
 namespace tsal {
 /**
@@ -51,7 +52,12 @@ bool OutputDevice::isActive() const {
   return mActive;
 }
 
-
+Mixer* OutputDevice::getMixer() {
+  if (mMixer == nullptr) {
+    std::cout << "OutputDevice: Mixer not set" << std::endl;
+  }
+  return mMixer;
+}
 
 Util::ParameterRange<double> OutputDevice::mGainRange = std::make_pair(-50.0, 50.0);
 Util::ParameterRange<double> OutputDevice::mVolumeRange = std::make_pair(0.0, 2.0);

@@ -5,7 +5,7 @@ namespace tsal {
 
 void Delay::setMixer(Mixer* mixer) {
   OutputDevice::setMixer(mixer);
-  mBuffer = std::make_unique<Buffer<double>>(getSampleRate() * 2);
+  mBuffer = std::make_unique<Buffer<double>>(getMixer()->getSampleRate() * 2);
   Delay::mDelayRange = std::make_pair(0, mBuffer->size());
   setDelay(1000);
 }
@@ -39,7 +39,7 @@ double Delay::getOutput() {
  * @param delay (ms)
  */
 void Delay::setDelay(unsigned delay) {
-  delay = std::round(getSampleRate() * ((double) delay / 1000));
+  delay = std::round(getMixer()->getSampleRate() * ((double) delay / 1000));
   mDelay = Util::checkParameterRange("Delay: Delay", delay, mDelayRange);
 }
 
