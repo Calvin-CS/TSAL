@@ -140,7 +140,7 @@ void Compressor::setPostGain(double postGain) {
 
 Util::ParameterRange<double> Compressor::mAttackTimeRange = std::make_pair(0.0, 2000.0);
 Util::ParameterRange<double> Compressor::mReleaseTimeRange = std::make_pair(0.0, 2000.0);
-Util::ParameterRange<double> Compressor::mThresholdRange = std::make_pair(-30.0, 400.0);
+Util::ParameterRange<double> Compressor::mThresholdRange = std::make_pair(-60.0, 0.0);
 Util::ParameterRange<double> Compressor::mRatioRange = std::make_pair(1.0, 20.0);
 Util::ParameterRange<double> Compressor::mGainRange = std::make_pair(-30.0, 30.0);
 }

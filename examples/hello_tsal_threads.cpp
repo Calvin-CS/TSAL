@@ -9,13 +9,21 @@
  * The main idea is that each synth gets its own thread, and then plays
  * a pitch based on that thread id.
  */
-int main() {
+int main(int argc, char* argv[]) {
+  int numThreads = (argc == 2) ? atoi(argv[1]) : 2;
+  if (numThreads == 0) {
+    std::cout << "\nhello_tsal_threads <num_threads>\n"
+              << "\tnum_threads = the number of threads\n"
+              << std::endl;
+    return 0;
+  }
+      
   // Create the mixer and array of synths
   tsal::Mixer mixer;
-  tsal::Synth synths[NUM_THREADS];
+  tsal::Synth synths[numThreads];
 
   // Setup omp with a number of threads
-  omp_set_num_threads(NUM_THREADS);
+  omp_set_num_threads(numThreads);
   
   // Run the parallel block
   #pragma omp parallel

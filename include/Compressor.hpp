@@ -49,9 +49,9 @@ class Compressor : public Effect {
     double mAttackGain = 0.0;
     double mReleaseGain = 0.0;
 
-    double mThreshold = 80.0;
+    double mThreshold = -30.0;
     double mRatio = 2.0;
-    double mPreGain = 0.0;
+    double mPreGain = 6.0;
     double mPostGain = 0.0;
 
     static Util::ParameterRange<double> mAttackTimeRange;
