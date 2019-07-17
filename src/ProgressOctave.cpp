@@ -3,7 +3,6 @@
 namespace tsal {
 
 ProgressOctave::ProgressOctave(unsigned startNote, unsigned problemSize, unsigned numWorkers) {
-  std::cout << startNote << std::endl;
   mStartNote = startNote;
   mProblemSize = problemSize;
   mNumWorkers = numWorkers;

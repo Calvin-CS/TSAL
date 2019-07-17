@@ -6,10 +6,6 @@
 
 class SharedQueue {
   public:
-    SharedQueue() {
-      synth.setVolume(0.3);
-      synth.noteOn(mNote);
-    };
     void produce(int item) {
       std::unique_lock<std::mutex> lk(mMutex);
       mCondition.wait(lk, [this]{return mQueue.size() < mMaxQueueSize;}); 
@@ -40,9 +36,9 @@ class SharedQueue {
 
 void produce(SharedQueue* queue, tsal::Mixer* mixer) {
   tsal::Synth synth;
+  mixer->add(synth);
   synth.setVolume(0.2);
   synth.setMode(tsal::Oscillator::SQUARE);
-  mixer->add(synth);
 
   int item;
   while (true) {
@@ -58,9 +54,9 @@ void produce(SharedQueue* queue, tsal::Mixer* mixer) {
 
 void consume(SharedQueue* queue, tsal::Mixer* mixer) {
   tsal::Synth synth;
+  mixer->add(synth);
   synth.setVolume(0.2);
   synth.setMode(tsal::Oscillator::SAW);
-  mixer->add(synth);
 
   int item;
   while (true) {
@@ -107,7 +103,10 @@ int main(int argc, char* argv[]) {
   const int numConsumers = atoi(argv[2]);
   tsal::Mixer mixer;
   SharedQueue queue;
-  mixer.add(queue.getSynth());
+  auto& queueSynth = queue.getSynth();
+  mixer.add(queueSynth);
+  queueSynth.setVolume(0.5);
+  queueSynth.noteOn(tsal::C4);
 
 
   std::thread producers[numProducers];

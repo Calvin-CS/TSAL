@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
   const unsigned work = (argc < 3) ? 100000000 : (unsigned) atoi(argv[2]);
 
   tsal::Mixer mixer;
-  tsal::ProgressOctave progress(tsal::C2, work, numThreads);
+  tsal::ProgressOctave progress(tsal::C4, work, numThreads);
 
   mixer.add(progress);
   

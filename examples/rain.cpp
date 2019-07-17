@@ -33,26 +33,14 @@ int main(int argc, char* argv[]) {
 
   tsal::Mixer mixer;
   std::vector<tsal::ThreadSynth> voices(numTracks);  
-  for (unsigned i = 0; i < voices.size(); i++) {
-    voices[i].setVolume(0.3);
-    mixer.add(voices[i]);
-  }
 
-  for (unsigned i = 0; i < midiParser.size(); i++) {
-    auto& me = midiParser[i];  
-    if (me.isNoteOn())
-      voices[0].noteOn(me.getKeyNumber(), me.getVelocity(), me.tick);
-    
-    if (me.isNoteOff())
-      voices[0].noteOff(me.getKeyNumber(), me.tick);
-  }
-
-  mixer.getSequencer().setTick(0);
   omp_set_num_threads(numTracks);
 
   #pragma omp parallel
   {
     int id = omp_get_thread_num();
+    voices[id].setVolume(0.3);
+    mixer.add(voices[id]);
     int timeOffset = midiParser[id * std::floor(midiParser.size()/omp_get_num_threads())].tick;
  
     #pragma omp for
@@ -64,6 +52,7 @@ int main(int argc, char* argv[]) {
       if (me.isNoteOff())
         voices[id].noteOff(me.getKeyNumber(), me.tick - timeOffset);
     }
+    mixer.remove(voices[id]);
   }
   return 0;
 }

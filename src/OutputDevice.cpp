@@ -54,7 +54,7 @@ bool OutputDevice::isActive() const {
 
 Mixer* OutputDevice::getMixer() {
   if (mMixer == nullptr) {
-    std::cout << "OutputDevice: Mixer not set" << std::endl;
+    std::cout << "OutputDevice: Mixer not set, make sure to add the device to a mixer or channel before using it" << std::endl;
   }
   return mMixer;
 }

@@ -7,6 +7,12 @@
 
 namespace tsal {
 
+/** @class RouteDevice
+ * @brief Routes any number of inputs into a single output
+ *
+ * RouteDevice is a flexible class intended to make managing inputs easier.
+ * Combining multiple inputs is as simple as adding up all the input values.
+ */
 template <typename DeviceType>
 class RouteDevice : public InputDevice, public OutputDevice {
   public:

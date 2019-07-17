@@ -8,9 +8,9 @@ TSAL uses the GNU Autotools build system to build and install the library.
 
 ### Prerequisites
 
-Install RtAudio (this should maybe just be included in the src dir)
+Install [RtAudio](https://github.com/thestk/rtaudio)
 
-Install autotools (`autoconf`, `automake`, and `libtool`) on your system. For Windows, a building environment like MSYS2 is recommended
+Install autotools (`autoconf`, `automake`, and `libtool`). For Windows, a build environment like MSYS2 is recommended
 
 ### Build
 
@@ -33,7 +33,8 @@ Use `make check` to run the tests
 ## Built With
 
 * [RtAudio](https://github.com/thestk/rtaudio) - Audio API
-* [Midifile](https://github.com/craigsapp/midifile) - Midi processing
+* [Midifile](https://github.com/craigsapp/midifile) - MIDI processing
+* [TinySoundFont](https://github.com/schellingb/TinySoundFont) - SoundFont player
   
 ## License
 

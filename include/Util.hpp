@@ -8,6 +8,12 @@
 
 namespace tsal {
 
+/** @class Util
+ * @brief A utilities class
+ *
+ * Provides basic shared utility functions that programs and classes 
+ * can make use of.
+ */
 class Util {
   public:
     static double ampToDb(double amplitude);

@@ -1,12 +1,16 @@
 #ifndef EFFECTCHAIN_H
 #define EFFECTCHAIN_H
 
-#include "RouteDevice.hpp"
 #include "OutputDevice.hpp"
-#include "Instrument.hpp"
 #include "Effect.hpp"
 namespace tsal {
 
+/** @class EffectChain
+ * @brief Manages the effect chain for a channel
+ *
+ * Effects are applied to a channel linked in a chain and updating the audio 
+ * stream as it passes through the chain
+ */
 class EffectChain : public OutputDevice {
   public:
     void setInput(OutputDevice& input);

@@ -5,6 +5,12 @@
 
 namespace tsal {
 
+/** @class Buffer
+ * @brief A generic buffer class
+ *
+ * When working with audio data, it it sometimes necessary to store 
+ * the data in a buffer.
+ */
 template <typename Item>
 class Buffer {
   public:

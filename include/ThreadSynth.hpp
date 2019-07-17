@@ -8,7 +8,7 @@
 namespace tsal {
 
 /** @class ThreadSynth
- * @brief A threaded audio synth
+ * @brief A threaded audio synthesizer
  * 
  * A more specific implementation of the Synth class that dedicates the synth's
  * thread as the means to schedule events and timings for notes. This class

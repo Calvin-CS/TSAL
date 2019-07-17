@@ -36,22 +36,25 @@ class SharedQueue {
 
 void monitor(SharedQueue* queue, tsal::Mixer* mixer) {
   tsal::SoundFont sf("/usr/share/soundfonts/FluidR3_GM.sf2");
-  sf.setPreset(103);
+  sf.setPreset("Halo Pad");
   mixer->add(sf);
 
-  int size;
+  int size = 0;
+  sf.noteOn(40);
   while(true) {
-    size = queue->size();
-    tsal::Util::thread_sleep(size + 1 * 1000);
-    sf.noteOn(30 + size);
-    tsal::Util::thread_sleep(2000);
-    sf.noteOff(30 + size);
+    tsal::Util::thread_sleep(1000);
+    int currentSize = queue->size();
+    if (size != currentSize) {
+      sf.noteOff(40 + size);
+      sf.noteOn(40 + currentSize);
+      size = currentSize;
+    }
   }
 }
 
 void produce(SharedQueue* queue, tsal::Mixer* mixer) {
   tsal::SoundFont sf("/usr/share/soundfonts/FluidR3_GM.sf2");
-  sf.setPreset(22);
+  sf.setPreset(1);
   mixer->add(sf);
 
   int item;
@@ -116,8 +119,6 @@ int main(int argc, char* argv[]) {
   const int numProducers = atoi(argv[1]);
   const int numConsumers = atoi(argv[2]);
   tsal::Mixer mixer;
-  tsal::Delay delay;
-  mixer.add(delay);
   
   SharedQueue queue;
 
