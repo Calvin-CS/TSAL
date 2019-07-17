@@ -102,7 +102,7 @@ struct sortData {
  * \details Different colors represent different sections being sorted.
  * \details Once all items have been sorted and merged, the animation stops and all lines are colored white.
  */
-void mergeSortFunction(std::vector<Oscillator>& oscillators, int threads, int size) {
+void mergeSortFunction(std::vector<Oscillator>& voices, int threads, int size) {
   const int IPF = 1;      // Iterations per frame
   int* numbers = new int[size];       // Array to store the data
   for (int i = 0; i < size; i++)
@@ -122,7 +122,7 @@ void mergeSortFunction(std::vector<Oscillator>& oscillators, int threads, int si
   #pragma omp parallel num_threads(threads)
   {
     int tid = omp_get_thread_num();
-    auto& oscillator = oscillators[tid];
+    auto& voice = voices[tid];
     //std::cout << tid << std::endl;
     while (true) {
       if (sd[tid]->state == S_WAIT) {  //Merge waiting threads
@@ -147,10 +147,10 @@ void mergeSortFunction(std::vector<Oscillator>& oscillators, int threads, int si
           height = numbers[i];
           // If we are processing the item, play a sound
           if (i == sd[tid]->left) {
-            oscillator.setActive();
-            oscillator.setFrequency(100 + (tid * 100) + height);
+            voice.setActive();
+            voice.setFrequency(100 + (tid * 100) + height);
             tsal::Util::thread_sleep(10);
-            oscillator.setActive(false);
+            voice.setActive(false);
           }
         }
       }
@@ -182,10 +182,10 @@ int main() {
     for (threads = 1; threads < t; threads *=2);  //Force threads to be a power of 2
 
     Mixer mixer;
-    std::vector<Oscillator> oscillators(threads);
-    for (unsigned i = 0; i < oscillators.size(); i++) {
-      oscillators[i].setVolume(0.2);
-      mixer.add(oscillators[i]);
+    std::vector<Oscillator> voices(threads);
+    for (unsigned i = 0; i < voices.size(); i++) {
+      voices[i].setVolume(0.2);
+      mixer.add(voices[i]);
     } 
-    mergeSortFunction(oscillators, threads, 1000);
+    mergeSortFunction(voices, threads, 1000);
 }

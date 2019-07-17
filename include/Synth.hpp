@@ -21,6 +21,12 @@ class Synth : public Instrument {
     virtual void noteOff(unsigned note = A0) override;
     void setVelocity(double velocity);
     void setMode(Oscillator::OscillatorMode mode) { mOscillator.setMode(mode); };
+    void setEnvelopeActive(bool active = true) { mEnvelope.setActive(active); };
+    void setEnvelope(double attackTime, double decayTime, double sustainLevel,
+                     double releaseTime) {
+      mEnvelope.setEnvelope(attackTime, decayTime, sustainLevel, releaseTime);
+    };
+
     unsigned getNote() const;
     
     virtual void setMixer(Mixer* mixer) override {

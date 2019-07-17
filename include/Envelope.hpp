@@ -35,6 +35,7 @@ class Envelope : public OutputDevice {
     void setDecayTime(double decayTime);
     void setSustainLevel(double level);
     void setReleaseTime(double releaseTime);
+    void setEnvelope(double attackTime, double decayTime, double sustainLevel, double releaseTime);
 
     double getStateValue(EnvelopeState state) { return mStateValue[state]; };
     // Min value exists since the calculateMultiplier function doesn't work with 0

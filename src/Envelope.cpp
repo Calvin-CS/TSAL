@@ -52,6 +52,9 @@ void Envelope::updateState() {
  * @return double A sample of the envelope
  */
 double Envelope::getOutput() {
+  if (!mActive) {
+    return 1.0;
+  }
   if (stateIsTimed()) {
     if (mCurrentStateIndex >= mNextStateIndex) {
       updateState();
@@ -105,6 +108,21 @@ void Envelope::stop() {
  */
 bool Envelope::stateIsTimed() {
   return mState != OFF && mState != SUSTAIN;
+}
+
+/**
+ * @brief Set all the envelope state values
+ *
+ * @param attackTime
+ * @param decayTime
+ * @param sustainLevel
+ * @param releaseTime
+ */
+void Envelope::setEnvelope(double attackTime, double decayTime, double sustainLevel, double releaseTime) {
+  setAttackTime(attackTime);
+  setDecayTime(decayTime);
+  setSustainLevel(sustainLevel);
+  setReleaseTime(releaseTime);
 }
 
 /**

@@ -2,7 +2,6 @@
 #define OSCILLATORNODE_H
 
 #include "Instrument.hpp"
-#include "Envelope.hpp"
 #include "Mixer.hpp"
 
 namespace tsal {

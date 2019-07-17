@@ -46,7 +46,7 @@ int main(int argc, char* argv[]) {
   {
     int id = omp_get_thread_num();
     
-    voices[id].setVolume(0.3);
+    voices[id].setVolume(0.5);
     mixer.add(voices[id]);
     
     // Get a ith measure offset into the song

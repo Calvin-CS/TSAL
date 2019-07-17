@@ -39,8 +39,10 @@ int main(int argc, char* argv[]) {
   #pragma omp parallel
   {
     int id = omp_get_thread_num();
-    voices[id].setVolume(0.3);
     mixer.add(voices[id]);
+    voices[id].setVolume(0.3);
+    voices[id].setEnvelope(0, 0, 1, 2.0);
+    
     int timeOffset = midiParser[id * std::floor(midiParser.size()/omp_get_num_threads())].tick;
  
     #pragma omp for
