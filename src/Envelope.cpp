@@ -9,7 +9,7 @@ Item checkParameterRangeWithMax(const std::string& name, Item value, std::pair<I
 
 Envelope::Envelope() {
   mStateValue[OFF] = MIN_VALUE;
-  mStateValue[ATTACK] = 0.001;
+  mStateValue[ATTACK] = 0.01;
   mStateValue[DECAY] = 0.5;
   mStateValue[SUSTAIN] = 0.5;
   mStateValue[RELEASE] = 2.0;
@@ -53,13 +53,14 @@ void Envelope::updateState() {
  */
 double Envelope::getOutput() {
   if (stateIsTimed()) {
-    if (mCurrentStateIndex == mNextStateIndex) {
+    if (mCurrentStateIndex >= mNextStateIndex) {
       updateState();
     }
     mCurrentStateIndex++;
     mEnvelopeValue *= mMultiplier;
   }
-  return mEnvelopeValue;
+  // TODO: never figured out why, but occasionally the envelope Value skyrockets when in attack state. This is protect against anything ridiculous
+  return std::min(1.0, mEnvelopeValue);
 }
 
 /**
