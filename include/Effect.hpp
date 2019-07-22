@@ -18,6 +18,7 @@ namespace tsal {
  */
 class Effect : public InputDevice, public OutputDevice {
   public:
+    ~Effect();
     virtual double getInput() override;
     void setInput(OutputDevice* input);
 

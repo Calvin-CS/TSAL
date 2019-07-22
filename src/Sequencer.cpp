@@ -15,6 +15,13 @@ void Sequencer::tick() {
         mCondition.notify_all();
       } 
     }
+    // Ugly replace soon
+    for (unsigned i = 0; i < mEvents.size(); i++) {
+      if (mTick >= mEvents[i]->tick) {
+        mEvents[i]->callback();
+        mEvents.erase(mEvents.begin() + i);
+      }
+    }
     mSampleTime = 0;
   }
 }
@@ -45,6 +52,10 @@ void Sequencer::setPPQ(unsigned ppq) {
 
 void Sequencer::setSamplesPerTick() {
   mSamplesPerTick = mSampleRate / ((mBPM * mPPQ) / 60);
+}
+
+void Sequencer::schedule(unsigned tick, std::function<void ()> callback) {
+  mEvents.push_back(std::make_unique<Event>(Event(mTick + tick, callback)));
 }
 
 unsigned Sequencer::getTick() const {

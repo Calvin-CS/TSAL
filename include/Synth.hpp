@@ -17,8 +17,8 @@ namespace tsal {
 class Synth : public Instrument {
   public:
     virtual double getOutput() override;
-    virtual void noteOn(double note, double velocity = 100.0) override;
-    virtual void noteOff(double note = A0) override;
+    virtual void noteOn(double note, double velocity = 100.0, unsigned duration = 0);
+    virtual void noteOff();
     void setVelocity(double velocity);
     void setMode(Oscillator::OscillatorMode mode) { mOscillator.setMode(mode); };
     void setEnvelopeActive(bool active = true) { mEnvelope.setActive(active); };

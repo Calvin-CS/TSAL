@@ -13,8 +13,6 @@ class SharedQueue {
     void produce(Synth* item) {
       std::unique_lock<std::mutex> lk(mMutex);
       mCondition.wait(lk, [this]{return mQueue.size() < mMaxQueueSize;}); 
-      item->setVolume(0.1);
-      item->setMode(Oscillator::SQUARE);
       mQueue.push(item);
       lk.unlock();
       mCondition.notify_all();
@@ -44,6 +42,7 @@ void produce(SharedQueue* queue, Mixer* mixer) {
     item->setVolume(0.5);
     item->setEnvelopeActive(false);
     item->noteOn(C3 + rand() % (C4 - C3));
+    
     for (int i = 0; i < 100; i++) {
       item->noteOn(item->getNote() + 0.1);
       Util::thread_sleep(5);
@@ -57,8 +56,7 @@ void consume(SharedQueue* queue, Mixer* mixer) {
   while (run) {
     Util::thread_sleep(rand() % 5000);
     item = queue->consume();
-    item->setVolume(0.5);
-    item->setMode(Oscillator::SINE);
+
     for (int i = 0; i < 100; i++) {
       item->noteOn(item->getNote() + 0.1);
       Util::thread_sleep(5);

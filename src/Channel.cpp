@@ -9,6 +9,8 @@ Channel::Channel() {
   mEffectChain.setInput(mChannelIn);
 }
 
+Channel::~Channel() {}
+
 void Channel::setMixer(Mixer* mixer) {
   mChannelIn.setMixer(mixer);
   mEffectChain.setMixer(mixer);

@@ -24,12 +24,22 @@ class Sequencer {
     void setTick(unsigned tick);
     void setBPM(unsigned bpm);
     void setPPQ(unsigned ppq);
+    void schedule(unsigned tick, std::function<void ()> callback);
     unsigned getTick() const;
     void waitForTick(unsigned tick);
+    struct Event {
+        Event(unsigned t, std::function<void ()> f) {
+          tick = t;
+          callback = f;
+        }
+        unsigned tick;
+        std::function<void ()> callback;
+    };
   private:
     std::mutex mMutex; 
     std::condition_variable mCondition;
-    std::vector<unsigned> mTickEvents;
+    std::vector<unsigned> mTickEvents; // Replace with mEvents eventually
+    std::vector<std::unique_ptr<Event>> mEvents;
     void setSamplesPerTick();
     unsigned mSampleTime = 0;
     unsigned mTick = 0;

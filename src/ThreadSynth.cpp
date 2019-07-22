@@ -26,7 +26,7 @@ void ThreadSynth::noteOff(double note, unsigned tick) {
   if (mMixer == nullptr)
     return;
   mMixer->getSequencer().waitForTick(tick);
-  Synth::noteOff(note);
+  //Synth::noteOff(note);
 }
 
 }

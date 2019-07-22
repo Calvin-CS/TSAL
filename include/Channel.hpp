@@ -17,6 +17,7 @@ namespace tsal {
 class Channel : public OutputDevice {
   public:
     Channel();
+    virtual ~Channel();
     virtual double getOutput() override;
     virtual void setMixer(Mixer* mixer) override;
     void add(Channel& channel);

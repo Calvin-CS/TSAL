@@ -1,4 +1,5 @@
 #include "Synth.hpp"
+#include <functional>
 
 namespace tsal {
 
@@ -12,12 +13,16 @@ double Synth::getOutput() {
  * @param note 
  * @param velocity 
  */
-void Synth::noteOn(double note, double velocity) {
+void Synth::noteOn(double note, double velocity, unsigned duration) {
   mNote = note;
   mOscillator.setActive();
   mEnvelope.start();
   setVelocity(velocity); 
   mOscillator.setNote(note);
+  if (duration > 0) {
+    std::function< void() > callback = std::bind(&Synth::noteOff, this);
+    getMixer()->getSequencer().schedule(duration, callback);
+  } 
 }
 
 /**
@@ -25,7 +30,7 @@ void Synth::noteOn(double note, double velocity) {
  * 
  * @param note 
  */
-void Synth::noteOff(double note) {
+void Synth::noteOff() {
   if (mEnvelope.isActive()) {
     mEnvelope.stop();
   } else {

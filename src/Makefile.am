@@ -9,6 +9,7 @@ libtsal_la_SOURCES = \
   Effect.cpp \
   EffectChain.cpp \
   Envelope.cpp \
+	Instrument.cpp \
   MidiEvent.cpp \
   MidiEventList.cpp \
   MidiFile.cpp \

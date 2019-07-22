@@ -60,7 +60,6 @@ int main(int argc, char* argv[]) {
       if (me.isNoteOff())
         voices[id].noteOff(me.getKeyNumber(), me.tick + timeOffset);
     }
-    mixer.remove(voices[id]);
   }
   return 0;
 }

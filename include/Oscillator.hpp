@@ -1,7 +1,7 @@
 #ifndef OSCILLATORNODE_H
 #define OSCILLATORNODE_H
 
-#include "Instrument.hpp"
+#include "OutputDevice.hpp"
 #include "Mixer.hpp"
 
 namespace tsal {
@@ -12,7 +12,7 @@ namespace tsal {
  * Oscillator is a low level synthesizer that generates samples from
  * algorithmic waveforms. It supports saw, sine, and square waveforms
  */
-class Oscillator : public Instrument {
+class Oscillator : public OutputDevice {
   public:
     /**
      * @brief Modes for the oscillator 

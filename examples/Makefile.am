@@ -4,7 +4,6 @@ noinst_PROGRAMS = \
 	canon \
 	rain \
 	merge_sort \
-	chord \
 	progress \
 	producer_consumer \
 	producer_consumer_percussion
@@ -26,9 +25,6 @@ rain_LDADD = $(top_builddir)/src/libtsal.la
 
 merge_sort_SOURCES = merge_sort.cpp
 merge_sort_LDADD = $(top_builddir)/src/libtsal.la
-
-chord_SOURCES = chord.cpp
-chord_LDADD = $(top_builddir)/src/libtsal.la
 
 progress_SOURCES = progress.cpp
 progress_LDADD = $(top_builddir)/src/libtsal.la

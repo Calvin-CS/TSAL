@@ -40,7 +40,7 @@ class SoundFont : public Instrument {
     std::string getPresetName(int presetIndex);
     std::string getPresetName(int bank, int presetNumber);
   private:
-    std::unique_ptr<tsf> mSoundFont;
+    tsf* mSoundFont;
     int mPresetIndex = 0;
     Util::ParameterRange<int> mPresetRange;
 };
