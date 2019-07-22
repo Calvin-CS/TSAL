@@ -4,68 +4,68 @@
 #include <iostream>
 #include <queue>
 
+using namespace tsal;
+
+bool run = true;
+
 class SharedQueue {
   public:
-    void produce(int item) {
+    void produce(Synth* item) {
       std::unique_lock<std::mutex> lk(mMutex);
       mCondition.wait(lk, [this]{return mQueue.size() < mMaxQueueSize;}); 
+      item->setVolume(0.1);
+      item->setMode(Oscillator::SQUARE);
       mQueue.push(item);
-      synth.noteOn(++mNote);
       lk.unlock();
       mCondition.notify_all();
     };
-    int consume() {
+    Synth* consume() {
       std::unique_lock<std::mutex> lk(mMutex);
       mCondition.wait(lk, [this]{return mQueue.size() > 0;});
-      const int front = mQueue.front();
+      Synth* front = mQueue.front();
       mQueue.pop();
-      synth.noteOn(--mNote);
       lk.unlock();
       mCondition.notify_all();
-      return front;  
+      return front; 
     };
-    tsal::Synth& getSynth() { return synth; };
   private:
-    tsal::Synth synth;
-    unsigned mNote = 60;
     std::condition_variable mCondition;
     std::mutex mMutex;
-    std::queue<int> mQueue;
+    std::queue<Synth*> mQueue;
     unsigned mMaxQueueSize = 12;
 };
 
-void produce(SharedQueue* queue, tsal::Mixer* mixer) {
-  tsal::Synth synth;
-  mixer->add(synth);
-  synth.setVolume(0.2);
-  synth.setMode(tsal::Oscillator::SQUARE);
-
-  int item;
-  while (true) {
-    tsal::Util::thread_sleep(rand() % 5000);
-    item = rand() % 10;
-    std::cout << "producing: " << item << std::endl;
+void produce(SharedQueue* queue, Mixer* mixer) {
+  Synth* item = nullptr;
+  while (run) {
+    Util::thread_sleep(rand() % 5000);
+    item = new Synth();
+    mixer->add(*item);
+    item->setVolume(0.5);
+    item->setEnvelopeActive(false);
+    item->noteOn(C3 + rand() % (C4 - C3));
+    for (int i = 0; i < 100; i++) {
+      item->noteOn(item->getNote() + 0.1);
+      Util::thread_sleep(5);
+    }
     queue->produce(item);
-    synth.noteOn(30 + item);
-    tsal::Util::thread_sleep(100);
-    synth.noteOff();
   }
 }
 
-void consume(SharedQueue* queue, tsal::Mixer* mixer) {
-  tsal::Synth synth;
-  mixer->add(synth);
-  synth.setVolume(0.2);
-  synth.setMode(tsal::Oscillator::SAW);
-
-  int item;
-  while (true) {
-    tsal::Util::thread_sleep(rand() % 5000);
+void consume(SharedQueue* queue, Mixer* mixer) {
+  Synth* item = nullptr;
+  while (run) {
+    Util::thread_sleep(rand() % 5000);
     item = queue->consume();
-    std::cout << "consuming: " << item << std::endl;
-    synth.noteOn(80 + item);
-    tsal::Util::thread_sleep(100);
-    synth.noteOff();
+    item->setVolume(0.5);
+    item->setMode(Oscillator::SINE);
+    for (int i = 0; i < 100; i++) {
+      item->noteOn(item->getNote() + 0.1);
+      Util::thread_sleep(5);
+    }
+    item->noteOff();
+    mixer->remove(*item);
+    delete item;
   }
 }
 
@@ -101,13 +101,8 @@ int main(int argc, char* argv[]) {
   }
   const int numProducers = atoi(argv[1]);
   const int numConsumers = atoi(argv[2]);
-  tsal::Mixer mixer;
+  Mixer mixer;
   SharedQueue queue;
-  auto& queueSynth = queue.getSynth();
-  mixer.add(queueSynth);
-  queueSynth.setVolume(0.5);
-  queueSynth.noteOn(tsal::C4);
-
 
   std::thread producers[numProducers];
   std::thread consumers[numConsumers];
@@ -117,6 +112,13 @@ int main(int argc, char* argv[]) {
   for (int i = 0; i < numConsumers; i++) {
     consumers[i] = std::thread(consume, &queue, &mixer);
   }
+
+  // Wait for the user to stop the synth
+  char input;
+  std::cout << "Press <enter> to quit:" << std::flush;
+  std::cin.get(input);
+  run = false;
+  std::cout << "Quitting..." << std::endl;
 
   for (int i = 0; i < numProducers; i++) {
     producers[i].join();

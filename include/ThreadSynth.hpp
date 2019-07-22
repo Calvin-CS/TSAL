@@ -17,8 +17,8 @@ namespace tsal {
  */
 class ThreadSynth : public Synth {
   public:
-    void noteOn(unsigned note, double velocity, unsigned tick);
-    void noteOff(unsigned note, unsigned tick);
+    void noteOn(double note, double velocity, unsigned tick);
+    void noteOff(double note, unsigned tick);
 };
 
 }

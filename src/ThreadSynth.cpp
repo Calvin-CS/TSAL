@@ -9,7 +9,7 @@ namespace tsal {
  * @param note 
  * @param tick 
  */
-void ThreadSynth::noteOn(unsigned note, double velocity, unsigned tick) {
+void ThreadSynth::noteOn(double note, double velocity, unsigned tick) {
   if (mMixer == nullptr)
     return;
   mMixer->getSequencer().waitForTick(tick);
@@ -22,7 +22,7 @@ void ThreadSynth::noteOn(unsigned note, double velocity, unsigned tick) {
  * @param note 
  * @param tick 
  */
-void ThreadSynth::noteOff(unsigned note, unsigned tick) {
+void ThreadSynth::noteOff(double note, unsigned tick) {
   if (mMixer == nullptr)
     return;
   mMixer->getSequencer().waitForTick(tick);

@@ -12,8 +12,8 @@ namespace tsal {
  */
 class Instrument : public OutputDevice {
   public:
-    virtual void noteOn(unsigned note, double velocity) {};
-    virtual void noteOff(unsigned note) {};
+    virtual void noteOn(double note, double velocity) {};
+    virtual void noteOff(double note) {};
 };
 
 }

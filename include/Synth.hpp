@@ -17,8 +17,8 @@ namespace tsal {
 class Synth : public Instrument {
   public:
     virtual double getOutput() override;
-    virtual void noteOn(unsigned note, double velocity = 100.0) override;
-    virtual void noteOff(unsigned note = A0) override;
+    virtual void noteOn(double note, double velocity = 100.0) override;
+    virtual void noteOff(double note = A0) override;
     void setVelocity(double velocity);
     void setMode(Oscillator::OscillatorMode mode) { mOscillator.setMode(mode); };
     void setEnvelopeActive(bool active = true) { mEnvelope.setActive(active); };
@@ -27,7 +27,7 @@ class Synth : public Instrument {
       mEnvelope.setEnvelope(attackTime, decayTime, sustainLevel, releaseTime);
     };
 
-    unsigned getNote() const;
+    double getNote() const;
     
     virtual void setMixer(Mixer* mixer) override {
       OutputDevice::setMixer(mixer);
@@ -39,7 +39,7 @@ class Synth : public Instrument {
     Oscillator mOscillator;
     Envelope mEnvelope;
     double mVelocity;
-    unsigned mNote = 0;
+    double mNote = 0.0;
     
     static Util::ParameterRange<double> mVelocityRange;
 }; 

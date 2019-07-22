@@ -28,14 +28,14 @@ class Oscillator : public Instrument {
     double getOutput() override;
 
     void setMode(OscillatorMode mode);
-    void setNote(unsigned note);
+    void setNote(double note);
     void setFrequency(double frequency);
 
     double getFrequency() const;
     unsigned getNote() const;
 
     static unsigned getNoteFromFrequency(double frequency);
-    static double getFrequencyFromNote(unsigned note);
+    static double getFrequencyFromNote(double note);
 
   private:
     double polyBLEP(double t);
@@ -46,7 +46,7 @@ class Oscillator : public Instrument {
     double mPhaseStep = 0.0;
     double mWaveFormValue = 0.0;
 
-    static Util::ParameterRange<unsigned> mNoteRange;
+    static Util::ParameterRange<double> mNoteRange;
     static Util::ParameterRange<double> mFrequencyRange;
 };
 

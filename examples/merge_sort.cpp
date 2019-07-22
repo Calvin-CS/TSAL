@@ -102,11 +102,12 @@ struct sortData {
  * \details Different colors represent different sections being sorted.
  * \details Once all items have been sorted and merged, the animation stops and all lines are colored white.
  */
-void mergeSortFunction(std::vector<Oscillator>& voices, int threads, int size) {
+void mergeSortFunction(std::vector<Synth>& voices, int threads, int size) {
   const int IPF = 1;      // Iterations per frame
+  const int maxNumber = 1000;
   int* numbers = new int[size];       // Array to store the data
   for (int i = 0; i < size; i++)
-    numbers[i] = rand() % 1000;
+    numbers[i] = rand() % maxNumber;
 
   int bs = size / threads;
   int ex = size % threads;
@@ -141,16 +142,15 @@ void mergeSortFunction(std::vector<Oscillator>& voices, int threads, int size) {
       for (int i = 0; i < IPF; i++)
         sd[tid]->sortStep();
 
-      int height;
+      double number;
       if (sd[tid]->state != S_HIDE) {
         for (int i = sd[tid]->first; i < sd[tid]->last; ++i) {
-          height = numbers[i];
+          number = numbers[i];
           // If we are processing the item, play a sound
           if (i == sd[tid]->left) {
-            voice.setActive();
-            voice.setFrequency(100 + (tid * 100) + height);
-            tsal::Util::thread_sleep(10);
-            voice.setActive(false);
+            voice.noteOn(C2 + (tid * 3) + 60 * (number / maxNumber));
+            Util::thread_sleep(10);
+            voice.noteOff();
           }
         }
       }
@@ -182,10 +182,11 @@ int main() {
     for (threads = 1; threads < t; threads *=2);  //Force threads to be a power of 2
 
     Mixer mixer;
-    std::vector<Oscillator> voices(threads);
+    std::vector<Synth> voices(threads);
     for (unsigned i = 0; i < voices.size(); i++) {
-      voices[i].setVolume(0.2);
       mixer.add(voices[i]);
+      voices[i].setVolume(0.5);
+      voices[i].setEnvelopeActive(false);      
     } 
     mergeSortFunction(voices, threads, 1000);
 }

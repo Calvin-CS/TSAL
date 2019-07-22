@@ -17,7 +17,7 @@ double PolySynth::getOutput() {
   return output;
 }
 
-void PolySynth::noteOn(unsigned note, double velocity) {
+void PolySynth::noteOn(double note, double velocity) {
   Synth* voice = getInactiveVoice();
   if (voice == nullptr) {
     // Maybe change the behavior to grab the nearest note 
@@ -26,7 +26,7 @@ void PolySynth::noteOn(unsigned note, double velocity) {
   voice->noteOn(note, velocity);
 }
 
-void PolySynth::noteOff(unsigned note) {
+void PolySynth::noteOff(double note) {
   for (unsigned i = 0; i < NUM_VOICES; i++) {
     if (mVoices[i].getNote() == note) {
       mVoices[i].noteOff();

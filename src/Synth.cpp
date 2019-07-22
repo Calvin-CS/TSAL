@@ -12,8 +12,9 @@ double Synth::getOutput() {
  * @param note 
  * @param velocity 
  */
-void Synth::noteOn(unsigned note, double velocity) {
+void Synth::noteOn(double note, double velocity) {
   mNote = note;
+  mOscillator.setActive();
   mEnvelope.start();
   setVelocity(velocity); 
   mOscillator.setNote(note);
@@ -24,11 +25,15 @@ void Synth::noteOn(unsigned note, double velocity) {
  * 
  * @param note 
  */
-void Synth::noteOff(unsigned note) {
-  mEnvelope.stop();
+void Synth::noteOff(double note) {
+  if (mEnvelope.isActive()) {
+    mEnvelope.stop();
+  } else {
+    mOscillator.setActive(false);
+  }
 }
 
-unsigned Synth::getNote() const {
+double Synth::getNote() const {
   return mNote;
 }
 
@@ -37,4 +42,5 @@ void Synth::setVelocity(double velocity) {
 }
 
 Util::ParameterRange<double> Synth::mVelocityRange = std::make_pair(0.0, 127.0);
+
 }
