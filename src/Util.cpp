@@ -4,8 +4,8 @@
 
 namespace tsal {
 
-void Util::thread_sleep(unsigned milliseconds) {
-  std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
+void Util::thread_sleep(unsigned duration, const TimeScale scale) {
+  std::this_thread::sleep_for(duration * std::chrono::microseconds(scale));
 }
 
 double Util::ampToDb(double amplitude) {

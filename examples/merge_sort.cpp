@@ -104,7 +104,7 @@ struct sortData {
  */
 void mergeSortFunction(std::vector<Synth>& voices, int threads, int size) {
   const int IPF = 1;      // Iterations per frame
-  const int maxNumber = 1000;
+  const int maxNumber = 100000;
   int* numbers = new int[size];       // Array to store the data
   for (int i = 0; i < size; i++)
     numbers[i] = rand() % maxNumber;
@@ -149,10 +149,9 @@ void mergeSortFunction(std::vector<Synth>& voices, int threads, int size) {
           // If we are processing the item, play a sound
           if (i == sd[tid]->left) {
             voice.noteOn(C2 + (tid * 3) + 60 * (number / maxNumber));
-            Util::thread_sleep(10);
-            voice.noteOff();
+            Util::thread_sleep(100, Util::TimeScale::MICROSECOND);
           }
-        }
+        } 
       }
     }
   }
@@ -188,5 +187,5 @@ int main() {
       voices[i].setVolume(0.5);
       voices[i].setEnvelopeActive(false);      
     } 
-    mergeSortFunction(voices, threads, 1000);
+    mergeSortFunction(voices, threads, 50000);
 }

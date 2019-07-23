@@ -16,11 +16,16 @@ namespace tsal {
  */
 class Util {
   public:
+    enum TimeScale {
+      SECOND = 1000000,
+      MILLISECOND = 1000,
+      MICROSECOND = 1,
+    };
     static double ampToDb(double amplitude);
     static double dbToAmp(double db);
     static double volumeToDb(double volume);
     static double dbToVolume(double db);
-    static void thread_sleep(unsigned milliseconds);
+    static void thread_sleep(unsigned duration, TimeScale scale = MILLISECOND);
     
     template <typename Item>
     using ParameterRange = std::pair<Item, Item>;
