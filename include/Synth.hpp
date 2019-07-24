@@ -5,6 +5,7 @@
 #include "Envelope.hpp"
 #include "Instrument.hpp"
 #include "MidiNotes.hpp"
+#include "Sequencer.hpp"
 
 namespace tsal {
 
@@ -17,8 +18,10 @@ namespace tsal {
 class Synth : public Instrument {
   public:
     virtual double getOutput() override;
-    virtual void noteOn(double note, double velocity = 100.0, unsigned duration = 0);
+    virtual void noteOn(double note, double velocity = 100.0);
     virtual void noteOff();
+    virtual void play(double note, Util::TimeScale scale, unsigned multiplier);
+    virtual void play(double note, Sequencer::NoteScale scale, unsigned multiplier);
     void setVelocity(double velocity);
     void setMode(Oscillator::OscillatorMode mode) { mOscillator.setMode(mode); };
     void setEnvelopeActive(bool active = true) { mEnvelope.setActive(active); };

@@ -13,16 +13,23 @@ double Synth::getOutput() {
  * @param note 
  * @param velocity 
  */
-void Synth::noteOn(double note, double velocity, unsigned duration) {
+void Synth::noteOn(double note, double velocity) {
   mNote = note;
   mOscillator.setActive();
   mEnvelope.start();
   setVelocity(velocity); 
   mOscillator.setNote(note);
-  if (duration > 0) {
-    std::function< void() > callback = std::bind(&Synth::noteOff, this);
-    getMixer()->getSequencer().schedule(duration, callback);
-  } 
+}
+
+void Synth::play(double note, Util::TimeScale scale, unsigned multiplier) {
+  noteOn(note);
+  Util::thread_sleep(multiplier, scale);
+}
+
+void Synth::play(double note, Sequencer::NoteScale scale, unsigned multiplier) {
+  noteOn(note);
+  Sequencer& seq = getMixer()->getSequencer();
+  seq.waitForTick(seq.getTick() + seq.getTicksInNote(scale) * multiplier);
 }
 
 /**

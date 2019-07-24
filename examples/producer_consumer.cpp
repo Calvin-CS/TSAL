@@ -13,14 +13,29 @@ class SharedQueue {
     void produce(Synth* item) {
       std::unique_lock<std::mutex> lk(mMutex);
       mCondition.wait(lk, [this]{return mQueue.size() < mMaxQueueSize;}); 
+      
+      for (int i = 0; i < 100; i++) {
+        item->noteOn(item->getNote() + 0.1);
+        Util::thread_sleep(5);
+      }
+      Util::thread_sleep(500);
+      
       mQueue.push(item);
       lk.unlock();
       mCondition.notify_all();
     };
+
     Synth* consume() {
       std::unique_lock<std::mutex> lk(mMutex);
       mCondition.wait(lk, [this]{return mQueue.size() > 0;});
       Synth* front = mQueue.front();
+      
+      for (int i = 0; i < 100; i++) {
+        front->noteOn(front->getNote() + 0.1);
+        Util::thread_sleep(5);
+      }
+      front->noteOff();
+      
       mQueue.pop();
       lk.unlock();
       mCondition.notify_all();
@@ -39,14 +54,9 @@ void produce(SharedQueue* queue, Mixer* mixer) {
     Util::thread_sleep(rand() % 5000);
     item = new Synth();
     mixer->add(*item);
-    item->setVolume(0.5);
-    item->setEnvelopeActive(false);
+    item->setMode(Oscillator::SQUARE);
     item->noteOn(C3 + rand() % (C4 - C3));
     
-    for (int i = 0; i < 100; i++) {
-      item->noteOn(item->getNote() + 0.1);
-      Util::thread_sleep(5);
-    }
     queue->produce(item);
   }
 }
@@ -57,11 +67,6 @@ void consume(SharedQueue* queue, Mixer* mixer) {
     Util::thread_sleep(rand() % 5000);
     item = queue->consume();
 
-    for (int i = 0; i < 100; i++) {
-      item->noteOn(item->getNote() + 0.1);
-      Util::thread_sleep(5);
-    }
-    item->noteOff();
     mixer->remove(*item);
     delete item;
   }

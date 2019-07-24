@@ -11,8 +11,7 @@ void insertionSort(Synth& synth, int size, int* data) {
     insertValue = data[i];
     j = i;
     while (j > 0 && data[j - 1] > insertValue) {
-      synth.noteOn(C2 + 55 * ((double) data[j] / MAX_VALUE));
-      Util::thread_sleep(5);
+      synth.play(C2 + 55 * ((double) data[j] / MAX_VALUE), Util::MILLISECOND, 5);
       
       data[j] = data[j - 1];
       j--;

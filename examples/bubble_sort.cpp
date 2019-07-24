@@ -4,16 +4,15 @@ using namespace tsal;
 
 void bubbleSort(Synth& synth, int size, int* data) {
   int temp;
-  for (int i = size; i > 0; i--) {
-    for (int j = 0; j < i; j++) {
-      synth.noteOn(C2 + 55 * ((double) data[j] / 1000.0));
-      Util::thread_sleep(100, Util::TimeScale::MICROSECOND);
+  for (int i = 0; i < size; i++) {
+    for (int j = size; j > i; j--) {
       
-      if (data[j] > data[j + 1]) {
-        
+      synth.play(C3 + 40 * ((double) data[j] / 1000.0), Util::MICROSECOND, 100);
+      
+      if (data[j] < data[j - 1]) {
         temp = data[j];
-        data[j] = data[j + 1];
-        data[j + 1] = temp;
+        data[j] = data[j - 1];
+        data[j - 1] = temp;
       }
     }
   }
@@ -26,7 +25,7 @@ int main() {
   synth.setEnvelopeActive(false);
   
   // Generate the data
-  const int size = 1000;
+  const int size = 500;
   int* data = new int[size];
   for (int i = 0; i < size; i++) {
     data[i] = rand() % 1000;

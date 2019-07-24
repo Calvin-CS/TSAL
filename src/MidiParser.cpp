@@ -49,6 +49,7 @@ void MidiParser::read(const std::string& filename) {
   
   mHasRead = true;
   mMidiFile.joinTracks();
+  mMidiFile.linkNotePairs();
 
   smf::MidiEventList& midiTrack = mMidiFile[0];
 

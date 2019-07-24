@@ -8,7 +8,8 @@ int main() {
   tsal::SoundFont soundfont("/usr/share/soundfonts/FluidR3_GM.sf2");
   tsal::Synth synth;
   mixer.add(synth);
-  synth.noteOn(tsal::C4, 100.0, 1000);
+  std::cout << "Playing synth" << std::endl;
+  std::cout << "Done" << std::endl;
 
 
   // mixer.add(channel);
@@ -29,9 +30,6 @@ int main() {
   // tsal::Util::thread_sleep(2000);
 
   // mixer.remove(channel);
-  while(true) {
-  }
-
   
   return 0;
 }

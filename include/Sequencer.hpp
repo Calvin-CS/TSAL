@@ -17,6 +17,13 @@ namespace tsal {
  */
 class Sequencer {
   public:
+    enum NoteScale {
+                    TICK = 0,
+                    EIGHTH = 8,
+                    QUATER = 4,
+                    HALF = 2,
+                    WHOLE = 1,
+    };
     void tick();
     void start();
     void stop();
@@ -24,8 +31,9 @@ class Sequencer {
     void setTick(unsigned tick);
     void setBPM(unsigned bpm);
     void setPPQ(unsigned ppq);
-    void schedule(unsigned tick, std::function<void ()> callback);
+    void schedule(std::function<void ()> callback, NoteScale scale, unsigned duration = 1);
     unsigned getTick() const;
+    unsigned getTicksInNote(NoteScale note) const;
     void waitForTick(unsigned tick);
     struct Event {
         Event(unsigned t, std::function<void ()> f) {
