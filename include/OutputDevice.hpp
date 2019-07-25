@@ -8,7 +8,6 @@ namespace tsal {
 
 // Forward declarations
 class Mixer;
-class Channel;
 
 /** @class OutputDevice
  * @brief Base class for a device that produces audio output
@@ -19,9 +18,13 @@ class OutputDevice {
     OutputDevice(Mixer* mixer);
     virtual ~OutputDevice() {};
     virtual double getOutput() = 0;
+    /**
+     * @brief Get the output for the device
+     * 
+     * @return double 
+     */
     virtual void setActive(bool active = true);
     virtual void setMixer(Mixer* mixer) { mMixer = mixer; };
-    virtual void setParentChannel(Channel* channel){};
 
     void setGain(double gain);
     void setVolume(double volume);
@@ -31,7 +34,6 @@ class OutputDevice {
     bool isActive() const;
 
   protected:
-    Channel* parentChannel = nullptr;
     Mixer* mMixer = nullptr;
     bool mActive = true;
     double mAmp = 1.0;

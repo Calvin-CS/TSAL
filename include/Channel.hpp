@@ -14,7 +14,7 @@ namespace tsal {
  * Instruments, effects, and channels can all be added to a channel. The mixer has one default master channel
  * but more channels can be added to the mixer to increase flexibility
  */
-class Channel : public OutputDevice {
+class Channel : public ChannelDevice {
   public:
     Channel(Mixer* mixer);
     virtual ~Channel();

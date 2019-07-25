@@ -3,18 +3,18 @@
 
 namespace tsal {
 
-Effect::Effect(Mixer* mixer) : OutputDevice(mixer) {
+Effect::Effect(Mixer* mixer) : ChannelDevice(mixer) {
 }
 
 Effect::~Effect() {
-  if (parentChannel != nullptr)
-    parentChannel->remove(*this);
+  if (mParentChannel != nullptr)
+    mParentChannel->remove(*this);
 }
 
 void Effect::setParentChannel(Channel* channel) {
-  if (parentChannel != nullptr)
-    parentChannel->remove(*this);
-  parentChannel = channel;
+  if (mParentChannel != nullptr)
+    mParentChannel->remove(*this);
+  mParentChannel = channel;
 }
 
 double Effect::getInput() {

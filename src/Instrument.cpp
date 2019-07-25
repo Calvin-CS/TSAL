@@ -3,18 +3,18 @@
 
 namespace tsal {
 
-Instrument::Instrument(Mixer *mixer) : OutputDevice(mixer){
+Instrument::Instrument(Mixer *mixer) : ChannelDevice(mixer){
 };
 
 Instrument::~Instrument() {
-  if (parentChannel != nullptr)
-    parentChannel->remove(*this);
+  if (mParentChannel != nullptr)
+    mParentChannel->remove(*this);
 }
 
 void Instrument::setParentChannel(Channel* channel) {
-  if (parentChannel != nullptr)
-    parentChannel->remove(*this);
-  parentChannel = channel;
+  if (mParentChannel != nullptr)
+    mParentChannel->remove(*this);
+  mParentChannel = channel;
 }
 
 } 

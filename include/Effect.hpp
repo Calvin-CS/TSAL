@@ -16,7 +16,7 @@ namespace tsal {
  * It processes the audio and then continues to pass it up the chain until the audio reaches
  * the end and it routed to the mixer
  */
-class Effect : public InputDevice, public OutputDevice {
+class Effect : public InputDevice, public ChannelDevice {
   public:
     Effect(Mixer* mixer);
     ~Effect();
