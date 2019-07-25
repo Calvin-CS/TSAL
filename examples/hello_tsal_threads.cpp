@@ -32,11 +32,11 @@ int main(int argc, char* argv[]) {
     synths[id].setVolume(.5);
     
     // Start playing a pitch based on thread number
-    synths[id].noteOn(tsal::C4 + 5 * id);
+    synths[id].play(tsal::C4 + 5 * id);
     // Wait for a second
     tsal::Util::thread_sleep(1000);
     // Stop playing 
-    synths[id].noteOff();
+    synths[id].stop();
   }
 
   return 0;

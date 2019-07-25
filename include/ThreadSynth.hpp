@@ -18,8 +18,11 @@ namespace tsal {
 class ThreadSynth : public Synth {
   public:
     ThreadSynth(Mixer* mixer);
-    virtual void noteOnTest(double note, double velocity, unsigned tick) ;
-    virtual void noteOffTest(double note, unsigned tick) ;
+    void play(double note, Util::TimeScale scale, unsigned multiplier);
+    void play(double note, Sequencer::NoteScale scale, unsigned multiplier);
+    void stop(Util::TimeScale scale, unsigned multiplier);
+    void stop(Sequencer::NoteScale scale, unsigned multiplier);
+    void stop() { Synth::stop(); };
 };
 
 }

@@ -20,8 +20,8 @@ class PolySynth : public Instrument {
   public:
     PolySynth(Mixer* mixer);
     virtual double getOutput() override;
-    virtual void noteOn(double note, double velocity = 100.0) override;
-    virtual void noteOff(double note) override;
+    void play(double note, double velocity = 100.0);
+    void stop(double note);
     void setMode(Oscillator::OscillatorMode mode);
  private:
     Synth* getInactiveVoice();

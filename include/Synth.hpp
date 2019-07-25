@@ -19,15 +19,14 @@ class Synth : public Instrument {
   public:
     Synth(Mixer *mixer);
     virtual double getOutput() override;
-    virtual void noteOn(double note, double velocity = 100.0);
-    virtual void noteOff();
-    virtual void play(double note, Util::TimeScale scale, unsigned multiplier);
-    virtual void play(double note, Sequencer::NoteScale scale, unsigned multiplier);
+    void play(double note, double velocity = 100.0);
+    void stop();
     void setVelocity(double velocity);
     void setMode(Oscillator::OscillatorMode mode) { mOscillator.setMode(mode); };
     void setEnvelopeActive(bool active = true) { mEnvelope.setActive(active); };
     void setEnvelope(double attackTime, double decayTime, double sustainLevel,
                      double releaseTime) {
+      mEnvelope.setActive();
       mEnvelope.setEnvelope(attackTime, decayTime, sustainLevel, releaseTime);
     };
 

@@ -4,7 +4,7 @@ using namespace tsal;
 
 #define MAX_VALUE 1000000
 
-void quickSort(Synth& synth, int* data, int low, int high) {
+void quickSort(ThreadSynth& synth, int* data, int low, int high) {
   if (low < high) {
     // Partition
     int pivotValue = data[low];
@@ -26,7 +26,7 @@ void quickSort(Synth& synth, int* data, int low, int high) {
 
 int main() {
   Mixer mixer;
-  Synth synth(&mixer);
+  ThreadSynth synth(&mixer);
   mixer.add(synth);
   synth.setEnvelopeActive(false);
 
@@ -39,9 +39,4 @@ int main() {
   
   // Sort the data
   quickSort(synth, data, 0, size);
-
-  for (int i = 0; i < size; i++) {
-    synth.noteOn(C3 + 45 * ((double) data[i] / MAX_VALUE));
-    Util::thread_sleep(100, Util::TimeScale::MICROSECOND);
-  }
 }

@@ -7,7 +7,6 @@ Effect::Effect(Mixer* mixer) : OutputDevice(mixer) {
 }
 
 Effect::~Effect() {
-  std::cout << "Removing Effect from Channl" << std::endl;
   if (parentChannel != nullptr)
     parentChannel->remove(*this);
 }

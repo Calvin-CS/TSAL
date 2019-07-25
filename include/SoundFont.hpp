@@ -25,8 +25,8 @@ class SoundFont : public Instrument {
     ~SoundFont();
     virtual double getOutput() override;
     virtual void setMixer(Mixer* mixer) override;
-    virtual void noteOn(double note, double velocity = 100.0) override;
-    virtual void noteOff(double note) override;
+    void play(double note, double velocity = 100.0);
+    void stop(double note); 
     void channelNoteOn(int channel, unsigned note, double velocity = 100.0);
     void channelNoteOff(int channel, unsigned note);
 

@@ -4,7 +4,7 @@ using namespace tsal;
 
 #define MAX_VALUE 100000
 
-void insertionSort(Synth& synth, int size, int* data) {
+void insertionSort(ThreadSynth& synth, int size, int* data) {
   int insertValue;
   int j;
   for (int i = 1; i < size; i++) {
@@ -22,7 +22,7 @@ void insertionSort(Synth& synth, int size, int* data) {
 
 int main() {
   Mixer mixer;
-  Synth synth(&mixer);
+  ThreadSynth synth(&mixer);
   mixer.add(synth);
   synth.setEnvelopeActive(false);
 

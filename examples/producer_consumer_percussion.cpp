@@ -40,13 +40,13 @@ void monitor(SharedQueue* queue, tsal::Mixer* mixer) {
   mixer->add(sf);
 
   int size = 0;
-  sf.noteOn(40);
+  sf.play(40);
   while(true) {
     tsal::Util::thread_sleep(1000);
     int currentSize = queue->size();
     if (size != currentSize) {
-      sf.noteOff(40 + size);
-      sf.noteOn(40 + currentSize);
+      sf.stop(40 + size);
+      sf.play(40 + currentSize);
       size = currentSize;
     }
   }
@@ -63,9 +63,9 @@ void produce(SharedQueue* queue, tsal::Mixer* mixer) {
     item = rand() % 50;
     std::cout << "producing: " << item << std::endl;
     queue->produce(item);
-    sf.noteOn(30 + item);
+    sf.play(30 + item);
     tsal::Util::thread_sleep(500);
-    sf.noteOff(30 + item);
+    sf.stop(30 + item);
     
   }
 }
@@ -80,9 +80,9 @@ void consume(SharedQueue* queue, tsal::Mixer* mixer) {
     tsal::Util::thread_sleep(rand() % 2000);
     item = queue->consume();
     std::cout << "consuming: " << item << std::endl;
-    sf.noteOn(50 + item);
+    sf.play(50 + item);
     tsal::Util::thread_sleep(500);
-    sf.noteOff(50 + item);
+    sf.stop(50 + item);
   }
 }
 

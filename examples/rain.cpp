@@ -48,11 +48,11 @@ int main(int argc, char* argv[]) {
     #pragma omp for
     for (unsigned i = 0; i < midiParser.size(); i++) {
       auto& me = midiParser[i];  
-      if (me.isNoteOn())
-        voices[id].noteOnTest(me.getKeyNumber(), me.getVelocity(), me.tick - timeOffset);
+      // if (me.isNoteOn())
+      //   voices[id].playTest(me.getKeyNumber(), me.getVelocity(), me.tick - timeOffset);
       
-      if (me.isNoteOff())
-        voices[id].noteOffTest(me.getKeyNumber(), me.tick - timeOffset);
+      // if (me.isNoteOff())
+      //   voices[id].stopTest(me.getKeyNumber(), me.tick - timeOffset);
     }
   }
   return 0;

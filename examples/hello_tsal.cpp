@@ -21,7 +21,7 @@ int main() {
   mixer.add(synth);
   
   // Play a note on the synth
-  synth.noteOn(tsal::C4);
+  synth.play(tsal::C4);
   
   // Wait for the user to stop the synth
   char input;
@@ -29,6 +29,6 @@ int main() {
   std::cin.get(input);
   
   // Stop the synth
-  synth.noteOff();
+  synth.stop();
   return 0;
 }

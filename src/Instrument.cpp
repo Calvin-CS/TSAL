@@ -7,7 +7,6 @@ Instrument::Instrument(Mixer *mixer) : OutputDevice(mixer){
 };
 
 Instrument::~Instrument() {
-  std::cout << "Removing Instrument from Channel" << std::endl;
   if (parentChannel != nullptr)
     parentChannel->remove(*this);
 }

@@ -4,7 +4,7 @@ using namespace tsal;
 
 #define MAX_VALUE 10000
 
-void selectionSort(Synth& synth, int size, int* data) {
+void selectionSort(ThreadSynth& synth, int size, int* data) {
   int min;
   int temp;
   for (int i = 0; i < size; i++) {
@@ -22,7 +22,7 @@ void selectionSort(Synth& synth, int size, int* data) {
 
 int main() {
   Mixer mixer;
-  Synth synth(&mixer);
+  ThreadSynth synth(&mixer);
   mixer.add(synth);
   synth.setEnvelopeActive(false);
   

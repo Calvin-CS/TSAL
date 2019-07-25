@@ -6,26 +6,28 @@ namespace tsal {
 ThreadSynth::ThreadSynth(Mixer* mixer) : Synth(mixer) {
 };
 
-/**
- * @brief Start playing a note after blocking the thread till tick time
- * 
- * @param note 
- * @param tick 
- */
-void ThreadSynth::noteOnTest(double note, double velocity, unsigned tick) {
-  mMixer->getSequencer().waitForTick(tick);
-  Synth::noteOn(note, velocity);
+void ThreadSynth::play(double note, Util::TimeScale scale, unsigned multiplier) {
+  Synth::play(note);
+  Util::thread_sleep(multiplier, scale);
 }
 
-/**
- * @brief Stop playing a note after blocking the thread till tick time
- * 
- * @param note 
- * @param tick 
- */
-void ThreadSynth::noteOffTest(double note, unsigned tick) {
-  mMixer->getSequencer().waitForTick(tick);
-  Synth::noteOff();
+void ThreadSynth::play(double note, Sequencer::NoteScale scale, unsigned multiplier) {
+  Synth::play(note);
+  Sequencer& seq = mMixer->getSequencer();
+  seq.waitForTick(seq.getTick() + seq.getTicksInNote(scale) * multiplier);
 }
+
+
+void ThreadSynth::stop(Util::TimeScale scale, unsigned multiplier) {
+  Synth::stop();
+  Util::thread_sleep(multiplier, scale);
+}
+
+void ThreadSynth::stop(Sequencer::NoteScale scale, unsigned multiplier) {
+  Synth::stop();
+  Sequencer& seq = mMixer->getSequencer();
+  seq.waitForTick(seq.getTick() + seq.getTicksInNote(scale) * multiplier);
+}
+
 
 }

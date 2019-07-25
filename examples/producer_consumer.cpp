@@ -15,7 +15,7 @@ class SharedQueue {
       mCondition.wait(lk, [this]{return mQueue.size() < mMaxQueueSize;}); 
       
       for (int i = 0; i < 100; i++) {
-        item->noteOn(item->getNote() + 0.25);
+        item->play(item->getNote() + 0.25);
         Util::thread_sleep(5);
       }
       item->setVolume(0.5);
@@ -33,10 +33,10 @@ class SharedQueue {
       
       front->setVolume(1);
       for (int i = 0; i < 100; i++) {
-        front->noteOn(front->getNote() + 0.25);
+        front->play(front->getNote() + 0.25);
         Util::thread_sleep(5);
       }
-      front->noteOff();
+      front->stop();
       
       mQueue.pop();
       lk.unlock();
@@ -58,7 +58,7 @@ void produce(SharedQueue* queue, Mixer* mixer) {
     mixer->add(*item);
     item->setEnvelopeActive(false);
     item->setMode(Oscillator::SINE);
-    item->noteOn(C3);
+    item->play(C3);
     
     queue->produce(item);
   }

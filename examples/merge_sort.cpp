@@ -102,7 +102,7 @@ struct sortData {
  * \details Different colors represent different sections being sorted.
  * \details Once all items have been sorted and merged, the animation stops and all lines are colored white.
  */
-void mergeSortFunction(std::vector<Synth>& voices, int threads, int size) {
+void mergeSortFunction(std::vector<ThreadSynth>& voices, int threads, int size) {
   const int IPF = 1;      // Iterations per frame
   const int maxNumber = 100000;
   int* numbers = new int[size];       // Array to store the data
@@ -127,6 +127,7 @@ void mergeSortFunction(std::vector<Synth>& voices, int threads, int size) {
     //std::cout << tid << std::endl;
     while (true) {
       if (sd[tid]->state == S_WAIT) {  //Merge waiting threads
+        voice.stop();
 
         if ((tid % sd[tid]->size) > 0) {
           sd[tid]->state = S_DONE;
@@ -143,13 +144,13 @@ void mergeSortFunction(std::vector<Synth>& voices, int threads, int size) {
         sd[tid]->sortStep();
 
       double number;
-      if (sd[tid]->state != S_HIDE) {
+      MergeState state = sd[tid]->state;
+      if (state != S_HIDE && state != S_DONE) {
         for (int i = sd[tid]->first; i < sd[tid]->last; ++i) {
           number = numbers[i];
           // If we are processing the item, play a sound
           if (i == sd[tid]->left) {
-            voice.noteOn(C2 + (tid * 3) + 60 * (number / maxNumber));
-            Util::thread_sleep(100, Util::TimeScale::MICROSECOND);
+            voice.play(C2 + (tid * 3) + 60 * (number / maxNumber), Util::MICROSECOND, 100);
           }
         } 
       }
@@ -181,11 +182,11 @@ int main() {
     for (threads = 1; threads < t; threads *=2);  //Force threads to be a power of 2
 
     Mixer mixer;
-    std::vector<Synth> voices(threads, Synth(&mixer));
+    std::vector<ThreadSynth> voices(threads, ThreadSynth(&mixer));
     for (unsigned i = 0; i < voices.size(); i++) {
       mixer.add(voices[i]);
       voices[i].setVolume(0.5);
       voices[i].setEnvelopeActive(false);      
     } 
-    mergeSortFunction(voices, threads, 10000);
+    mergeSortFunction(voices, threads, 50000);
 }

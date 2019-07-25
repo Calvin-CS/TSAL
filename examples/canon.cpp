@@ -8,7 +8,7 @@
  * If this instrument was used in a process with only one thread, there could only be 
  * one synth playing at a time. To achieve a multi-instrument sound, each ThreadSynth
  * will need its own thread. The omp parallel pragma creates these threads for each synth
- * so that when the ThreadSynth makes a call to noteOn or noteOff, only that synth's thread
+ * so that when the ThreadSynth makes a call to play or stop, only that synth's thread
  * is blocked
  * 
  * A canon (or a round) is a musical composition technique that takes a melody and duplicates it over multiple voices with some variation in time offset or pitch.
@@ -54,11 +54,11 @@ int main(int argc, char* argv[]) {
 
     for (unsigned i = 0; i < midiParser.size(); i++) {
       auto& me = midiParser[i];
-      if (me.isNoteOn())
-        voices[id].noteOnTest(me.getKeyNumber(), me.getVelocity(), me.tick + timeOffset);
+      // if (me.isNoteOn())
+        //voices[id].play(me.getKeyNumber(), me.getVelocity(), me.tick + timeOffset);
 
-      if (me.isNoteOff())
-        voices[id].noteOffTest(me.getKeyNumber(), me.tick + timeOffset);
+      // if (me.isNoteOff())
+        //voices[id].stop(me.getKeyNumber(), me.tick + timeOffset);
     }
   }
   return 0;

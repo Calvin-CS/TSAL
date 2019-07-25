@@ -8,13 +8,13 @@ int main() {
   Synth synth(&mixer);
   Delay delay(&mixer);
   PolySynth poly(&mixer);
-  poly.noteOn(C4);
+  poly.play(C4);
 
   Channel channel2(&mixer);
   Channel channel(&mixer);
   
   {
-    Synth synth2(&mixer);
+    ThreadSynth synth2(&mixer);
     synth2.setVolume(0.0);
     synth2.play(C5, Util::SECOND, 5);
   }
@@ -27,7 +27,7 @@ int main() {
   // synth.setMode(Oscillator::SAW);
   // channel2.add(synth);
   // synth.play(C4, Sequencer::EIGHTH, 1);
-  // synth.noteOff();
+  // synth.stop();
 
 
   // mixer.add(channel);
@@ -42,9 +42,9 @@ int main() {
   // }
   // soundfont.setVolume(0.5);
   // soundfont.setPreset(4);
-  // soundfont.noteOn(C4);
+  // soundfont.play(C4);
   // Util::thread_sleep(1000);
-  // soundfont.noteOff(C4);
+  // soundfont.stop(C4);
   // Util::thread_sleep(2000);
 
   // mixer.remove(channel);

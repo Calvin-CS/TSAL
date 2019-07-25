@@ -12,9 +12,9 @@ OutputDevice::OutputDevice(Mixer* mixer) {
  * 
  * @return double 
  */
-double OutputDevice::getOutput() { 
-  return 0.0; 
-}
+// double OutputDevice::getOutput() { 
+//   return 0.0; 
+// }
 
 /**
  * @brief Set the active status of the device

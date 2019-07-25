@@ -27,11 +27,11 @@ double SoundFont::getOutput() {
   return buffer[0] * mAmp;
 }
 
-void SoundFont::noteOn(double note, double velocity) {
+void SoundFont::play(double note, double velocity) {
   tsf_note_on(mSoundFont, mPresetIndex, note, velocity/127.0);
 }
 
-void SoundFont::noteOff(double note) {
+void SoundFont::stop(double note) {
   tsf_note_off(mSoundFont, mPresetIndex, note);
 }
 

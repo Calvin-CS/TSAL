@@ -2,7 +2,7 @@
 
 using namespace tsal;
 
-void bubbleSort(Synth& synth, int size, int* data) {
+void bubbleSort(ThreadSynth& synth, int size, int* data) {
   int temp;
   for (int i = 0; i < size; i++) {
     for (int j = size; j > i; j--) {
@@ -20,9 +20,8 @@ void bubbleSort(Synth& synth, int size, int* data) {
 
 int main() {
   Mixer mixer;
-  Synth synth(&mixer);
+  ThreadSynth synth(&mixer);
   mixer.add(synth);
-  synth.setEnvelopeActive(false);
   
   // Generate the data
   const int size = 500;

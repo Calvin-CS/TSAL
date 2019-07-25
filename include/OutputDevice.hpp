@@ -18,7 +18,7 @@ class OutputDevice {
   public:
     OutputDevice(Mixer* mixer);
     virtual ~OutputDevice() {};
-    virtual double getOutput();
+    virtual double getOutput() = 0;
     virtual void setActive(bool active = true);
     virtual void setMixer(Mixer* mixer) { mMixer = mixer; };
     virtual void setParentChannel(Channel* channel){};

@@ -10,7 +10,6 @@ Channel::Channel(Mixer* mixer) : OutputDevice(mixer), mChannelIn(mixer), mRouted
 }
 
 Channel::~Channel() {
-  std::cout << "Removing Channel from Channel" << std::endl;
   if (parentChannel != nullptr)
     parentChannel->remove(*this);
 }

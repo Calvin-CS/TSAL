@@ -12,10 +12,8 @@ namespace tsal {
  */
 class Instrument : public OutputDevice {
   public:
-    Instrument(Mixer *mixer);
+    Instrument(Mixer* mixer);
     virtual ~Instrument();
-    virtual void noteOn(double note, double velocity) {};
-    virtual void noteOff(double note) {};
     virtual void setParentChannel(Channel* channel) override;
 };
 

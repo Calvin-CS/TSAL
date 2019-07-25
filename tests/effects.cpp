@@ -12,7 +12,7 @@ void testEffectChain() {
 
   mixer.add(channel);
   channel.add(synth);
-  synth.noteOn(C4);
+  synth.play(C4);
   
   channel.add(compressor[0]);
   channel.add(compressor[1]);

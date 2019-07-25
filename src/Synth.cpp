@@ -5,6 +5,7 @@ namespace tsal {
 
 
 Synth::Synth(Mixer *mixer) : Instrument(mixer), mOscillator(mixer), mEnvelope(mixer) {
+  mEnvelope.setActive(false);
 };
 
 double Synth::getOutput() {
@@ -17,7 +18,7 @@ double Synth::getOutput() {
  * @param note 
  * @param velocity 
  */
-void Synth::noteOn(double note, double velocity) {
+void Synth::play(double note, double velocity) {
   mNote = note;
   mOscillator.setActive();
   mEnvelope.start();
@@ -25,23 +26,13 @@ void Synth::noteOn(double note, double velocity) {
   mOscillator.setNote(note);
 }
 
-void Synth::play(double note, Util::TimeScale scale, unsigned multiplier) {
-  noteOn(note);
-  Util::thread_sleep(multiplier, scale);
-}
-
-void Synth::play(double note, Sequencer::NoteScale scale, unsigned multiplier) {
-  noteOn(note);
-  Sequencer& seq = mMixer->getSequencer();
-  seq.waitForTick(seq.getTick() + seq.getTicksInNote(scale) * multiplier);
-}
 
 /**
  * @brief Stop playing a note. However, this synth is monophonic so the note is irrelavant
  * 
  * @param note 
  */
-void Synth::noteOff() {
+void Synth::stop() {
   if (mEnvelope.isActive()) {
     mEnvelope.stop();
   } else {
