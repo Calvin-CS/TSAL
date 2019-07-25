@@ -3,7 +3,7 @@
 
 namespace tsal {
 
-SoundFont::SoundFont(std::string filename) {
+SoundFont::SoundFont(Mixer* mixer, std::string filename) : Instrument(mixer) {
   mSoundFont = tsf_load_filename(filename.c_str());
   if (mSoundFont == nullptr) {
     std::cout << "Failed to load SoundFont: " << filename << std::endl;
@@ -18,7 +18,7 @@ SoundFont::~SoundFont() {
 
 void SoundFont::setMixer(Mixer* mixer) {
   OutputDevice::setMixer(mixer);
-  tsf_set_output(mSoundFont, TSF_MONO, getMixer()->getSampleRate(), 0);
+  tsf_set_output(mSoundFont, TSF_MONO, mMixer->getSampleRate(), 0);
 }
 
 double SoundFont::getOutput() {

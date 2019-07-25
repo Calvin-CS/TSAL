@@ -22,8 +22,7 @@ namespace tsal {
  */
 class Compressor : public Effect {
   public:
-    Compressor()
-        : mBuffer(COMPRESSOR_MAX_BUFFER), mEnvelope(COMPRESSOR_MAX_BUFFER){};
+    Compressor(Mixer* mixer);
     virtual double getOutput() override;
     virtual void setMixer(Mixer* mixer) override;
     void setAttackTime(double attackTime);

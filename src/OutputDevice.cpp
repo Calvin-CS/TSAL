@@ -2,6 +2,11 @@
 #include "Mixer.hpp"
 
 namespace tsal {
+
+OutputDevice::OutputDevice(Mixer* mixer) {
+  setMixer(mixer);
+}
+
 /**
  * @brief Get the output for the device
  * 
@@ -50,13 +55,6 @@ double OutputDevice::getVolume() const {
 
 bool OutputDevice::isActive() const {
   return mActive;
-}
-
-Mixer* OutputDevice::getMixer() {
-  if (mMixer == nullptr) {
-    std::cout << "OutputDevice: Mixer not set, make sure to add the device to a mixer or channel before using it" << std::endl;
-  }
-  return mMixer;
 }
 
 Util::ParameterRange<double> OutputDevice::mGainRange = std::make_pair(-50.0, 50.0);

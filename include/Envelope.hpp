@@ -19,6 +19,7 @@ namespace tsal {
  */
 class Envelope : public OutputDevice {
   public:
+    Envelope(Mixer* mixer);
     enum EnvelopeState {
       OFF,
       ATTACK,

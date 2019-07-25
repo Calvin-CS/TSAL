@@ -21,7 +21,7 @@ namespace tsal {
  */
 class SoundFont : public Instrument {
   public:
-    SoundFont(std::string filename);
+    SoundFont(Mixer* mixer, std::string filename);
     ~SoundFont();
     virtual double getOutput() override;
     virtual void setMixer(Mixer* mixer) override;

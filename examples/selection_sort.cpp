@@ -22,9 +22,10 @@ void selectionSort(Synth& synth, int size, int* data) {
 
 int main() {
   Mixer mixer;
-  Synth synth;
+  Synth synth(&mixer);
   mixer.add(synth);
   synth.setEnvelopeActive(false);
+  
   // Generate the data
   const int size = 500;
   int* data = new int[size];

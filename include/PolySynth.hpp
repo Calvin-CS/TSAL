@@ -18,7 +18,7 @@ namespace tsal {
  */
 class PolySynth : public Instrument {
   public:
-    PolySynth();
+    PolySynth(Mixer* mixer);
     virtual double getOutput() override;
     virtual void noteOn(double note, double velocity = 100.0) override;
     virtual void noteOff(double note) override;
@@ -26,7 +26,7 @@ class PolySynth : public Instrument {
  private:
     Synth* getInactiveVoice();
     Oscillator::OscillatorMode mMode;
-    Synth mVoices[20];
+    std::vector<Synth> mVoices;
 };
   
 }

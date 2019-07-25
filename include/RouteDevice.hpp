@@ -16,6 +16,7 @@ namespace tsal {
 template <typename DeviceType>
 class RouteDevice : public InputDevice, public OutputDevice {
   public:
+    RouteDevice(Mixer *mixer) : OutputDevice(mixer){};
     virtual double getInput() override;
     virtual double getOutput() override;
     virtual void setMixer(Mixer* mixer) override;

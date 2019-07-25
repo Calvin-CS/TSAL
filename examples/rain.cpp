@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
   tsal::MidiParser midiParser(numTracks, argv[1]);
 
   tsal::Mixer mixer;
-  std::vector<tsal::ThreadSynth> voices(numTracks);  
+  std::vector<tsal::ThreadSynth> voices(numTracks, tsal::ThreadSynth(&mixer));  
 
   omp_set_num_threads(numTracks);
 
@@ -49,10 +49,10 @@ int main(int argc, char* argv[]) {
     for (unsigned i = 0; i < midiParser.size(); i++) {
       auto& me = midiParser[i];  
       if (me.isNoteOn())
-        voices[id].noteOn(me.getKeyNumber(), me.getVelocity(), me.tick - timeOffset);
+        voices[id].noteOnTest(me.getKeyNumber(), me.getVelocity(), me.tick - timeOffset);
       
       if (me.isNoteOff())
-        voices[id].noteOff(me.getKeyNumber(), me.tick - timeOffset);
+        voices[id].noteOffTest(me.getKeyNumber(), me.tick - timeOffset);
     }
   }
   return 0;

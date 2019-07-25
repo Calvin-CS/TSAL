@@ -26,7 +26,7 @@ void quickSort(Synth& synth, int* data, int low, int high) {
 
 int main() {
   Mixer mixer;
-  Synth synth;
+  Synth synth(&mixer);
   mixer.add(synth);
   synth.setEnvelopeActive(false);
 

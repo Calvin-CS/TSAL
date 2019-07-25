@@ -12,7 +12,6 @@ int main() {
   for (unsigned i = 0; i < voices.size(); i++) {
     voices[i].setGain(-20);
     voices[i].setNote(chord[i]);
-    mixer.add(voices[i]);
   }
 
   omp_set_num_threads(NUM_THREADS);

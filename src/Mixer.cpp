@@ -70,8 +70,6 @@ void Mixer::initalizeStream() {
   mSequencer.setPPQ(240);
 
   // Add a compressor so people don't break their sound cards
-  mMaster.setMixer(this);
-  mCompressor.setMixer(this);
   mMaster.add(mCompressor);
 
   try {
@@ -83,7 +81,7 @@ void Mixer::initalizeStream() {
   } 
 }
 
-Mixer::Mixer() {
+Mixer::Mixer() : mMaster(this), mCompressor(this) {
   mChannels = 1;
   initalizeStream();
 }
@@ -93,7 +91,7 @@ Mixer::Mixer() {
  * 
  * @param sampleRate if left blank, TSAudio will default to the highest sample rate supported
  */
-Mixer::Mixer(unsigned sampleRate) {
+Mixer::Mixer(unsigned sampleRate)  : mMaster(this), mCompressor(this) {
   mSampleRate = sampleRate;
   // Eventually it would be nice to play in stereo, but that sounds hard for now
   mChannels = 1;

@@ -1,19 +1,27 @@
 #include "tsal.hpp"
 #include <cassert>
 
+using namespace tsal;
+
 void testConstructors() {
-  tsal::Mixer mixer;
-  tsal::Mixer mixer1(44100);
-  assert(mixer1.getSampleRate() == 44100);
+  Mixer mixer;
+  Mixer mixer2(44100);
+  assert(mixer2.getSampleRate() == 44100);
+
+  Synth synth(&mixer);
+  mixer.add(synth);
+  mixer2.add(synth);
+  mixer2.remove(synth);
+  mixer.add(synth);
 }
 
 void testAddRemove() {
-  tsal::Mixer mixer;
-  tsal::Channel channel;
-  tsal::Synth synth[2];
-  tsal::Delay delay;
+  Mixer mixer;
+  Channel channel(&mixer);
+  Synth synth[2]{Synth(&mixer), Synth(&mixer)};
+  Delay delay(&mixer);
   // Get a reference to the master channel
-  tsal::Channel& master = mixer.getMaster();
+  Channel& master = mixer.getMaster();
   // The master channel will probably come with some number of default effects
   int defaultEffectCount = master.getEffectCount();
   

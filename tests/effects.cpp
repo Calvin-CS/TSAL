@@ -1,14 +1,18 @@
 #include "tsal.hpp"
 #include <cassert>
 
+using namespace tsal;
+
 void testEffectChain() {
-  tsal::Mixer mixer;
-  tsal::Synth synth;
-  tsal::Channel channel;
-  tsal::Compressor compressor[3];
+  Mixer mixer;
+  Synth synth(&mixer);
+  Channel channel(&mixer);
+  Compressor compressor[3]{Compressor(&mixer), Compressor(&mixer),
+                           Compressor(&mixer)};
+
   mixer.add(channel);
   channel.add(synth);
-  synth.noteOn(tsal::C4);
+  synth.noteOn(C4);
   
   channel.add(compressor[0]);
   channel.add(compressor[1]);
@@ -34,9 +38,9 @@ void testEffectChain() {
 }
 
 void testCompressor() {
-  tsal::Mixer mixer;
-  tsal::Synth synth;
-  tsal::Compressor compressor;
+  Mixer mixer;
+  Synth synth(&mixer);
+  Compressor compressor(&mixer);
   mixer.add(compressor);
   mixer.add(synth);
 

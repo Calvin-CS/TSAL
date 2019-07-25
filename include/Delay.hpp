@@ -14,14 +14,16 @@ namespace tsal {
  */
 class Delay : public Effect {
   public:
+    Delay(Mixer *mixer);
+    void init();
     virtual void setMixer(Mixer* mixer) override;
     virtual double getOutput() override;
     void setDelay(unsigned delay);
     void setFeedback(double feedback);
   private:
     std::unique_ptr<Buffer<double>> mBuffer = nullptr;
-    unsigned mCounter = 0;
-    unsigned mDelay = 0;
+    int mCounter = 0;
+    int mDelay = 0;
     double mFeedback = 0.5;
 
     Util::ParameterRange<unsigned> mDelayRange;

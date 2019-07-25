@@ -15,9 +15,9 @@ int main() {
   tsal::Mixer mixer;
   
   // Create the synthesizer object
-  tsal::Synth synth;
+  tsal::Synth synth(&mixer);
   
-  // Add the synth to the master channel in the mixer
+  // Add the synth to the mixer
   mixer.add(synth);
   
   // Play a note on the synth

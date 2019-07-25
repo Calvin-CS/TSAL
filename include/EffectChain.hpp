@@ -13,6 +13,7 @@ namespace tsal {
  */
 class EffectChain : public OutputDevice {
   public:
+    EffectChain(Mixer *mixer) : OutputDevice(mixer){};
     void setInput(OutputDevice& input);
     virtual double getOutput() override;
     virtual void setMixer(Mixer* mixer) override;

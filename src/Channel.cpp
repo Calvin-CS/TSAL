@@ -3,13 +3,23 @@
 
 namespace tsal {
   
-Channel::Channel() {
+Channel::Channel(Mixer* mixer) : OutputDevice(mixer), mChannelIn(mixer), mRoutedInstruments(mixer), mRoutedChannels(mixer), mEffectChain(mixer) {
   mChannelIn.add(mRoutedInstruments);
   mChannelIn.add(mRoutedChannels);
   mEffectChain.setInput(mChannelIn);
 }
 
-Channel::~Channel() {}
+Channel::~Channel() {
+  std::cout << "Removing Channel from Channel" << std::endl;
+  if (parentChannel != nullptr)
+    parentChannel->remove(*this);
+}
+
+void Channel::setParentChannel(Channel* channel) {
+  if (parentChannel != nullptr)
+    parentChannel->remove(*this);
+  parentChannel = channel;
+}
 
 void Channel::setMixer(Mixer* mixer) {
   mChannelIn.setMixer(mixer);
@@ -29,6 +39,7 @@ double Channel::getOutput() {
  * @param effect 
  */
 void Channel::add(Effect& effect) {
+  effect.setParentChannel(this);
   mEffectChain.add(effect);
 }
 /**
@@ -46,6 +57,7 @@ void Channel::remove(Effect& effect) {
 * @param instrument 
  */
 void Channel::add(Instrument& instrument) {
+  instrument.setParentChannel(this);
   mRoutedInstruments.add(instrument);
 }
 
@@ -65,6 +77,7 @@ void Channel::remove(Instrument& instrument) {
  */
 void Channel::add(Channel& channel) {
   if (&channel != this) {
+    channel.setParentChannel(this);
     mRoutedChannels.add(channel);
   }
 }

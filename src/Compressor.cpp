@@ -5,6 +5,9 @@
   
 namespace tsal {
 
+Compressor::Compressor(Mixer* mixer) : Effect(mixer), mBuffer(COMPRESSOR_MAX_BUFFER), mEnvelope(COMPRESSOR_MAX_BUFFER) {
+};
+
 // This may not be the best implementation, maybe a circular buffer would work better, but 
 // it seems to be fine
 double Compressor::getOutput() {
@@ -89,7 +92,7 @@ void Compressor::calculateSlope() {
  */
 void Compressor::setAttackTime(double attackTime) {
   attackTime = Util::checkParameterRange("Compressor: AttackTime", attackTime, mAttackTimeRange);
-  mAttackGain = attackTime == 0.0 ? 0.0 : std::exp(-1.0 / (getMixer()->getSampleRate() * attackTime/1000));
+  mAttackGain = attackTime == 0.0 ? 0.0 : std::exp(-1.0 / (mMixer->getSampleRate() * attackTime/1000));
 }
 
 /**
@@ -99,7 +102,7 @@ void Compressor::setAttackTime(double attackTime) {
  */
 void Compressor::setReleaseTime(double releaseTime) {
   releaseTime = Util::checkParameterRange("Compressor: ReleaseTime", releaseTime, mReleaseTimeRange);
-  mReleaseGain = releaseTime == 0.0 ? 0.0 : std::exp(-1.0 / (getMixer()->getSampleRate() * releaseTime/1000));
+  mReleaseGain = releaseTime == 0.0 ? 0.0 : std::exp(-1.0 / (mMixer->getSampleRate() * releaseTime/1000));
 }
 
 /**

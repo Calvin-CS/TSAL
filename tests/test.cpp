@@ -1,15 +1,33 @@
 #include "tsal.hpp"
 #include <omp.h>
 
+using namespace tsal;
+
 int main() {
-  tsal::Mixer mixer;
-  tsal::Channel channel;
-  tsal::Channel channel2;
-  tsal::SoundFont soundfont("/usr/share/soundfonts/FluidR3_GM.sf2");
-  tsal::Synth synth;
-  mixer.add(synth);
-  std::cout << "Playing synth" << std::endl;
-  std::cout << "Done" << std::endl;
+  Mixer mixer;
+  Synth synth(&mixer);
+  Delay delay(&mixer);
+  PolySynth poly(&mixer);
+  poly.noteOn(C4);
+
+  Channel channel2(&mixer);
+  Channel channel(&mixer);
+  
+  {
+    Synth synth2(&mixer);
+    synth2.setVolume(0.0);
+    synth2.play(C5, Util::SECOND, 5);
+  }
+    
+  // channel2.add(delay);
+  // channel.add(synth);
+  // std::cout << "Playing synth" << std::endl;
+
+  // synth.play(C4, Sequencer::HALF, 2);
+  // synth.setMode(Oscillator::SAW);
+  // channel2.add(synth);
+  // synth.play(C4, Sequencer::EIGHTH, 1);
+  // synth.noteOff();
 
 
   // mixer.add(channel);
@@ -24,12 +42,12 @@ int main() {
   // }
   // soundfont.setVolume(0.5);
   // soundfont.setPreset(4);
-  // soundfont.noteOn(tsal::C4);
-  // tsal::Util::thread_sleep(1000);
-  // soundfont.noteOff(tsal::C4);
-  // tsal::Util::thread_sleep(2000);
+  // soundfont.noteOn(C4);
+  // Util::thread_sleep(1000);
+  // soundfont.noteOff(C4);
+  // Util::thread_sleep(2000);
 
   // mixer.remove(channel);
   
-  return 0;
+  exit (0);
 }

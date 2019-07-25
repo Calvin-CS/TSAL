@@ -18,7 +18,7 @@ void EffectChain::setMixer(Mixer* mixer) {
 } 
 
 void EffectChain::add(Effect& effect) {
-   effect.setMixer(mMixer);
+  effect.setMixer(mMixer);
   if (mEffects.size() == 0) {
     effect.setInput(mInput);
     mEffects.push_back(&effect);

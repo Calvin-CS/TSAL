@@ -1,8 +1,6 @@
 #include "tsal.hpp"
 #include <omp.h>
 
-#define NUM_THREADS 2
-
 /** @example hello_tsal_threads.cpp
  *
  * A more complex "Hello World!" example that uses multithreading
@@ -20,7 +18,7 @@ int main(int argc, char* argv[]) {
       
   // Create the mixer and array of synths
   tsal::Mixer mixer;
-  tsal::Synth synths[numThreads];
+  std::vector<tsal::Synth> synths(numThreads, tsal::Synth(&mixer));
 
   // Setup omp with a number of threads
   omp_set_num_threads(numThreads);

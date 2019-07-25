@@ -3,6 +3,10 @@
 
 namespace tsal {
 
+
+Synth::Synth(Mixer *mixer) : Instrument(mixer), mOscillator(mixer), mEnvelope(mixer) {
+};
+
 double Synth::getOutput() {
   return mOscillator.getOutput() * mEnvelope.getOutput() * mAmp * (mVelocity / 127.0);
 }
@@ -28,7 +32,7 @@ void Synth::play(double note, Util::TimeScale scale, unsigned multiplier) {
 
 void Synth::play(double note, Sequencer::NoteScale scale, unsigned multiplier) {
   noteOn(note);
-  Sequencer& seq = getMixer()->getSequencer();
+  Sequencer& seq = mMixer->getSequencer();
   seq.waitForTick(seq.getTick() + seq.getTicksInNote(scale) * multiplier);
 }
 

@@ -3,19 +3,31 @@
 
 namespace tsal {
 
-void Delay::setMixer(Mixer* mixer) {
-  OutputDevice::setMixer(mixer);
-  mBuffer = std::make_unique<Buffer<double>>(getMixer()->getSampleRate() * 2);
+Delay::Delay(Mixer* mixer) : Effect(mixer) {
+  init();
+}
+
+void Delay::init() {
+  mBuffer = std::make_unique<Buffer<double>>(mMixer->getSampleRate() * 2);
   Delay::mDelayRange = std::make_pair(0, mBuffer->size());
   setDelay(1000);
 }
 
+void Delay::setMixer(Mixer* mixer) {
+  OutputDevice::setMixer(mixer);
+  init();
+}
+
 double Delay::getOutput() {
-  if (!mActive) {
-    return getInput();
+  double const input = getInput();
+  // We have to check if the buffer is null because Delay gets
+  // added to the mixer master channel before the buffer is initialized
+  // this is sort of a temporary fix until some better is figured out
+  if (!mActive || mBuffer == nullptr) {
+    return input;
   }
 
-  auto& buffer = *mBuffer;
+  auto& buffer = *mBuffer.get();
   int offset = mCounter - mDelay;
 
   // Clip lookback buffer-bound
@@ -23,14 +35,14 @@ double Delay::getOutput() {
     offset = buffer.size() + offset;
 
   double const output = buffer[offset];
-  double const bufferValue = getInput() + output * mFeedback;
+  double const bufferValue = input + output * mFeedback;
   buffer[mCounter++] = bufferValue;
 
   // Clip delay counter
   if(mCounter >= buffer.size())
     mCounter -= buffer.size();
 
-  return output;
+  return output + input;
 }
 
 /**
@@ -39,7 +51,7 @@ double Delay::getOutput() {
  * @param delay (ms)
  */
 void Delay::setDelay(unsigned delay) {
-  delay = std::round(getMixer()->getSampleRate() * ((double) delay / 1000));
+  delay = std::round(mMixer->getSampleRate() * ((double) delay / 1000));
   mDelay = Util::checkParameterRange("Delay: Delay", delay, mDelayRange);
 }
 

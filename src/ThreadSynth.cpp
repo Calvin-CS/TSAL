@@ -3,15 +3,16 @@
 
 namespace tsal {
 
+ThreadSynth::ThreadSynth(Mixer* mixer) : Synth(mixer) {
+};
+
 /**
  * @brief Start playing a note after blocking the thread till tick time
  * 
  * @param note 
  * @param tick 
  */
-void ThreadSynth::noteOn(double note, double velocity, unsigned tick) {
-  if (mMixer == nullptr)
-    return;
+void ThreadSynth::noteOnTest(double note, double velocity, unsigned tick) {
   mMixer->getSequencer().waitForTick(tick);
   Synth::noteOn(note, velocity);
 }
@@ -22,11 +23,9 @@ void ThreadSynth::noteOn(double note, double velocity, unsigned tick) {
  * @param note 
  * @param tick 
  */
-void ThreadSynth::noteOff(double note, unsigned tick) {
-  if (mMixer == nullptr)
-    return;
+void ThreadSynth::noteOffTest(double note, unsigned tick) {
   mMixer->getSequencer().waitForTick(tick);
-  //Synth::noteOff(note);
+  Synth::noteOff();
 }
 
 }
