@@ -2,6 +2,9 @@
 
 namespace tsal {
 
+// Ensures that a parameter is never actually set to 0. A value of 0
+// does not work with calculateMultiplier function, so just set a really
+// small value when 0 is specified
 template <typename Item>
 Item checkParameterRangeWithMax(const std::string& name, Item value, std::pair<Item, Item> range) {
   return std::max(Util::checkParameterRange(name, value, range), MIN_VALUE);
@@ -72,6 +75,7 @@ double Envelope::getOutput() {
  * Human sense are logarithmic, the envelope needs to change exponentially
  * This function calculates an appropriate multiplier that gets the envelope value 
  * from a start level to an end level in the number of specified samples (time)
+ *
  * @param startLevel 
  * @param endLevel 
  * @param lengthInSamples

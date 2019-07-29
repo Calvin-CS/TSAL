@@ -17,6 +17,11 @@ double PolySynth::getOutput() {
   return output;
 }
 
+/* @brief Play a note with velocity
+ *
+ * @param note
+ * @param velocity
+ */
 void PolySynth::play(double note, double velocity) {
   Synth* voice = getInactiveVoice();
   if (voice == nullptr) {
@@ -26,6 +31,10 @@ void PolySynth::play(double note, double velocity) {
   voice->play(note, velocity);
 }
 
+/* @brief Stop playing a note
+ *
+ * @param note
+ */
 void PolySynth::stop(double note) {
   for (unsigned i = 0; i < NUM_VOICES; i++) {
     if (mVoices[i].getNote() == note) {
@@ -35,6 +44,10 @@ void PolySynth::stop(double note) {
   }
 }
 
+/* @brief Set the mode of the underlying synths
+ *
+ * @param mode
+ */
 void PolySynth::setMode(Oscillator::OscillatorMode mode) {
   for (unsigned i = 0; i < NUM_VOICES; i++) {
     mVoices[i].setMode(mode);
@@ -42,6 +55,8 @@ void PolySynth::setMode(Oscillator::OscillatorMode mode) {
 }
 
 Synth* PolySynth::getInactiveVoice() {
+  // Whenever a note is pressed, an inactive voice needs to be found an played
+  // If all the voices are active, a nullptr is returned
   Synth* voice = nullptr;
   for (unsigned i = 0; i < NUM_VOICES; i++) {
     if (!mVoices[i].isActive()) {

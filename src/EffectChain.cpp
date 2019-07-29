@@ -17,6 +17,10 @@ void EffectChain::setMixer(Mixer* mixer) {
   }
 } 
 
+/* @brief Add an effect to the end of the chain
+ *
+ * @param effect
+ */
 void EffectChain::add(Effect& effect) {
   effect.setMixer(mMixer);
   if (mEffects.size() == 0) {
@@ -28,6 +32,10 @@ void EffectChain::add(Effect& effect) {
   }
 }
 
+/* @brief Remove an effect from the effect chain
+ *
+ * @param effect
+ */
 void EffectChain::remove(Effect& effect) {
   if (mEffects.size() == 0) {
     return;

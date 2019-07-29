@@ -188,5 +188,5 @@ int main() {
       voices[i].setVolume(0.5);
       voices[i].setEnvelopeActive(false);      
     } 
-    mergeSortFunction(voices, threads, 50000);
+    mergeSortFunction(voices, threads, 25000);
 }

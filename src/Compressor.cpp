@@ -8,9 +8,11 @@ namespace tsal {
 Compressor::Compressor(Mixer* mixer) : Effect(mixer), mBuffer(COMPRESSOR_MAX_BUFFER), mEnvelope(COMPRESSOR_MAX_BUFFER) {
 };
 
-// This may not be the best implementation, maybe a circular buffer would work better, but 
-// it seems to be fine
 double Compressor::getOutput() {
+  /* The Compressor uses a circular buffer where a value is written behind 
+   * the value that was read. Once the buffer is full of new values, all
+   * of the samples in the buffer are processed.
+   */
   // If not active, just route the samples through without applying an filtering
   if (!mActive) {
     return getInput();

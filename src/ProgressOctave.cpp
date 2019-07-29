@@ -28,6 +28,10 @@ void ProgressOctave::setMixer(Mixer* mixer) {
   }
 }
 
+/* @brief Update the oscillator that corresponds to the id
+ *
+ * @param id
+ */
 void ProgressOctave::update(unsigned id) {
   mOscillators[id]->setFrequency(mOscillators[id]->getFrequency() + mStepValue);
 }

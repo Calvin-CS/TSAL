@@ -14,8 +14,8 @@ class Channel;
 class ChannelDevice : public OutputDevice {
   public:
     ChannelDevice(Mixer* mixer) : OutputDevice(mixer){};
-    virtual void setParentChannel(Channel* channel) = 0;
   protected:
+    virtual void setParentChannel(Channel* channel) = 0;
     Channel* mParentChannel = nullptr;
 };
 

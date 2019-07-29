@@ -20,7 +20,7 @@ namespace tsal {
  * and channel mixing
  * 
  * To use TSAL, the Mixer class needs to be initiliazed at the start of the project.
- * All other audio devices will be routed through the Mixer
+ * All other audio devices will be routed through the Mixer's master channel
  */
 class Mixer : public InputDevice {
   public:

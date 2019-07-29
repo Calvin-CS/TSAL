@@ -7,6 +7,12 @@ Delay::Delay(Mixer* mixer) : Effect(mixer) {
   init();
 }
 
+/* @brief Dynamically allocates a buffer based on the sample rate
+ *
+ * Since the buffer since of the delay is dependent on the sample
+ * rate, the buffer has to be reallocated whenever the sample rate
+ * changes
+ */
 void Delay::init() {
   mBuffer = std::make_unique<Buffer<double>>(mMixer->getSampleRate() * 2);
   Delay::mDelayRange = std::make_pair(0, mBuffer->size());
@@ -20,10 +26,7 @@ void Delay::setMixer(Mixer* mixer) {
 
 double Delay::getOutput() {
   double const input = getInput();
-  // We have to check if the buffer is null because Delay gets
-  // added to the mixer master channel before the buffer is initialized
-  // this is sort of a temporary fix until some better is figured out
-  if (!mActive || mBuffer == nullptr) {
+  if (!mActive) {
     return input;
   }
 

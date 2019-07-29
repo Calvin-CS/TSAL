@@ -5,18 +5,17 @@ using namespace tsal;
 
 int main() {
   Mixer mixer;
-  Synth synth(&mixer);
   Delay delay(&mixer);
-  PolySynth poly(&mixer);
-  poly.play(C4);
 
   Channel channel2(&mixer);
   Channel channel(&mixer);
   
   {
     ThreadSynth synth2(&mixer);
-    synth2.setVolume(0.0);
-    synth2.play(C5, Util::SECOND, 5);
+    mixer.add(synth2);
+    std::cout << "Playing synth" << std::endl;
+    synth2.play(C5, Sequencer::WHOLE, 2);
+    std::cout << "DOne" << std::endl;
   }
     
   // channel2.add(delay);

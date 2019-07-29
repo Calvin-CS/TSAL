@@ -7,14 +7,6 @@ OutputDevice::OutputDevice(Mixer* mixer) {
   setMixer(mixer);
 }
 
-/**
- * @brief Get the output for the device
- * 
- * @return double 
- */
-// double OutputDevice::getOutput() { 
-//   return 0.0; 
-// }
 
 /**
  * @brief Set the active status of the device
@@ -28,7 +20,7 @@ void OutputDevice::setActive(bool active) {
 }
 
 /**
- * @brief Set the gain
+ * @brief Set the amplitude modifer from a db value
  * 
  * @param gain 
  */
@@ -37,7 +29,7 @@ void OutputDevice::setGain(double gain) {
 }
 
 /**
- * @brief Get the gain
+ * @brief Get the amplitude modifier in db
  * 
  * @return double 
  */
@@ -45,14 +37,29 @@ double OutputDevice::getGain() const {
   return Util::ampToDb(mAmp);
 }
 
+/**
+ * @brief Set the amplitude modifer from a volume
+ * 
+ * @return double 
+ */
 void OutputDevice::setVolume(double volume) {
-  mAmp = Util::dbToAmp(Util::volumeToDb(volume));
+  mAmp = Util::dbToAmp(Util::volumeToDb(Util::checkParameterRange("Oscillator: Volume", volume, mVolumeRange)));
 }
 
+/**
+ * @brief Get the amplitude modifier in volume
+ * 
+ * @return double 
+ */
 double OutputDevice::getVolume() const {
   return Util::dbToVolume(getGain());
 }
 
+/**
+ * @brief Check if the device is active
+ *
+ * @return bool
+ */
 bool OutputDevice::isActive() const {
   return mActive;
 }
