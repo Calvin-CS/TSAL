@@ -49,16 +49,14 @@ int main(int argc, char* argv[]) {
     mixer.add(voices[id]);
     voices[id].setVolume(0.5);
     
-    // Get a ith measure offset into the song
-    int timeOffset = id * 4 * midiParser.getPPQ();
+    // Wait to come in based on thread id
+    voices[id].stop(tsal::Sequencer::HALF, id);
 
     for (unsigned i = 0; i < midiParser.size(); i++) {
       auto& me = midiParser[i];
-      // if (me.isNoteOn())
-        //voices[id].play(me.getKeyNumber(), me.getVelocity(), me.tick + timeOffset);
-
-      // if (me.isNoteOff())
-        //voices[id].stop(me.getKeyNumber(), me.tick + timeOffset);
+      if (me.isNoteOn()) {
+        voices[id].play(me.getKeyNumber(), tsal::Sequencer::TICK, me.getTickDuration()); 
+      }
     }
   }
   return 0;

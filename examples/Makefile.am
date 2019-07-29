@@ -5,7 +5,6 @@ noinst_PROGRAMS = \
 	canon \
 	insertion_sort \
 	quick_sort \
-	rain \
 	selection_sort \
 	merge_sort \
 	progress \
@@ -28,9 +27,6 @@ canon_LDADD = $(top_builddir)/src/libtsal.la
 
 insertion_sort_SOURCES = insertion_sort.cpp
 insertion_sort_LDADD = $(top_builddir)/src/libtsal.la
-
-rain_SOURCES = rain.cpp
-rain_LDADD = $(top_builddir)/src/libtsal.la
 
 quick_sort_SOURCES = quick_sort.cpp
 quick_sort_LDADD = $(top_builddir)/src/libtsal.la
