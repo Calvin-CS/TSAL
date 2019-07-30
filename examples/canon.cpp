@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
 
 
   tsal::Mixer mixer;
-  std::vector<tsal::ThreadSynth> voices(numVoices, tsal::ThreadSynth(&mixer));  
+  //std::vector<tsal::ThreadSynth> voices(numVoices, tsal::ThreadSynth(&mixer));  
 
   omp_set_num_threads(numVoices);
 
@@ -46,16 +46,18 @@ int main(int argc, char* argv[]) {
   {
     int id = omp_get_thread_num();
     
-    mixer.add(voices[id]);
-    voices[id].setVolume(0.5);
+    tsal::ThreadSynth threadSynth(&mixer);
+    mixer.add(threadSynth);
+    
+    threadSynth.setVolume(0.5);
     
     // Wait to come in based on thread id
-    voices[id].stop(tsal::Timing::HALF, id);
+    threadSynth.stop(tsal::Timing::HALF, id);
 
     for (unsigned i = 0; i < midiParser.size(); i++) {
       auto& me = midiParser[i];
       if (me.isNoteOn()) {
-        voices[id].play(me.getKeyNumber(), tsal::Timing::TICK, me.getTickDuration()); 
+        threadSynth.play(me.getKeyNumber(), tsal::Timing::TICK, me.getTickDuration()); 
       }
     }
   }

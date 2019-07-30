@@ -8,19 +8,16 @@ void Sequencer::tick() {
   // But it seems to work well enough, maybe in the future it would be better to change to a more consistent timing method
   if (++mSampleTime > mSamplesPerTick) {
     mTick++;
-    // if (mTickEvents.size() > 0 && (mTickEvents[mTickEvents.back()] <= mTick || mTickEvents[mTickEvents.back()] >= mTick)) {
-    for (unsigned i = 0; i < mTickEvents.size(); i++) {
-      if (mTick >= mTickEvents[i]) {
-        mTickEvents.erase(mTickEvents.begin() + i);
-        mCondition.notify_all();
-      } 
-    }
-    // Ugly replace soon
-    for (unsigned i = 0; i < mEvents.size(); i++) {
-      if (mTick >= mEvents[i]->tick) {
-        mEvents[i]->callback();
-        mEvents.erase(mEvents.begin() + i);
-      }
+    // for (unsigned i = 0; i < mEvents.size(); i++) {
+    //   if (mTick >= mEvents[i]->tick) {
+    //     mEvents[i]->callback();
+    //     mEvents.erase(mEvents.begin() + i);
+    //   }
+    // }
+    while (!mEventQueue.empty() && mTick >= mEventQueue.top()->tick) {
+      mEventQueue.top()->callback();
+      delete mEventQueue.top();
+      mEventQueue.pop();
     }
     mSampleTime = 0;
   }
@@ -56,7 +53,7 @@ void Sequencer::setSamplesPerTick() {
 
 void Sequencer::schedule(std::function<void ()> callback, Timing::NoteScale scale, unsigned duration) {
   int tick = getTicksInNote(scale) * duration;
-  mEvents.push_back(std::make_unique<Event>(Event(mTick + tick, callback)));
+  mEventQueue.push(new Event(mTick + tick, callback));
 }
 
 unsigned Sequencer::getTick() const {
@@ -65,17 +62,6 @@ unsigned Sequencer::getTick() const {
 
 unsigned Sequencer::getTicksInNote(Timing::NoteScale note) const {
   return (note == Timing::TICK) ? 1 : mPPQ * 4.0 * (1.0/note);
-}
-
-/**
- * @brief Put a thread to sleep for the given tick time
- * 
- * @param tick 
- */
-void Sequencer::waitForTick(unsigned tick) {
-  std::unique_lock<std::mutex> lk(mMutex);
-  mTickEvents.push_back(tick);
-  mCondition.wait(lk, [this, tick]{return mTick >= tick;}); 
 }
 
 Util::ParameterRange<unsigned> Sequencer::mBPMRange = std::make_pair(1, 1000);

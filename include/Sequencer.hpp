@@ -6,8 +6,12 @@
 #include <functional>
 #include <vector>
 #include <algorithm>
+#include <queue>
 
 namespace tsal {
+
+// Forward declaration of Mixer
+class Mixer;
 
 /** @class Sequencer
  * @brief A sequencer that handles the scheduling of events
@@ -27,20 +31,23 @@ class Sequencer {
     void schedule(std::function<void ()> callback, Timing::NoteScale scale, unsigned duration = 1);
     unsigned getTick() const;
     unsigned getTicksInNote(Timing::NoteScale note) const;
-    void waitForTick(unsigned tick);
     struct Event {
         Event(unsigned t, std::function<void ()> f) {
           tick = t;
           callback = f;
         }
+        struct compare {
+            bool operator()(const Event* lhs, const Event* rhs) {
+              return lhs->tick > rhs->tick;
+            }
+        };
+              
         unsigned tick;
         std::function<void ()> callback;
     };
   private:
-    std::mutex mMutex; 
-    std::condition_variable mCondition;
-    std::vector<unsigned> mTickEvents; // Replace with mEvents eventually
     std::vector<std::unique_ptr<Event>> mEvents;
+    std::priority_queue<Event*, std::vector<Event*>, Event::compare > mEventQueue;
     void setSamplesPerTick();
     unsigned mSampleTime = 0;
     unsigned mTick = 0;
@@ -49,7 +56,7 @@ class Sequencer {
     unsigned mPPQ = 240;
     unsigned mBPM = 100;
     unsigned mSampleRate = 0;
-    double mSamplesPerTick;
+    double mSamplesPerTick = 0.0;
 
     static Util::ParameterRange<unsigned> mBPMRange;
     static Util::ParameterRange<unsigned> mPPQRange;
