@@ -10,7 +10,7 @@ void quickSort(ThreadSynth& synth, int* data, int low, int high) {
     int pivotValue = data[low];
     int pivot = low;
     for (int i = low + 1; i < high; i++) {
-      synth.play(C3 + 45 * ((double) data[i] / MAX_VALUE), Util::MICROSECOND, 100);
+      synth.play(C3 + 45 * ((double) data[i] / MAX_VALUE), Timing::MICROSECOND, 100);
       
       if (data[i] < pivotValue) {
         pivot++;

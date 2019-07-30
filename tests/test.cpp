@@ -14,7 +14,7 @@ int main() {
     ThreadSynth synth2(&mixer);
     mixer.add(synth2);
     std::cout << "Playing synth" << std::endl;
-    synth2.play(C5, Sequencer::WHOLE, 2);
+    synth2.play(C5, Timing::WHOLE, 2);
     std::cout << "DOne" << std::endl;
   }
     

@@ -50,12 +50,12 @@ int main(int argc, char* argv[]) {
     voices[id].setVolume(0.5);
     
     // Wait to come in based on thread id
-    voices[id].stop(tsal::Sequencer::HALF, id);
+    voices[id].stop(tsal::Timing::HALF, id);
 
     for (unsigned i = 0; i < midiParser.size(); i++) {
       auto& me = midiParser[i];
       if (me.isNoteOn()) {
-        voices[id].play(me.getKeyNumber(), tsal::Sequencer::TICK, me.getTickDuration()); 
+        voices[id].play(me.getKeyNumber(), tsal::Timing::TICK, me.getTickDuration()); 
       }
     }
   }

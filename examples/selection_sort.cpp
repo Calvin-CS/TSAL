@@ -10,7 +10,7 @@ void selectionSort(ThreadSynth& synth, int size, int* data) {
   for (int i = 0; i < size; i++) {
     min = i; 
     for (int j = i; j < size; j++) {
-      synth.play(C2 + 55 * ((double) data[j] / MAX_VALUE), Util::MICROSECOND, 100);
+      synth.play(C2 + 55 * ((double) data[j] / MAX_VALUE), Timing::MICROSECOND, 100);
       
       min = data[j] < data[min] ? j : min;
     }

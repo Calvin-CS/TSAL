@@ -1,6 +1,7 @@
 #ifndef UTIL_H
 #define UTIL_H
 
+#include "Timing.hpp"
 #include <iostream>
 #define _USE_MATH_DEFINES 
 #include <cmath>
@@ -16,16 +17,11 @@ namespace tsal {
  */
 class Util {
   public:
-    enum TimeScale {
-      SECOND = 1000000,
-      MILLISECOND = 1000,
-      MICROSECOND = 1,
-    };
     static double ampToDb(double amplitude);
     static double dbToAmp(double db);
     static double volumeToDb(double volume);
     static double dbToVolume(double db);
-    static void thread_sleep(unsigned duration, TimeScale scale = MILLISECOND);
+    static void thread_sleep(unsigned duration, Timing::TimeScale scale = Timing::MILLISECOND);
     
     template <typename Item>
     using ParameterRange = std::pair<Item, Item>;

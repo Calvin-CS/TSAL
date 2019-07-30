@@ -54,7 +54,7 @@ void Sequencer::setSamplesPerTick() {
   mSamplesPerTick = mSampleRate / ((mBPM * mPPQ) / 60);
 }
 
-void Sequencer::schedule(std::function<void ()> callback, NoteScale scale, unsigned duration) {
+void Sequencer::schedule(std::function<void ()> callback, Timing::NoteScale scale, unsigned duration) {
   int tick = getTicksInNote(scale) * duration;
   mEvents.push_back(std::make_unique<Event>(Event(mTick + tick, callback)));
 }
@@ -63,8 +63,8 @@ unsigned Sequencer::getTick() const {
   return mTick;
 }
 
-unsigned Sequencer::getTicksInNote(NoteScale note) const {
-  return (note == TICK) ? 1 : mPPQ * 4.0 * (1.0/note);
+unsigned Sequencer::getTicksInNote(Timing::NoteScale note) const {
+  return (note == Timing::TICK) ? 1 : mPPQ * 4.0 * (1.0/note);
 }
 
 /**

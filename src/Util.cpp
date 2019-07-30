@@ -4,7 +4,7 @@
 
 namespace tsal {
 
-void Util::thread_sleep(unsigned duration, const TimeScale scale) {
+void Util::thread_sleep(unsigned duration, const Timing::TimeScale scale) {
   std::this_thread::sleep_for(duration * std::chrono::microseconds(scale));
 }
 

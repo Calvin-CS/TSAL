@@ -69,12 +69,19 @@ void testCompressor() {
   compressor.setPostGain(40.0);
   compressor.setPostGain(0.0);
 
-  mixer.remove(synth);
-  mixer.remove(compressor);
+}
+
+void testDelay() {
+  Mixer mixer;
+  Synth synth(&mixer);
+  Delay delay(&mixer);
+  mixer.add(synth);
+  mixer.add(delay);
 }
 
 int main() {
   testEffectChain();
   testCompressor();
+  testDelay();
   return 0;
 }

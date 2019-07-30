@@ -13,5 +13,6 @@
 #include "SoundFont.hpp"
 #include "Synth.hpp"
 #include "ThreadSynth.hpp"
+#include "Timing.hpp"
 
 #endif
