@@ -222,6 +222,7 @@ effects
 /man
 
 # Other stuff
+vgcore*
 .vscode
 todo.txt
 /external

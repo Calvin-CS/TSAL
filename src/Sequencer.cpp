@@ -8,15 +8,12 @@ void Sequencer::tick() {
   // But it seems to work well enough, maybe in the future it would be better to change to a more consistent timing method
   if (++mSampleTime > mSamplesPerTick) {
     mTick++;
-    // for (unsigned i = 0; i < mEvents.size(); i++) {
-    //   if (mTick >= mEvents[i]->tick) {
-    //     mEvents[i]->callback();
-    //     mEvents.erase(mEvents.begin() + i);
-    //   }
-    // }
+    // Keep checking the front until there are no events left for this tick value
     while (!mEventQueue.empty() && mTick >= mEventQueue.top()->tick) {
+      // Run the callback function for the event 
       mEventQueue.top()->callback();
-      delete mEventQueue.top();
+      // Free the memory
+      //delete mEventQueue.top();
       mEventQueue.pop();
     }
     mSampleTime = 0;
@@ -53,7 +50,7 @@ void Sequencer::setSamplesPerTick() {
 
 void Sequencer::schedule(std::function<void ()> callback, Timing::NoteScale scale, unsigned duration) {
   int tick = getTicksInNote(scale) * duration;
-  mEventQueue.push(new Event(mTick + tick, callback));
+  mEventQueue.push(std::make_unique<Event>(mTick + tick, callback));
 }
 
 unsigned Sequencer::getTick() const {

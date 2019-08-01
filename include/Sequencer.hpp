@@ -31,23 +31,26 @@ class Sequencer {
     void schedule(std::function<void ()> callback, Timing::NoteScale scale, unsigned duration = 1);
     unsigned getTick() const;
     unsigned getTicksInNote(Timing::NoteScale note) const;
+    /*
+     * A helper class that wraps a tick value and callback for event scheduling 
+     */
     struct Event {
         Event(unsigned t, std::function<void ()> f) {
           tick = t;
           callback = f;
         }
+        // A compare function for the sorting of the priority queue
         struct compare {
-            bool operator()(const Event* lhs, const Event* rhs) {
+            bool operator()(const std::unique_ptr<Event>& lhs, const std::unique_ptr<Event>& rhs) {
               return lhs->tick > rhs->tick;
             }
         };
-              
         unsigned tick;
         std::function<void ()> callback;
     };
+    
   private:
-    std::vector<std::unique_ptr<Event>> mEvents;
-    std::priority_queue<Event*, std::vector<Event*>, Event::compare > mEventQueue;
+    std::priority_queue<std::unique_ptr<Event>, std::vector<std::unique_ptr<Event>>, Event::compare> mEventQueue;
     void setSamplesPerTick();
     unsigned mSampleTime = 0;
     unsigned mTick = 0;

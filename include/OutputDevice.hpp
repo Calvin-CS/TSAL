@@ -17,7 +17,7 @@ class OutputDevice {
   public:
     OutputDevice(Mixer* mixer);
     virtual ~OutputDevice() {};
-    virtual double getOutput(){ return 0.0; };
+    virtual double getOutput() { return 0.0; };
     /**
      * @brief Get the output for the device
      * 

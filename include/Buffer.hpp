@@ -1,7 +1,7 @@
 #ifndef BUFFER_H
 #define BUFFER_H
 
-#include <memory>
+#include <vector>
 
 namespace tsal {
 
@@ -15,20 +15,17 @@ template <typename Item>
 class Buffer {
   public:
     Buffer(unsigned size);
-    Item size() const { return mSize; };
+    Item size() const { return mBufferArray.size(); };
 
     const Item& operator[](int index) const;
     Item& operator[](int index);
   private:
     int getCircularIndex(int index);
-    unsigned mSize = 0;
-    std::unique_ptr<Item[]> mBufferArray; 
+    std::vector<Item> mBufferArray;
 };
 
 template <typename Item>
-Buffer<Item>::Buffer(unsigned size){
-  mSize = size;
-  mBufferArray = std::make_unique<Item[]>(size);
+Buffer<Item>::Buffer(unsigned size) : mBufferArray(size) {
 }
 
 template <typename Item>
@@ -43,7 +40,8 @@ Item& Buffer<Item>::operator[](int index) {
 
 template <typename Item>
 int Buffer<Item>::getCircularIndex(int index) {
-  return (index < 0) ? mSize + index : index % mSize;
+  // The "true" modulo operation. Works on negative values
+  return ((index % mBufferArray.size()) + mBufferArray.size()) % mBufferArray.size();
 }
 
 }

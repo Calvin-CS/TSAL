@@ -5,9 +5,9 @@
 #include "Buffer.hpp"
 #include "Util.hpp"
 
-/* I still don't know if buffer size should be sample rate dependent
- * If it turns out to be the case then dynamically allocate things 
- * Similar to what is done in Delay
+/*
+ * larger buffer = better quality but more latency
+ * I just chose an arbitrary size
  */
 #define COMPRESSOR_MAX_BUFFER 512
 
