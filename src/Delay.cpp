@@ -3,8 +3,7 @@
 
 namespace tsal {
 
-Delay::Delay(Mixer* mixer) : Effect(mixer) {
-  init();
+Delay::Delay(Mixer* mixer) : Effect(mixer), mBuffer(mixer->getSampleRate()) {
 }
 
 /* @brief Dynamically allocates a buffer based on the sample rate
@@ -14,8 +13,8 @@ Delay::Delay(Mixer* mixer) : Effect(mixer) {
  * changes
  */
 void Delay::init() {
-  mBuffer = std::make_unique<Buffer<double>>(mMixer->getSampleRate() * 2);
-  Delay::mDelayRange = std::make_pair(0, mBuffer->size());
+  mBuffer.setSize(mMixer->getSampleRate());
+  Delay::mDelayRange = std::make_pair(0, mBuffer.size());
   setDelay(1000);
 }
 
@@ -30,20 +29,19 @@ double Delay::getOutput() {
     return input;
   }
 
-  auto& buffer = *mBuffer.get();
   int offset = mCounter - mDelay;
 
   // Clip lookback buffer-bound
   if (offset < 0)
-    offset = buffer.size() + offset;
+    offset = mBuffer.size() + offset;
 
-  double const output = buffer[offset];
+  double const output = mBuffer[offset];
   double const bufferValue = input + output * mFeedback;
-  buffer[mCounter++] = bufferValue;
+  mBuffer[mCounter++] = bufferValue;
 
   // Clip delay counter
-  if(mCounter >= buffer.size())
-    mCounter -= buffer.size();
+  if(mCounter >= mBuffer.size())
+    mCounter = 0;
 
   return output + input;
 }

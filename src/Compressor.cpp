@@ -19,7 +19,7 @@ double Compressor::getOutput() {
   }
 
   // Add a new sample into the buffer
-  mBuffer[++mCurrentSample] = getInput();
+  mBuffer[mCurrentSample++] = getInput();
   if (mCurrentSample >= COMPRESSOR_MAX_BUFFER) {
     mCurrentSample = 0;
     // Filter the generated audio data since the buffer is full
@@ -27,7 +27,7 @@ double Compressor::getOutput() {
   }
 
   // Get an audio sample from the audio that has been processed in front
-  return mBuffer[(mCurrentSample + 1) % COMPRESSOR_MAX_BUFFER];
+  return mBuffer[mCurrentSample % COMPRESSOR_MAX_BUFFER];
 }
 
 void Compressor::setMixer(Mixer *mixer) {
@@ -46,6 +46,7 @@ void Compressor::getEnvelope() {
     double envIn = std::abs(mBuffer[i]);
 
     double gain = mEnvelopeSample < envIn ? mAttackGain : mReleaseGain;
+      
     mEnvelopeSample = envIn + gain * (mEnvelopeSample - envIn);
 
     mEnvelope[i] = mEnvelopeSample;

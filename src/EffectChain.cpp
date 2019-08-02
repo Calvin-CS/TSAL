@@ -2,12 +2,27 @@
 
 namespace tsal {
   
-void EffectChain::setInput(OutputDevice& input) {
-  mInput = &input;
+void EffectChain::setInput(OutputDevice* input) {
+  mInput = input;
+}
+
+EffectChain::~EffectChain() {
+  for (unsigned i = 0; i < mEffects.size(); i++) {
+    remove(*mEffects[i]);
+  }
 }
 
 double EffectChain::getOutput() {
-  return (mEffects.size() == 0) ? mInput->getOutput() : mEffects.back()->getOutput();
+  if (mEffects.size() == 0)  {
+    if (mInput == nullptr) {
+      return 0.0;
+    } else {
+      return mInput->getOutput();
+    }
+  } else {
+    return mEffects.back()->getOutput();
+  }
+  //return (mEffects.size() == 0) ? mInput->getOutput() : mEffects.back()->getOutput();
 }
 
 void EffectChain::setMixer(Mixer* mixer) {

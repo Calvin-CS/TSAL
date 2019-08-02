@@ -14,7 +14,8 @@ namespace tsal {
 class EffectChain : public OutputDevice {
   public:
     EffectChain(Mixer *mixer) : OutputDevice(mixer){};
-    void setInput(OutputDevice& input);
+    ~EffectChain();
+    void setInput(OutputDevice* input);
     virtual double getOutput() override;
     virtual void setMixer(Mixer* mixer) override;
     void add(Effect& effect);
@@ -22,7 +23,7 @@ class EffectChain : public OutputDevice {
     int size() { return mEffects.size(); };
   private:
     std::vector<Effect*> mEffects;
-    OutputDevice* mInput;
+    OutputDevice* mInput = nullptr;
 };
 
 }

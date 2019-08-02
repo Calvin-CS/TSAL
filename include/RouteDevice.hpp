@@ -16,7 +16,8 @@ namespace tsal {
 template <typename DeviceType>
 class RouteDevice : public InputDevice, public OutputDevice {
   public:
-    RouteDevice(Mixer *mixer) : OutputDevice(mixer){};
+    RouteDevice(Mixer* mixer) : OutputDevice(mixer){};
+    ~RouteDevice();
     virtual double getInput() override;
     virtual double getOutput() override;
     virtual void setMixer(Mixer* mixer) override;
@@ -35,6 +36,14 @@ class RouteDevice : public InputDevice, public OutputDevice {
     std::vector<DeviceType*> mInputDevices;
     std::mutex mVectorMutex;
 };
+
+template <typename DeviceType>
+RouteDevice<DeviceType>::~RouteDevice() {
+  std::lock_guard<std::mutex> guard(mVectorMutex);
+  for (unsigned i = 0; i < mInputDevices.size(); i++) {
+    mInputDevices.erase(mInputDevices.begin() + i);
+  }
+}
 
 /**
  * @brief Get the input from the attached output devices 
@@ -84,10 +93,10 @@ void RouteDevice<DeviceType>::add(DeviceType& output) {
  */
 template <typename DeviceType>
 void RouteDevice<DeviceType>::remove(DeviceType& output) {
-  for (auto it = mInputDevices.begin(); it != mInputDevices.end(); it++) {
-    if (&output == (*it)) {
-      std::lock_guard<std::mutex> guard(mVectorMutex);
-      mInputDevices.erase(it);
+  std::lock_guard<std::mutex> guard(mVectorMutex);
+  for (unsigned i = 0; i < mInputDevices.size(); i++) {
+    if (&output == mInputDevices[i]) {
+      mInputDevices.erase(mInputDevices.begin() + i);
       break;
     }
   }
