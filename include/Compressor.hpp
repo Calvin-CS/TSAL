@@ -41,7 +41,7 @@ class Compressor : public Effect {
     // Figure what an optimal buffer size would be 
     Buffer<double> mBuffer;
     Buffer<double> mEnvelope;
-    unsigned mCurrentSample = COMPRESSOR_MAX_BUFFER;
+    unsigned mCurrentSample = 0;
       
     double mSlope = 0.0;
     double mGain = 0.0;

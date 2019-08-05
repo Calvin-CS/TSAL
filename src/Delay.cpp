@@ -13,7 +13,7 @@ Delay::Delay(Mixer* mixer) : Effect(mixer), mBuffer(mixer->getSampleRate()) {
  * changes
  */
 void Delay::init() {
-  mBuffer.setSize(mMixer->getSampleRate());
+  mBuffer.resize(mMixer->getSampleRate());
   Delay::mDelayRange = std::make_pair(0, mBuffer.size());
   setDelay(1000);
 }

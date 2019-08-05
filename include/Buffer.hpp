@@ -21,16 +21,15 @@ class Buffer {
     const Item& operator[](int index) const;
     Item& operator[](int index);
     
-    void setSize(unsigned size);
+    void resize(unsigned size);
   private:
-    int getCircularIndex(int index);
     unsigned mSize = 0;
-    Item* mBufferArray = nullptr; 
+    Item* mBufferArray = nullptr;
 };
 
 template <typename Item>
 Buffer<Item>::Buffer(unsigned size) {
-  setSize(size);
+  resize(size);
 }
 
 template <typename Item>
@@ -44,7 +43,7 @@ Item& Buffer<Item>::operator[](int index) {
 }
 
 template <typename Item>
-void Buffer<Item>::setSize(unsigned size) {
+void Buffer<Item>::resize(unsigned size) {
   if (mBufferArray != nullptr) {
     delete[] mBufferArray;
   }
@@ -53,12 +52,6 @@ void Buffer<Item>::setSize(unsigned size) {
   for (unsigned i = 0; i < mSize; i++) {
     mBufferArray[i] = Item();
   }
-}
-
-template <typename Item>
-int Buffer<Item>::getCircularIndex(int index) {
-  // The "true" modulo operation. Works on negative values
-  return ((index % mSize) + mSize) % mSize;
 }
 
 }

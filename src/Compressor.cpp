@@ -27,7 +27,7 @@ double Compressor::getOutput() {
   }
 
   // Get an audio sample from the audio that has been processed in front
-  return mBuffer[mCurrentSample % COMPRESSOR_MAX_BUFFER];
+  return mBuffer[mCurrentSample];
 }
 
 void Compressor::setMixer(Mixer *mixer) {
