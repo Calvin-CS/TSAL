@@ -1,10 +1,6 @@
 #include "EffectChain.hpp"
 
 namespace tsal {
-  
-void EffectChain::setInput(OutputDevice* input) {
-  mInput = input;
-}
 
 EffectChain::~EffectChain() {
   for (unsigned i = 0; i < mEffects.size(); i++) {
@@ -13,16 +9,7 @@ EffectChain::~EffectChain() {
 }
 
 double EffectChain::getOutput() {
-  if (mEffects.size() == 0)  {
-    if (mInput == nullptr) {
-      return 0.0;
-    } else {
-      return mInput->getOutput();
-    }
-  } else {
-    return mEffects.back()->getOutput();
-  }
-  //return (mEffects.size() == 0) ? mInput->getOutput() : mEffects.back()->getOutput();
+  return (mEffects.size() == 0) ? mInput.getOutput() : mEffects.back()->getOutput();
 }
 
 void EffectChain::setMixer(Mixer* mixer) {
@@ -39,7 +26,7 @@ void EffectChain::setMixer(Mixer* mixer) {
 void EffectChain::add(Effect& effect) {
   effect.setMixer(mMixer);
   if (mEffects.size() == 0) {
-    effect.setInput(mInput);
+    effect.setInput(&mInput);
     mEffects.push_back(&effect);
   } else {
     effect.setInput(mEffects.back());
@@ -62,7 +49,7 @@ void EffectChain::remove(Effect& effect) {
     // Front case
     mEffects.erase(mEffects.begin());
     if (mEffects.size() > 0) {
-      mEffects.front()->setInput(mInput);
+      mEffects.front()->setInput(&mInput);
     }
   } else if (mEffects.back() == effectPtr) {
     // Back case

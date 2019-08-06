@@ -105,7 +105,6 @@ Mixer::~Mixer() {
 
 double Mixer::getInput() {
   mSequencer.tick();
-  mCurrentTick = mSequencer.getTick();
   return mMaster.getOutput();
 }
 
