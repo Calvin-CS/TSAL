@@ -33,13 +33,14 @@ class RouteDevice : public InputDevice, public OutputDevice {
 
   protected:
     bool outOfRange(const int index) const;
+    void lock() { std::lock_guard<std::mutex> guard(mVectorMutex); };
     std::vector<DeviceType*> mInputDevices;
     std::mutex mVectorMutex;
 };
 
 template <typename DeviceType>
 RouteDevice<DeviceType>::~RouteDevice() {
-  std::lock_guard<std::mutex> guard(mVectorMutex);
+  lock();
   for (unsigned i = 0; i < mInputDevices.size(); i++) {
     mInputDevices.erase(mInputDevices.begin() + i);
   }
@@ -53,7 +54,7 @@ RouteDevice<DeviceType>::~RouteDevice() {
 template <typename DeviceType>
 double RouteDevice<DeviceType>::getInput() {
   double output = 0.0;
-  std::lock_guard<std::mutex> guard(mVectorMutex); 
+  lock();
   for (auto d : mInputDevices) {
     output += d->getOutput();
   }
@@ -68,6 +69,7 @@ double RouteDevice<DeviceType>::getOutput() {
 template <typename DeviceType>
 void RouteDevice<DeviceType>::setMixer(Mixer* mixer) {
   OutputDevice::setMixer(mixer);
+  lock();
   for (auto d : mInputDevices) {
     d->setMixer(mixer);
   }
@@ -81,7 +83,7 @@ void RouteDevice<DeviceType>::setMixer(Mixer* mixer) {
  */
 template <typename DeviceType>
 void RouteDevice<DeviceType>::add(DeviceType& output) {
-  std::lock_guard<std::mutex> guard(mVectorMutex); 
+  lock();
   output.setMixer(mMixer);
   mInputDevices.push_back(&output);
 }
@@ -93,7 +95,7 @@ void RouteDevice<DeviceType>::add(DeviceType& output) {
  */
 template <typename DeviceType>
 void RouteDevice<DeviceType>::remove(DeviceType& output) {
-  std::lock_guard<std::mutex> guard(mVectorMutex);
+  lock();
   for (unsigned i = 0; i < mInputDevices.size(); i++) {
     if (&output == mInputDevices[i]) {
       mInputDevices.erase(mInputDevices.begin() + i);
@@ -104,6 +106,7 @@ void RouteDevice<DeviceType>::remove(DeviceType& output) {
 
 template <typename DeviceType>
 DeviceType& RouteDevice<DeviceType>::operator[](const int index) {
+  lock();
   if (outOfRange(index)) {
     throw "RouteDevice: Index out of range";
   }
@@ -112,6 +115,7 @@ DeviceType& RouteDevice<DeviceType>::operator[](const int index) {
 
 template <typename DeviceType>
 const DeviceType& RouteDevice<DeviceType>::operator[](const int index) const {
+  lock();
   if (outOfRange(index)) {
     throw "RouteDevice: Index out of range";
   }

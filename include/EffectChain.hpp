@@ -21,8 +21,10 @@ class EffectChain : public OutputDevice {
     void remove(Effect& effect);
     int size() { return mEffects.size(); };
   private:
+    void lock() { std::lock_guard<std::mutex> guard(mVectorMutex); };
     std::vector<Effect*> mEffects;
     OutputDevice& mInput;
+    std::mutex mVectorMutex;
 };
 
 }

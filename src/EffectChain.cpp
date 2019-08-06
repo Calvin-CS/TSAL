@@ -3,6 +3,7 @@
 namespace tsal {
 
 EffectChain::~EffectChain() {
+  lock();
   for (unsigned i = 0; i < mEffects.size(); i++) {
     remove(*mEffects[i]);
   }
@@ -14,6 +15,7 @@ double EffectChain::getOutput() {
 
 void EffectChain::setMixer(Mixer* mixer) {
   OutputDevice::setMixer(mixer);
+  lock();
   for (auto effect : mEffects) {
     effect->setMixer(mixer);
   }
@@ -24,6 +26,7 @@ void EffectChain::setMixer(Mixer* mixer) {
  * @param effect
  */
 void EffectChain::add(Effect& effect) {
+  lock();
   effect.setMixer(mMixer);
   if (mEffects.size() == 0) {
     effect.setInput(&mInput);
@@ -39,6 +42,7 @@ void EffectChain::add(Effect& effect) {
  * @param effect
  */
 void EffectChain::remove(Effect& effect) {
+  lock();
   if (mEffects.size() == 0) {
     return;
   }
