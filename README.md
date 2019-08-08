@@ -2,10 +2,6 @@
 
 A Thread Safe Audio Library that uses audiolizations to assist in the understanding of concurrent and parallel processing.
 
-### Examples
-
-[Bubble Sort](https://raw.githubusercontent.com/Calvin-CS/TSAL/master/recordings/bubble_sort.mp3)
-
 ## Getting Started
 
 TSAL uses the GNU Autotools build system to build and install the library.
