@@ -6,7 +6,7 @@
 #include "Channel.hpp"
 #include "Compressor.hpp"
 #include "Sequencer.hpp"
-#include <rtaudio/RtAudio.h>
+#include "portaudio.h"
 
 
 typedef signed short BIT_DEPTH;
@@ -43,22 +43,20 @@ class Mixer : public InputDevice {
     virtual double getInput() override;
 
   private:
-    void initalizeStream();
-    RtAudio mRtAudio;
-    unsigned mChannels;
+    PaStream* mPaStream;
     Channel mMaster;
     Compressor mCompressor;
     Sequencer mSequencer;
+    void openPaStream();
     
-    unsigned mSampleRate = 0;
+    unsigned mSampleRate = 44100;
     unsigned mBufferFrames = 0;
-    static void errorCallback(RtAudioError::Type type, const std::string &errorText);
-    static int streamCallback(void *outputBuffer,
-                      __attribute__((unused)) void *inputBuffer,
-                      unsigned nBufferFrames, 
-                      __attribute__((unused)) double streamTime,
-                      RtAudioStreamStatus status,
-                      void *data);
+    static void paStreamFinished(void* userData);
+    static int paCallback( const void *inputBuffer, void *outputBuffer,
+                           unsigned long framesPerBuffer,
+                           const PaStreamCallbackTimeInfo* timeInfo,
+                           PaStreamCallbackFlags statusFlags,
+                           void *userData );
 };
 
 }
