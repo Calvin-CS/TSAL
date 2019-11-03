@@ -3,6 +3,7 @@
 
 #include "Util.hpp"
 #include <iostream>
+#include <vector>
 
 namespace tsal {
 
@@ -18,6 +19,7 @@ class OutputDevice {
     OutputDevice(Mixer* mixer);
     virtual ~OutputDevice() {};
     virtual double getOutput() { return 0.0; };
+    virtual void getOutput(std::vector<float>& buffer, unsigned long frameCount, unsigned channelCount) { return; };
     /**
      * @brief Get the output for the device
      * 
@@ -26,9 +28,12 @@ class OutputDevice {
     virtual void setActive(bool active = true);
     virtual void setMixer(Mixer* mixer) { mMixer = mixer; };
 
+    void setPanning(double panning);
     void setGain(double gain);
     void setVolume(double volume);
 
+    double getLeftPanning() const;
+    double getRightPanning() const;
     double getGain() const;
     double getVolume() const;
     bool isActive() const;
@@ -37,9 +42,11 @@ class OutputDevice {
     Mixer* mMixer = nullptr;
     bool mActive = true;
     double mAmp = 1.0;
+    double mPanning = 0.0;
     
     static Util::ParameterRange<double> mGainRange;
     static Util::ParameterRange<double> mVolumeRange;
+    static Util::ParameterRange<double> mPanningRange;    
 };
 
 }

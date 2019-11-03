@@ -20,12 +20,18 @@ int Mixer::paCallback( const void *inputBuffer, void *outputBuffer,
   (void) statusFlags;
   (void) inputBuffer;
 
+  AudioData data;
+  data.buffer = out;
+  data.frameCount = framesPerBuffer;
+  data.channelCount = mixer->getChannelCount();
+  
+  mixer->getInput(data);
   float output;
-  for(i = 0; i < framesPerBuffer; i++) {
-    output = (float) mixer->getInput();
-    *out++ = output;
-    *out++ = output;
-  }
+  // for(i = 0; i < framesPerBuffer; i++) {
+  //   output = (float) mixer->getInput();
+  //   *out++ = output;
+  //   *out++ = output;
+  // }
   return paContinue;
 
 }
@@ -48,7 +54,7 @@ void Mixer::openPaStream() {
     printf("Output device name: '%s'\n", pInfo->name);
   }
 
-  outputParameters.channelCount = 2;       /* stereo output */
+  outputParameters.channelCount = mChannelCount;
   outputParameters.sampleFormat = paFloat32; /* 32 bit floating point output */
   outputParameters.suggestedLatency = Pa_GetDeviceInfo( outputParameters.device )->defaultLowOutputLatency;
   outputParameters.hostApiSpecificStreamInfo = NULL;
@@ -115,6 +121,10 @@ Mixer::~Mixer() {
 double Mixer::getInput() {
   mSequencer.tick();
   return mMaster.getOutput();
+}
+
+void Mixer::getInput(AudioData data) {
+  return mMaster.getInput(data);
 }
 
 /**

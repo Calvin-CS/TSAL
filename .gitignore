@@ -233,6 +233,7 @@ todo.txt
 /bin
 /build
 compile_commands.json
+.clangd
 .cquery
 .cquery_cached_index
 RtAudio.h

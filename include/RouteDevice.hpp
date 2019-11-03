@@ -4,6 +4,7 @@
 #include "InputDevice.hpp"
 #include "OutputDevice.hpp"
 #include <mutex>
+#include <vector>
 
 namespace tsal {
 
@@ -20,29 +21,40 @@ class RouteDevice : public InputDevice, public OutputDevice {
     ~RouteDevice();
     virtual double getInput() override;
     virtual double getOutput() override;
+    virtual void getOutput(std::vector<float>& buffer, unsigned long frameCount, unsigned channelCount) override;
+    virtual void getInput(std::vector<float>& buffer, unsigned long frameCount, unsigned channelCount) override;
     virtual void setMixer(Mixer* mixer) override;
     
-    void add(DeviceType& output);
-    void remove(DeviceType& output);
-    int size() { return mInputDevices.size(); };
+    void add(DeviceType& device);
+    void remove(DeviceType& device);
+    int size() { return mRoutedInputs.size(); };
     
     DeviceType& operator[](const int index);
     const DeviceType& operator[](const int index) const;
     
-    std::vector<DeviceType*>& getInputDevices() { return mInputDevices; };
+    std::vector<DeviceType*>& getInputDevices() { return mRoutedInputs; };
 
   protected:
+    /* Store an input device with an output buffer
+     * Each device buffer is combined/mixed within this class
+     * so that they aren't modifying existing data
+     */ 
+    struct RoutedInput {
+        DeviceType* device;
+        std::vector<float> buffer;
+        RoutedInput(DeviceType* d, Mixer* mixer)
+          : device(d) {};
+    };
     bool outOfRange(const int index) const;
-    void lock() { std::lock_guard<std::mutex> guard(mVectorMutex); };
-    std::vector<DeviceType*> mInputDevices;
+    std::vector<RoutedInput> mRoutedInputs;
     std::mutex mVectorMutex;
 };
 
 template <typename DeviceType>
 RouteDevice<DeviceType>::~RouteDevice() {
-  lock();
-  for (unsigned i = 0; i < mInputDevices.size(); i++) {
-    mInputDevices.erase(mInputDevices.begin() + i);
+  std::lock_guard<std::mutex> guard(mVectorMutex);
+  for (unsigned i = 0; i < mRoutedInputs.size(); i++) {
+    mRoutedInputs.erase(mRoutedInputs.begin() + i);
   }
 }
 
@@ -54,9 +66,9 @@ RouteDevice<DeviceType>::~RouteDevice() {
 template <typename DeviceType>
 double RouteDevice<DeviceType>::getInput() {
   double output = 0.0;
-  lock();
-  for (auto d : mInputDevices) {
-    output += d->getOutput();
+  std::lock_guard<std::mutex> guard(mVectorMutex);
+  for (unsigned i = 0; i < mRoutedInputs.size(); i++) {
+    output += mRoutedInputs[i].device->getOutput();
   }
   return output;
 }
@@ -67,11 +79,26 @@ double RouteDevice<DeviceType>::getOutput() {
 }
 
 template <typename DeviceType>
+void RouteDevice<DeviceType>::getInput(std::vector<float> &buffer, unsigned long frameCount,
+                                       unsigned channelCount) {
+  std::lock_guard<std::mutex> guard(mVectorMutex);
+  for (auto routedInput : mRoutedInputs) {
+    if (routedInput.buffer.size() < frameCount * channelCount) {
+      routedInput.buffer.resize(frameCount * channelCount);
+    }
+    routedInput.device->getOutput(routedInput.buffer, frameCount, channelCount);
+    for (unsigned i = 0; i < routedInput.buffer.size(); i++) {
+      buffer[i] += routedInput.buffer[i];
+    }
+  }
+};
+
+template <typename DeviceType>
 void RouteDevice<DeviceType>::setMixer(Mixer* mixer) {
   OutputDevice::setMixer(mixer);
-  lock();
-  for (auto d : mInputDevices) {
-    d->setMixer(mixer);
+  std::lock_guard<std::mutex> guard(mVectorMutex);
+  for (unsigned i = 0; i < mRoutedInputs.size(); i++) {
+    mRoutedInputs[i].device->setMixer(mixer);
   }
 }
   
@@ -82,10 +109,10 @@ void RouteDevice<DeviceType>::setMixer(Mixer* mixer) {
  * @param output 
  */
 template <typename DeviceType>
-void RouteDevice<DeviceType>::add(DeviceType& output) {
-  lock();
-  output.setMixer(mMixer);
-  mInputDevices.push_back(&output);
+void RouteDevice<DeviceType>::add(DeviceType& device) {
+  std::lock_guard<std::mutex> guard(mVectorMutex);
+  device.setMixer(mMixer);
+  mRoutedInputs.push_back(RoutedInput(&device, mMixer));
 }
 
 /**
@@ -94,11 +121,11 @@ void RouteDevice<DeviceType>::add(DeviceType& output) {
  * @param output 
  */
 template <typename DeviceType>
-void RouteDevice<DeviceType>::remove(DeviceType& output) {
-  lock();
-  for (unsigned i = 0; i < mInputDevices.size(); i++) {
-    if (&output == mInputDevices[i]) {
-      mInputDevices.erase(mInputDevices.begin() + i);
+void RouteDevice<DeviceType>::remove(DeviceType& device) {
+  std::lock_guard<std::mutex> guard(mVectorMutex);
+  for (unsigned i = 0; i < mRoutedInputs.size(); i++) {
+    if (&device == mRoutedInputs[i].device) {
+      mRoutedInputs.erase(mRoutedInputs.begin() + i);
       break;
     }
   }
@@ -106,25 +133,25 @@ void RouteDevice<DeviceType>::remove(DeviceType& output) {
 
 template <typename DeviceType>
 DeviceType& RouteDevice<DeviceType>::operator[](const int index) {
-  lock();
+  std::lock_guard<std::mutex> guard(mVectorMutex);
   if (outOfRange(index)) {
     throw "RouteDevice: Index out of range";
   }
-  return *mInputDevices[index];
+  return *(mRoutedInputs[index]->device);
 }
 
 template <typename DeviceType>
 const DeviceType& RouteDevice<DeviceType>::operator[](const int index) const {
-  lock();
+  std::lock_guard<std::mutex> guard(mVectorMutex);
   if (outOfRange(index)) {
     throw "RouteDevice: Index out of range";
   }
-  return *mInputDevices[index];
+  return *(mRoutedInputs[index]->device);
 }
 
 template <typename DeviceType>
 bool RouteDevice<DeviceType>::outOfRange(const int index) const {
-  return index < 0 || index > (int) mInputDevices.size();
+  return index < 0 || index > (int) mRoutedInputs.size();
 }
     
 } // namespace tsal

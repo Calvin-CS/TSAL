@@ -8,11 +8,6 @@
 #include "Sequencer.hpp"
 #include "portaudio.h"
 
-
-typedef signed short BIT_DEPTH;
-#define FORMAT RTAUDIO_SINT16
-#define SCALE 32767.0
-
 namespace tsal {
 
 /** @class Mixer
@@ -39,8 +34,10 @@ class Mixer : public InputDevice {
     Channel& getMaster() { return mMaster; };
     Sequencer& getSequencer() { return mSequencer; };
     unsigned getSampleRate() { return mSampleRate; };
+    unsigned getChannelCount() { return mChannelCount; };
 
     virtual double getInput() override;
+    virtual void getInput(std::vector<float>& buffer, unsigned long frameCount, unsigned channelCount) override;
 
   private:
     PaStream* mPaStream;
@@ -50,7 +47,7 @@ class Mixer : public InputDevice {
     void openPaStream();
     
     unsigned mSampleRate = 44100;
-    unsigned mBufferFrames = 0;
+    unsigned mChannelCount = 2;
     static void paStreamFinished(void* userData);
     static int paCallback( const void *inputBuffer, void *outputBuffer,
                            unsigned long framesPerBuffer,

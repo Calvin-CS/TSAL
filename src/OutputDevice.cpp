@@ -1,5 +1,6 @@
 #include "OutputDevice.hpp"
 #include "Mixer.hpp"
+#include <cmath>
 
 namespace tsal {
 
@@ -17,6 +18,14 @@ OutputDevice::OutputDevice(Mixer* mixer) {
  */
 void OutputDevice::setActive(bool active) { 
   mActive = active; 
+}
+/**
+ * @brief Set the panning modifer for 2 channel processing
+ * 
+ * @param gain 
+ */
+void OutputDevice::setPanning(double panning) {
+  mPanning = Util::checkParameterRange("Oscillator: Panning", panning, mPanningRange);
 }
 
 /**
@@ -56,6 +65,24 @@ double OutputDevice::getVolume() const {
 }
 
 /**
+ * @brief Get the amplitude modifier for left channel
+ * 
+ * @return double 
+ */
+double OutputDevice::getLeftPanning() const {
+  return cos(mPanning);
+}
+
+/*
+ * @brief Get the amplitude modifier for right channel
+ * 
+ * @return double 
+ */
+double OutputDevice::getRightPanning() const {
+  return sin(mPanning);
+}
+
+/**
  * @brief Check if the device is active
  *
  * @return bool
@@ -66,5 +93,6 @@ bool OutputDevice::isActive() const {
 
 Util::ParameterRange<double> OutputDevice::mGainRange = std::make_pair(-50.0, 50.0);
 Util::ParameterRange<double> OutputDevice::mVolumeRange = std::make_pair(0.0, 2.0);
+Util::ParameterRange<double> OutputDevice::mPanningRange = std::make_pair(-1.0, 1.0);
 
 }

@@ -19,6 +19,7 @@ class Channel : public ChannelDevice {
     Channel(Mixer* mixer);
     virtual ~Channel();
     virtual double getOutput() override;
+    virtual void getOutput(std::vector<float>& buffer, unsigned long frameCount, unsigned channelCount) override;
     virtual void setMixer(Mixer* mixer) override;
     virtual void setParentChannel(Channel* channel) override;
     void add(Channel& channel);
