@@ -16,6 +16,7 @@ class EffectChain : public OutputDevice {
     EffectChain(Mixer* mixer, OutputDevice& output) : OutputDevice(mixer), mInput(output) {};
     ~EffectChain();
     virtual double getOutput() override;
+    virtual void getOutput(std::vector<float>& buffer, unsigned long frameCount, unsigned channelCount) override;
     virtual void setMixer(Mixer* mixer) override;
     void add(Effect& effect);
     void remove(Effect& effect);

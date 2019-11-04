@@ -1,5 +1,6 @@
 #include "Mixer.hpp"
 #include "Channel.hpp"
+#include <vector>
 
 namespace tsal {
 
@@ -20,21 +21,17 @@ int Mixer::paCallback( const void *inputBuffer, void *outputBuffer,
   (void) statusFlags;
   (void) inputBuffer;
 
-  AudioData data;
-  data.buffer = out;
-  data.frameCount = framesPerBuffer;
-  data.channelCount = mixer->getChannelCount();
   
-  mixer->getInput(data);
-  float output;
-  // for(i = 0; i < framesPerBuffer; i++) {
-  //   output = (float) mixer->getInput();
-  //   *out++ = output;
-  //   *out++ = output;
-  // }
+  unsigned long sampleCount = framesPerBuffer * mixer->getChannelCount();
+  std::vector<float> buffer(sampleCount);
+  mixer->getInput(buffer, framesPerBuffer, mixer->getChannelCount());
+  
+  for(i = 0; i < sampleCount; i++) {
+    *out++ = buffer[i];
+  }
   return paContinue;
-
 }
+
 void Mixer::openPaStream() {
   PaError err = Pa_Initialize();
   if (err != paNoError) {
@@ -123,9 +120,11 @@ double Mixer::getInput() {
   return mMaster.getOutput();
 }
 
-void Mixer::getInput(AudioData data) {
-  return mMaster.getInput(data);
+void Mixer::getInput(std::vector<float>& buffer, unsigned long frameCount, unsigned channelCount) {
+  return mMaster.getOutput(buffer, frameCount, channelCount);
 }
+
+
 
 /**
  * @brief Add a channel 

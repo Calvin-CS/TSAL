@@ -31,6 +31,15 @@ double Channel::getOutput() {
   return mEffectChain.getOutput() * mAmp;
 }
 
+void Channel::getOutput(std::vector<float>& buffer, unsigned long frameCount, unsigned channelCount) {
+  if (mActive) {
+    // mEffectChain.getOuput(buffer, frameCount, channelCount);
+    for (unsigned i = 0; i < buffer.size(); i++) {
+      buffer[i] *= mAmp;
+    }
+  }
+}
+
 /**
  * @brief Add an effect to the end of the effect chain
  * 

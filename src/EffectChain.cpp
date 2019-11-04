@@ -13,6 +13,13 @@ double EffectChain::getOutput() {
   return (mEffects.size() == 0) ? mInput.getOutput() : mEffects.back()->getOutput();
 }
 
+void EffectChain::getOutput(std::vector<float>& buffer, unsigned long frameCount, unsigned channelCount) {
+  if (mEffects.size() == 0) {
+    mInput.getOutput(buffer, frameCount, channelCount);
+  } else {
+    mEffects.back()->getOutput(buffer, frameCount, channelCount);
+  }
+}
 void EffectChain::setMixer(Mixer* mixer) {
   OutputDevice::setMixer(mixer);
   lock();

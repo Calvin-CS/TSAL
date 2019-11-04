@@ -36,6 +36,15 @@ double Oscillator::getOutput() {
   return mWaveFormValue * mAmp;
 }
 
+void Oscillator::getOutput(std::vector<float>& buffer, unsigned long frameCount, unsigned channelCount) {
+  if (mActive) {
+    for (unsigned long i = 0; i < frameCount; i += channelCount) {
+      for (unsigned j = 0; j < channelCount; j++) {
+        buffer[i + j] = getOutput();
+      }
+    }
+  }
+}
 /**
  * @brief Get the note from a corresponding frequency
  * 

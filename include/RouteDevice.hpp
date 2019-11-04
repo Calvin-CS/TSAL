@@ -43,7 +43,8 @@ class RouteDevice : public InputDevice, public OutputDevice {
         DeviceType* device;
         std::vector<float> buffer;
         RoutedInput(DeviceType* d, Mixer* mixer)
-          : device(d) {};
+          : device(d),
+            buffer() {};
     };
     bool outOfRange(const int index) const;
     std::vector<RoutedInput> mRoutedInputs;
@@ -84,6 +85,7 @@ void RouteDevice<DeviceType>::getInput(std::vector<float> &buffer, unsigned long
   std::lock_guard<std::mutex> guard(mVectorMutex);
   for (auto routedInput : mRoutedInputs) {
     if (routedInput.buffer.size() < frameCount * channelCount) {
+      std::cout << "Updating buffer size" << std::endl;
       routedInput.buffer.resize(frameCount * channelCount);
     }
     routedInput.device->getOutput(routedInput.buffer, frameCount, channelCount);
