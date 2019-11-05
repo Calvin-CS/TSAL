@@ -17,7 +17,7 @@ namespace tsal {
 class ProgressOctave : public Instrument {
   public:
     ProgressOctave(Mixer* mixer, unsigned startNote, unsigned problemSize, unsigned numWorkers);
-    virtual double getOutput() override;
+    void getOutput(std::vector<float>& buffer, unsigned long frameCount, unsigned channelCount) override;
     virtual void setMixer(Mixer* mixer) override;
     void update(unsigned id);
   private:

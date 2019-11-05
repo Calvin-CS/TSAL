@@ -83,5 +83,5 @@ int main() {
   testEffectChain();
   testCompressor();
   testDelay();
-  exit(0);
+  return 0;
 }

@@ -13,21 +13,19 @@ int Mixer::paCallback( const void *inputBuffer, void *outputBuffer,
                        const PaStreamCallbackTimeInfo* timeInfo,
                        PaStreamCallbackFlags statusFlags,
                        void *userData ) {
-  float *out = (float*)outputBuffer;
-  unsigned long i;
-  Mixer *mixer = (Mixer *) userData;
-
   (void) timeInfo; /* Prevent unused variable warnings. */
   (void) statusFlags;
   (void) inputBuffer;
 
-  
-  unsigned long sampleCount = framesPerBuffer * mixer->getChannelCount();
-  std::vector<float> buffer(sampleCount);
-  mixer->getInput(buffer, framesPerBuffer, mixer->getChannelCount());
-  
-  for(i = 0; i < sampleCount; i++) {
-    *out++ = buffer[i];
+  Mixer * mixer = static_cast<Mixer *>(userData);
+  return mixer->audioCallback((const float*) inputBuffer, (float*) outputBuffer, framesPerBuffer);
+}
+
+int Mixer::audioCallback(const float *inputBuffer, float *outputBuffer, unsigned long frameCount) {
+  for (unsigned long frame = 0; frame < frameCount; frame += mChannelCount) {
+    for (unsigned channel = 0; channel < mChannelCount; channel++) {
+
+    }
   }
   return paContinue;
 }
@@ -63,14 +61,14 @@ void Mixer::openPaStream() {
   // Add a compressor so people don't break their sound cards
   mMaster.add(mCompressor);
   err = Pa_OpenStream(&mPaStream,
-                              NULL, /* no input */
-                              &outputParameters,
-                              mSampleRate,
-                              paFramesPerBufferUnspecified,
-                              paClipOff,      /* we won't output out of range samples so don't bother clipping them */
-                              &Mixer::paCallback,
-                              this
-                              );
+                      NULL, /* no input */
+                      &outputParameters,
+                      mSampleRate,
+                      paFramesPerBufferUnspecified,
+                      paClipOff,      /* we won't output out of range samples so don't bother clipping them */
+                      &Mixer::paCallback,
+                      this
+                      );
 
   if (err != paNoError) {
     /* Failed to open stream to device !!! */
@@ -114,17 +112,6 @@ Mixer::~Mixer() {
     return;
   }
 }
-
-double Mixer::getInput() {
-  mSequencer.tick();
-  return mMaster.getOutput();
-}
-
-void Mixer::getInput(std::vector<float>& buffer, unsigned long frameCount, unsigned channelCount) {
-  return mMaster.getOutput(buffer, frameCount, channelCount);
-}
-
-
 
 /**
  * @brief Add a channel 

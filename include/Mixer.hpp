@@ -1,7 +1,6 @@
 #ifndef MIXER_H
 #define MIXER_H
 
-#include "InputDevice.hpp"
 #include "OutputDevice.hpp"
 #include "Channel.hpp"
 #include "Compressor.hpp"
@@ -17,7 +16,7 @@ namespace tsal {
  * To use TSAL, the Mixer class needs to be initiliazed at the start of the project.
  * All other audio devices will be routed through the Mixer's master channel
  */
-class Mixer : public InputDevice {
+class Mixer {
   public:
     Mixer();
     Mixer(unsigned sampleRate);
@@ -36,9 +35,6 @@ class Mixer : public InputDevice {
     unsigned getSampleRate() { return mSampleRate; };
     unsigned getChannelCount() { return mChannelCount; };
 
-    virtual double getInput() override;
-    virtual void getInput(std::vector<float>& buffer, unsigned long frameCount, unsigned channelCount) override;
-
   private:
     PaStream* mPaStream;
     Channel mMaster;
@@ -47,13 +43,16 @@ class Mixer : public InputDevice {
     void openPaStream();
     
     unsigned mSampleRate = 44100;
+    // Assuming two channels until a system for variable number of channels exists
     unsigned mChannelCount = 2;
+    int audioCallback(const float *inputBuffer, float *outputBuffer, unsigned long frameCount);
     static void paStreamFinished(void* userData);
     static int paCallback( const void *inputBuffer, void *outputBuffer,
                            unsigned long framesPerBuffer,
                            const PaStreamCallbackTimeInfo* timeInfo,
                            PaStreamCallbackFlags statusFlags,
                            void *userData );
+    
 };
 
 }

@@ -4,8 +4,8 @@
 namespace tsal {
   
 Channel::Channel(Mixer* mixer) : ChannelDevice(mixer), mChannelIn(mixer), mRoutedInstruments(mixer), mRoutedChannels(mixer), mEffectChain(mixer, mChannelIn) {
-  mChannelIn.add(mRoutedInstruments);
-  mChannelIn.add(mRoutedChannels);
+  // mChannelIn.add(mRoutedInstruments);
+  // mChannelIn.add(mRoutedChannels);
 }
 
 Channel::~Channel() {
@@ -24,16 +24,10 @@ void Channel::setMixer(Mixer* mixer) {
   mEffectChain.setMixer(mixer);
 }
 
-double Channel::getOutput() {
-  if (!mActive) {
-    return 0.0;
-  }
-  return mEffectChain.getOutput() * mAmp;
-}
-
 void Channel::getOutput(std::vector<float>& buffer, unsigned long frameCount, unsigned channelCount) {
   if (mActive) {
     // mEffectChain.getOuput(buffer, frameCount, channelCount);
+    mChannelIn.getOutput(buffer, frameCount, channelCount);
     for (unsigned i = 0; i < buffer.size(); i++) {
       buffer[i] *= mAmp;
     }
@@ -65,7 +59,8 @@ void Channel::remove(Effect& effect) {
  */
 void Channel::add(Instrument& instrument) {
   instrument.setParentChannel(this);
-  mRoutedInstruments.add(instrument);
+  // mRoutedInstruments.add(instrument);
+  mChannelIn.add(instrument);
 }
 
 /**

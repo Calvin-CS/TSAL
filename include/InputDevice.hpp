@@ -14,7 +14,7 @@ class InputDevice {
   public:
     virtual ~InputDevice() {};
     virtual double getInput() { return 0; };
-    virtual void getInput(std::vector<float>& buffer, unsigned long frameCount, unsigned channelCount) { return; };
+    // virtual void getInput(std::vector<float>& buffer, unsigned long frameCount, unsigned channelCount) { return; };
 };
 
 }
