@@ -5,6 +5,7 @@
 namespace tsal {
 
 void Mixer::paStreamFinished(void* userData) {
+  (void) userData;
   return;
 }
 
@@ -18,13 +19,13 @@ int Mixer::paCallback( const void *inputBuffer, void *outputBuffer,
   (void) inputBuffer;
 
   Mixer * mixer = static_cast<Mixer *>(userData);
-  return mixer->audioCallback((const float*) inputBuffer, (float*) outputBuffer, framesPerBuffer);
+  return mixer->audioCallback((float*) outputBuffer, framesPerBuffer);
 }
 
-int Mixer::audioCallback(const float *inputBuffer, float *outputBuffer, unsigned long frameCount) {
+int Mixer::audioCallback(float *outputBuffer, unsigned long frameCount) {
   for (unsigned long frame = 0; frame < frameCount; frame += mChannelCount) {
     for (unsigned channel = 0; channel < mChannelCount; channel++) {
-
+      (void) outputBuffer;
     }
   }
   return paContinue;

@@ -14,10 +14,13 @@ class AudioBuffer {
         mChannelCount(channelCount) {};
     void updateFrameCount(unsigned long frameCount);
     void updateChannelCount(unsigned channelCount);
+    unsigned long getFrameCount() { return mFrameCount; }
+    unsigned getChannelCount() { return mChannelCount; }
 
     const T& operator[](int index) const;
     T& operator[](int index);
   private:
+    void resizeBuffer() { mBuffer.resize(mFrameCount * mChannelCount); };
     std::vector<T> mBuffer;
     unsigned long mFrameCount;
     unsigned mChannelCount;
@@ -31,6 +34,18 @@ const T& AudioBuffer<T>::operator[](int index) const {
 template <typename T>
 T& AudioBuffer<T>::operator[](int index) {
   return mBuffer[index];
+}
+
+template <typename T>
+void AudioBuffer<T>::updateFrameCount(unsigned long frameCount) {
+  mFrameCount = frameCount;
+  resizeBuffer();
+}
+
+template <typename T>
+void AudioBuffer<T>::updateChannelCount(unsigned channelCount) {
+  mChannelCount = channelCount;
+  resizeBuffer();
 }
 
 }
