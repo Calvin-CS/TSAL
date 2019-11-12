@@ -22,15 +22,19 @@ int Mixer::paCallback( const void *inputBuffer, void *outputBuffer,
 }
 
 int Mixer::audioCallback(const float *inputBuffer, float *outputBuffer, unsigned long frameCount) {
+  mBuffer.setSize(frameCount, mChannelCount);
+  mBuffer.clear();
+  mMaster.getOutput(mBuffer);
   for (unsigned long frame = 0; frame < frameCount; frame += mChannelCount) {
     for (unsigned channel = 0; channel < mChannelCount; channel++) {
-
+      outputBuffer[frame + channel] = mBuffer[frame + channel];
     }
   }
   return paContinue;
 }
 
 void Mixer::openPaStream() {
+  mChannelCount = 1;
   PaError err = Pa_Initialize();
   if (err != paNoError) {
     return;

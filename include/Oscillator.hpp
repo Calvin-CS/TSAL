@@ -27,7 +27,7 @@ class Oscillator : public OutputDevice {
     };
 
     double getOutput() override;
-    void getOutput(std::vector<float>& buffer, unsigned long frameCount, unsigned channelCount) override;
+    void getOutput(AudioBuffer<float> &buffer) override;
     void setMode(OscillatorMode mode);
     void setNote(double note);
     void setFrequency(double frequency);

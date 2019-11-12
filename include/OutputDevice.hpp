@@ -2,6 +2,7 @@
 #define OUTPUTDEVICE_H
 
 #include "Util.hpp"
+#include "AudioBuffer.hpp"
 #include <iostream>
 #include <vector>
 
@@ -19,7 +20,7 @@ class OutputDevice {
     OutputDevice(Mixer* mixer);
     virtual ~OutputDevice() {};
     virtual double getOutput() { return 0.0; };
-    virtual void getOutput(std::vector<float>& buffer, unsigned long frameCount, unsigned channelCount) { return; };
+    virtual void getOutput(AudioBuffer<float> &buffer) { return; };
     /**
      * @brief Get the output for the device
      * 

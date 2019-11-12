@@ -42,6 +42,7 @@ class Mixer {
     Sequencer mSequencer;
     void openPaStream();
     
+    AudioBuffer<float> mBuffer;
     unsigned mSampleRate = 44100;
     // Assuming two channels until a system for variable number of channels exists
     unsigned mChannelCount = 2;

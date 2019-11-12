@@ -24,10 +24,10 @@ void Channel::setMixer(Mixer* mixer) {
   mEffectChain.setMixer(mixer);
 }
 
-void Channel::getOutput(std::vector<float>& buffer, unsigned long frameCount, unsigned channelCount) {
+void Channel::getOutput(AudioBuffer<float> &buffer) {
   if (mActive) {
-    // mEffectChain.getOuput(buffer, frameCount, channelCount);
-    mChannelIn.getOutput(buffer, frameCount, channelCount);
+    // mEffectChain.getOuput(buffer);
+    mChannelIn.getOutput(buffer);
     for (unsigned i = 0; i < buffer.size(); i++) {
       buffer[i] *= mAmp;
     }

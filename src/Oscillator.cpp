@@ -36,11 +36,16 @@ double Oscillator::getOutput() {
   return mWaveFormValue * mAmp;
 }
 
-void Oscillator::getOutput(std::vector<float>& buffer, unsigned long frameCount, unsigned channelCount) {
+void Oscillator::getOutput(AudioBuffer<float> &buffer) {
   if (mActive) {
-    for (unsigned long i = 0; i < frameCount; i += channelCount) {
+    const auto channelCount = buffer.getChannelCount();
+    for (unsigned long i = 0; i < buffer.getFrameCount(); i += channelCount) {
       for (unsigned j = 0; j < channelCount; j++) {
-        buffer[i + j] = getOutput();
+        if (j == 0) {
+          buffer[i + j] = getOutput();
+        } else {
+          buffer[i + j] = 0;
+        }
       }
     }
   }

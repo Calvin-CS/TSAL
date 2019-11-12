@@ -11,6 +11,10 @@ Synth::Synth(Mixer *mixer) : Instrument(mixer), mOscillator(mixer), mEnvelope(mi
 double Synth::getOutput() {
   return mOscillator.getOutput() * mEnvelope.getOutput() * mAmp * (mVelocity / 127.0);
 }
+
+void Synth::getOutput(AudioBuffer<float> &buffer) {
+  mOscillator.getOutput(buffer);
+}
   
 /**
  * @brief Start playing a note

@@ -8,8 +8,8 @@ ProgressOctave::ProgressOctave(Mixer* mixer, unsigned startNote, unsigned proble
   mNumWorkers = numWorkers;
 }
 
-void ProgressOctave::getOutput(std::vector<float>& buffer, unsigned long frameCount, unsigned channelCount) {
-  mRoutedOscillators.getOutput(buffer, frameCount, channelCount);
+void ProgressOctave::getOutput(AudioBuffer<float> &buffer) {
+  mRoutedOscillators.getOutput(buffer);
 }
 
 void ProgressOctave::setMixer(Mixer* mixer) {
