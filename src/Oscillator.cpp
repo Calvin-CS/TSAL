@@ -37,16 +37,14 @@ double Oscillator::getOutput() {
 }
 
 void Oscillator::getOutput(AudioBuffer<float> &buffer) {
-  if (mActive) {
-    const auto channelCount = buffer.getChannelCount();
-    for (unsigned long i = 0; i < buffer.getFrameCount(); i += channelCount) {
-      for (unsigned j = 0; j < channelCount; j++) {
-        if (j == 0) {
-          buffer[i + j] = getOutput();
-        } else {
-          buffer[i + j] = 0;
-        }
-      }
+  const auto channels = buffer.getChannelCount();
+  const auto frames = buffer.getFrameCount();
+  float output;
+
+  for (unsigned long i = 0; i < frames; i++) {
+    output = getOutput();
+    for (unsigned j = 0; j < channels; j++) {
+      buffer[i * channels + j] = output; 
     }
   }
 }

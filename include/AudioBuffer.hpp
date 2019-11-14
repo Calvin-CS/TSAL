@@ -48,7 +48,6 @@ template <typename T>
 void AudioBuffer<T>::resize() {
   unsigned long bufferSize = mFrameCount * mChannelCount;
   if (bufferSize > mBuffer.size()) {
-    std::cout << "resizing buffer" << std::endl;
     mBuffer.resize(bufferSize);
   }
 }

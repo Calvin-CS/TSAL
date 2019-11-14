@@ -5,19 +5,15 @@ using namespace tsal;
 
 int main() {
   Mixer mixer;
-  Delay delay(&mixer);
-
-  Channel channel2(&mixer);
-  Channel channel(&mixer);
-  
-  {
-    ThreadSynth synth2(&mixer);
-    mixer.add(synth2);
-    std::cout << "Playing synth" << std::endl;
-    synth2.play(C5, Timing::WHOLE, 2);
-    std::cout << "DOne" << std::endl;
-  }
+  Synth synth(&mixer);
+  synth.play(tsal::C4);
     
+  AudioBuffer<float> mBuffer;
+  mBuffer.setSize(12, 2);
+  synth.getOutput(mBuffer);
+  for (unsigned i = 0; i < mBuffer.size(); i++) {
+    printf("%f, ", mBuffer[i]);
+  }
   // channel2.add(delay);
   // channel.add(synth);
   // std::cout << "Playing synth" << std::endl;
