@@ -33,17 +33,17 @@ class OutputDevice {
     void setGain(double gain);
     void setVolume(double volume);
 
-    double getLeftPanning() const;
-    double getRightPanning() const;
     double getGain() const;
     double getVolume() const;
     bool isActive() const;
 
   protected:
+    virtual void setChannelPanning(unsigned channelCount);
     Mixer* mMixer = nullptr;
     bool mActive = true;
     double mAmp = 1.0;
     double mPanning = 0.0;
+    std::vector<double> mChannelPanning;
     
     static Util::ParameterRange<double> mGainRange;
     static Util::ParameterRange<double> mVolumeRange;

@@ -41,10 +41,12 @@ void Oscillator::getOutput(AudioBuffer<float> &buffer) {
   const auto frames = buffer.getFrameCount();
   float output;
 
+  setChannelPanning(channels);
+
   for (unsigned long i = 0; i < frames; i++) {
     output = getOutput();
     for (unsigned j = 0; j < channels; j++) {
-      buffer[i * channels + j] = output; 
+      buffer[i * channels + j] = output * mChannelPanning[j]; 
     }
   }
 }

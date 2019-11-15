@@ -19,13 +19,28 @@ OutputDevice::OutputDevice(Mixer* mixer) {
 void OutputDevice::setActive(bool active) { 
   mActive = active; 
 }
+
+void OutputDevice::setPanning(double panning) {
+  mPanning = Util::checkParameterRange("Oscillator: Panning", panning, mPanningRange);
+}
+
 /**
- * @brief Set the panning modifer for 2 channel processing
+ * @brief Set the panning modifier or all the channels
  * 
  * @param gain 
  */
-void OutputDevice::setPanning(double panning) {
-  mPanning = Util::checkParameterRange("Oscillator: Panning", panning, mPanningRange);
+void OutputDevice::setChannelPanning(unsigned channelCount) {
+  switch (channelCount) {
+    // mono channel
+    case 1: mChannelPanning[0] = std::abs(mPanning);
+      break;
+    // stereo channel
+    case 2: {
+      mChannelPanning[0] = cos(mPanning);
+      mChannelPanning[1] = sin(mPanning);
+      break;
+    }
+  }
 }
 
 /**
@@ -62,24 +77,6 @@ void OutputDevice::setVolume(double volume) {
  */
 double OutputDevice::getVolume() const {
   return Util::dbToVolume(getGain());
-}
-
-/**
- * @brief Get the amplitude modifier for left channel
- * 
- * @return double 
- */
-double OutputDevice::getLeftPanning() const {
-  return cos(mPanning);
-}
-
-/*
- * @brief Get the amplitude modifier for right channel
- * 
- * @return double 
- */
-double OutputDevice::getRightPanning() const {
-  return sin(mPanning);
 }
 
 /**
