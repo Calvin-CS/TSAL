@@ -27,10 +27,10 @@ void Channel::setMixer(Mixer* mixer) {
 void Channel::getOutput(AudioBuffer<float> &buffer) {
   if (mActive) {
     mChannelIn.getOutput(buffer);
-    // mEffectChain.getOutput(buffer);
-    // for (unsigned i = 0; i < buffer.size(); i++) {
-    //   buffer[i] *= mAmp;
-    // }
+    mEffectChain.getOutput(buffer);
+    for (unsigned i = 0; i < buffer.size(); i++) {
+      buffer[i] *= mAmp;
+    }
   }
 }
 
@@ -59,7 +59,6 @@ void Channel::remove(Effect& effect) {
  */
 void Channel::add(Instrument& instrument) {
   instrument.setParentChannel(this);
-  // mChannelIn.add(instrument);
   mRoutedInstruments.add(instrument);
 }
 

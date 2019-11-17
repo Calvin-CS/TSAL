@@ -5,7 +5,7 @@
   
 namespace tsal {
 
-Compressor::Compressor(Mixer* mixer) : Effect(mixer), mBuffer(COMPRESSOR_MAX_BUFFER), mEnvelope(COMPRESSOR_MAX_BUFFER) {
+Compressor::Compressor(Mixer* mixer) : Effect(mixer), mEnvelope(COMPRESSOR_MAX_BUFFER) {
 };
 
 void Compressor::getOutput(AudioBuffer<float> &buffer) {
@@ -37,29 +37,19 @@ void Compressor::setMixer(Mixer *mixer) {
 void Compressor::getEnvelope(AudioBuffer<float> &buffer) {
   const auto channels = buffer.getChannelCount();
   const auto frames = buffer.getFrameCount();
+  mEnvelope.resize(frames);
   for (unsigned i = 0; i < channels; i++) {
     for (unsigned long j = 0; j < frames; j++) {
       float envIn = std::abs(buffer[j * channels + i]);
       double gain = mEnvelopeSample < envIn ? mAttackGain : mReleaseGain;
       mEnvelopeSample = envIn + gain * (mEnvelopeSample - envIn);
       if (i == 0) {
-        mEnvelope[j] = mEnvelopeSample / channels;
+        mEnvelope[j] = mEnvelopeSample / (float) channels;
       } else {
-        mEnvelope[j] += mEnvelopeSample / channels;
+        mEnvelope[j] += mEnvelopeSample / (float) channels;
       }
     }
   }
-         
-  // for (unsigned i = 0; i < COMPRESSOR_MAX_BUFFER; i++) {
-  //   // Peak detection
-  //   double envIn = std::abs(mBuffer[i]);
-
-  //   double gain = mEnvelopeSample < envIn ? mAttackGain : mReleaseGain;
-      
-  //   mEnvelopeSample = envIn + gain * (mEnvelopeSample - envIn);
-
-  //   mEnvelope[i] = mEnvelopeSample;
-  // }
 }
 /**
  * @brief Compress the audio in the buffer if necessary
