@@ -7,7 +7,7 @@ namespace tsal {
 
 // Helpful implementation of ployBLEP to reduce aliasing
 // http://metafunction.co.uk/all-about-digital-oscillators-part-2-blits-bleps/
-double Oscillator::getOutput() {
+double Oscillator::getSample() {
   double t = mPhase / PI2;
 
   switch (mMode) {
@@ -44,7 +44,7 @@ void Oscillator::getOutput(AudioBuffer<float> &buffer) {
   setChannelPanning(channels);
 
   for (unsigned long i = 0; i < frames; i++) {
-    output = getOutput();
+    output = getSample();
     for (unsigned j = 0; j < channels; j++) {
       buffer[i * channels + j] = output * mChannelPanning[j]; 
     }

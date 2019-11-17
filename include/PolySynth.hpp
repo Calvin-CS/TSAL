@@ -5,7 +5,7 @@
 #include "Oscillator.hpp"
 #include "Instrument.hpp"
 
-#define NUM_VOICES 1
+#define NUM_VOICES 20
 
 namespace tsal {
 

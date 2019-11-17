@@ -3,6 +3,7 @@
 
 #include "OutputDevice.hpp"
 #include "Effect.hpp"
+
 namespace tsal {
 
 /** @class EffectChain
@@ -23,7 +24,7 @@ class EffectChain : public OutputDevice {
   private:
     std::vector<Effect*> mEffects;
     OutputDevice& mInput;
-    std::mutex mVectorMutex;
+    std::mutex mEffectChainMutex;
 };
 
 }

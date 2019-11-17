@@ -43,11 +43,17 @@ class RouteDevice : public OutputDevice {
     };
     bool outOfRange(const int index) const;
     std::vector<RoutedInput*> mRoutedInputs;
+    /* The mutex protection on RouteDevice and EffectChain
+     * should use a single mutex for structure modification protection
+     * to reduce complexity. But there are potential for deadlocks in both cases
+     */
+    std::mutex mRouterMutex;
 };
 
 
 template <typename DeviceType>
 RouteDevice<DeviceType>::~RouteDevice() {
+  std::lock_guard<std::mutex> guard(mRouterMutex);
   for (unsigned i = 0; i < mRoutedInputs.size(); i++) {
     mRoutedInputs.erase(mRoutedInputs.begin() + i);
   }
@@ -57,6 +63,7 @@ template <typename DeviceType>
 void RouteDevice<DeviceType>::getOutput(AudioBuffer<float> &buffer) {
   for (auto routedInput : mRoutedInputs) {
     routedInput->buffer.setSize(buffer);
+    routedInput->buffer.clear();
     routedInput->device->getOutput(routedInput->buffer);
     for (unsigned i = 0; i < buffer.size(); i++) {
       buffer[i] += routedInput->buffer[i];
@@ -79,6 +86,7 @@ void RouteDevice<DeviceType>::setMixer(Mixer* mixer) {
  */
 template <typename DeviceType>
 void RouteDevice<DeviceType>::add(DeviceType& device) {
+  std::lock_guard<std::mutex> guard(mRouterMutex);
   device.setMixer(mMixer);
   mRoutedInputs.push_back(new RoutedInput(&device, mMixer));
 }
@@ -90,6 +98,7 @@ void RouteDevice<DeviceType>::add(DeviceType& device) {
  */
 template <typename DeviceType>
 void RouteDevice<DeviceType>::remove(DeviceType& device) {
+  std::lock_guard<std::mutex> guard(mRouterMutex);
   for (unsigned i = 0; i < mRoutedInputs.size(); i++) {
     if (&device == mRoutedInputs[i]->device) {
       mRoutedInputs.erase(mRoutedInputs.begin() + i);

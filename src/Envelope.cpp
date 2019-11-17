@@ -54,7 +54,7 @@ void Envelope::updateState() {
  * 
  * @return double A sample of the envelope
  */
-double Envelope::getOutput() {
+double Envelope::getSample() {
   if (!mActive) {
     return 1.0;
   }

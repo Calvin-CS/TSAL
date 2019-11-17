@@ -17,7 +17,6 @@ class Delay : public Effect {
     Delay(Mixer *mixer);
     void init();
     virtual void setMixer(Mixer* mixer) override;
-    virtual double getOutput() override;
     virtual void getOutput(AudioBuffer<float> &buffer) override;
     void setDelay(unsigned delay);
     void setFeedback(double feedback);

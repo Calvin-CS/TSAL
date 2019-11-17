@@ -21,10 +21,8 @@ void SoundFont::setMixer(Mixer* mixer) {
   tsf_set_output(mSoundFont, TSF_MONO, mMixer->getSampleRate(), 0);
 }
 
-double SoundFont::getOutput() {
-  float buffer[1];
-  tsf_render_float(mSoundFont, buffer, 1, 0);
-  return buffer[0] * mAmp;
+void SoundFont::getOutput(AudioBuffer<float> &buffer) {
+  // tsf_render_float(mSoundFont, buffer, buffer.size(), 0);
 }
 
 void SoundFont::play(double note, double velocity) {

@@ -28,7 +28,7 @@ class Envelope : public OutputDevice {
       RELEASE
     };
     Envelope();
-    double getOutput();
+    double getSample();
     void updateState();
     void start();
     void stop();

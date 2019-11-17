@@ -34,8 +34,10 @@ class Mixer {
     Sequencer& getSequencer() { return mSequencer; };
     unsigned getSampleRate() { return mSampleRate; };
     unsigned getChannelCount() { return mChannelCount; };
+    std::mutex& getSystemLock() { return mSystemLock; };
 
   private:
+    std::mutex mSystemLock;
     PaStream* mPaStream;
     Channel mMaster;
     Compressor mCompressor;

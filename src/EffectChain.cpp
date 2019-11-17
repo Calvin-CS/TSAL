@@ -3,7 +3,6 @@
 namespace tsal {
 
 EffectChain::~EffectChain() {
-  std::lock_guard<std::mutex> guard(mVectorMutex);
   for (unsigned i = 0; i < mEffects.size(); i++) {
     remove(*mEffects[i]);
   }
@@ -17,7 +16,6 @@ void EffectChain::getOutput(AudioBuffer<float> &buffer) {
 
 void EffectChain::setMixer(Mixer* mixer) {
   OutputDevice::setMixer(mixer);
-  std::lock_guard<std::mutex> guard(mVectorMutex);
   for (auto effect : mEffects) {
     effect->setMixer(mixer);
   }
@@ -28,7 +26,7 @@ void EffectChain::setMixer(Mixer* mixer) {
  * @param effect
  */
 void EffectChain::add(Effect& effect) {
-  std::lock_guard<std::mutex> guard(mVectorMutex);
+  std::lock_guard<std::mutex> guard(mEffectChainMutex);
   effect.setMixer(mMixer);
   mEffects.push_back(&effect);
 }
@@ -38,7 +36,7 @@ void EffectChain::add(Effect& effect) {
  * @param effect
  */
 void EffectChain::remove(Effect& effect) {
-  std::lock_guard<std::mutex> guard(mVectorMutex);
+  std::lock_guard<std::mutex> guard(mEffectChainMutex);
   for (unsigned i = 1; i < mEffects.size() - 1; i++) {
     if (mEffects[i] == &effect) {
       mEffects.erase(mEffects.begin() + i);
