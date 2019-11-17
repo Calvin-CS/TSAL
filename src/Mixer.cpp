@@ -26,8 +26,11 @@ int Mixer::audioCallback(float *outputBuffer, unsigned long frameCount) {
   mBuffer.setSize(frameCount, mChannelCount);
   mBuffer.clear();
   mMaster.getOutput(mBuffer);
-  for (unsigned i = 0; i < frameCount * mChannelCount; i++) {
-    outputBuffer[i] = mBuffer[i];
+  for (unsigned long i = 0; i < frameCount; i++) {
+    mSequencer.tick();
+    for (unsigned j = 0; j < mChannelCount; j++) {
+      outputBuffer[i * mChannelCount + j] = mBuffer[i * mChannelCount + j];
+    }
   }
   return paContinue;
 }
