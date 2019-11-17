@@ -8,26 +8,20 @@ namespace tsal {
 Compressor::Compressor(Mixer* mixer) : Effect(mixer), mBuffer(COMPRESSOR_MAX_BUFFER), mEnvelope(COMPRESSOR_MAX_BUFFER) {
 };
 
-double Compressor::getOutput() {
+void Compressor::getOutput(AudioBuffer<float> &buffer) {
   /* The Compressor uses a circular buffer where a value is written behind 
    * the value that was read. Once the buffer is full of new values, all
    * of the samples in the buffer are processed.
    */
   // If not active, just route the samples through without applying an filtering
   if (!mActive) {
-    return getInput();
+    return; 
   }
 
-  // Add a new sample into the buffer
-  mBuffer[mCurrentSample++] = getInput();
-  if (mCurrentSample >= COMPRESSOR_MAX_BUFFER) {
-    mCurrentSample = 0;
-    // Filter the generated audio data since the buffer is full
-    filterAudio();
-  }
+  filterAudio(buffer);
 
   // Get an audio sample from the audio that has been processed in front
-  return mBuffer[mCurrentSample];
+  // return mBuffer[mCurrentSample];
 }
 
 void Compressor::setMixer(Mixer *mixer) {
@@ -40,42 +34,61 @@ void Compressor::setMixer(Mixer *mixer) {
  * @brief Get the sound envelope for the sample buffer
  * 
  */
-void Compressor::getEnvelope() {
-  for (unsigned i = 0; i < COMPRESSOR_MAX_BUFFER; i++) {
-    // Peak detection
-    double envIn = std::abs(mBuffer[i]);
-
-    double gain = mEnvelopeSample < envIn ? mAttackGain : mReleaseGain;
-      
-    mEnvelopeSample = envIn + gain * (mEnvelopeSample - envIn);
-
-    mEnvelope[i] = mEnvelopeSample;
+void Compressor::getEnvelope(AudioBuffer<float> &buffer) {
+  const auto channels = buffer.getChannelCount();
+  const auto frames = buffer.getFrameCount();
+  for (unsigned i = 0; i < channels; i++) {
+    for (unsigned long j = 0; j < frames; j++) {
+      float envIn = std::abs(buffer[j * channels + i]);
+      double gain = mEnvelopeSample < envIn ? mAttackGain : mReleaseGain;
+      mEnvelopeSample = envIn + gain * (mEnvelopeSample - envIn);
+      if (i == 0) {
+        mEnvelope[j] = mEnvelopeSample / channels;
+      } else {
+        mEnvelope[j] += mEnvelopeSample / channels;
+      }
+    }
   }
+         
+  // for (unsigned i = 0; i < COMPRESSOR_MAX_BUFFER; i++) {
+  //   // Peak detection
+  //   double envIn = std::abs(mBuffer[i]);
+
+  //   double gain = mEnvelopeSample < envIn ? mAttackGain : mReleaseGain;
+      
+  //   mEnvelopeSample = envIn + gain * (mEnvelopeSample - envIn);
+
+  //   mEnvelope[i] = mEnvelopeSample;
+  // }
 }
 /**
  * @brief Compress the audio in the buffer if necessary
  * 
  */
-void Compressor::filterAudio() {
+void Compressor::filterAudio(AudioBuffer<float> &buffer) {
   double postGainAmp = Util::dbToAmp(mPostGain);
 
   // If there is any pregain, apply it to the audio buffer
   if (mPreGain != 0.0) {
     double preGainAmp = Util::dbToAmp(mPreGain);
-    for (unsigned i = 0; i < COMPRESSOR_MAX_BUFFER; i++) {
-      mBuffer[i] *= preGainAmp;
+    for (unsigned i = 0; i < buffer.size(); i++) {
+      buffer[i] *= preGainAmp;
     }
   }
 
-  getEnvelope();
+  getEnvelope(buffer);
   calculateSlope();
   
+  const auto channels = buffer.getChannelCount();
+  const auto frames = buffer.getFrameCount();
   // Apply the adjusted gain and postGain to the audio buffer
-  for (unsigned i = 0; i < COMPRESSOR_MAX_BUFFER; i++) {
+  for (unsigned long i = 0; i < frames; i++) {
     mGain = mSlope * (mThreshold - Util::ampToDb(mEnvelope[i]));
     mGain = std::min(0.0, mGain);
     mGain = Util::dbToAmp(mGain);
-    mBuffer[i] *= (mGain * postGainAmp);
+    for (unsigned j = 0; j < channels; j++) {
+      buffer[i * channels + j] *= (mGain * postGainAmp);
+    }
   }
 }
  

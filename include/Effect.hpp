@@ -16,16 +16,11 @@ namespace tsal {
  * It processes the audio and then continues to pass it up the chain until the audio reaches
  * the end and it routed to the mixer
  */
-class Effect : public InputDevice, public ChannelDevice {
+class Effect : public ChannelDevice {
   public:
     Effect(Mixer* mixer);
     ~Effect();
     virtual void setParentChannel(Channel* channel) override;
-    virtual double getInput() override;
-    void setInput(OutputDevice* input);
-
-  private:
-    OutputDevice* mInput = nullptr;
 };
 
 }

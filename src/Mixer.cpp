@@ -1,69 +1,65 @@
 #include "Mixer.hpp"
 #include "Channel.hpp"
+#include <vector>
 
 namespace tsal {
 
-void Mixer::errorCallback( RtAudioError::Type type, const std::string &errorText ) {
-  // This example error handling function does exactly the same thing
-  // as the embedded RtAudio::error() function.
-  std::cout << "in errorCallback" << std::endl;
-  if ( type == RtAudioError::WARNING )
-    std::cerr << '\n' << errorText << "\n\n";
-  else if ( type != RtAudioError::WARNING )
-    throw( RtAudioError( errorText, type ) );
+void Mixer::paStreamFinished(void* userData) {
+  (void) userData;
+  return;
 }
 
-/* This is the main function that we give to the audio buffer to call for sampling
- * Depending on how it's configured, this will usually get called 44100 per second
- */
-int Mixer::streamCallback(void *outputBuffer,
-                   __attribute__((unused)) void *inputBuffer,
-                   unsigned nBufferFrames, 
-                   __attribute__((unused)) double streamTime,
-                   RtAudioStreamStatus status,
-                   void *data) {
-  
-  BIT_DEPTH *buffer = (BIT_DEPTH *) outputBuffer;
-  Mixer *audio = (Mixer *) data;
+int Mixer::paCallback( const void *inputBuffer, void *outputBuffer,
+                       unsigned long framesPerBuffer,
+                       const PaStreamCallbackTimeInfo* timeInfo,
+                       PaStreamCallbackFlags statusFlags,
+                       void *userData ) {
+  (void) timeInfo; /* Prevent unused variable warnings. */
+  (void) statusFlags;
+  (void) inputBuffer;
 
-  if ( status )
-    std::cout << "Stream underflow detected!" << std::endl;
-
-  for (unsigned i = 0; i < nBufferFrames; i++) {
-    *buffer++ = (BIT_DEPTH) (audio->getInput() * SCALE);
-  }
-
-  return 0;        
+  Mixer * mixer = static_cast<Mixer *>(userData);
+  return mixer->audioCallback((float*) outputBuffer, framesPerBuffer);
 }
 
-void Mixer::initalizeStream() {
-  if (mRtAudio.getDeviceCount() < 1) {
-    std::cout << "\nNo audio devices found!\n";
-    exit(1);
+int Mixer::audioCallback(float *outputBuffer, unsigned long frameCount) {
+  mBuffer.setSize(frameCount, mChannelCount);
+  mBuffer.clear();
+  mMaster.getOutput(mBuffer);
+  for (unsigned long i = 0; i < frameCount; i++) {
+    mSequencer.tick();
+    for (unsigned j = 0; j < mChannelCount; j++) {
+      outputBuffer[i * mChannelCount + j] = mBuffer[i * mChannelCount + j];
+    }
   }
-  
-  unsigned deviceId = mRtAudio.getDefaultOutputDevice(); 
-  RtAudio::DeviceInfo info = mRtAudio.getDeviceInfo(deviceId);
-  // If the sample rate hasn't been set, use the highest sample rate supported
-  if (mSampleRate == 0) {
-    mSampleRate = info.sampleRates[info.sampleRates.size() - 1];
+  return paContinue;
+}
+
+void Mixer::openPaStream() {
+  mChannelCount = 2;
+  PaError err = Pa_Initialize();
+  if (err != paNoError) {
+    return;
   }
-  
-  mRtAudio.showWarnings(true);
+  PaStreamParameters outputParameters;
 
-  mBufferFrames = 512;
-  RtAudio::StreamParameters oParams;
-  oParams.deviceId = deviceId;
-  oParams.nChannels = mChannels;
-  oParams.firstChannel = 0;
+  const PaDeviceIndex index = Pa_GetDefaultOutputDevice();
+  outputParameters.device = index;
+  if (outputParameters.device == paNoDevice) {
+    printf("No default output device found\n");
+    return;
+  }
 
-  RtAudio::StreamOptions options;
-  // Investigate what exactly these flags do
-  //options.flags = RTAUDIO_HOG_DEVICE | RTAUDIO_SCHEDULE_REALTIME;
-  
-  std::cout << "Sample rate: " << mSampleRate 
-            << "\nBuffer frames: " << mBufferFrames
-            << std::endl;
+  const PaDeviceInfo* pInfo = Pa_GetDeviceInfo(index);
+  if (pInfo != 0) {
+    printf("Output device name: '%s'\n", pInfo->name);
+    printf("Default sample rate: '%f'\n", pInfo->defaultSampleRate);
+  }
+
+  outputParameters.channelCount = mChannelCount;
+  outputParameters.sampleFormat = paFloat32; /* 32 bit floating point output */
+  outputParameters.suggestedLatency = Pa_GetDeviceInfo( outputParameters.device )->defaultLowOutputLatency;
+  outputParameters.hostApiSpecificStreamInfo = NULL;
 
   mSequencer.setSampleRate(mSampleRate);
   mSequencer.setBPM(60);
@@ -71,19 +67,36 @@ void Mixer::initalizeStream() {
 
   // Add a compressor so people don't break their sound cards
   mMaster.add(mCompressor);
+  err = Pa_OpenStream(&mPaStream,
+                      NULL, /* no input */
+                      &outputParameters,
+                      mSampleRate,
+                      paFramesPerBufferUnspecified,
+                      paClipOff,      /* we won't output out of range samples so don't bother clipping them */
+                      &Mixer::paCallback,
+                      this
+                      );
 
-  try {
-    mRtAudio.openStream(&oParams, NULL, FORMAT, mSampleRate, &mBufferFrames, 
-      &streamCallback, (void *)this, &options, &errorCallback);
-    mRtAudio.startStream();
-  } catch (RtAudioError& e) {
-    e.printMessage();
-  } 
+  if (err != paNoError) {
+    /* Failed to open stream to device !!! */
+    return;
+  }
+
+  err = Pa_SetStreamFinishedCallback(mPaStream, &Mixer::paStreamFinished);
+
+  if (err != paNoError) {
+    Pa_CloseStream(mPaStream);
+    mPaStream = 0;
+    return;
+  }
+  err = Pa_StartStream(mPaStream);
+  if (err != paNoError) {
+    return;
+  }
 }
 
 Mixer::Mixer() : mMaster(this), mCompressor(this) {
-  mChannels = 1;
-  initalizeStream();
+  openPaStream();
 }
 
 /**
@@ -93,20 +106,18 @@ Mixer::Mixer() : mMaster(this), mCompressor(this) {
  */
 Mixer::Mixer(unsigned sampleRate)  : mMaster(this), mCompressor(this) {
   mSampleRate = sampleRate;
-  // Eventually it would be nice to play in stereo, but that sounds hard for now
-  mChannels = 1;
-  initalizeStream();
+  openPaStream();
 }
 
 Mixer::~Mixer() {
-  if (mRtAudio.isStreamOpen())
-    mRtAudio.closeStream();
-}
-
-double Mixer::getInput() {
-  mSequencer.tick();
-  mCurrentTick = mSequencer.getTick();
-  return mMaster.getOutput();
+  PaError err = Pa_CloseStream(mPaStream);
+  if (err != paNoError) {
+    return;
+  }
+  err = Pa_Terminate();
+  if (err != paNoError) {
+    return;
+  }
 }
 
 /**

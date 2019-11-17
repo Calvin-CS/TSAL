@@ -14,6 +14,7 @@ class InputDevice {
   public:
     virtual ~InputDevice() {};
     virtual double getInput() { return 0; };
+    // virtual void getInput(AudioBuffer<float> &buffer) { return; };
 };
 
 }

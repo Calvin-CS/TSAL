@@ -23,27 +23,26 @@ void Delay::setMixer(Mixer* mixer) {
   init();
 }
 
-double Delay::getOutput() {
-  double const input = getInput();
+void Delay::getOutput(AudioBuffer<float> &buffer) {
   if (!mActive) {
-    return input;
+    return;
   }
 
-  int offset = mCounter - mDelay;
+  const auto channels = buffer.getChannelCount();
+  for (unsigned long i = 0; i < buffer.getFrameCount(); i++) {
+    int offset = mCounter - mDelay;
+    if (offset < 0) offset = mBuffer.size() + offset;
 
-  // Clip lookback buffer-bound
-  if (offset < 0)
-    offset = mBuffer.size() + offset;
-
-  double const output = mBuffer[offset];
-  double const bufferValue = input + output * mFeedback;
-  mBuffer[mCounter++] = bufferValue;
-
-  // Clip delay counter
-  if(mCounter >= mBuffer.size())
-    mCounter = 0;
-
-  return output + input;
+    for (unsigned j = 0; j < channels; j++) {
+      double const output = mBuffer[offset];
+      double const bufferValue = buffer[i * channels + j] + output * mFeedback;
+      mBuffer[mCounter++] = bufferValue;
+      if (mCounter >= mBuffer.size()) {
+        mCounter = 0;
+      }
+      buffer[i * channels + j] += output;
+    }
+  }
 }
 
 /**

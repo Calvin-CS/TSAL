@@ -207,6 +207,10 @@ rain_p
 progress
 producer_consumer
 producer_consumer_percussion
+bubble_sort
+insertion_sort
+selection_sort
+quick_sort
 hello_tsal
 hello_tsal_threads
 
@@ -229,6 +233,7 @@ todo.txt
 /bin
 /build
 compile_commands.json
+.clangd
 .cquery
 .cquery_cached_index
 RtAudio.h

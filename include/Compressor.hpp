@@ -4,6 +4,7 @@
 #include "Effect.hpp"
 #include "Buffer.hpp"
 #include "Util.hpp"
+#include <vector>
 
 /*
  * larger buffer = better quality but more latency
@@ -23,7 +24,7 @@ namespace tsal {
 class Compressor : public Effect {
   public:
     Compressor(Mixer* mixer);
-    virtual double getOutput() override;
+    virtual void getOutput(AudioBuffer<float>& buffer) override;
     virtual void setMixer(Mixer* mixer) override;
     void setAttackTime(double attackTime);
     void setReleaseTime(double releaseTime);
@@ -33,14 +34,13 @@ class Compressor : public Effect {
     void setPostGain(double postGain);
 
   private:
-    void filterAudio();
-    void getEnvelope();
+    void filterAudio(AudioBuffer<float>& buffer);
+    void getEnvelope(AudioBuffer<float>& buffer);
     void calculateSlope();
     double mEnvelopeSample = 0.0;
 
-    // Figure what an optimal buffer size would be 
     Buffer<double> mBuffer;
-    Buffer<double> mEnvelope;
+    std::vector<float> mEnvelope;
     unsigned mCurrentSample = 0;
       
     double mSlope = 0.0;

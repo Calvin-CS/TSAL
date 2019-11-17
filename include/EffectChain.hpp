@@ -3,6 +3,7 @@
 
 #include "OutputDevice.hpp"
 #include "Effect.hpp"
+
 namespace tsal {
 
 /** @class EffectChain
@@ -13,17 +14,17 @@ namespace tsal {
  */
 class EffectChain : public OutputDevice {
   public:
-    EffectChain(Mixer *mixer) : OutputDevice(mixer){};
+    EffectChain(Mixer* mixer, OutputDevice& output) : OutputDevice(mixer), mInput(output) {};
     ~EffectChain();
-    void setInput(OutputDevice* input);
-    virtual double getOutput() override;
+    virtual void getOutput(AudioBuffer<float> &buffer) override;
     virtual void setMixer(Mixer* mixer) override;
     void add(Effect& effect);
     void remove(Effect& effect);
     int size() { return mEffects.size(); };
   private:
     std::vector<Effect*> mEffects;
-    OutputDevice* mInput = nullptr;
+    OutputDevice& mInput;
+    std::mutex mEffectChainMutex;
 };
 
 }

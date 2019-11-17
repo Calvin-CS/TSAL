@@ -24,7 +24,7 @@ int main() {
   mixer.add(synth);
   
   // Generate the data
-  const int size = 100;
+  const int size = 400;
   int data[size];
   for (int i = 0; i < size; i++) {
     data[i] = rand() % 1000;

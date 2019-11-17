@@ -17,8 +17,7 @@ AC_PROG_CC
 AC_PROG_LIBTOOL
 
 # Checks for libraries.
-# FIXME: Replace `main' with a function in `-lrtaudio':
-AC_CHECK_LIB([rtaudio], [RtAudio::getVersion])
+AC_CHECK_LIB([portaudio], [PortAudio::Pa_GetVersion])
 
 # Checks for header files.
 AC_FUNC_ALLOCA

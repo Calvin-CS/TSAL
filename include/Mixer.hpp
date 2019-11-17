@@ -1,17 +1,11 @@
 #ifndef MIXER_H
 #define MIXER_H
 
-#include "InputDevice.hpp"
 #include "OutputDevice.hpp"
 #include "Channel.hpp"
 #include "Compressor.hpp"
 #include "Sequencer.hpp"
-#include <rtaudio/RtAudio.h>
-
-
-typedef signed short BIT_DEPTH;
-#define FORMAT RTAUDIO_SINT16
-#define SCALE 32767.0
+#include "portaudio.h"
 
 namespace tsal {
 
@@ -22,7 +16,7 @@ namespace tsal {
  * To use TSAL, the Mixer class needs to be initiliazed at the start of the project.
  * All other audio devices will be routed through the Mixer's master channel
  */
-class Mixer : public InputDevice {
+class Mixer {
   public:
     Mixer();
     Mixer(unsigned sampleRate);
@@ -39,29 +33,27 @@ class Mixer : public InputDevice {
     Channel& getMaster() { return mMaster; };
     Sequencer& getSequencer() { return mSequencer; };
     unsigned getSampleRate() { return mSampleRate; };
-    unsigned getCurrentTick() { return mCurrentTick; };
-    unsigned getBufferFrames() { return mBufferFrames; };
-
-    virtual double getInput() override;
+    unsigned getChannelCount() { return mChannelCount; };
 
   private:
-    void initalizeStream();
-    RtAudio mRtAudio;
-    unsigned mChannels;
+    PaStream* mPaStream;
     Channel mMaster;
     Compressor mCompressor;
     Sequencer mSequencer;
+    void openPaStream();
     
-    unsigned mCurrentTick = 0;
-    unsigned mSampleRate = 0;
-    unsigned mBufferFrames = 0;
-    static void errorCallback(RtAudioError::Type type, const std::string &errorText);
-    static int streamCallback(void *outputBuffer,
-                      __attribute__((unused)) void *inputBuffer,
-                      unsigned nBufferFrames, 
-                      __attribute__((unused)) double streamTime,
-                      RtAudioStreamStatus status,
-                      void *data);
+    AudioBuffer<float> mBuffer;
+    unsigned mSampleRate = 44100;
+    // Assuming two channels until a system for variable number of channels exists
+    unsigned mChannelCount = 2;
+    int audioCallback(float *outputBuffer, unsigned long frameCount);
+    static void paStreamFinished(void* userData);
+    static int paCallback( const void *inputBuffer, void *outputBuffer,
+                           unsigned long framesPerBuffer,
+                           const PaStreamCallbackTimeInfo* timeInfo,
+                           PaStreamCallbackFlags statusFlags,
+                           void *userData );
+    
 };
 
 }

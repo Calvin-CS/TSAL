@@ -2,19 +2,16 @@
 
 namespace tsal {
 
-PolySynth::PolySynth(Mixer* mixer) : Instrument(mixer), mVoices(20, Synth(mixer)) {
-  for (unsigned i = 0; i < NUM_VOICES; i++) {
+PolySynth::PolySynth(Mixer* mixer) : Instrument(mixer), mVoices(NUM_VOICES, Synth(mixer)), mRoutedSynths(mixer) {
+  for (unsigned i = 0; i < mVoices.size(); i++) {
     mVoices[i].setActive(false);
     mVoices[i].setVolume(0.3);
+    mRoutedSynths.add(mVoices[i]);
   }
 }
 
-double PolySynth::getOutput() {
-  double output = 0.0;
-  for (unsigned i = 0; i < NUM_VOICES; i++) {
-    output += mVoices[i].getOutput();
-  }
-  return output;
+void PolySynth::getOutput(AudioBuffer<float> &buffer) {
+  mRoutedSynths.getOutput(buffer);
 }
 
 /* @brief Play a note with velocity
@@ -36,7 +33,7 @@ void PolySynth::play(double note, double velocity) {
  * @param note
  */
 void PolySynth::stop(double note) {
-  for (unsigned i = 0; i < NUM_VOICES; i++) {
+  for (unsigned i = 0; i < mVoices.size(); i++) {
     if (mVoices[i].getNote() == note) {
       mVoices[i].stop();
       mVoices[i].setActive(false);
@@ -49,7 +46,7 @@ void PolySynth::stop(double note) {
  * @param mode
  */
 void PolySynth::setMode(Oscillator::OscillatorMode mode) {
-  for (unsigned i = 0; i < NUM_VOICES; i++) {
+  for (unsigned i = 0; i < mVoices.size(); i++) {
     mVoices[i].setMode(mode);
   }
 }
@@ -58,7 +55,7 @@ Synth* PolySynth::getInactiveVoice() {
   // Whenever a note is pressed, an inactive voice needs to be found an played
   // If all the voices are active, a nullptr is returned
   Synth* voice = nullptr;
-  for (unsigned i = 0; i < NUM_VOICES; i++) {
+  for (unsigned i = 0; i < mVoices.size(); i++) {
     if (!mVoices[i].isActive()) {
       voice = &mVoices[i];
       voice->setActive();
