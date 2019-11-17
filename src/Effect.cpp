@@ -17,12 +17,4 @@ void Effect::setParentChannel(Channel* channel) {
   mParentChannel = channel;
 }
 
-double Effect::getInput() {
-  return mInput->getOutput();
-}
-
-void Effect::setInput(OutputDevice* input) {
-  mInput = input;
-}
-
 }

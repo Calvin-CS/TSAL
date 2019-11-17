@@ -26,8 +26,8 @@ void Channel::setMixer(Mixer* mixer) {
 
 void Channel::getOutput(AudioBuffer<float> &buffer) {
   if (mActive) {
-    // mEffectChain.getOuput(buffer);
     mChannelIn.getOutput(buffer);
+    mEffectChain.getOutput(buffer);
     for (unsigned i = 0; i < buffer.size(); i++) {
       buffer[i] *= mAmp;
     }

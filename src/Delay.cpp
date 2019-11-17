@@ -24,26 +24,26 @@ void Delay::setMixer(Mixer* mixer) {
 }
 
 double Delay::getOutput() {
-  double const input = getInput();
-  if (!mActive) {
-    return input;
-  }
+  // double const input = getInput();
+  // if (!mActive) {
+  //   return input;
+  // }
 
-  int offset = mCounter - mDelay;
+  // int offset = mCounter - mDelay;
 
-  // Clip lookback buffer-bound
-  if (offset < 0)
-    offset = mBuffer.size() + offset;
+  // // Clip lookback buffer-bound
+  // if (offset < 0)
+  //   offset = mBuffer.size() + offset;
 
-  double const output = mBuffer[offset];
-  double const bufferValue = input + output * mFeedback;
-  mBuffer[mCounter++] = bufferValue;
+  // double const output = mBuffer[offset];
+  // double const bufferValue = input + output * mFeedback;
+  // mBuffer[mCounter++] = bufferValue;
 
-  // Clip delay counter
-  if(mCounter >= mBuffer.size())
-    mCounter = 0;
+  // // Clip delay counter
+  // if(mCounter >= mBuffer.size())
+  //   mCounter = 0;
 
-  return output + input;
+  // return output + input;
 }
 
 /**

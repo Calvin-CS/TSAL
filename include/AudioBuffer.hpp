@@ -27,6 +27,8 @@ class AudioBuffer {
 
     const T& operator[](int index) const;
     T& operator[](int index);
+
+    static std::vector<std::vector<T>> deinterleaveBuffer(AudioBuffer<T> &buffer);
   private:
     void resize();
     std::vector<T> mBuffer;
@@ -68,6 +70,22 @@ template <typename T>
 void AudioBuffer<T>::setChannelCount(unsigned channelCount) {
   mChannelCount = channelCount;
   resize();
+}
+
+template <typename T>
+std::vector<std::vector<T>> AudioBuffer<T>::deinterleaveBuffer(AudioBuffer<T> &buffer) {
+  std::vector<std::vector<T>> data(buffer.getChannelCount(), std::vector<T>(buffer.size() / buffer.getChannelCount()));
+  const auto channels = buffer.getChannelCount();
+  const auto frames = buffer.getFrameCount();
+
+  setChannelPanning(channels);
+
+  for (unsigned long i = 0; i < frames; i++) {
+    for (unsigned j = 0; j < channels; j++) {
+      data[j][i] = buffer[i * channels + j];
+    }
+  }
+  return std::move(data);
 }
 
 }

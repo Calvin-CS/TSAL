@@ -14,12 +14,16 @@ double EffectChain::getOutput() {
 }
 
 void EffectChain::getOutput(AudioBuffer<float> &buffer) {
-  if (mEffects.size() == 0) {
-    mInput.getOutput(buffer);
-  } else {
-    mEffects.back()->getOutput(buffer);
+  // if (mEffects.size() == 0) {
+  //   mInput.getOutput(buffer);
+  // } else {
+  //   mEffects.back()->getOutput(buffer);
+  // }
+  for (auto effect : mEffects) {
+    effect->getOutput(buffer);
   }
 }
+
 void EffectChain::setMixer(Mixer* mixer) {
   OutputDevice::setMixer(mixer);
   lock();
@@ -35,13 +39,7 @@ void EffectChain::setMixer(Mixer* mixer) {
 void EffectChain::add(Effect& effect) {
   lock();
   effect.setMixer(mMixer);
-  if (mEffects.size() == 0) {
-    effect.setInput(&mInput);
-    mEffects.push_back(&effect);
-  } else {
-    effect.setInput(mEffects.back());
-    mEffects.push_back(&effect);
-  }
+  mEffects.push_back(&effect);
 }
 
 /* @brief Remove an effect from the effect chain
@@ -50,28 +48,9 @@ void EffectChain::add(Effect& effect) {
  */
 void EffectChain::remove(Effect& effect) {
   lock();
-  if (mEffects.size() == 0) {
-    return;
-  }
-
-  const auto effectPtr = &effect;
-
-  if (mEffects.front() == effectPtr) {
-    // Front case
-    mEffects.erase(mEffects.begin());
-    if (mEffects.size() > 0) {
-      mEffects.front()->setInput(&mInput);
-    }
-  } else if (mEffects.back() == effectPtr) {
-    // Back case
-    mEffects.pop_back();
-  } else {
-    // Middle case
-    for (unsigned i = 1; i < mEffects.size() - 1; i++) {
-      if (mEffects[i] == &effect) {
-        mEffects[i + 1]->setInput(mEffects[i - 1]);
-        mEffects.erase(mEffects.begin() + i);
-      }
+  for (unsigned i = 1; i < mEffects.size() - 1; i++) {
+    if (mEffects[i] == &effect) {
+      mEffects.erase(mEffects.begin() + i);
     }
   }
 }
