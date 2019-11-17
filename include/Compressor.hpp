@@ -39,9 +39,7 @@ class Compressor : public Effect {
     void calculateSlope();
     double mEnvelopeSample = 0.0;
 
-    Buffer<double> mBuffer;
     std::vector<float> mEnvelope;
-    unsigned mCurrentSample = 0;
       
     double mSlope = 0.0;
     double mGain = 0.0;

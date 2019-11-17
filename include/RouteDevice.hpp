@@ -13,7 +13,8 @@ namespace tsal {
  *
  * RouteDevice is a flexible class intended to make managing inputs easier.
  * Combining multiple inputs is as simple as adding up all the input values.
- */
+
+*/
 template <typename DeviceType>
 class RouteDevice : public OutputDevice {
   public:
@@ -61,6 +62,7 @@ RouteDevice<DeviceType>::~RouteDevice() {
 
 template <typename DeviceType>
 void RouteDevice<DeviceType>::getOutput(AudioBuffer<float> &buffer) {
+  std::lock_guard<std::mutex> guard(mRouterMutex);
   for (auto routedInput : mRoutedInputs) {
     routedInput->buffer.setSize(buffer);
     routedInput->buffer.clear();
@@ -73,6 +75,7 @@ void RouteDevice<DeviceType>::getOutput(AudioBuffer<float> &buffer) {
 
 template <typename DeviceType>
 void RouteDevice<DeviceType>::setMixer(Mixer* mixer) {
+  std::lock_guard<std::mutex> guard(mRouterMutex);
   OutputDevice::setMixer(mixer);
   for (unsigned i = 0; i < mRoutedInputs.size(); i++) {
     mRoutedInputs[i]->device->setMixer(mixer);

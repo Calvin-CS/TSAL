@@ -9,12 +9,14 @@ EffectChain::~EffectChain() {
 }
 
 void EffectChain::getOutput(AudioBuffer<float> &buffer) {
+  std::lock_guard<std::mutex> guard(mEffectChainMutex);
   for (auto effect : mEffects) {
     effect->getOutput(buffer);
   }
 }
 
 void EffectChain::setMixer(Mixer* mixer) {
+  std::lock_guard<std::mutex> guard(mEffectChainMutex);
   OutputDevice::setMixer(mixer);
   for (auto effect : mEffects) {
     effect->setMixer(mixer);
