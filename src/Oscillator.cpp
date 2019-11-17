@@ -8,10 +8,6 @@ namespace tsal {
 // Helpful implementation of ployBLEP to reduce aliasing
 // http://metafunction.co.uk/all-about-digital-oscillators-part-2-blits-bleps/
 double Oscillator::getOutput() {
-  // If not active, move value to 0
-  if (!mActive) {
-    return 0.0;
-  } 
   double t = mPhase / PI2;
 
   switch (mMode) {
@@ -37,6 +33,10 @@ double Oscillator::getOutput() {
 }
 
 void Oscillator::getOutput(AudioBuffer<float> &buffer) {
+  if (!mActive) {
+    return;
+  }
+  
   const auto channels = buffer.getChannelCount();
   const auto frames = buffer.getFrameCount();
   float output;

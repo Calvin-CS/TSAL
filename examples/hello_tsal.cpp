@@ -10,25 +10,31 @@
  * Synth - A very basic audio synthesizer. It can only play one note at a time (monophonic),
  * and it can choose from 3 basic waveforms: sine, saw, and square.
  */
+using namespace tsal;
+
 int main() {
   // Create the mixer object
-  tsal::Mixer mixer;
+  Mixer mixer;
   
   // Create the synthesizer object
-  tsal::Synth synth(&mixer);
+  PolySynth synth(&mixer);
   
   // Add the synth to the mixer
   mixer.add(synth);
   
   // Play a note on the synth
-  synth.play(tsal::C4);
+  synth.play(C4);
+  // synth.play(E4);
+  
+  // Util::thread_sleep(1000);
+
+  // synth.stop(C4);
   
   // Wait for the user to stop the synth
   char input;
   std::cout << "Press <enter> to quit:" << std::flush;
   std::cin.get(input);
   
-  // Stop the synth
-  synth.stop();
   return 0;
+  
 }

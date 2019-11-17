@@ -5,7 +5,7 @@ using namespace tsal;
 
 int main() {
   Mixer mixer;
-  Synth synth(&mixer);
+  PolySynth synth(&mixer);
   synth.play(tsal::C4);
     
   AudioBuffer<float> mBuffer;

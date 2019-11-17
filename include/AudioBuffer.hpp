@@ -23,7 +23,7 @@ class AudioBuffer {
     void clear() { std::fill(mBuffer.begin(), mBuffer.end(), 0); };
     unsigned long getFrameCount() { return mFrameCount; };
     unsigned getChannelCount() { return mChannelCount; };
-    auto size() { return mBuffer.size(); };
+    unsigned long size() { return mFrameCount * mChannelCount; };
 
     const T& operator[](int index) const;
     T& operator[](int index);

@@ -13,7 +13,21 @@ double Synth::getOutput() {
 }
 
 void Synth::getOutput(AudioBuffer<float> &buffer) {
+  if (!mActive) {
+    return;
+  }
+  const auto channels = buffer.getChannelCount();
+  const auto frames = buffer.getFrameCount();
+
+  setChannelPanning(channels);
+
   mOscillator.getOutput(buffer);
+  for (unsigned long i = 0; i < frames; i++) {
+    const auto envelope = mEnvelope.getOutput();
+    for (unsigned j = 0; j < channels; j++) {
+      buffer[i * channels + j] *= mChannelPanning[j] * envelope * mAmp * (mVelocity / 127.0); 
+    }
+  }
 }
   
 /**

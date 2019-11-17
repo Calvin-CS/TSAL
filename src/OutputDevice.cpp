@@ -97,7 +97,7 @@ bool OutputDevice::isActive() const {
 }
 
 Util::ParameterRange<double> OutputDevice::mGainRange = std::make_pair(-50.0, 50.0);
-Util::ParameterRange<double> OutputDevice::mVolumeRange = std::make_pair(0.0, 10.0);
+Util::ParameterRange<double> OutputDevice::mVolumeRange = std::make_pair(0.0, 2.0);
 Util::ParameterRange<double> OutputDevice::mPanningRange = std::make_pair(-1.0, 1.0);
 
 }

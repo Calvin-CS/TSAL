@@ -18,11 +18,12 @@ class Delay : public Effect {
     void init();
     virtual void setMixer(Mixer* mixer) override;
     virtual double getOutput() override;
+    virtual void getOutput(AudioBuffer<float> &buffer) override;
     void setDelay(unsigned delay);
     void setFeedback(double feedback);
   private:
     Buffer<double> mBuffer;
-    int mCounter = 0;
+    unsigned mCounter = 0;
     int mDelay = 0;
     double mFeedback = 0.5;
 

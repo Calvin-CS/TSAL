@@ -2,19 +2,17 @@
 
 namespace tsal {
 
-PolySynth::PolySynth(Mixer* mixer) : Instrument(mixer), mVoices(20, Synth(mixer)) {
+PolySynth::PolySynth(Mixer* mixer) : Instrument(mixer), mVoices(20, Synth(mixer)), mRoutedSynths(mixer) {
   for (unsigned i = 0; i < NUM_VOICES; i++) {
     mVoices[i].setActive(false);
     mVoices[i].setVolume(0.3);
+    mRoutedSynths.add(mVoices[i]);
   }
 }
 
-double PolySynth::getOutput() {
-  double output = 0.0;
-  for (unsigned i = 0; i < NUM_VOICES; i++) {
-    output += mVoices[i].getOutput();
-  }
-  return output;
+void PolySynth::getOutput(AudioBuffer<float> &buffer) {
+  mVoices[0].getOutput(buffer);
+  // mRoutedSynths.getOutput(buffer);
 }
 
 /* @brief Play a note with velocity
