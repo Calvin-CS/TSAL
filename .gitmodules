@@ -1,0 +1,3 @@
+[submodule "extern/TinySoundFont"]
+	path = extern/TinySoundFont
+	url = https://github.com/schellingb/TinySoundFont
