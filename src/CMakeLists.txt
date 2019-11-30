@@ -34,7 +34,8 @@ add_subdirectory("${PROJECT_SOURCE_DIR}/extern/midifile" "extern/midifile")
 # Make an automatic library - will be static or dynamic based on user setting
 # add_library(tsal tsal.cpp ${HEADER_LIST})
 add_library(tsal ${SOURCES} ${HEADER_LIST})
-# add_library(tsal)
+# Also make it accessible via namespace
+add_library(${LOCAL_PROJECT_NAMESPACE}::${LOCAL_PROJECT_NAME} ALIAS tsal)
 # target_sources(tsal PUBLIC ../include/tsal.hpp)
 
 # We need this directory, and users of our library will need it too
@@ -51,10 +52,17 @@ target_link_directories(tsal
   # PRIVATE ${PROJECT_SOURCE_DIR}/extern/midifile/src
   )
 
+
 # This depends on (header only) boost
 # target_link_libraries(tsal PRIVATE midifile Boost::boost)
-target_link_libraries(tsal midifile portaudio OpenMP::OpenMP_CXX Threads::Threads soundfont)
-
+target_link_libraries(tsal
+  midifile
+  portaudio
+  PortAudio::Pa_GetVersion
+  OpenMP::OpenMP_CXX
+  Threads::Threads
+  soundfont
+  )
 
 # All users of this library will need at least C++11
 target_compile_features(tsal PUBLIC cxx_std_14)

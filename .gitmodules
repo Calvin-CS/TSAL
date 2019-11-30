@@ -1,3 +1,9 @@
 [submodule "extern/TinySoundFont"]
 	path = extern/TinySoundFont
 	url = https://github.com/schellingb/TinySoundFont
+[submodule "midi"]
+	path = midi
+	url = https://github.com/craigsapp/midifile.git
+[submodule "extern/midifile"]
+	path = extern/midifile
+	url = https://github.com/craigsapp/midifile.git
