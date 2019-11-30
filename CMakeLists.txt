@@ -61,6 +61,11 @@ endif()
 # find_package(portaudio REQUIRED)
 find_package(Portaudio REQUIRED)
 
+find_package(Threads REQUIRED)
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+
+find_package(OpenMP REQUIRED)
+
 # check if boost was found
 # if(portaudio_FOUND)
 #     message ("portaudio found")

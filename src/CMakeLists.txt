@@ -9,14 +9,12 @@ set(HEADER_LIST "${TSAL_SOURCE_DIR}/include/tsal.hpp")
 
 set(SOURCES
   Channel.cpp
-  CMakeLists.txt
   Compressor.cpp
   Delay.cpp
   EffectChain.cpp
   Effect.cpp
   Envelope.cpp
   Instrument.cpp
-  Makefile.am
   MidiParser.cpp
   Mixer.cpp
   Oscillator.cpp
@@ -55,7 +53,8 @@ target_link_directories(tsal
 
 # This depends on (header only) boost
 # target_link_libraries(tsal PRIVATE midifile Boost::boost)
-target_link_libraries(tsal midifile portaudio)
+target_link_libraries(tsal midifile portaudio OpenMP::OpenMP_CXX Threads::Threads soundfont)
+
 
 # All users of this library will need at least C++11
 target_compile_features(tsal PUBLIC cxx_std_14)
