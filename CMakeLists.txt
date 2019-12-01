@@ -180,6 +180,10 @@ if(NOT EXISTS "${PROJECT_SOURCE_DIR}/extern/TinySoundFont")
     message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
 endif()
 
+if(NOT EXISTS "${PROJECT_SOURCE_DIR}/extern/portaudio")
+    message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
+endif()
+
 # System Dependencies
 # find_package(Portaudio REQUIRED)
 
