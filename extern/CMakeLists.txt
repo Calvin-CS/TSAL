@@ -1,14 +1,4 @@
 # TinySoundFont
-find_path(TSF_INCLUDE_DIR tsf.h TinySoundFont)
-
-if(NOT EXISTS ${TSF_INCLUDE_DIR})
-    message("Unable to find TinySoundFont Library")
-
-    execute_process(COMMAND git submodule update --init -- external/TinySoundFont
-                    # WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-                    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
-endif()
-
 set(TSF_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/extern/TinySoundFont
   CACHE PATH "TinySoundFont include directory")
 
@@ -31,20 +21,9 @@ install(TARGETS tsf
   )
 
 # Midifile: midifile had bad cmake support so just replicate it
-
 ## TODO: Add upstream change so that static is optional
 ## and better support for submoduling
 # add_subdirectory(midifile)
-find_path(MIDIFILE_INCLUDE_DIR MidiFile.h midifile/include)
-
-if(NOT EXISTS ${MIDIFILE_INCLUDE_DIR})
-    message("Unable to find TinySoundFont Library")
-
-    execute_process(COMMAND git submodule update --init -- external/midifile
-                    # WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-                    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
-endif()
-
 set(MIDIFILE_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/extern/midifile/include
   CACHE PATH "midifile include directory")
 
