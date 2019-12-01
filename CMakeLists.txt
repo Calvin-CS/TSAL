@@ -14,6 +14,8 @@ set(LOCAL_PROJECT_NAME        "TSAL")
 set(LOCAL_PROJECT_OUTPUT_NAME "tsal")
 set(LOCAL_PROJECT_DESCRIPTION "Thread safe Autio Library")
 
+set(CMAKE_INSTALL_PREFIX /usr/local/)
+
 # Project details
 project(${LOCAL_PROJECT_NAME}
         VERSION ${LOCAL_PROJECT_VERSION}
@@ -28,9 +30,6 @@ option(INSTALL_HEADERS "Install library headers" ON)
 option(BUILD_TESTS "Build unit tests" ON)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-
-# Make this conditional
-include(GNUInstallDirs)
 
 include(CheckIncludeFiles)
 check_include_files(stddef.h HAVE_STDDEF_H)
@@ -72,78 +71,78 @@ check_function_exists(tzset HAVE_TZSET)
 check_function_exists(wcwidth HAVE_WCWIDTH)
 check_function_exists(obstack HAVE_OBSTACK)
 
-include(CheckTypeSize)
-# Check for integer types
-check_type_size("short" SIZE_OF_SHORT)
-check_type_size("int" SIZE_OF_INT)
-check_type_size("long" SIZE_OF_LONG)
-check_type_size("long long" SIZE_OF_LONG_LONG)
+# include(CheckTypeSize)
+# # Check for integer types
+# check_type_size("short" SIZE_OF_SHORT)
+# check_type_size("int" SIZE_OF_INT)
+# check_type_size("long" SIZE_OF_LONG)
+# check_type_size("long long" SIZE_OF_LONG_LONG)
 
-check_type_size("unsigned short" SIZE_OF_UNSIGNED_SHORT)
-check_type_size("unsigned" SIZE_OF_UNSIGNED)
-check_type_size("unsigned long" SIZE_OF_UNSIGNED_LONG)
-check_type_size("unsigned long long" SIZE_OF_UNSIGNED_LONG_LONG)
+# check_type_size("unsigned short" SIZE_OF_UNSIGNED_SHORT)
+# check_type_size("unsigned" SIZE_OF_UNSIGNED)
+# check_type_size("unsigned long" SIZE_OF_UNSIGNED_LONG)
+# check_type_size("unsigned long long" SIZE_OF_UNSIGNED_LONG_LONG)
 
-check_type_size("__int64" __INT64)
-check_type_size("unsigned __int64" UNSIGNED___INT64)
+# check_type_size("__int64" __INT64)
+# check_type_size("unsigned __int64" UNSIGNED___INT64)
 
-check_type_size(int16_t INT16_T)
-check_type_size(int32_t INT32_T)
-check_type_size(int64_t INT64_T)
-check_type_size(intmax_t INTMAX_T)
-check_type_size(uint8_t UINT8_T)
-check_type_size(uint16_t UINT16_T)
-check_type_size(uint32_t UINT32_T)
-check_type_size(uint64_t UINT64_T)
-check_type_size(uintmax_t UINTMAX_T)
+# check_type_size(int16_t INT16_T)
+# check_type_size(int32_t INT32_T)
+# check_type_size(int64_t INT64_T)
+# check_type_size(intmax_t INTMAX_T)
+# check_type_size(uint8_t UINT8_T)
+# check_type_size(uint16_t UINT16_T)
+# check_type_size(uint32_t UINT32_T)
+# check_type_size(uint64_t UINT64_T)
+# check_type_size(uintmax_t UINTMAX_T)
 
-set(CMAKE_EXTRA_INCLUDE_FILES time.h)
-check_type_size(clock_t CLOCK_T)
-if(NOT HAVE_CLOCK_T)
-  set(clock_t int)
-endif(NOT HAVE_CLOCK_T)
-unset(CMAKE_EXTRA_INCLUDE_FILES)
-#
-set(CMAKE_EXTRA_INCLUDE_FILES time.h)
-check_type_size(clockid_t CLOCKID_T)
-if(NOT HAVE_CLOCKID_T)
-  set(clockid_t int)
-endif(NOT HAVE_CLOCKID_T)
-unset(CMAKE_EXTRA_INCLUDE_FILES)
-#
-check_type_size(size_t SIZE_T)
-if(NOT HAVE_SIZE_T)
-  if("${CMAKE_SIZEOF_VOID_P}" EQUAL 8)
-    set(size_t "uint64_t")
-  else("${CMAKE_SIZEOF_VOID_P}" EQUAL 8)
-    set(size_t   "uint32_t")
-  endif("${CMAKE_SIZEOF_VOID_P}" EQUAL 8)
-endif(NOT HAVE_SIZE_T)
-#
-check_type_size(ssize_t SSIZE_T)
-if(NOT HAVE_SSIZE_T)
-  if("${CMAKE_SIZEOF_VOID_P}" EQUAL 8)
-    set(ssize_t "int64_t")
-  else("${CMAKE_SIZEOF_VOID_P}" EQUAL 8)
-    set(ssize_t "long")
-  endif("${CMAKE_SIZEOF_VOID_P}" EQUAL 8)
-endif(NOT HAVE_SSIZE_T)
-#
-check_type_size(pid_t PID_T)
-if(NOT HAVE_PID_T)
-  if(WIN32)
-    set(pid_t "int")
-  else(WIN32)
-    MESSAGE(FATAL_ERROR "pid_t doesn't exist on this platform?")
-  endif(WIN32)
-endif(NOT HAVE_PID_T)
-#
-set(CMAKE_EXTRA_INCLUDE_FILES time.h)
-check_type_size(timer_t TIMER_T)
-if(NOT HAVE_TIMER_T)
-  set(timer_t int)
-endif(NOT HAVE_TIMER_T)
-unset(CMAKE_EXTRA_INCLUDE_FILES)
+# set(CMAKE_EXTRA_INCLUDE_FILES time.h)
+# check_type_size(clock_t CLOCK_T)
+# if(NOT HAVE_CLOCK_T)
+#   set(clock_t int)
+# endif(NOT HAVE_CLOCK_T)
+# unset(CMAKE_EXTRA_INCLUDE_FILES)
+# #
+# set(CMAKE_EXTRA_INCLUDE_FILES time.h)
+# check_type_size(clockid_t CLOCKID_T)
+# if(NOT HAVE_CLOCKID_T)
+#   set(clockid_t int)
+# endif(NOT HAVE_CLOCKID_T)
+# unset(CMAKE_EXTRA_INCLUDE_FILES)
+# #
+# check_type_size(size_t SIZE_T)
+# if(NOT HAVE_SIZE_T)
+#   if("${CMAKE_SIZEOF_VOID_P}" EQUAL 8)
+#     set(size_t "uint64_t")
+#   else("${CMAKE_SIZEOF_VOID_P}" EQUAL 8)
+#     set(size_t   "uint32_t")
+#   endif("${CMAKE_SIZEOF_VOID_P}" EQUAL 8)
+# endif(NOT HAVE_SIZE_T)
+# #
+# check_type_size(ssize_t SSIZE_T)
+# if(NOT HAVE_SSIZE_T)
+#   if("${CMAKE_SIZEOF_VOID_P}" EQUAL 8)
+#     set(ssize_t "int64_t")
+#   else("${CMAKE_SIZEOF_VOID_P}" EQUAL 8)
+#     set(ssize_t "long")
+#   endif("${CMAKE_SIZEOF_VOID_P}" EQUAL 8)
+# endif(NOT HAVE_SSIZE_T)
+# #
+# check_type_size(pid_t PID_T)
+# if(NOT HAVE_PID_T)
+#   if(WIN32)
+#     set(pid_t "int")
+#   else(WIN32)
+#     MESSAGE(FATAL_ERROR "pid_t doesn't exist on this platform?")
+#   endif(WIN32)
+# endif(NOT HAVE_PID_T)
+# #
+# set(CMAKE_EXTRA_INCLUDE_FILES time.h)
+# check_type_size(timer_t TIMER_T)
+# if(NOT HAVE_TIMER_T)
+#   set(timer_t int)
+# endif(NOT HAVE_TIMER_T)
+# unset(CMAKE_EXTRA_INCLUDE_FILES)
 
 
 # Only do these if this is the main project, and not if it is included through add_subdirectory
@@ -151,14 +150,29 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 
     # Optionally set things like CMAKE_CXX_STANDARD, CMAKE_POSITION_INDEPENDENT_CODE here
 
-    # Let's ensure -std=c++xx instead of -std=g++xx
-    set(CMAKE_CXX_EXTENSIONS OFF)
+    if(CMAKE_CXX_STANDARD EQUAL "98" )
+      message(FATAL_ERROR "CMAKE_CXX_STANDARD:STRING=98 is not supported.")
+    endif()
 
-    # Use C++14
-    set(CMAKE_CXX_STANDARD 14)
+    if(NOT CMAKE_CXX_STANDARD)
+      set(CMAKE_CXX_STANDARD 14) # Supported values are ``11``, ``14``, and ``17``.
+    endif()
+    if(NOT CMAKE_CXX_STANDARD_REQUIRED)
+      set(CMAKE_CXX_STANDARD_REQUIRED ON)
+    endif()
+    if(NOT CMAKE_CXX_EXTENSIONS)
+      set(CMAKE_CXX_EXTENSIONS OFF)
+    endif()
+
+    # Enable runtime search path support for dynamic libraries on OSX
+    if(APPLE)
+      set(CMAKE_MACOSX_RPATH 1)
+    endif()
 
     # Let's nicely support folders in IDE's
     set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+    include(GNUInstallDirs)
 
     # Testing only available if this is the main app
     # Note this needs to be done in the main CMakeLists
@@ -204,6 +218,8 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 
 find_package(OpenMP REQUIRED)
 
+add_subdirectory(extern)
+
 # The compiled library code is here
 add_subdirectory(src)
 
@@ -215,7 +231,6 @@ add_subdirectory(examples)
 if((CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME OR MODERN_CMAKE_BUILD_TESTING) AND BUILD_TESTING)
     add_subdirectory(tests)
 endif()
-
 
 # set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 # set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})

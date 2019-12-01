@@ -1,0 +1,4 @@
+@PACKAGE_INIT@
+
+find_dependency(Boost 1.60 REQUIRED COMPONENTS regex)
+include(${PROJECT_SOURCE_DIR}/src/tsalTargets.cmake)
