@@ -1,7 +1,7 @@
 # file(GLOB HEADER_LIST CONFIGURE_DEPENDS "${TSAL_SOURCE_DIR}/include/*.hpp")
-set(HEADER_LIST "${TSAL_SOURCE_DIR}/include/tsal.hpp")
+set(HEADER_LIST "${PROJECT_SOURCE_DIR}/include/tsal.hpp")
 
-set(TSAL_INCLUDE_DIR ${TSAL_SOURCE_DIR}/include)
+set(TSAL_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
 set(INSTALL_CONFIGDIR ${CMAKE_INSTALL_LIBDIR}/cmake/tsal)
 
 SET(BUILD_SHARED_LIBS ON)
@@ -93,7 +93,7 @@ set_target_properties(tsal
   )
 
 # IDEs should put the headers in a nice place
-source_group(TREE "${PROJECT_SOURCE_DIR}/include" PREFIX "Header Files" FILES ${HEADER_LIST})
+# source_group(TREE "${PROJECT_SOURCE_DIR}/include" PREFIX "Header Files" FILES ${HEADER_LIST})
 
 install(TARGETS tsal midifile tsf
   EXPORT tsalTargets

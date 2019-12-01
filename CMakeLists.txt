@@ -10,7 +10,7 @@ endif()
 set(LOCAL_PROJECT_VERSION     "1.0.0")
 set(LOCAL_PROJECT_VENDOR      "Calvin University")
 set(LOCAL_PROJECT_NAMESPACE   "tsal")
-set(LOCAL_PROJECT_NAME        "TSAL")
+set(LOCAL_PROJECT_NAME        "tsal")
 set(LOCAL_PROJECT_OUTPUT_NAME "tsal")
 set(LOCAL_PROJECT_DESCRIPTION "Thread safe Autio Library")
 

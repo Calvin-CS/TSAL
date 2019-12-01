@@ -6,7 +6,7 @@ if(NOT EXISTS ${TSF_INCLUDE_DIR})
 
     execute_process(COMMAND git submodule update --init -- external/TinySoundFont
                     # WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-                    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+                    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 endif()
 
 set(TSF_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/extern/TinySoundFont
@@ -42,7 +42,7 @@ if(NOT EXISTS ${MIDIFILE_INCLUDE_DIR})
 
     execute_process(COMMAND git submodule update --init -- external/midifile
                     # WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-                    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+                    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 endif()
 
 set(MIDIFILE_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/extern/midifile/include
