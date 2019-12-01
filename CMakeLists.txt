@@ -5,7 +5,6 @@ if(${CMAKE_VERSION} VERSION_LESS 3.12)
     cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
 endif()
 
-
 # Variables so we don't repeat ourselves
 set(LOCAL_PROJECT_VERSION     "1.0.0")
 set(LOCAL_PROJECT_VENDOR      "Calvin University")

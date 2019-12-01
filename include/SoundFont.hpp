@@ -3,6 +3,7 @@
 
 #include "Instrument.hpp"
 
+#ifndef TSF_IMPLEMENTATION
 #define TSF_IMPLEMENTATION
 #include "tsf.h"
 
@@ -12,7 +13,7 @@ namespace tsal {
 /** @class SoundFont
  * @brief A SoundFont 2 synthesizer that can sf2 files
  *
- * SoundFonts seem to be the easiest way to synthesize real instruments. The 
+ * SoundFonts seem to be the easiest way to synthesize real instruments. The
  * SoundFont class uses the TinySoundFont library to load and play sf2 files.
  *
  * Useful links:
@@ -26,7 +27,7 @@ class SoundFont : public Instrument {
     virtual void getOutput(AudioBuffer<float> &buffer) override;
     virtual void setMixer(Mixer* mixer) override;
     void play(double note, double velocity = 100.0);
-    void stop(double note); 
+    void stop(double note);
     void channelNoteOn(int channel, unsigned note, double velocity = 100.0);
     void channelNoteOff(int channel, unsigned note);
 
@@ -46,5 +47,7 @@ class SoundFont : public Instrument {
 };
 
 }
+
+#endif
 
 #endif
