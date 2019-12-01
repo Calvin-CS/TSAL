@@ -181,7 +181,7 @@ if(NOT EXISTS "${PROJECT_SOURCE_DIR}/extern/TinySoundFont")
 endif()
 
 # System Dependencies
-find_package(Portaudio REQUIRED)
+# find_package(Portaudio REQUIRED)
 
 find_package(Threads REQUIRED)
 set(THREADS_PREFER_PTHREAD_FLAG ON)

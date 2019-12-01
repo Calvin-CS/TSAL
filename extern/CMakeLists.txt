@@ -64,3 +64,6 @@ install(TARGETS midifile
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
   )
+
+# Portaudio
+add_subdirectory(portaudio EXCLUDE_FROM_ALL)

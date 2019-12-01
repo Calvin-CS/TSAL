@@ -7,3 +7,9 @@
 [submodule "extern/midifile"]
 	path = extern/midifile
 	url = https://github.com/craigsapp/midifile.git
+[submodule "portaudio"]
+	path = portaudio
+	url = https://git.assembla.com/portaudio.git
+[submodule "extern/portaudio"]
+	path = extern/portaudio
+	url = https://git.assembla.com/portaudio.git
