@@ -30,6 +30,27 @@ set(MIDIFILE_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/extern/midifile/include
 set(MIDIFILE_SOURCE_DIR ${PROJECT_SOURCE_DIR}/extern/midifile/src
   CACHE PATH "midifile source directory")
 
+if(APPLE)
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "10.9" CACHE STRING "Minimum OS X deployment version")
+endif()
+
+if(MSVC)
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+
+    option(STATIC_CRT "Use static CRT libraries" OFF)
+
+    # Rewrite command line flags to use /MT if necessary
+    if(STATIC_CRT)
+        foreach(flag_var
+                CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
+                CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO)
+            if(${flag_var} MATCHES "/MD")
+                string(REGEX REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
+            endif(${flag_var} MATCHES "/MD")
+        endforeach(flag_var)
+    endif()
+endif()
+
 set(MIDIFILE_SOURCES
     ${MIDIFILE_SOURCE_DIR}/Options.cpp
     ${MIDIFILE_SOURCE_DIR}/Binasc.cpp

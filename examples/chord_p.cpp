@@ -23,7 +23,7 @@ struct ThreadData {
 void* ThreadFunction(void* ptr) {
   ThreadData data = *((ThreadData*) ptr);
   auto& voices = *data.voices;
-  
+
   for (unsigned i = data.start; i < data.end; i++) {
     voices[data.tid].setFrequency(voices[data.tid].getFrequency() + 10);
     Util::thread_sleep(100);
@@ -35,7 +35,7 @@ int main() {
   pthread_t threads[NUM_THREADS];
   ThreadData* threadData[NUM_THREADS];
   tsal::Mixer mixer;
-  std::vector<tsal::Oscillator> voices(NUM_THREADS);  
+  std::vector<tsal::Oscillator> voices(NUM_THREADS);
 
   tsal::MidiNote chord[3] = {tsal::C4, tsal::E4, tsal::G4};
   for (unsigned i = 0; i < voices.size(); i++) {
@@ -45,7 +45,7 @@ int main() {
   }
 
   for(unsigned i = 0; i < NUM_THREADS; i++ ) {
-    threadData[i] = new ThreadData { &voices, i, 0, 100/NUM_THREADS };  
+    threadData[i] = new ThreadData { &voices, i, 0, 100/NUM_THREADS };
     pthread_create(&threads[i], NULL, ThreadFunction, (void *) threadData[i]);
   }
 
