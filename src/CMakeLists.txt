@@ -18,8 +18,8 @@ set(PUBLIC_HEADERS
   ${TSAL_INCLUDE_DIR}/Envelope.hpp
   ${TSAL_INCLUDE_DIR}/InputDevice.hpp
   ${TSAL_INCLUDE_DIR}/Instrument.hpp
-  ${TSAL_INCLUDE_DIR}/MidiNotes.hpp
-  ${TSAL_INCLUDE_DIR}/MidiParser.hpp
+  # ${TSAL_INCLUDE_DIR}/MidiNotes.hpp
+  # ${TSAL_INCLUDE_DIR}/MidiParser.hpp
   ${TSAL_INCLUDE_DIR}/Mixer.hpp
   ${TSAL_INCLUDE_DIR}/Oscillator.hpp
   ${TSAL_INCLUDE_DIR}/OutputDevice.hpp
@@ -43,7 +43,7 @@ set(SOURCES
   Effect.cpp
   Envelope.cpp
   Instrument.cpp
-  MidiParser.cpp
+  # MidiParser.cpp
   Mixer.cpp
   Oscillator.cpp
   OutputDevice.cpp
@@ -73,12 +73,13 @@ target_link_libraries(tsal
     OpenMP::OpenMP_CXX
     Threads::Threads
     tsf
-    midifile
+    # midifile
   )
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang|GNU")
     # target_compile_options(tsal PRIVATE -Wall -Werror -Wextra -Wunreachable-code -Wpedantic)
-    target_compile_options(tsal PRIVATE -Wall -Wextra -Wunreachable-code -Wpedantic)
+    # target_compile_options(tsal PRIVATE -Wall -Wextra -Wunreachable-code -Wpedantic)
+    target_compile_options(tsal PRIVATE -Wall)
 endif()
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     target_compile_options(tsal PRIVATE -Wweak-vtables -Wexit-time-destructors -Wglobal-constructors -Wmissing-noreturn )
@@ -95,7 +96,8 @@ set_target_properties(tsal
 # IDEs should put the headers in a nice place
 # source_group(TREE "${PROJECT_SOURCE_DIR}/include" PREFIX "Header Files" FILES ${HEADER_LIST})
 
-install(TARGETS tsal midifile tsf
+# install(TARGETS tsal midifile tsf
+install(TARGETS tsal tsf
   EXPORT tsalTargets
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}

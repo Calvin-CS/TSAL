@@ -1,6 +1,6 @@
 # Add executable
 add_executable(bubble_sort bubble_sort.cpp)
-add_executable(canon canon.cpp)
+# add_executable(canon canon.cpp)
 # add_executable(chord chord.cpp)
 # add_executable(chord_p chord_p.cpp)
 add_executable(hello_tsal hello_tsal.cpp)
@@ -17,7 +17,7 @@ add_executable(selection_sort selection_sort.cpp)
 
 # Link libraries
 target_link_libraries(bubble_sort tsal)
-target_link_libraries(canon tsal)
+# target_link_libraries(canon tsal)
 # target_link_libraries(chord tsal)
 # target_link_libraries(chord_p tsal)
 target_link_libraries(hello_tsal tsal)

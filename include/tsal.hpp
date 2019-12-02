@@ -4,9 +4,9 @@
 #include "Channel.hpp"
 #include "Compressor.hpp"
 #include "Delay.hpp"
-#include "MidiNotes.hpp"
+/* #include "MidiNotes.hpp" */
 #include "Mixer.hpp"
-#include "MidiParser.hpp"
+/* #include "MidiParser.hpp" */
 #include "Oscillator.hpp"
 #include "PolySynth.hpp"
 #include "ProgressOctave.hpp"
