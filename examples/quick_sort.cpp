@@ -2,7 +2,7 @@
 
 using namespace tsal;
 
-#define MAX_VALUE 1000000
+#define MAX_VALUE 100000
 
 void quickSort(ThreadSynth& synth, int* data, int low, int high) {
   if (low < high) {
@@ -10,7 +10,7 @@ void quickSort(ThreadSynth& synth, int* data, int low, int high) {
     int pivotValue = data[low];
     int pivot = low;
     for (int i = low + 1; i < high; i++) {
-      synth.play(C3 + 45 * ((double) data[i] / MAX_VALUE), Timing::MICROSECOND, 100);
+      synth.play(C3 + 45 * ((double) data[i] / MAX_VALUE), Timing::MICROSECOND, 50);
       
       if (data[i] < pivotValue) {
         pivot++;
@@ -31,7 +31,7 @@ int main() {
   synth.setEnvelopeActive(false);
 
   // Generate the data
-  const int size = 10000;
+  const int size = 5000;
   int* data = new int[size];
   for (int i = 0; i < size; i++) {
     data[i] = rand() % MAX_VALUE;

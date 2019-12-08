@@ -11,7 +11,7 @@ void insertionSort(ThreadSynth& synth, int size, int* data) {
     insertValue = data[i];
     j = i;
     while (j > 0 && data[j - 1] > insertValue) {
-      synth.play(C2 + 55 * ((double) data[j] / MAX_VALUE), Timing::MILLISECOND, 5);
+      synth.play(C3 + 45 * ((double) data[j] / MAX_VALUE), Timing::MICROSECOND, 50);
       
       data[j] = data[j - 1];
       j--;
@@ -27,7 +27,7 @@ int main() {
   synth.setEnvelopeActive(false);
 
   // Generate data
-  const int size = 150;
+  const int size = 5000;
   int* data = new int[size];
   for (int i = 0; i < size; i++) {
     data[i] = rand() % MAX_VALUE;

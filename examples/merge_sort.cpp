@@ -3,6 +3,8 @@
 
 using namespace tsal;
 
+#define MAX_VALUE 100000
+
 enum MergeState {
   S_MERGE = 1,
   S_SHIFT = 2,
@@ -150,7 +152,7 @@ void mergeSortFunction(std::vector<ThreadSynth>& voices, int threads, int size) 
           number = numbers[i];
           // If we are processing the item, play a sound
           if (i == sd[tid]->left) {
-            voice.play(C2 + (tid * 3) + 60 * (number / maxNumber), Timing::MICROSECOND, 100);
+            voice.play(C2 + (tid * 3) + 60 * (number / maxNumber), Timing::MICROSECOND, 50);
           }
         } 
       }
@@ -178,7 +180,7 @@ void mergeSortFunction(std::vector<ThreadSynth>& voices, int threads, int size) 
  */
 int main() {
 
-    int threads, t = 4;
+    int threads, t = 1;
     for (threads = 1; threads < t; threads *=2);  //Force threads to be a power of 2
 
     Mixer mixer;
@@ -188,5 +190,5 @@ int main() {
       voices[i].setVolume(0.5);
       voices[i].setEnvelopeActive(false);      
     } 
-    mergeSortFunction(voices, threads, 25000);
+    mergeSortFunction(voices, threads, 5000);
 }
