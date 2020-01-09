@@ -5,8 +5,8 @@
 
 namespace tsal {
 
-OutputDevice::OutputDevice(Mixer* mixer) {
-  setMixer(mixer);
+OutputDevice::OutputDevice(const Context& context) {
+  mContext = &context;
 }
 
 

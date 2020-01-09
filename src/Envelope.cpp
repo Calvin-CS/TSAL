@@ -10,7 +10,7 @@ Item checkParameterRangeWithMax(const std::string& name, Item value, std::pair<I
   return std::max(Util::checkParameterRange(name, value, range), MIN_VALUE);
 }
 
-Envelope::Envelope(Mixer* mixer) : OutputDevice(mixer) {
+Envelope::Envelope(const Context& context) : OutputDevice(context) {
   mStateValue[OFF] = MIN_VALUE;
   mStateValue[ATTACK] = 0.01;
   mStateValue[DECAY] = 0.5;
@@ -27,7 +27,7 @@ void Envelope::updateState() {
   mState = static_cast<EnvelopeState>((mState + 1) % 5);
   mCurrentStateIndex = 0;
   // OFF and SUSTAIN are indefinite so no need to set mNextStateIndex
-  mNextStateIndex = stateIsTimed() ? mStateValue[mState] * mMixer->getSampleRate() : 0;
+  mNextStateIndex = stateIsTimed() ? mStateValue[mState] * 44100 : 0;
   switch(mState) {
     case OFF:
       mEnvelopeValue = 0.0;

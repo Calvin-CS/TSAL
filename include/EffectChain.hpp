@@ -14,7 +14,7 @@ namespace tsal {
  */
 class EffectChain : public OutputDevice {
   public:
-    EffectChain(Mixer* mixer, OutputDevice& output) : OutputDevice(mixer), mInput(output) {};
+    EffectChain(const Context& context) : OutputDevice(context) {};
     ~EffectChain();
     virtual void getOutput(AudioBuffer<float> &buffer) override;
     virtual void setMixer(Mixer* mixer) override;
@@ -23,7 +23,6 @@ class EffectChain : public OutputDevice {
     int size() { return mEffects.size(); };
   private:
     std::vector<Effect*> mEffects;
-    OutputDevice& mInput;
     std::mutex mEffectChainMutex;
 };
 

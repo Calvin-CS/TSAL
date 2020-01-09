@@ -21,10 +21,10 @@ void ThreadSynth::notify() {
 }
 
 void ThreadSynth::lock(Timing::NoteScale scale, unsigned duration) {
-  Sequencer& seq = mMixer->getSequencer();
-  std::unique_lock<std::mutex> lk(mMutex);
-  seq.schedule(std::bind(&ThreadSynth::notify, this), scale, duration);
-  mCondition.wait(lk);
+  // Sequencer& seq = mMixer->getSequencer();
+  // std::unique_lock<std::mutex> lk(mMutex);
+  // seq.schedule(std::bind(&ThreadSynth::notify, this), scale, duration);
+  // mCondition.wait(lk);
 }
 
 

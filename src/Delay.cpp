@@ -3,7 +3,7 @@
 
 namespace tsal {
 
-Delay::Delay(Mixer* mixer) : Effect(mixer), mBuffer(mixer->getSampleRate()) {
+Delay::Delay(const Context& context) : Effect(context), mBuffer(context.mSampleRate){
 }
 
 /* @brief Dynamically allocates a buffer based on the sample rate

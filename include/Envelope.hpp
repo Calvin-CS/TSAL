@@ -1,7 +1,6 @@
 #ifndef ENVELOPE_H
 #define ENVELOPE_H
 
-#include "Mixer.hpp"
 #include "OutputDevice.hpp"
 #include "Util.hpp"
 #include <cmath>
@@ -19,7 +18,7 @@ namespace tsal {
  */
 class Envelope : public OutputDevice {
   public:
-    Envelope(Mixer* mixer);
+    Envelope(const Context& context);
     enum EnvelopeState {
       OFF,
       ATTACK,

@@ -3,7 +3,7 @@
 
 namespace tsal {
 
-Instrument::Instrument(Mixer *mixer) : ChannelDevice(mixer){
+Instrument::Instrument(const Context& context) : ChannelDevice(context){
 };
 
 Instrument::~Instrument() {

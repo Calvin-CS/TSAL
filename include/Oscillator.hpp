@@ -14,7 +14,7 @@ namespace tsal {
  */
 class Oscillator : public OutputDevice {
   public:
-    Oscillator(Mixer* mixer) : OutputDevice(mixer){};
+    Oscillator(const Context& context) : OutputDevice(context){};
     /**
      * @brief Modes for the oscillator 
      * 

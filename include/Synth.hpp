@@ -17,7 +17,7 @@ namespace tsal {
  */
 class Synth : public Instrument {
   public:
-    Synth(Mixer *mixer);
+    Synth(const Context& context);
     virtual void getOutput(AudioBuffer<float> &buffer) override;
     void play(double note, double velocity = 100.0);
     void stop();

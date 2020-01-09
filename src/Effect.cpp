@@ -3,7 +3,7 @@
 
 namespace tsal {
 
-Effect::Effect(Mixer* mixer) : ChannelDevice(mixer) {
+Effect::Effect(const Context& context) : ChannelDevice(context) {
 }
 
 Effect::~Effect() {

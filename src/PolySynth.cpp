@@ -2,7 +2,7 @@
 
 namespace tsal {
 
-PolySynth::PolySynth(Mixer* mixer) : Instrument(mixer), mVoices(NUM_VOICES, Synth(mixer)), mRoutedSynths(mixer) {
+PolySynth::PolySynth(const Context& context) : Instrument(context), mVoices(NUM_VOICES, Synth(context)), mRoutedSynths(context) {
   for (unsigned i = 0; i < mVoices.size(); i++) {
     mVoices[i].setActive(false);
     mVoices[i].setVolume(0.3);

@@ -3,6 +3,7 @@
 
 #include "OutputDevice.hpp"
 #include "Channel.hpp"
+#include "Context.hpp"
 #include "Compressor.hpp"
 #include "Sequencer.hpp"
 #include "portaudio.h"
@@ -36,10 +37,11 @@ class Mixer {
     unsigned getChannelCount() { return mChannelCount; };
 
   private:
-    PaStream* mPaStream;
+    Context mContext;
     Channel mMaster;
     Compressor mCompressor;
     Sequencer mSequencer;
+    PaStream* mPaStream;
     void openPaStream();
     
     AudioBuffer<float> mBuffer;

@@ -3,7 +3,7 @@
 
 namespace tsal {
   
-Channel::Channel(Mixer* mixer) : ChannelDevice(mixer), mChannelIn(mixer), mRoutedInstruments(mixer), mRoutedChannels(mixer), mEffectChain(mixer, mChannelIn) {
+Channel::Channel(const Context& context) : ChannelDevice(context), mChannelIn(context), mRoutedInstruments(context), mRoutedChannels(context), mEffectChain(context) {
   mChannelIn.add(mRoutedInstruments);
   mChannelIn.add(mRoutedChannels);
 }

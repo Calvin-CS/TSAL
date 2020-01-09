@@ -95,7 +95,7 @@ void Mixer::openPaStream() {
   }
 }
 
-Mixer::Mixer() : mMaster(this), mCompressor(this) {
+Mixer::Mixer() : mContext(), mMaster(mContext), mCompressor(mContext) {
   openPaStream();
 }
 
@@ -104,7 +104,7 @@ Mixer::Mixer() : mMaster(this), mCompressor(this) {
  * 
  * @param sampleRate if left blank, TSAudio will default to the highest sample rate supported
  */
-Mixer::Mixer(unsigned sampleRate)  : mMaster(this), mCompressor(this) {
+Mixer::Mixer(unsigned sampleRate) : mContext(), mMaster(mContext), mCompressor(mContext) {
   mSampleRate = sampleRate;
   openPaStream();
 }

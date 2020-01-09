@@ -18,7 +18,7 @@ namespace tsal {
 template <typename DeviceType>
 class RouteDevice : public OutputDevice {
   public:
-    RouteDevice(Mixer* mixer) : OutputDevice(mixer){};
+    RouteDevice(const Context& context) : OutputDevice(context){};
     ~RouteDevice();
     virtual void getOutput(AudioBuffer<float> &buffer) override;
     virtual void setMixer(Mixer* mixer) override;
@@ -39,7 +39,7 @@ class RouteDevice : public OutputDevice {
     struct RoutedInput {
         DeviceType* device;
         AudioBuffer<float> buffer;
-        RoutedInput(DeviceType* d, Mixer* mixer)
+        RoutedInput(DeviceType* d)
           : device(d) {};
     };
     bool outOfRange(const int index) const;
@@ -90,8 +90,7 @@ void RouteDevice<DeviceType>::setMixer(Mixer* mixer) {
 template <typename DeviceType>
 void RouteDevice<DeviceType>::add(DeviceType& device) {
   std::lock_guard<std::mutex> guard(mRouterMutex);
-  device.setMixer(mMixer);
-  mRoutedInputs.push_back(new RoutedInput(&device, mMixer));
+  mRoutedInputs.push_back(new RoutedInput(&device));
 }
 
 /**

@@ -16,7 +16,7 @@ namespace tsal {
  */
 class ProgressOctave : public Instrument {
   public:
-    ProgressOctave(Mixer* mixer, unsigned startNote, unsigned problemSize, unsigned numWorkers);
+    ProgressOctave(const Context& context, unsigned startNote, unsigned problemSize, unsigned numWorkers);
     void getOutput(AudioBuffer<float> &buffer) override;
     virtual void setMixer(Mixer* mixer) override;
     void update(unsigned id);

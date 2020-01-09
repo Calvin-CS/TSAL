@@ -23,7 +23,7 @@ namespace tsal {
  */
 class Compressor : public Effect {
   public:
-    Compressor(Mixer* mixer);
+    Compressor(const Context& context);
     virtual void getOutput(AudioBuffer<float>& buffer) override;
     virtual void setMixer(Mixer* mixer) override;
     void setAttackTime(double attackTime);

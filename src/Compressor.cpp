@@ -5,7 +5,7 @@
   
 namespace tsal {
 
-Compressor::Compressor(Mixer* mixer) : Effect(mixer), mEnvelope(COMPRESSOR_MAX_BUFFER) {
+Compressor::Compressor(const Context& context) : Effect(context), mEnvelope(COMPRESSOR_MAX_BUFFER) {
 };
 
 void Compressor::getOutput(AudioBuffer<float> &buffer) {

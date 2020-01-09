@@ -4,7 +4,7 @@
 namespace tsal {
 
 
-Synth::Synth(Mixer *mixer) : Instrument(mixer), mOscillator(mixer), mEnvelope(mixer) {
+Synth::Synth(const Context& context) : Instrument(context), mOscillator(context), mEnvelope(context) {
   mEnvelope.setActive(false);
 };
 
