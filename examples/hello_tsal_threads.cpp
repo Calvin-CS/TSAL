@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
       
   // Create the mixer and array of synths
   tsal::Mixer mixer;
-  std::vector<tsal::Synth> synths(numThreads, tsal::Synth(&mixer));
+  std::vector<tsal::Synth> synths(numThreads, tsal::Synth(mixer.getContext()));
 
   // Setup omp with a number of threads
   omp_set_num_threads(numThreads);

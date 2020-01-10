@@ -182,7 +182,7 @@ int main() {
     for (threads = 1; threads < t; threads *=2);  //Force threads to be a power of 2
 
     Mixer mixer;
-    std::vector<ThreadSynth> voices(threads, ThreadSynth(&mixer));
+    std::vector<ThreadSynth> voices(threads, ThreadSynth(mixer.getContext()));
     for (unsigned i = 0; i < voices.size(); i++) {
       mixer.add(voices[i]);
       voices[i].setVolume(0.5);

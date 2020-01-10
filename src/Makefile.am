@@ -1,4 +1,4 @@
-AM_CXXFLAGS = -Wall -I$(top_srcdir)/include -lrtaudio -lportaudio
+AM_CXXFLAGS = -Wall -I$(top_srcdir)/include -lportaudio
 
 lib_LTLIBRARIES = libtsal.la
 libtsal_la_SOURCES = \
@@ -21,7 +21,6 @@ libtsal_la_SOURCES = \
   OutputDevice.cpp \
 	PolySynth.cpp \
 	ProgressOctave.cpp \
-	SoundFont.cpp \
   Synth.cpp \
 	ThreadSynth.cpp \
   Util.cpp
@@ -52,7 +51,6 @@ include_HEADERS = \
 	$(top_srcdir)/include/PolySynth.hpp \
   $(top_srcdir)/include/ProgressOctave.hpp \
   $(top_srcdir)/include/RouteDevice.hpp \
-  $(top_srcdir)/include/SoundFont.hpp \
 	$(top_srcdir)/include/Synth.hpp \
 	$(top_srcdir)/include/ThreadSynth.hpp \
   $(top_srcdir)/include/Util.hpp

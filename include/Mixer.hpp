@@ -35,6 +35,7 @@ class Mixer {
     Sequencer& getSequencer() { return mSequencer; };
     unsigned getSampleRate() { return mSampleRate; };
     unsigned getChannelCount() { return mChannelCount; };
+    const Context& getContext() { return mContext; };
 
   private:
     Context mContext;

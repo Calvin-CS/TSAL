@@ -15,11 +15,11 @@ void EffectChain::getOutput(AudioBuffer<float> &buffer) {
   }
 }
 
-void EffectChain::setMixer(Mixer* mixer) {
+void EffectChain::updateContext(const Context& context) {
   std::lock_guard<std::mutex> guard(mEffectChainMutex);
-  OutputDevice::setMixer(mixer);
+  OutputDevice::updateContext(mContext);
   for (auto effect : mEffects) {
-    effect->setMixer(mixer);
+    effect->updateContext(mContext);
   }
 } 
 
@@ -29,7 +29,7 @@ void EffectChain::setMixer(Mixer* mixer) {
  */
 void EffectChain::add(Effect& effect) {
   std::lock_guard<std::mutex> guard(mEffectChainMutex);
-  effect.setMixer(mMixer);
+  effect.updateContext(mContext);
   mEffects.push_back(&effect);
 }
 

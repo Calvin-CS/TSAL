@@ -24,8 +24,9 @@ void Compressor::getOutput(AudioBuffer<float> &buffer) {
   // return mBuffer[mCurrentSample];
 }
 
-void Compressor::setMixer(Mixer *mixer) {
-  OutputDevice::setMixer(mixer);
+void Compressor::updateContext(const Context& context) {
+  OutputDevice::updateContext(mContext);
+  // Do this better
   setAttackTime(1.0);
   setReleaseTime(1500.0);
 }
@@ -98,7 +99,7 @@ void Compressor::calculateSlope() {
  */
 void Compressor::setAttackTime(double attackTime) {
   attackTime = Util::checkParameterRange("Compressor: AttackTime", attackTime, mAttackTimeRange);
-  mAttackGain = attackTime == 0.0 ? 0.0 : std::exp(-1.0 / (mMixer->getSampleRate() * attackTime/1000));
+  mAttackGain = attackTime == 0.0 ? 0.0 : std::exp(-1.0 / (mContext.getSampleRate() * attackTime/1000));
 }
 
 /**
@@ -108,7 +109,7 @@ void Compressor::setAttackTime(double attackTime) {
  */
 void Compressor::setReleaseTime(double releaseTime) {
   releaseTime = Util::checkParameterRange("Compressor: ReleaseTime", releaseTime, mReleaseTimeRange);
-  mReleaseGain = releaseTime == 0.0 ? 0.0 : std::exp(-1.0 / (mMixer->getSampleRate() * releaseTime/1000));
+  mReleaseGain = releaseTime == 0.0 ? 0.0 : std::exp(-1.0 / (mContext.getSampleRate() * releaseTime/1000));
 }
 
 /**

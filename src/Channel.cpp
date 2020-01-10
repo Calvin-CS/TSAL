@@ -19,9 +19,10 @@ void Channel::setParentChannel(Channel* channel) {
   mParentChannel = channel;
 }
 
-void Channel::setMixer(Mixer* mixer) {
-  mChannelIn.setMixer(mixer);
-  mEffectChain.setMixer(mixer);
+void Channel::updateContext(const Context& context) {
+  mContext.update(context);
+  mChannelIn.updateContext(mContext);
+  mEffectChain.updateContext(mContext);
 }
 
 void Channel::getOutput(AudioBuffer<float> &buffer) {

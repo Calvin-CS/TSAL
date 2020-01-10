@@ -17,7 +17,7 @@ class EffectChain : public OutputDevice {
     EffectChain(const Context& context) : OutputDevice(context) {};
     ~EffectChain();
     virtual void getOutput(AudioBuffer<float> &buffer) override;
-    virtual void setMixer(Mixer* mixer) override;
+    virtual void updateContext(const Context& context) override;
     void add(Effect& effect);
     void remove(Effect& effect);
     int size() { return mEffects.size(); };

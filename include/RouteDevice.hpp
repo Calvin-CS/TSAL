@@ -21,7 +21,7 @@ class RouteDevice : public OutputDevice {
     RouteDevice(const Context& context) : OutputDevice(context){};
     ~RouteDevice();
     virtual void getOutput(AudioBuffer<float> &buffer) override;
-    virtual void setMixer(Mixer* mixer) override;
+    virtual void updateContext(const Context& context) override;
     
     void add(DeviceType& device);
     void remove(DeviceType& device);
@@ -74,11 +74,12 @@ void RouteDevice<DeviceType>::getOutput(AudioBuffer<float> &buffer) {
 };
 
 template <typename DeviceType>
-void RouteDevice<DeviceType>::setMixer(Mixer* mixer) {
+void RouteDevice<DeviceType>::updateContext(const Context& context) {
   std::lock_guard<std::mutex> guard(mRouterMutex);
-  OutputDevice::setMixer(mixer);
+  OutputDevice::updateContext(mContext);
   for (unsigned i = 0; i < mRoutedInputs.size(); i++) {
-    mRoutedInputs[i]->device->setMixer(mixer);
+    mRoutedInputs[i]->device->updateContext(mContext);
+    
   }
 }
 

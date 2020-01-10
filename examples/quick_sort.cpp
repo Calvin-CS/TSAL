@@ -26,7 +26,7 @@ void quickSort(ThreadSynth& synth, int* data, int low, int high) {
 
 int main() {
   Mixer mixer;
-  ThreadSynth synth(&mixer);
+  ThreadSynth synth(mixer.getContext());
   mixer.add(synth);
   synth.setEnvelopeActive(false);
 

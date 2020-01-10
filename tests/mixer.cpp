@@ -8,7 +8,7 @@ void testConstructors() {
   Mixer mixer2(44100);
   assert(mixer2.getSampleRate() == 44100);
 
-  Synth synth(&mixer);
+  Synth synth(mixer.getContext());
   mixer.add(synth);
   mixer2.add(synth);
   mixer2.remove(synth);
@@ -17,9 +17,9 @@ void testConstructors() {
 
 void testAddRemove() {
   Mixer mixer;
-  Channel channel(&mixer);
-  Synth synth[2]{Synth(&mixer), Synth(&mixer)};
-  Delay delay(&mixer);
+  Channel channel(mixer.getContext());
+  Synth synth[2]{Synth(mixer.getContext()), Synth(mixer.getContext())};
+  Delay delay(mixer.getContext());
   // Get a reference to the master channel
   Channel& master = mixer.getMaster();
   // The master channel will probably come with some number of default effects

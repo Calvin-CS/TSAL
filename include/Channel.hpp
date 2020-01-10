@@ -19,8 +19,7 @@ class Channel : public ChannelDevice {
     Channel(const Context& context);
     virtual ~Channel();
     virtual void getOutput(AudioBuffer<float> &buffer) override;
-    virtual void getOutput(float *buffer, unsigned long frameCount, unsigned channelCount);
-    virtual void setMixer(Mixer* mixer) override;
+    virtual void updateContext(const Context& context) override;
     virtual void setParentChannel(Channel* channel) override;
     void add(Channel& channel);
     void add(Effect& effect, unsigned position);

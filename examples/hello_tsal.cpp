@@ -17,7 +17,7 @@ int main() {
   Mixer mixer;
   
   // Create the synthesizer object
-  PolySynth synth(&mixer);
+  Synth synth(mixer.getContext());
   
   // Add the synth to the mixer
   mixer.add(synth);

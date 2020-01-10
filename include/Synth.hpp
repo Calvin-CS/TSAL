@@ -32,10 +32,10 @@ class Synth : public Instrument {
 
     double getNote() const;
     
-    virtual void setMixer(Mixer* mixer) override {
-      OutputDevice::setMixer(mixer);
-      mOscillator.setMixer(mixer);
-      mEnvelope.setMixer(mixer);
+    virtual void updateContext(const Context& context) override {
+      OutputDevice::updateContext(mContext);
+      mOscillator.updateContext(mContext);
+      mEnvelope.updateContext(mContext);
     }
 
   private:

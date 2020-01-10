@@ -5,10 +5,10 @@ using namespace tsal;
 
 void testEffectChain() {
   Mixer mixer;
-  Synth synth(&mixer);
-  Channel channel(&mixer);
-  Compressor compressor[3]{Compressor(&mixer), Compressor(&mixer),
-                           Compressor(&mixer)};
+  Synth synth(mixer.getContext());
+  Channel channel(mixer.getContext());
+  Compressor compressor[3]{Compressor(mixer.getContext()), Compressor(mixer.getContext()),
+                           Compressor(mixer.getContext())};
 
   mixer.add(channel);
   channel.add(synth);
@@ -39,8 +39,8 @@ void testEffectChain() {
 
 void testCompressor() {
   Mixer mixer;
-  Synth synth(&mixer);
-  Compressor compressor(&mixer);
+  Synth synth(mixer.getContext());
+  Compressor compressor(mixer.getContext());
   mixer.add(compressor);
   mixer.add(synth);
 
@@ -73,8 +73,8 @@ void testCompressor() {
 
 void testDelay() {
   Mixer mixer;
-  Synth synth(&mixer);
-  Delay delay(&mixer);
+  Synth synth(mixer.getContext());
+  Delay delay(mixer.getContext());
   mixer.add(synth);
   mixer.add(delay);
 }

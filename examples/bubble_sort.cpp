@@ -20,7 +20,7 @@ void bubbleSort(ThreadSynth& synth, int size, int data[]) {
 
 int main() {
   Mixer mixer;
-  ThreadSynth synth(&mixer);
+  ThreadSynth synth(mixer.getContext());
   mixer.add(synth);
   
   // Generate the data

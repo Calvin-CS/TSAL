@@ -27,7 +27,7 @@ void Envelope::updateState() {
   mState = static_cast<EnvelopeState>((mState + 1) % 5);
   mCurrentStateIndex = 0;
   // OFF and SUSTAIN are indefinite so no need to set mNextStateIndex
-  mNextStateIndex = stateIsTimed() ? mStateValue[mState] * 44100 : 0;
+  mNextStateIndex = stateIsTimed() ? mStateValue[mState] * mContext.getSampleRate() : 0;
   switch(mState) {
     case OFF:
       mEnvelopeValue = 0.0;

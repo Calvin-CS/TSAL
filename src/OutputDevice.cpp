@@ -5,8 +5,7 @@
 
 namespace tsal {
 
-OutputDevice::OutputDevice(const Context& context) {
-  mContext = &context;
+OutputDevice::OutputDevice(const Context& context) : mContext(context) {
 }
 
 

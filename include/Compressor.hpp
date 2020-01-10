@@ -25,7 +25,7 @@ class Compressor : public Effect {
   public:
     Compressor(const Context& context);
     virtual void getOutput(AudioBuffer<float>& buffer) override;
-    virtual void setMixer(Mixer* mixer) override;
+    virtual void updateContext(const Context& context) override;
     void setAttackTime(double attackTime);
     void setReleaseTime(double releaseTime);
     void setThreshold(double threshold);

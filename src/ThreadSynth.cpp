@@ -3,7 +3,7 @@
 
 namespace tsal {
 
-ThreadSynth::ThreadSynth(Mixer* mixer) : Synth(mixer) {
+ThreadSynth::ThreadSynth(const Context& context) : Synth(context) {
 };
 
 void ThreadSynth::play(double note, Timing::TimeScale scale, unsigned duration) {
@@ -21,7 +21,7 @@ void ThreadSynth::notify() {
 }
 
 void ThreadSynth::lock(Timing::NoteScale scale, unsigned duration) {
-  // Sequencer& seq = mMixer->getSequencer();
+  // Sequencer& seq = mContext.getSequencer();
   // std::unique_lock<std::mutex> lk(mMutex);
   // seq.schedule(std::bind(&ThreadSynth::notify, this), scale, duration);
   // mCondition.wait(lk);

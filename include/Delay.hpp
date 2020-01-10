@@ -16,7 +16,7 @@ class Delay : public Effect {
   public:
     Delay(const Context& context);
     void init();
-    virtual void setMixer(Mixer* mixer) override;
+    virtual void updateContext(const Context& context) override;
     virtual void getOutput(AudioBuffer<float> &buffer) override;
     void setDelay(unsigned delay);
     void setFeedback(double feedback);

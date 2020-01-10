@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
   tsal::MidiParser midiParser(numTracks, argv[1]);
 
   tsal::Mixer mixer;
-  std::vector<tsal::ThreadSynth> voices(numTracks, tsal::ThreadSynth(&mixer));  
+  std::vector<tsal::ThreadSynth> voices(numTracks, tsal::ThreadSynth(mixer.getContext()));  
 
   omp_set_num_threads(numTracks);
 

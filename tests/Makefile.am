@@ -4,7 +4,7 @@ check_PROGRAMS = \
 
 noinst_PROGRAMS = test
 
-AM_CXXFLAGS = -g -Wall -I$(top_srcdir)/include -I/usr/lib/gcc/x86_64-pc-linux-gnu/9.1.0/include -lrtaudio -fopenmp -pthread
+AM_CXXFLAGS = -g -Wall -I$(top_srcdir)/include -I/usr/lib/gcc/x86_64-pc-linux-gnu/9.1.0/include -fopenmp -pthread
 
 
 effects_SOURCES = effects.cpp
