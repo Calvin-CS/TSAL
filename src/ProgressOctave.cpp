@@ -22,9 +22,11 @@ void ProgressOctave::updateContext(const Context& context) {
   mStepValue = octavePortion / mProblemSize;
   for (unsigned i = 0; i < mNumWorkers; i++) {
     mOscillators.push_back(std::make_unique<Oscillator>(mContext));
-    mRoutedOscillators.add(*mOscillators[i]);
-    mOscillators[i]->setVolume(0.5);
-    mOscillators[i]->setFrequency(startingFrequency + octavePortion * i);
+
+    auto& oscillator = mOscillators[i];
+    mRoutedOscillators.add(*(oscillator.get()));
+    oscillator->setVolume(0.5);
+    oscillator->setFrequency(startingFrequency + octavePortion * i);
   }
 }
 
@@ -33,7 +35,8 @@ void ProgressOctave::updateContext(const Context& context) {
  * @param id
  */
 void ProgressOctave::update(unsigned id) {
-  mOscillators[id]->setFrequency(mOscillators[id]->getFrequency() + mStepValue);
+  auto& oscillator = mOscillators[id];
+  oscillator->setFrequency(oscillator->getFrequency() + mStepValue);
 }
 
 }

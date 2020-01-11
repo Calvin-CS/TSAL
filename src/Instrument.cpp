@@ -1,5 +1,5 @@
 #include "Instrument.hpp"
-#include "Mixer.hpp"
+#include "Channel.hpp"
 
 namespace tsal {
 

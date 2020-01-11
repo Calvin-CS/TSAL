@@ -1,5 +1,6 @@
 #include "tsal.hpp"
 #include <omp.h>
+#include <iostream>
 
 /** @example progress.cpp
  * 

@@ -22,7 +22,7 @@ class Delay : public Effect {
     void setDelay(unsigned delay);
     void setFeedback(double feedback);
   private:
-    std::vector<float> mBuffer;
+    AudioBuffer<float> mBuffer;
     unsigned mCounter = 0;
     int mDelay = 0;
     double mFeedback = 0.5;

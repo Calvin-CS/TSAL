@@ -1,5 +1,4 @@
 #include "Mixer.hpp"
-#include "Channel.hpp"
 #include <vector>
 
 namespace tsal {
@@ -95,7 +94,7 @@ void Mixer::openPaStream() {
   }
 }
 
-Mixer::Mixer() : mContext(), mMaster(mContext), mCompressor(mContext) {
+Mixer::Mixer() : mContext(44100, 2), mMaster(mContext), mCompressor(mContext) {
   openPaStream();
 }
 
@@ -104,7 +103,7 @@ Mixer::Mixer() : mContext(), mMaster(mContext), mCompressor(mContext) {
  * 
  * @param sampleRate if left blank, TSAudio will default to the highest sample rate supported
  */
-Mixer::Mixer(unsigned sampleRate) : mContext(), mMaster(mContext), mCompressor(mContext) {
+Mixer::Mixer(unsigned sampleRate) : mContext(sampleRate, 2), mMaster(mContext), mCompressor(mContext) {
   mSampleRate = sampleRate;
   openPaStream();
 }

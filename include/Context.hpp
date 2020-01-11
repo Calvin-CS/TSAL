@@ -3,6 +3,9 @@
 
 class Context {
   public:
+    Context(unsigned sampleRate, unsigned channelCount) :
+      mSampleRate(sampleRate),
+      mChannelCount(channelCount){};
     unsigned getChannelCount() const { return mChannelCount; };
     unsigned getSampleRate() const { return mSampleRate; };
     void update(const Context& context) {
@@ -10,8 +13,9 @@ class Context {
       mChannelCount = context.getChannelCount();
     };
   private:
-    unsigned mSampleRate = 44100;
-    unsigned mChannelCount = 2;
+    unsigned mSampleRate;
+    // Assuming two channels until a system for variable number of channels exists
+    unsigned mChannelCount;
 };
 
 #endif

@@ -4,6 +4,7 @@
 #include "Synth.hpp"
 #include "Oscillator.hpp"
 #include "Instrument.hpp"
+#include "RouteDevice.hpp"
 
 #define NUM_VOICES 20
 

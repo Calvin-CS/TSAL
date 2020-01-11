@@ -90,6 +90,7 @@ void RouteDevice<DeviceType>::updateContext(const Context& context) {
 template <typename DeviceType>
 void RouteDevice<DeviceType>::add(DeviceType& device) {
   std::lock_guard<std::mutex> guard(mRouterMutex);
+  device.updateContext(mContext);
   mRoutedInputs.push_back(std::make_unique<RoutedInput>(&device));
 }
 

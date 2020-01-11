@@ -32,10 +32,6 @@ class Mixer {
     void remove(Instrument& instrument);
     void remove(Effect& effect);
 
-    Channel& getMaster() { return mMaster; };
-    Sequencer& getSequencer() { return mSequencer; };
-    unsigned getSampleRate() { return mSampleRate; };
-    unsigned getChannelCount() { return mChannelCount; };
     const Context& getContext() { return mContext; };
 
   private:

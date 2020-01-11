@@ -4,7 +4,8 @@ noinst_PROGRAMS = \
 	hello_tsal_threads \
 	insertion_sort \
 	quick_sort \
-	selection_sort
+	selection_sort \
+	progress	
 
 
 AM_CXXFLAGS = -g -Wall -I$(top_srcdir)/include -I/usr/lib/gcc/x86_64-pc-linux-gnu/9.1.0/include -fopenmp -pthread
@@ -33,8 +34,8 @@ selection_sort_LDADD = $(top_builddir)/src/libtsal.la
 # merge_sort_SOURCES = merge_sort.cpp
 # merge_sort_LDADD = $(top_builddir)/src/libtsal.la
 
-# progress_SOURCES = progress.cpp
-# progress_LDADD = $(top_builddir)/src/libtsal.la
+progress_SOURCES = progress.cpp
+progress_LDADD = $(top_builddir)/src/libtsal.la
 
 # producer_consumer_SOURCES = producer_consumer.cpp
 # producer_consumer_LDADD = $(top_builddir)/src/libtsal.la

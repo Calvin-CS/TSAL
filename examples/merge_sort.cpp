@@ -183,6 +183,8 @@ int main() {
 
     Mixer mixer;
     std::vector<ThreadSynth> voices(threads, ThreadSynth(mixer.getContext()));
+    std::vector<Synth> voices2(threads, Synth(mixer.getContext()));
+    // std::vector<ThreadSynth> voices;
     for (unsigned i = 0; i < voices.size(); i++) {
       mixer.add(voices[i]);
       voices[i].setVolume(0.5);

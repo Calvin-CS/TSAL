@@ -1,5 +1,5 @@
 #include "Effect.hpp"
-#include "Mixer.hpp"
+#include "Channel.hpp"
 
 namespace tsal {
 

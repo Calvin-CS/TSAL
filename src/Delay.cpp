@@ -1,9 +1,8 @@
 #include "Delay.hpp"
-#include "Mixer.hpp"
 
 namespace tsal {
 
-Delay::Delay(const Context& context) : Effect(context), mBuffer(mContext.getSampleRate() * mContext.getChannelCount()){
+Delay::Delay(const Context& context) : Effect(context), mBuffer(mContext.getSampleRate(), mContext.getChannelCount()){
 }
 
 /* @brief Dynamically allocates a buffer based on the sample rate
@@ -13,8 +12,9 @@ Delay::Delay(const Context& context) : Effect(context), mBuffer(mContext.getSamp
  * changes
  */
 void Delay::init() {
-  mBuffer.resize(mContext.getSampleRate() * mContext.getChannelCount());
-  Delay::mDelayRange = std::make_pair(0, mBuffer.size());
+  const unsigned delay = mContext.getSampleRate();
+  mBuffer.setFrameCount(delay);
+  Delay::mDelayRange = std::make_pair(0, delay);
   setDelay(1000);
 }
 
