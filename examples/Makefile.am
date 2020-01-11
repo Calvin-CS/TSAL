@@ -5,7 +5,8 @@ noinst_PROGRAMS = \
 	insertion_sort \
 	quick_sort \
 	selection_sort \
-	progress	
+	progress	\
+	merge_sort
 
 
 AM_CXXFLAGS = -g -Wall -I$(top_srcdir)/include -I/usr/lib/gcc/x86_64-pc-linux-gnu/9.1.0/include -fopenmp -pthread
@@ -31,8 +32,8 @@ quick_sort_LDADD = $(top_builddir)/src/libtsal.la
 selection_sort_SOURCES = selection_sort.cpp
 selection_sort_LDADD = $(top_builddir)/src/libtsal.la
 
-# merge_sort_SOURCES = merge_sort.cpp
-# merge_sort_LDADD = $(top_builddir)/src/libtsal.la
+merge_sort_SOURCES = merge_sort.cpp
+merge_sort_LDADD = $(top_builddir)/src/libtsal.la
 
 progress_SOURCES = progress.cpp
 progress_LDADD = $(top_builddir)/src/libtsal.la

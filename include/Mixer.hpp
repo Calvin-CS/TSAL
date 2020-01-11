@@ -43,9 +43,6 @@ class Mixer {
     void openPaStream();
     
     AudioBuffer<float> mBuffer;
-    unsigned mSampleRate = 44100;
-    // Assuming two channels until a system for variable number of channels exists
-    unsigned mChannelCount = 2;
     int audioCallback(float *outputBuffer, unsigned long frameCount);
     static void paStreamFinished(void* userData);
     static int paCallback( const void *inputBuffer, void *outputBuffer,

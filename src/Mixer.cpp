@@ -22,20 +22,20 @@ int Mixer::paCallback( const void *inputBuffer, void *outputBuffer,
 }
 
 int Mixer::audioCallback(float *outputBuffer, unsigned long frameCount) {
-  mBuffer.setSize(frameCount, mChannelCount);
+  const auto channels = mContext.getChannelCount();
+  mBuffer.setSize(frameCount, channels);
   mBuffer.clear();
   mMaster.getOutput(mBuffer);
   for (unsigned long i = 0; i < frameCount; i++) {
     mSequencer.tick();
-    for (unsigned j = 0; j < mChannelCount; j++) {
-      outputBuffer[i * mChannelCount + j] = mBuffer[i * mChannelCount + j];
+    for (unsigned j = 0; j < channels; j++) {
+      outputBuffer[i * channels + j] = mBuffer[i * channels + j];
     }
   }
   return paContinue;
 }
 
 void Mixer::openPaStream() {
-  mChannelCount = 2;
   PaError err = Pa_Initialize();
   if (err != paNoError) {
     return;
@@ -55,12 +55,12 @@ void Mixer::openPaStream() {
     printf("Default sample rate: '%f'\n", pInfo->defaultSampleRate);
   }
 
-  outputParameters.channelCount = mChannelCount;
+  outputParameters.channelCount = mContext.getChannelCount();
   outputParameters.sampleFormat = paFloat32; /* 32 bit floating point output */
   outputParameters.suggestedLatency = Pa_GetDeviceInfo( outputParameters.device )->defaultLowOutputLatency;
   outputParameters.hostApiSpecificStreamInfo = NULL;
 
-  mSequencer.setSampleRate(mSampleRate);
+  mSequencer.setSampleRate(mContext.getSampleRate());
   mSequencer.setBPM(60);
   mSequencer.setPPQ(240);
 
@@ -69,7 +69,7 @@ void Mixer::openPaStream() {
   err = Pa_OpenStream(&mPaStream,
                       NULL, /* no input */
                       &outputParameters,
-                      mSampleRate,
+                      mContext.getSampleRate(),
                       paFramesPerBufferUnspecified,
                       paClipOff,      /* we won't output out of range samples so don't bother clipping them */
                       &Mixer::paCallback,
@@ -101,10 +101,9 @@ Mixer::Mixer() : mContext(44100, 2), mMaster(mContext), mCompressor(mContext) {
 /**
  * @brief Construct a new Mixer
  * 
- * @param sampleRate if left blank, TSAudio will default to the highest sample rate supported
+ * @param sampleRate if default constructor is used, Mixer will default to the highest sample rate supported
  */
 Mixer::Mixer(unsigned sampleRate) : mContext(sampleRate, 2), mMaster(mContext), mCompressor(mContext) {
-  mSampleRate = sampleRate;
   openPaStream();
 }
 
