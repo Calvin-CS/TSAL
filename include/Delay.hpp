@@ -1,9 +1,10 @@
 #ifndef DELAY_H
 #define DELAY_H
 
+#include "AudioBuffer.hpp"
 #include "Effect.hpp"
-#include "Buffer.hpp"
 #include "Util.hpp"
+#include <vector>
 
 namespace tsal {
 
@@ -21,7 +22,7 @@ class Delay : public Effect {
     void setDelay(unsigned delay);
     void setFeedback(double feedback);
   private:
-    Buffer<double> mBuffer;
+    std::vector<float> mBuffer;
     unsigned mCounter = 0;
     int mDelay = 0;
     double mFeedback = 0.5;

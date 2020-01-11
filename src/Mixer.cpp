@@ -18,7 +18,7 @@ int Mixer::paCallback( const void *inputBuffer, void *outputBuffer,
   (void) statusFlags;
   (void) inputBuffer;
 
-  Mixer * mixer = static_cast<Mixer *>(userData);
+  Mixer *mixer = static_cast<Mixer *>(userData);
   return mixer->audioCallback((float*) outputBuffer, framesPerBuffer);
 }
 

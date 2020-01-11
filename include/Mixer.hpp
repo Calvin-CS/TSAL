@@ -7,6 +7,7 @@
 #include "Compressor.hpp"
 #include "Sequencer.hpp"
 #include "portaudio.h"
+#include <memory>
 
 namespace tsal {
 
@@ -42,7 +43,7 @@ class Mixer {
     Channel mMaster;
     Compressor mCompressor;
     Sequencer mSequencer;
-    PaStream* mPaStream;
+    PaStream *mPaStream;
     void openPaStream();
     
     AudioBuffer<float> mBuffer;

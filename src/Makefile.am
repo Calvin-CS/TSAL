@@ -29,7 +29,6 @@ includedir=${prefix}/include/tsal
 include_HEADERS = \
   $(top_srcdir)/include/tsal.hpp \
   $(top_srcdir)/include/Binasc.h \
-  $(top_srcdir)/include/Buffer.hpp \
   $(top_srcdir)/include/Channel.hpp \
   $(top_srcdir)/include/Compressor.hpp \
   $(top_srcdir)/include/Delay.hpp \

@@ -2,7 +2,6 @@
 #define COMPRESSOR_H
 
 #include "Effect.hpp"
-#include "Buffer.hpp"
 #include "Util.hpp"
 #include <vector>
 

@@ -1,10 +1,10 @@
 #ifndef ROUTEDEVICE_H
 #define ROUTEDEVICE_H
 
-#include "InputDevice.hpp"
 #include "OutputDevice.hpp"
 #include <mutex>
 #include <vector>
+#include <memory>
 
 namespace tsal {
 
@@ -37,13 +37,13 @@ class RouteDevice : public OutputDevice {
      * so that they aren't modifying existing data
      */ 
     struct RoutedInput {
-        DeviceType* device;
-        AudioBuffer<float> buffer;
         RoutedInput(DeviceType* d)
           : device(d) {};
+        DeviceType* device;
+        AudioBuffer<float> buffer;
     };
     bool outOfRange(const int index) const;
-    std::vector<RoutedInput*> mRoutedInputs;
+    std::vector<std::unique_ptr<RoutedInput>> mRoutedInputs;
     /* The mutex protection on RouteDevice and EffectChain
      * should use a single mutex for structure modification protection
      * to reduce complexity. But there are potential for deadlocks in both cases
@@ -63,7 +63,7 @@ RouteDevice<DeviceType>::~RouteDevice() {
 template <typename DeviceType>
 void RouteDevice<DeviceType>::getOutput(AudioBuffer<float> &buffer) {
   std::lock_guard<std::mutex> guard(mRouterMutex);
-  for (auto routedInput : mRoutedInputs) {
+  for (const auto& routedInput : mRoutedInputs) {
     routedInput->buffer.setSize(buffer);
     routedInput->buffer.clear();
     routedInput->device->getOutput(routedInput->buffer);
@@ -77,9 +77,8 @@ template <typename DeviceType>
 void RouteDevice<DeviceType>::updateContext(const Context& context) {
   std::lock_guard<std::mutex> guard(mRouterMutex);
   OutputDevice::updateContext(mContext);
-  for (unsigned i = 0; i < mRoutedInputs.size(); i++) {
-    mRoutedInputs[i]->device->updateContext(mContext);
-    
+  for (const auto& routedInput : mRoutedInputs) {
+    routedInput->device->updateContext(mContext);
   }
 }
 
@@ -91,7 +90,7 @@ void RouteDevice<DeviceType>::updateContext(const Context& context) {
 template <typename DeviceType>
 void RouteDevice<DeviceType>::add(DeviceType& device) {
   std::lock_guard<std::mutex> guard(mRouterMutex);
-  mRoutedInputs.push_back(new RoutedInput(&device));
+  mRoutedInputs.push_back(std::make_unique<RoutedInput>(&device));
 }
 
 /**

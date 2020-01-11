@@ -3,7 +3,7 @@
 
 namespace tsal {
 
-Delay::Delay(const Context& context) : Effect(context), mBuffer(mContext.getSampleRate()){
+Delay::Delay(const Context& context) : Effect(context), mBuffer(mContext.getSampleRate() * mContext.getChannelCount()){
 }
 
 /* @brief Dynamically allocates a buffer based on the sample rate
@@ -13,7 +13,7 @@ Delay::Delay(const Context& context) : Effect(context), mBuffer(mContext.getSamp
  * changes
  */
 void Delay::init() {
-  mBuffer.resize(mContext.getSampleRate());
+  mBuffer.resize(mContext.getSampleRate() * mContext.getChannelCount());
   Delay::mDelayRange = std::make_pair(0, mBuffer.size());
   setDelay(1000);
 }
