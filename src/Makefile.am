@@ -5,6 +5,7 @@ libtsal_la_SOURCES = \
   Binasc.cpp \
   Channel.cpp \
   Compressor.cpp \
+	Context.cpp \
   Delay.cpp \
   Effect.cpp \
   EffectChain.cpp \
@@ -31,6 +32,7 @@ include_HEADERS = \
   $(top_srcdir)/include/Binasc.h \
   $(top_srcdir)/include/Channel.hpp \
   $(top_srcdir)/include/Compressor.hpp \
+  $(top_srcdir)/include/Context.hpp \
   $(top_srcdir)/include/Delay.hpp \
   $(top_srcdir)/include/Effect.hpp \
   $(top_srcdir)/include/EffectChain.hpp \

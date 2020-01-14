@@ -8,6 +8,8 @@
 #include "Sequencer.hpp"
 #include "portaudio.h"
 #include <memory>
+#include <condition_variable>
+#include <mutex>
 
 namespace tsal {
 
@@ -34,7 +36,16 @@ class Mixer {
 
     const Context& getContext() { return mContext; };
 
+    void requestModelChange(std::function<void()> change);
+    void runModelChanges();
+
   private:
+    unsigned mChangeRequests = 0;
+    std::mutex mChangeRequestMutex;
+    std::mutex mModelMutex; 
+    std::mutex mWaitModelChangeMutex;
+    std::condition_variable mWaitModelChangeCondition;
+    std::condition_variable mModelChangeRequestCondition;
     Context mContext;
     Channel mMaster;
     Compressor mCompressor;

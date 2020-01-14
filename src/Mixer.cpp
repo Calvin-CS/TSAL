@@ -1,4 +1,5 @@
 #include "Mixer.hpp"
+#include <mutex>
 #include <vector>
 
 namespace tsal {
@@ -32,6 +33,9 @@ int Mixer::audioCallback(float *outputBuffer, unsigned long frameCount) {
       outputBuffer[i * channels + j] = mBuffer[i * channels + j];
     }
   }
+  // Update the model
+  runModelChanges();
+  
   return paContinue;
 }
 
@@ -94,7 +98,7 @@ void Mixer::openPaStream() {
   }
 }
 
-Mixer::Mixer() : mContext(44100, 2), mMaster(mContext), mCompressor(mContext) {
+Mixer::Mixer() : mContext(44100, 2, this), mMaster(mContext), mCompressor(mContext) {
   openPaStream();
 }
 
@@ -103,7 +107,7 @@ Mixer::Mixer() : mContext(44100, 2), mMaster(mContext), mCompressor(mContext) {
  * 
  * @param sampleRate if default constructor is used, Mixer will default to the highest sample rate supported
  */
-Mixer::Mixer(unsigned sampleRate) : mContext(sampleRate, 2), mMaster(mContext), mCompressor(mContext) {
+Mixer::Mixer(unsigned sampleRate) : mContext(sampleRate, 2, this), mMaster(mContext), mCompressor(mContext) {
   openPaStream();
 }
 
@@ -115,6 +119,55 @@ Mixer::~Mixer() {
   err = Pa_Terminate();
   if (err != paNoError) {
     return;
+  }
+}
+
+/**
+ * @brief Make a change to the DAW model
+ * Since the callback function can be accessing any given device in the DAW (channel, instrument, effect),
+ * changes to this model have to be mutually exclusive from the sound device callback
+ * 
+ * @param change a function that is executed safely for making model changes
+ */
+void Mixer::requestModelChange(std::function<void()> change) {
+  // This is currently a pretty naive implementation
+  // It assumes that the audio callback function is constantly being run
+  
+  // Increment the model change request count
+  std::unique_lock<std::mutex> changeLock(mChangeRequestMutex);
+  mChangeRequests++;
+  changeLock.unlock();
+
+  // Start the critical section for the change
+  std::unique_lock<std::mutex> modelLock(mModelMutex);
+  mModelChangeRequestCondition.wait(modelLock);
+
+  // We can safely modify the model
+  change();
+  
+  changeLock.lock();
+  bool moreChanges = --mChangeRequests;
+  changeLock.unlock();
+
+  // Check if there are no more changes
+  if (!moreChanges) {
+    mWaitModelChangeCondition.notify_one();
+  } else {
+    modelLock.unlock();
+    mModelChangeRequestCondition.notify_one();
+  }
+}
+
+/**
+ * @brief Run the scheduled changes to the model
+ *
+ */
+void Mixer::runModelChanges() {
+  // Check if there are requests to change the model
+  if (mChangeRequests) {
+    std::unique_lock<std::mutex> lk(mWaitModelChangeMutex);
+    mModelChangeRequestCondition.notify_one();
+    mWaitModelChangeCondition.wait(lk);
   }
 }
 
