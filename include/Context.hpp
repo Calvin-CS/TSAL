@@ -2,6 +2,7 @@
 #define CONTEXT_H
 
 #include <functional>
+#include <iostream>
 
 namespace tsal {
 
@@ -16,7 +17,12 @@ class Context {
     void update(const Context& context) {
       mSampleRate = context.getSampleRate();
       mChannelCount = context.getChannelCount();
+      mMixer = context.mMixer;
     };
+    
+    // void clear() {
+    //   mMixer = nullptr;
+    // }
     void requestModelChange(std::function<void()> change);
   private:
     unsigned mSampleRate;

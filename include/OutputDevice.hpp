@@ -18,6 +18,7 @@ class Mixer;
  */
 class OutputDevice {
   public:
+    OutputDevice() {};
     OutputDevice(const Context& context);
     virtual ~OutputDevice() {};
     /**

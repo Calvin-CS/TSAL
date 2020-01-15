@@ -13,8 +13,8 @@ void ProgressOctave::getOutput(AudioBuffer<float> &buffer) {
 }
 
 void ProgressOctave::updateContext(const Context& context) {
-  OutputDevice::updateContext(mContext);
-  mRoutedOscillators.updateContext(mContext);
+  OutputDevice::updateContext(context);
+  mRoutedOscillators.updateContext(context);
   
   double startingFrequency = Oscillator::getFrequencyFromNote(mStartNote);
   // Jump by 2 octaves, basically 3 * startingFrequency

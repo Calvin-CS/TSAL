@@ -14,6 +14,7 @@ namespace tsal {
  */
 class EffectChain : public OutputDevice {
   public:
+    EffectChain() {};
     EffectChain(const Context& context) : OutputDevice(context) {};
     ~EffectChain();
     virtual void getOutput(AudioBuffer<float> &buffer) override;

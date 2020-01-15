@@ -3,9 +3,6 @@
 
 namespace tsal {
 
-Effect::Effect(const Context& context) : ChannelDevice(context) {
-}
-
 Effect::~Effect() {
   if (mParentChannel != nullptr)
     mParentChannel->remove(*this);

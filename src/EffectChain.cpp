@@ -17,9 +17,9 @@ void EffectChain::getOutput(AudioBuffer<float> &buffer) {
 
 void EffectChain::updateContext(const Context& context) {
   std::lock_guard<std::mutex> guard(mEffectChainMutex);
-  OutputDevice::updateContext(mContext);
+  OutputDevice::updateContext(context);
   for (auto effect : mEffects) {
-    effect->updateContext(mContext);
+    effect->updateContext(context);
   }
 } 
 

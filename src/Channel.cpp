@@ -2,6 +2,11 @@
 
 namespace tsal {
   
+Channel::Channel() {
+  mChannelIn.add(mRoutedInstruments);
+  mChannelIn.add(mRoutedChannels);
+}
+
 Channel::Channel(const Context& context) : ChannelDevice(context), mChannelIn(context), mRoutedInstruments(context), mRoutedChannels(context), mEffectChain(context) {
   mChannelIn.add(mRoutedInstruments);
   mChannelIn.add(mRoutedChannels);
@@ -19,9 +24,9 @@ void Channel::setParentChannel(Channel* channel) {
 }
 
 void Channel::updateContext(const Context& context) {
-  mContext.update(context);
-  mChannelIn.updateContext(mContext);
-  mEffectChain.updateContext(mContext);
+  OutputDevice::updateContext(context);
+  mChannelIn.updateContext(context);
+  mEffectChain.updateContext(context);
 }
 
 void Channel::getOutput(AudioBuffer<float> &buffer) {

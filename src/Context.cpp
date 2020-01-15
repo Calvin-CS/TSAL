@@ -3,9 +3,10 @@
 
 namespace tsal {
 
-Context::Context() {
-  
-};
+Context::Context() :
+  mSampleRate(1),
+  mChannelCount(1),
+  mMixer(nullptr){};
 
 Context::Context(unsigned sampleRate, unsigned channelCount, Mixer *mixer) :
   mSampleRate(sampleRate),
@@ -13,8 +14,11 @@ Context::Context(unsigned sampleRate, unsigned channelCount, Mixer *mixer) :
   mMixer(mixer){};
 
 void Context::requestModelChange(std::function<void()> change) {
-  if (mMixer == nullptr)
+  if (mMixer == nullptr) {
+    std::cout << "Mixer not set: making unsafe changes" << std::endl;
+    change();
     return;
+  }
   mMixer->requestModelChange(change);
 }
 

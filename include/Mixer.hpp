@@ -34,12 +34,13 @@ class Mixer {
     void remove(Instrument& instrument);
     void remove(Effect& effect);
 
-    const Context& getContext() { return mContext; };
+    Context getContext() { return mContext; };
 
     void requestModelChange(std::function<void()> change);
     void runModelChanges();
 
   private:
+    bool mProcessing = false;
     unsigned mChangeRequests = 0;
     std::mutex mChangeRequestMutex;
     std::mutex mModelMutex; 

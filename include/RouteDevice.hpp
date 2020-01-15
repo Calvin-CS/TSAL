@@ -5,6 +5,7 @@
 #include <mutex>
 #include <vector>
 #include <memory>
+#include <functional>
 
 namespace tsal {
 
@@ -18,6 +19,7 @@ namespace tsal {
 template <typename DeviceType>
 class RouteDevice : public OutputDevice {
   public:
+    RouteDevice() {};
     RouteDevice(const Context& context) : OutputDevice(context){};
     ~RouteDevice();
     virtual void getOutput(AudioBuffer<float> &buffer) override;
@@ -32,6 +34,8 @@ class RouteDevice : public OutputDevice {
     // std::vector<DeviceType*>& getInputDevices() { return mRoutedInputs; };
 
   protected:
+    void addDeviceToModel(DeviceType& device);
+    void removeDeviceFromModel(DeviceType& device);
     /* Store an input device with an output buffer
      * Each device buffer is combined/mixed within this class
      * so that they aren't modifying existing data
@@ -54,7 +58,6 @@ class RouteDevice : public OutputDevice {
 
 template <typename DeviceType>
 RouteDevice<DeviceType>::~RouteDevice() {
-  std::lock_guard<std::mutex> guard(mRouterMutex);
   for (unsigned i = 0; i < mRoutedInputs.size(); i++) {
     mRoutedInputs.erase(mRoutedInputs.begin() + i);
   }
@@ -62,7 +65,6 @@ RouteDevice<DeviceType>::~RouteDevice() {
 
 template <typename DeviceType>
 void RouteDevice<DeviceType>::getOutput(AudioBuffer<float> &buffer) {
-  std::lock_guard<std::mutex> guard(mRouterMutex);
   for (const auto& routedInput : mRoutedInputs) {
     routedInput->buffer.setSize(buffer);
     routedInput->buffer.clear();
@@ -75,10 +77,9 @@ void RouteDevice<DeviceType>::getOutput(AudioBuffer<float> &buffer) {
 
 template <typename DeviceType>
 void RouteDevice<DeviceType>::updateContext(const Context& context) {
-  std::lock_guard<std::mutex> guard(mRouterMutex);
-  OutputDevice::updateContext(mContext);
+  OutputDevice::updateContext(context);
   for (const auto& routedInput : mRoutedInputs) {
-    routedInput->device->updateContext(mContext);
+    routedInput->device->updateContext(context);
   }
 }
 
@@ -89,7 +90,11 @@ void RouteDevice<DeviceType>::updateContext(const Context& context) {
  */
 template <typename DeviceType>
 void RouteDevice<DeviceType>::add(DeviceType& device) {
-  std::lock_guard<std::mutex> guard(mRouterMutex);
+  mContext.requestModelChange(std::bind(&RouteDevice<DeviceType>::addDeviceToModel, this, std::ref(device)));
+}
+
+template <typename DeviceType>
+void RouteDevice<DeviceType>::addDeviceToModel(DeviceType& device) {
   device.updateContext(mContext);
   mRoutedInputs.push_back(std::make_unique<RoutedInput>(&device));
 }
@@ -101,7 +106,11 @@ void RouteDevice<DeviceType>::add(DeviceType& device) {
  */
 template <typename DeviceType>
 void RouteDevice<DeviceType>::remove(DeviceType& device) {
-  std::lock_guard<std::mutex> guard(mRouterMutex);
+  mContext.requestModelChange(std::bind(&RouteDevice<DeviceType>::removeDeviceFromModel, this, std::ref(device)));
+}
+
+template <typename DeviceType>
+void RouteDevice<DeviceType>::removeDeviceFromModel(DeviceType& device) {
   for (unsigned i = 0; i < mRoutedInputs.size(); i++) {
     if (&device == mRoutedInputs[i]->device) {
       mRoutedInputs.erase(mRoutedInputs.begin() + i);

@@ -24,7 +24,7 @@ void Compressor::getOutput(AudioBuffer<float> &buffer) {
 }
 
 void Compressor::updateContext(const Context& context) {
-  OutputDevice::updateContext(mContext);
+  OutputDevice::updateContext(context);
   // Do this better
   setAttackTime(1.0);
   setReleaseTime(1500.0);

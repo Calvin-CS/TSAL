@@ -1,5 +1,6 @@
 #include "Mixer.hpp"
 #include <mutex>
+#include <portaudio.h>
 #include <vector>
 
 namespace tsal {
@@ -23,6 +24,7 @@ int Mixer::paCallback( const void *inputBuffer, void *outputBuffer,
 }
 
 int Mixer::audioCallback(float *outputBuffer, unsigned long frameCount) {
+  mProcessing = true;
   const auto channels = mContext.getChannelCount();
   mBuffer.setSize(frameCount, channels);
   mBuffer.clear();
@@ -69,7 +71,7 @@ void Mixer::openPaStream() {
   mSequencer.setPPQ(240);
 
   // Add a compressor so people don't break their sound cards
-  mMaster.add(mCompressor);
+  // mMaster.add(mCompressor);
   err = Pa_OpenStream(&mPaStream,
                       NULL, /* no input */
                       &outputParameters,
@@ -96,9 +98,11 @@ void Mixer::openPaStream() {
   if (err != paNoError) {
     return;
   }
+
+  mMaster.updateContext(mContext);
 }
 
-Mixer::Mixer() : mContext(44100, 2, this), mMaster(mContext), mCompressor(mContext) {
+Mixer::Mixer() : mContext(44100, 2, this) {
   openPaStream();
 }
 
@@ -107,7 +111,7 @@ Mixer::Mixer() : mContext(44100, 2, this), mMaster(mContext), mCompressor(mConte
  * 
  * @param sampleRate if default constructor is used, Mixer will default to the highest sample rate supported
  */
-Mixer::Mixer(unsigned sampleRate) : mContext(sampleRate, 2, this), mMaster(mContext), mCompressor(mContext) {
+Mixer::Mixer(unsigned sampleRate) : mContext(sampleRate, 2, this) {
   openPaStream();
 }
 
@@ -135,6 +139,7 @@ void Mixer::requestModelChange(std::function<void()> change) {
   
   // Increment the model change request count
   std::unique_lock<std::mutex> changeLock(mChangeRequestMutex);
+  std::cout << "Incrementing change count" << std::endl;
   mChangeRequests++;
   changeLock.unlock();
 
@@ -142,10 +147,12 @@ void Mixer::requestModelChange(std::function<void()> change) {
   std::unique_lock<std::mutex> modelLock(mModelMutex);
   mModelChangeRequestCondition.wait(modelLock);
 
+  std::cout << "Critical section" << std::endl;
   // We can safely modify the model
   change();
   
   changeLock.lock();
+  std::cout << "Decrementing change count" << std::endl;
   bool moreChanges = --mChangeRequests;
   changeLock.unlock();
 

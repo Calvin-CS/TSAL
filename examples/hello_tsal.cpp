@@ -17,7 +17,9 @@ int main() {
   Mixer mixer;
   
   // Create the synthesizer object
-  Synth synth(mixer.getContext());
+  Synth synth;
+  // Synth synth;
+  synth.setMode(Oscillator::SAW);
   
   // Add the synth to the mixer
   mixer.add(synth);

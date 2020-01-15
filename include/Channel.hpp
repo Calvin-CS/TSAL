@@ -16,6 +16,7 @@ namespace tsal {
  */
 class Channel : public ChannelDevice {
   public:
+    Channel();
     Channel(const Context& context);
     virtual ~Channel();
     virtual void getOutput(AudioBuffer<float> &buffer) override;

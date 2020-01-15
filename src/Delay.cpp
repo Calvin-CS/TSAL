@@ -19,7 +19,7 @@ void Delay::init() {
 }
 
 void Delay::updateContext(const Context& context) {
-  OutputDevice::updateContext(mContext);
+  OutputDevice::updateContext(context);
   init();
 }
 
