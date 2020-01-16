@@ -48,11 +48,6 @@ class RouteDevice : public OutputDevice {
     };
     bool outOfRange(const int index) const;
     std::vector<std::unique_ptr<RoutedInput>> mRoutedInputs;
-    /* The mutex protection on RouteDevice and EffectChain
-     * should use a single mutex for structure modification protection
-     * to reduce complexity. But there are potential for deadlocks in both cases
-     */
-    std::mutex mRouterMutex;
 };
 
 
@@ -113,6 +108,7 @@ template <typename DeviceType>
 void RouteDevice<DeviceType>::removeDeviceFromModel(DeviceType& device) {
   for (unsigned i = 0; i < mRoutedInputs.size(); i++) {
     if (&device == mRoutedInputs[i]->device) {
+      device.updateContext(Context::clear());
       mRoutedInputs.erase(mRoutedInputs.begin() + i);
       break;
     }

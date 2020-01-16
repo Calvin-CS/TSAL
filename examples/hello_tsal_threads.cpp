@@ -28,7 +28,6 @@ int main(int argc, char* argv[]) {
     int id = omp_get_thread_num();
     tsal::Synth synth;
     // Add the synth to the mixer
-    std::cout << "adding synth" << std::endl;
     mixer.add(synth);
     synth.setMode(tsal::Oscillator::SAW);
     // Start playing a pitch based on thread number

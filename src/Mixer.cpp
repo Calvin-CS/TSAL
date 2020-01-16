@@ -139,7 +139,6 @@ void Mixer::requestModelChange(std::function<void()> change) {
   
   // Increment the model change request count
   std::unique_lock<std::mutex> changeLock(mChangeRequestMutex);
-  std::cout << "Incrementing change count" << std::endl;
   mChangeRequests++;
   changeLock.unlock();
 
@@ -147,12 +146,10 @@ void Mixer::requestModelChange(std::function<void()> change) {
   std::unique_lock<std::mutex> modelLock(mModelMutex);
   mModelChangeRequestCondition.wait(modelLock);
 
-  std::cout << "Critical section" << std::endl;
   // We can safely modify the model
   change();
   
   changeLock.lock();
-  std::cout << "Decrementing change count" << std::endl;
   bool moreChanges = --mChangeRequests;
   changeLock.unlock();
 

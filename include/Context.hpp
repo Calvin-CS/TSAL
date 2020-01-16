@@ -19,10 +19,10 @@ class Context {
       mChannelCount = context.getChannelCount();
       mMixer = context.mMixer;
     };
+    static Context clear() {
+      return Context();
+    }
     
-    // void clear() {
-    //   mMixer = nullptr;
-    // }
     void requestModelChange(std::function<void()> change);
   private:
     unsigned mSampleRate;
