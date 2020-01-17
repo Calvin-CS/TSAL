@@ -15,7 +15,6 @@ namespace tsal {
  */
 class Delay : public Effect {
   public:
-    Delay(const Context& context);
     void init();
     virtual void updateContext(const Context& context) override;
     virtual void getOutput(AudioBuffer<float> &buffer) override;

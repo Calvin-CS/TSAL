@@ -7,11 +7,6 @@ Channel::Channel() {
   mChannelIn.add(mRoutedChannels);
 }
 
-Channel::Channel(const Context& context) : ChannelDevice(context), mChannelIn(context), mRoutedInstruments(context), mRoutedChannels(context), mEffectChain(context) {
-  mChannelIn.add(mRoutedInstruments);
-  mChannelIn.add(mRoutedChannels);
-}
-
 Channel::~Channel() {
   if (mParentChannel != nullptr)
     mParentChannel->remove(*this);

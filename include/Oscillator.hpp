@@ -13,7 +13,6 @@ namespace tsal {
  */
 class Oscillator : public OutputDevice {
   public:
-    Oscillator(const Context& context) : OutputDevice(context){};
     /**
      * @brief Modes for the oscillator 
      * 

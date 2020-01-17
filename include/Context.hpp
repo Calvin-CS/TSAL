@@ -22,7 +22,6 @@ class Context {
     static Context clear() {
       return Context();
     }
-    
     void requestModelChange(std::function<void()> change);
   private:
     unsigned mSampleRate;

@@ -43,12 +43,13 @@ void EffectChain::remove(Effect& effect) {
 }
 
 void EffectChain::removeDeviceFromModel(Effect& effect) {
-  for (unsigned i = 1; i < mEffects.size() - 1; i++) {
+  for (unsigned i = 0; i < mEffects.size(); i++) {
     if (mEffects[i] == &effect) {
       effect.updateContext(Context::clear());
       mEffects.erase(mEffects.begin() + i);
     }
   }
+  std::cout << std::endl;
 }
 
 }

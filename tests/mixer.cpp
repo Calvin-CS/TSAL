@@ -7,7 +7,7 @@ void testConstructors() {
   Mixer mixer;
   Mixer mixer2(44100);
 
-  Synth synth(mixer.getContext());
+  Synth synth;
   mixer.add(synth);
   mixer2.add(synth);
   mixer2.remove(synth);
@@ -16,9 +16,9 @@ void testConstructors() {
 
 void testAddRemove() {
   Mixer mixer;
-  Channel channel(mixer.getContext());
-  Synth synth[2]{Synth(mixer.getContext()), Synth(mixer.getContext())};
-  Delay delay(mixer.getContext());
+  Channel channel;
+  Synth synth[2]{Synth(), Synth()};
+  Delay delay;
   // Get a reference to the master channel
   // The master channel will probably come with some number of default effects
   // int defaultEffectCount = master.getEffectCount();
@@ -53,7 +53,7 @@ void testAddRemove() {
 
 
 int main() {
-  testConstructors();
+  // testConstructors();
   testAddRemove();
   return 0;
 }

@@ -22,8 +22,7 @@ namespace tsal {
  */
 class Compressor : public Effect {
   public:
-    Compressor() {};
-    Compressor(const Context& context);
+    Compressor() : mEnvelope(COMPRESSOR_MAX_BUFFER) {}
     virtual void getOutput(AudioBuffer<float>& buffer) override;
     virtual void updateContext(const Context& context) override;
     void setAttackTime(double attackTime);

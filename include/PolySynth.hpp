@@ -19,11 +19,12 @@ namespace tsal {
  */
 class PolySynth : public Instrument {
   public:
-    PolySynth(const Context& context);
+    PolySynth();
     virtual void getOutput(AudioBuffer<float> &buffer) override;
     void play(double note, double velocity = 100.0);
     void stop(double note);
     void setMode(Oscillator::OscillatorMode mode);
+    virtual void updateContext(const Context& context) override;
  private:
     Synth* getInactiveVoice();
     Oscillator::OscillatorMode mMode;

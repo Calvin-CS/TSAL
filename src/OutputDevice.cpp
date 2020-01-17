@@ -4,10 +4,6 @@
 
 namespace tsal {
 
-OutputDevice::OutputDevice(const Context& context) : mContext(context) {
-}
-
-
 /**
  * @brief Set the active status of the device
  * 

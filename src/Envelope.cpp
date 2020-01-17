@@ -10,7 +10,7 @@ Item checkParameterRangeWithMax(const std::string& name, Item value, std::pair<I
   return std::max(Util::checkParameterRange(name, value, range), MIN_VALUE);
 }
 
-Envelope::Envelope(const Context& context) : OutputDevice(context) {
+Envelope::Envelope() {
   mStateValue[OFF] = MIN_VALUE;
   mStateValue[ATTACK] = 0.01;
   mStateValue[DECAY] = 0.5;

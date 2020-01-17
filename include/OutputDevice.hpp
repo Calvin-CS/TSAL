@@ -18,8 +18,6 @@ class Mixer;
  */
 class OutputDevice {
   public:
-    OutputDevice() {};
-    OutputDevice(const Context& context);
     virtual ~OutputDevice() {};
     /**
      * @brief Get the output for the device

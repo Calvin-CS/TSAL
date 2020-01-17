@@ -2,7 +2,7 @@
 
 namespace tsal {
 
-ProgressOctave::ProgressOctave(const Context& context, unsigned startNote, unsigned problemSize, unsigned numWorkers) : Instrument(context), mRoutedOscillators(context) {
+ProgressOctave::ProgressOctave(unsigned startNote, unsigned problemSize, unsigned numWorkers) {
   mStartNote = startNote;
   mProblemSize = problemSize;
   mNumWorkers = numWorkers;
@@ -21,7 +21,7 @@ void ProgressOctave::updateContext(const Context& context) {
   double octavePortion = (3 * startingFrequency) / mNumWorkers;
   mStepValue = octavePortion / mProblemSize;
   for (unsigned i = 0; i < mNumWorkers; i++) {
-    mOscillators.push_back(std::make_unique<Oscillator>(mContext));
+    mOscillators.push_back(std::make_unique<Oscillator>());
 
     auto& oscillator = mOscillators[i];
     mRoutedOscillators.add(*(oscillator.get()));

@@ -4,7 +4,7 @@
 namespace tsal {
 
 
-Synth::Synth(const Context& context) : Instrument(context), mOscillator(context), mEnvelope(context) {
+Synth::Synth() {
   mEnvelope.setActive(false);
 };
 

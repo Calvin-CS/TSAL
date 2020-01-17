@@ -3,9 +3,6 @@
 
 namespace tsal {
 
-ThreadSynth::ThreadSynth(const Context& context) : Synth(context) {
-};
-
 void ThreadSynth::play(double note, Timing::TimeScale scale, unsigned duration) {
   Synth::play(note);
   Util::thread_sleep(duration, scale);
@@ -18,7 +15,7 @@ void ThreadSynth::play(double note, Timing::TimeScale scale, unsigned duration) 
 
 // void ThreadSynth::notify() {
 //   mCondition.notify_one();
-// }
+//k }
 
 // void ThreadSynth::lock(Timing::NoteScale scale, unsigned duration) {
 //   // Sequencer& seq = mContext.getSequencer();

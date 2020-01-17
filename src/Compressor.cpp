@@ -4,9 +4,6 @@
   
 namespace tsal {
 
-Compressor::Compressor(const Context& context) : Effect(context), mEnvelope(COMPRESSOR_MAX_BUFFER) {
-};
-
 void Compressor::getOutput(AudioBuffer<float> &buffer) {
   /* The Compressor uses a circular buffer where a value is written behind 
    * the value that was read. Once the buffer is full of new values, all

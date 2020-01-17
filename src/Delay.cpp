@@ -2,9 +2,6 @@
 
 namespace tsal {
 
-Delay::Delay(const Context& context) : Effect(context), mBuffer(mContext.getSampleRate(), mContext.getChannelCount()){
-}
-
 /* @brief Dynamically allocates a buffer based on the sample rate
  *
  * Since the buffer since of the delay is dependent on the sample
@@ -14,6 +11,7 @@ Delay::Delay(const Context& context) : Effect(context), mBuffer(mContext.getSamp
 void Delay::init() {
   const unsigned delay = mContext.getSampleRate();
   mBuffer.setFrameCount(delay);
+  mBuffer.setChannelCount(mContext.getChannelCount());
   Delay::mDelayRange = std::make_pair(0, delay);
   setDelay(1000);
 }

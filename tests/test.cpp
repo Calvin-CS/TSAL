@@ -5,8 +5,8 @@ using namespace tsal;
 
 int main() {
   Mixer mixer;
-  PolySynth synth(mixer.getContext());
-  Delay delay(mixer.getContext());
+  PolySynth synth;
+  Delay delay;
   mixer.add(synth);
   mixer.add(delay);
   synth.play(tsal::C4);

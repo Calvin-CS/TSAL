@@ -20,7 +20,6 @@ template <typename DeviceType>
 class RouteDevice : public OutputDevice {
   public:
     RouteDevice() {};
-    RouteDevice(const Context& context) : OutputDevice(context){};
     ~RouteDevice();
     virtual void getOutput(AudioBuffer<float> &buffer) override;
     virtual void updateContext(const Context& context) override;

@@ -17,7 +17,6 @@ namespace tsal {
  */
 class ThreadSynth : public Synth {
   public:
-    ThreadSynth(const Context& context);
     void play(double note, Timing::TimeScale scale, unsigned multiplier);
     // void play(double note, Timing::NoteScale scale, unsigned multiplier);
     void stop(Timing::TimeScale scale, unsigned multiplier);

@@ -146,6 +146,10 @@ void Mixer::requestModelChange(std::function<void()> change) {
   std::unique_lock<std::mutex> modelLock(mModelMutex);
   mModelChangeRequestCondition.wait(modelLock);
 
+  // Wait until the main thread is waiting
+  // Or else we may finish the change before the main thread waits
+  std::unique_lock<std::mutex> waitLock(mWaitModelChangeMutex);
+
   // We can safely modify the model
   change();
   

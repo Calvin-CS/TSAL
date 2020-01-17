@@ -18,7 +18,7 @@ namespace tsal {
  */
 class Envelope : public OutputDevice {
   public:
-    Envelope(const Context& context);
+    Envelope();
     enum EnvelopeState {
       OFF,
       ATTACK,
@@ -26,7 +26,6 @@ class Envelope : public OutputDevice {
       SUSTAIN,
       RELEASE
     };
-    Envelope();
     double getSample();
     void updateState();
     void start();

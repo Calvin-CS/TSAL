@@ -3,9 +3,6 @@
 
 namespace tsal {
 
-Instrument::Instrument(const Context& context) : ChannelDevice(context){
-};
-
 Instrument::~Instrument() {
   if (mParentChannel != nullptr)
     mParentChannel->remove(*this);
