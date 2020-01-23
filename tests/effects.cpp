@@ -69,14 +69,15 @@ void testCompressor() {
 
 void testDelay() {
   Mixer mixer;
+  Synth synth;
   Delay delay;
   mixer.add(delay);
-  // mixer.add(synth);
+  mixer.add(synth);
 }
 
 int main() {
   testEffectChain();
-  // testCompressor();
-  // testDelay();
+  testCompressor();
+  testDelay();
   return 0;
 }
