@@ -11,6 +11,8 @@ libtsal_la_SOURCES = \
   EffectChain.cpp \
   Envelope.cpp \
 	Instrument.cpp \
+	LadspaManager.cpp \
+	LadspaEffect.cpp \
   MidiEvent.cpp \
   MidiEventList.cpp \
   MidiFile.cpp \
@@ -39,6 +41,8 @@ include_HEADERS = \
   $(top_srcdir)/include/Envelope.hpp \
   $(top_srcdir)/include/InputDevice.hpp \
   $(top_srcdir)/include/Instrument.hpp \
+  $(top_srcdir)/include/LadspaManager.hpp \
+  $(top_srcdir)/include/LadspaEffect.hpp \
   $(top_srcdir)/include/MidiEvent.h \
   $(top_srcdir)/include/MidiEventList.h \
   $(top_srcdir)/include/MidiFile.h \

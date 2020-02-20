@@ -21,14 +21,17 @@ class AudioBuffer {
     void setFrameCount(unsigned long frameCount);
     void setChannelCount(unsigned channelCount);
     void clear() { std::fill(mBuffer.begin(), mBuffer.end(), 0); };
+    void copyBuffer (AudioBuffer<T>& buffer);
     unsigned long getFrameCount() { return mFrameCount; };
     unsigned getChannelCount() { return mChannelCount; };
     unsigned long size() { return mFrameCount * mChannelCount; };
-
+    T* getRawPointer() { return mBuffer.data(); };
     const T& operator[](int index) const;
     T& operator[](int index);
 
-    static std::vector<std::vector<T>> deinterleaveBuffer(AudioBuffer<T> &buffer);
+    std::vector<AudioBuffer<T>> deinterleaveBuffer();
+    void toMono(AudioBuffer<T> &buffer, T* monoBuffer);
+    void toStereo(AudioBuffer<T> &buffer, T* monoBuffer);
   private:
     void resize();
     std::vector<T> mBuffer;
@@ -73,19 +76,54 @@ void AudioBuffer<T>::setChannelCount(unsigned channelCount) {
 }
 
 template <typename T>
-std::vector<std::vector<T>> AudioBuffer<T>::deinterleaveBuffer(AudioBuffer<T> &buffer) {
-  std::vector<std::vector<T>> data(buffer.getChannelCount(), std::vector<T>(buffer.size() / buffer.getChannelCount()));
-  const auto channels = buffer.getChannelCount();
-  const auto frames = buffer.getFrameCount();
+void AudioBuffer<T>::copyBuffer(AudioBuffer<T>& buffer) {
+  setChannelCount(buffer.getChannelCount());
+  setFrameCount(buffer.getFrameCount());
+  for (unsigned long i = 0; i < mFrameCount; i++) {
+    for (unsigned j = 0; j < mChannelCount; j++) {
+      mBuffer[i * mChannelCount + j] = buffer[i * mChannelCount + j];
+    }
+  }
+}
 
-  setChannelPanning(channels);
+template <typename T>
+void AudioBuffer<T>::toMono(AudioBuffer<T> &buffer, T* monoBuffer) {
+  // const auto channels = buffer.getChannelCount();
+  // const auto frames = buffer.getFrameCount();
+  // // This method assumes that the T* == buffer.getFrameCount()
+  // T channelSum = 0;
+  // for (unsigned long i = 0; i < frames; i++) {
+  //   for (unsigned j = 0; j < channels; j++) {
+  //     channelSum += buffer[i * channels + j];
+  //   }
+  //   monoBuffer[i] = channelSum / channels;
+  // }
+}
+
+template <typename T>
+void AudioBuffer<T>::toStereo(AudioBuffer<T> &buffer, T* monoBuffer) {
+  // const auto channels = buffer.getChannelCount();
+  // const auto frames = buffer.getFrameCount();
+  // // This method assumes that the buffer.getFrameCount() == monoBuffer size
+  // for (unsigned long i = 0; i < frames; i++) {
+  //   for (unsigned j = 0; j < channels; j++) {
+  //     buffer[i * channels + j] = monoBuffer[i];
+  //   }
+  // }
+}
+
+template <typename T>
+std::vector<AudioBuffer<T>> AudioBuffer<T>::deinterleaveBuffer() {
+  std::vector<AudioBuffer<T>> data(getChannelCount(), AudioBuffer<T>(size() / getChannelCount(), 1));
+  const auto channels = getChannelCount();
+  const auto frames = getFrameCount();
 
   for (unsigned long i = 0; i < frames; i++) {
     for (unsigned j = 0; j < channels; j++) {
-      data[j][i] = buffer[i * channels + j];
+      data[j][i] = mBuffer[i * channels + j];
     }
   }
-  return std::move(data);
+  return data;
 }
 
 }
