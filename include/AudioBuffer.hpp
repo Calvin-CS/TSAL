@@ -25,7 +25,7 @@ class AudioBuffer {
     unsigned long getFrameCount() { return mFrameCount; };
     unsigned getChannelCount() { return mChannelCount; };
     unsigned long size() { return mFrameCount * mChannelCount; };
-    T* getRawPointer() { return mBuffer.data(); };
+    T* getRawPointer() { return mBuffer.data(); std::cout << "wah" << mBuffer.data() << std::endl; };
     const T& operator[](int index) const;
     T& operator[](int index);
 
