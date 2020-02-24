@@ -27,7 +27,6 @@ set(PUBLIC_HEADERS
   ${TSAL_INCLUDE_DIR}/ProgressOctave.hpp
   ${TSAL_INCLUDE_DIR}/RouteDevice.hpp
   ${TSAL_INCLUDE_DIR}/Sequencer.hpp
-  ${TSAL_INCLUDE_DIR}/SoundFont.hpp
   ${TSAL_INCLUDE_DIR}/Synth.hpp
   ${TSAL_INCLUDE_DIR}/ThreadSynth.hpp
   ${TSAL_INCLUDE_DIR}/Timing.hpp
@@ -50,7 +49,6 @@ set(SOURCES
   PolySynth.cpp
   ProgressOctave.cpp
   Sequencer.cpp
-  SoundFont.cpp
   Synth.cpp
   ThreadSynth.cpp
   Util.cpp
@@ -72,8 +70,6 @@ target_link_libraries(tsal
     portaudio
     OpenMP::OpenMP_CXX
     Threads::Threads
-    tsf
-    # midifile
   )
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang|GNU")
@@ -97,7 +93,7 @@ set_target_properties(tsal
 # source_group(TREE "${PROJECT_SOURCE_DIR}/include" PREFIX "Header Files" FILES ${HEADER_LIST})
 
 # install(TARGETS tsal midifile tsf
-install(TARGETS tsal tsf
+install(TARGETS tsal
   EXPORT tsalTargets
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
