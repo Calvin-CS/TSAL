@@ -238,3 +238,5 @@ compile_commands.json
 .cquery_cached_index
 RtAudio.h
 NUL
+
+build

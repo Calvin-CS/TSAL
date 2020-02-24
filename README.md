@@ -10,7 +10,7 @@ TSAL uses the GNU Autotools build system to build and install the library.
 
 Install [PortAudio](http://www.portaudio.com/)
 
-Install autotools (`autoconf`, `automake`, and `libtool`). For Windows, a build environment like MSYS2 is recommended
+Install autotools (`autoconf`, `automake`, and `libtool`) or cmake. For Windows, a build environment like MSYS2 is recommended
 
 ### Build
 
@@ -22,8 +22,16 @@ autoreconf -vi
 make
 ```
 
-This will compile all the necessary files, tests, and examples for the project
+If you are using cmake,
 
+``` console
+mkdir build
+cd build
+cmake ..
+make
+```
+
+This will compile all the necessary files, tests, and examples for the project
 To install the library on your system run `make install` as root.
 
 ## Running the tests

@@ -1,0 +1,9 @@
+[submodule "extern/TinySoundFont"]
+	path = extern/TinySoundFont
+	url = https://github.com/schellingb/TinySoundFont
+[submodule "extern/midifile"]
+	path = extern/midifile
+	url = https://github.com/craigsapp/midifile.git
+[submodule "extern/portaudio"]
+	path = extern/portaudio
+	url = https://git.assembla.com/portaudio.git
