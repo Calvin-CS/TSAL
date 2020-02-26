@@ -192,6 +192,9 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 
 find_package(OpenMP REQUIRED)
 
+set(LIBRARY_OUTPUT_PATH "${CMAKE_BINARY_DIR}")
+set(EXECUTABLE_OUTPUT_PATH "${CMAKE_BINARY_DIR}")
+
 add_subdirectory(extern)
 
 # The compiled library code is here

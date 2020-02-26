@@ -55,7 +55,7 @@ set(SOURCES
   )
 
 # Make an automatic library - will be static or dynamic based on user setting
-add_library(tsal SHARED ${SOURCES} ${HEADER_LIST})
+add_library(tsal STATIC ${SOURCES} ${HEADER_LIST})
 # Also make it accessible via namespace
 add_library(${LOCAL_PROJECT_NAMESPACE}::${LOCAL_PROJECT_NAME} ALIAS tsal)
 
