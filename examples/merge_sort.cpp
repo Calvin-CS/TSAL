@@ -152,7 +152,9 @@ void mergeSortFunction(std::vector<ThreadSynth>& voices, int threads, int size) 
           number = numbers[i];
           // If we are processing the item, play a sound
           if (i == sd[tid]->left) {
-            voice.play(C2 + (tid * 3) + 60 * (number / maxNumber), Timing::MICROSECOND, 50);
+            MidiNote note = Util::scaleToNote<double>(number, std::make_pair(0, MAX_VALUE), std::make_pair(C3, C7));
+            voice.play(note, Timing::MICROSECOND, 50);
+            // voice.play(C2 + (tid * 3) + 60 * (number / maxNumber), Timing::MICROSECOND, 50);
           }
         } 
       }

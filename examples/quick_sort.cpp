@@ -10,7 +10,8 @@ void quickSort(ThreadSynth& synth, int* data, int low, int high) {
     int pivotValue = data[low];
     int pivot = low;
     for (int i = low + 1; i < high; i++) {
-      synth.play(C3 + 45 * ((double) data[i] / MAX_VALUE), Timing::MICROSECOND, 50);
+      MidiNote note = Util::scaleToNote(data[i], std::make_pair(0, MAX_VALUE), std::make_pair(C3, C7));
+      synth.play(note, Timing::MICROSECOND, 50);
       
       if (data[i] < pivotValue) {
         pivot++;

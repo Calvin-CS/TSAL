@@ -8,8 +8,8 @@ void bubbleSort(ThreadSynth& synth, int size, int data[]) {
   int temp;
   for (int i = 0; i < size; i++) {
     for (int j = size - 1; j > i; j--) {
-      
-      synth.play(C3 + 40 * ((double) data[j] / MAX_VALUE), Timing::MICROSECOND, 50);
+      MidiNote note = Util::scaleToNote(data[j], std::make_pair(0, MAX_VALUE), std::make_pair(C3, C7));
+      synth.play(note, Timing::MICROSECOND, 50);
       
       if (data[j] < data[j - 1]) {
         temp = data[j];
@@ -27,7 +27,7 @@ int main() {
   synth.setEnvelopeActive(false);
   
   // Generate the data
-  const int size = 5000;
+  const int size = 500;
   int data[size];
   for (int i = 0; i < size; i++) {
     data[i] = rand() % MAX_VALUE;
