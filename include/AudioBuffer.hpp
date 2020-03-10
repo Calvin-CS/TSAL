@@ -109,7 +109,7 @@ template <typename T>
 void AudioBuffer<T>::deinterleaveBuffer(std::vector<AudioBuffer<T>>& buffers) {
   for (auto& buffer : buffers) {
     buffer.setChannelCount(1);
-    buffer.setFrameCount(mFrameCount / buffers.size());
+    buffer.setFrameCount(mFrameCount);
   }
 
   for (unsigned long i = 0; i < mFrameCount; i++) {
