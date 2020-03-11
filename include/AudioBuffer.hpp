@@ -29,8 +29,8 @@ class AudioBuffer {
     const T& operator[](int index) const;
     T& operator[](int index);
 
-    void deinterleaveBuffer(std::vector<AudioBuffer<T>>& buffers);
-    void interleaveBuffers(std::vector<AudioBuffer<T>>& buffers);
+    void deinterleaveBuffer(std::vector<AudioBuffer<T>*>& buffers);
+    void interleaveBuffers(std::vector<AudioBuffer<T>*>& buffers);
   private:
     void resize();
     std::vector<T> mBuffer;
@@ -89,32 +89,49 @@ void AudioBuffer<T>::copyBuffer(AudioBuffer<T>& buffer) {
 }
 
 template <typename T>
-void AudioBuffer<T>::interleaveBuffers(std::vector<AudioBuffer<T>>& buffers) {
+void AudioBuffer<T>::interleaveBuffers(std::vector<AudioBuffer<T>*>& buffers) {
   if (buffers.size() == 0) {
     std::cout << "Cannot interleave buffers of size 0" << std::endl;
     return;
   }
+  if (mChannelCount % buffers.size() != 0) {
+    std::cout << "Cannot demultiplex buffers into channels" << std::endl;
+  }
+
+  const unsigned channelDemultiplex = mChannelCount / buffers.size();
   
-  setChannelCount(buffers.size());
-  setFrameCount(buffers[0].getFrameCount());
+  setFrameCount(buffers[0]->getFrameCount() * channelDemultiplex);
 
   for (unsigned long i = 0; i < mFrameCount; i++) {
     for (unsigned j = 0; j < mChannelCount; j++) {
-      mBuffer[i * mChannelCount + j] = buffers[j][i];
+      mBuffer[i * mChannelCount + j] = (*buffers[j])[i];
     }
   }
 }
 
 template <typename T>
-void AudioBuffer<T>::deinterleaveBuffer(std::vector<AudioBuffer<T>>& buffers) {
-  for (auto& buffer : buffers) {
-    buffer.setChannelCount(1);
-    buffer.setFrameCount(mFrameCount);
+void AudioBuffer<T>::deinterleaveBuffer(std::vector<AudioBuffer<T>*>& buffers) {
+  if (buffers.size() != mChannelCount) {
+    std::cout << "Cannot interleave buffers of size " << buffers.size() << std::endl;
+    return;
+  }
+  if ( mChannelCount % buffers.size() != 0) {
+    std::cout << "Cannot demultiplex buffers into channels" << std::endl;
+  }
+
+  const unsigned channelMultiplex = mChannelCount / buffers.size();
+
+  for (auto buffer : buffers) {
+    buffer->setChannelCount(1);
+    buffer->setFrameCount(mFrameCount / channelMultiplex);
   }
 
   for (unsigned long i = 0; i < mFrameCount; i++) {
-    for (unsigned j = 0; j < mChannelCount; j++) {
-      buffers[j][i] = mBuffer[i * mChannelCount + j];
+    for (unsigned j = 0; j < mChannelCount; j += channelMultiplex) {
+      (*buffers[j])[i] = 0;
+      for (unsigned k = 0; k < channelMultiplex; k++) {
+        (*buffers[j])[i] += mBuffer[i * mChannelCount + j + k];
+      }
     }
   }
 }

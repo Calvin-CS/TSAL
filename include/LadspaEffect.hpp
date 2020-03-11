@@ -15,9 +15,9 @@ class LadspaEffect : public Effect {
   private:
     LADSPA_Handle mHandle;
     const LADSPA_Descriptor * mDescriptor;
-    std::vector<std::unique_ptr<AudioBuffer<float>>> mBuffers;
-    std::vector<float> mControls;
-    std::vector<LADSPA_Data*> mBuffersTest;
+    std::vector<LadspaManager::Port> mInputPorts;
+    std::vector<LadspaManager::Port> mOutputPorts;
+    std::vector<LADSPA_Data> mControlPorts;
 };
 
 }

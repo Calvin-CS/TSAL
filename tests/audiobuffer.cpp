@@ -33,31 +33,7 @@ void testResizing() {
   assert(a1.size() == a3.size());
 }
 
-void testInterleaving() {
-  // Stereo test
-  std::vector<AudioBuffer<int>> buffers(1, AudioBuffer<int>(4, 1));
-  assert(buffers.size() == 2);
-  for (unsigned j = 0; j < buffers.size(); j++) {
-    auto& buffer = buffers[j];
-    assert(buffer.getChannelCount() == 1);
-    assert(buffer.getFrameCount() == 2);
-    assert(buffer.size() == 2);
-    for (unsigned i = 0; i < buffer.size(); i++) {
-      buffer[i] = (int) j + i * 2;
-    }
-  }
-
-  
-  AudioBuffer<int> a1(2, 2);
-  a1.interleaveBuffers(buffers);
-
-  for (unsigned i = 0; i < a1.size(); i++) {
-    assert(a1[i] == (int) i);
-  }
-}
-
-void testDeinterleaving() {
-  // Stereo test
+void testInterleavingStereo() {
   std::vector<AudioBuffer<int>> buffers(2, AudioBuffer<int>(2, 1));
   assert(buffers.size() == 2);
   for (auto& buffer : buffers) {
@@ -71,7 +47,11 @@ void testDeinterleaving() {
     a1[i] = i;
   }
 
-  a1.deinterleaveBuffer(buffers);
+  std::vector<AudioBuffer<int>*> buffer_pointers;
+  for (auto& buffer : buffers) {
+    buffer_pointers.push_back(&buffer);
+  }
+  a1.deinterleaveBuffer(buffer_pointers);
 
   for (unsigned j = 0; j < buffers.size(); j++) {
     auto& buffer = buffers[j];
@@ -79,11 +59,49 @@ void testDeinterleaving() {
       assert(buffer[i] == (int) (j + i * 2));
     }
   }
+
+  a1.interleaveBuffers(buffer_pointers);
+  for (unsigned i = 0; i < a1.size(); i++) {
+    assert(a1[i] == (int) i);
+  }
+}
+
+void testInterleavingMono() {
+  std::vector<AudioBuffer<int>> buffers(1, AudioBuffer<int>(2, 1));
+  assert(buffers.size() == 2);
+  for (auto& buffer : buffers) {
+    assert(buffer.getChannelCount() == 1);
+    assert(buffer.getFrameCount() == 2);
+    assert(buffer.size() == 2);
+  }
+
+  AudioBuffer<int> a1(2, 2);
+  for (unsigned i = 0; i < a1.size(); i++) {
+    a1[i] = i;
+  }
+
+  std::vector<AudioBuffer<int>*> buffer_pointers;
+  for (auto& buffer : buffers) {
+    buffer_pointers.push_back(&buffer);
+  }
+  a1.deinterleaveBuffer(buffer_pointers);
+
+  for (unsigned j = 0; j < buffers.size(); j++) {
+    auto& buffer = buffers[j];
+    for (unsigned i = 0; i < buffer.size(); i++) {
+      assert(buffer[i] == (int) (j + i * 2));
+    }
+  }
+
+  a1.interleaveBuffers(buffer_pointers);
+  for (unsigned i = 0; i < a1.size(); i++) {
+    assert(a1[i] == (int) i);
+  }
 }
 
 int main() {
   testConstructors();
   testResizing();
-  testDeinterleaving();
+  testInterleavingStereo();
   return 0;
 }

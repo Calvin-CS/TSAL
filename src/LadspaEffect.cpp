@@ -1,4 +1,5 @@
 #include "LadspaEffect.hpp"
+#include "LadspaManager.hpp"
 #include <cmath>
 #include <ladspa.h>
 
@@ -15,7 +16,7 @@ void LadspaEffect::loadPlugin(const std::string& pluginPath) {
   
   LADSPA_Descriptor_Function descriptorFunction = (LADSPA_Descriptor_Function)dlsym(pluginHandle, "ladspa_descriptor");
 
-  for (long pluginIndex = 0;; pluginIndex++) {
+  for (long pluginIndex = 1;; pluginIndex++) {
     descriptor = descriptorFunction(pluginIndex);
     if (descriptor == NULL) {
       std::cout << "Failed to initialize plugin " << pluginPath << std::endl;
@@ -34,51 +35,45 @@ void LadspaEffect::loadPlugin(const std::string& pluginPath) {
     }
     if (LADSPA_IS_PORT_AUDIO(portDescriptor)) {
       if (LADSPA_IS_PORT_INPUT(portDescriptor)) {
-        std::cout << "Port Input: " << descriptor->PortNames[i] << std::endl;
-        LADSPA_Data *buf = (LADSPA_Data *)calloc(BUFFER_SIZE, sizeof(LADSPA_Data));
-        mBuffersTest.push_back(buf);
-        descriptor->connect_port(mHandle, i, buf);
-        // mBuffers.push_back(std::make_unique<AudioBuffer<float>>(1, 1));
-        // std::cout << "Hi" << mBuffers[mBuffers.size() - 1]->getChannelCount() << std::endl;
-        // std::cout << "Connecting to buffer: " << mBuffers.size() << " " << mBuffers[mBuffers.size() - 1]->getRawPointer() << std::endl;
-        // descriptor->connect_port(mHandle, i, mBuffers[mBuffers.size() - 1]->getRawPointer());
-
+        mInputPorts.push_back(LadspaManager::Port(i));
       } 
       if (LADSPA_IS_PORT_OUTPUT(portDescriptor)) {
-        LADSPA_Data *buf = (LADSPA_Data *)calloc(BUFFER_SIZE, sizeof(LADSPA_Data));
-        mBuffersTest.push_back(buf);
-        descriptor->connect_port(mHandle, i, buf);
-        // std::cout << "Port Output: " << descriptor->PortNames[i] << std::endl;
-        // mBuffers.push_back(std::make_unique<AudioBuffer<float>>(1, 1));
-        // std::cout << "Connecting to buffer: " << mBuffers[mBuffers.size() - 1]->getRawPointer() << std::endl;
-        // descriptor->connect_port(mHandle, i, mBuffers[mBuffers.size() - 1]->getRawPointer());
+        mOutputPorts.push_back(LadspaManager::Port(i));
       } 
     }
     if (LADSPA_IS_PORT_CONTROL(portDescriptor)) {
-      mControls.push_back(1);
-      descriptor->connect_port(mHandle, i, &mControls[mControls.size() - 1]);
+      mControlPorts.push_back(1);
+      descriptor->connect_port(mHandle, i, &mControlPorts[mControlPorts.size() - 1]);
     }
   }
 
-  // descriptor->activate(plugin);
   if (descriptor->activate != NULL) {
     descriptor->activate(mHandle);
   }
-  mControls[0] = 0.5;
+  mControlPorts[0] = 1.0;
 }
 
 void LadspaEffect::getOutput(AudioBuffer<float>& buffer) {
-  // mBuffers[0]->copyBuffer(buffer);
-  // mBuffers[1]->copyBuffer(buffer);
-  for (unsigned i = 0; i < buffer.size(); i++) {
-    mBuffersTest[0][i] = buffer[i];
+  std::vector<AudioBuffer<LADSPA_Data>*> inputBuffers;
+  std::vector<AudioBuffer<LADSPA_Data>*> outputBuffers;
+  for (auto& port : mInputPorts) {
+    inputBuffers.push_back(&(port.buffer));
+  }
+  buffer.deinterleaveBuffer(inputBuffers);
+  for (auto& port : mInputPorts) {
+    mDescriptor->connect_port(mHandle, port.id, port.buffer.getRawPointer());
+  }
+  for (auto& port : mOutputPorts) {
+    port.buffer.setSize(buffer.getFrameCount(), 1);
+    mDescriptor->connect_port(mHandle, port.id, port.buffer.getRawPointer());
   }
 
-  mDescriptor->run(mHandle, BUFFER_SIZE);
-  for (unsigned i = 0; i < buffer.size(); i++) {
-    buffer[i] = mBuffersTest[1][i];
+  mDescriptor->run(mHandle, buffer.getFrameCount());
+
+  for (auto& port : mOutputPorts) {
+    outputBuffers.push_back(&(port.buffer));
   }
-  // buffer.copyBuffer(*mBuffers[1]);
+  buffer.interleaveBuffers(outputBuffers);
 }
 
 }
