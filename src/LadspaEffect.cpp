@@ -16,7 +16,7 @@ void LadspaEffect::loadPlugin(const std::string& pluginPath) {
   
   LADSPA_Descriptor_Function descriptorFunction = (LADSPA_Descriptor_Function)dlsym(pluginHandle, "ladspa_descriptor");
 
-  for (long pluginIndex = 1;; pluginIndex++) {
+  for (long pluginIndex = 0;; pluginIndex++) {
     descriptor = descriptorFunction(pluginIndex);
     if (descriptor == NULL) {
       std::cout << "Failed to initialize plugin " << pluginPath << std::endl;

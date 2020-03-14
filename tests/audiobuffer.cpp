@@ -68,7 +68,7 @@ void testInterleavingStereo() {
 
 void testInterleavingMono() {
   std::vector<AudioBuffer<int>> buffers(1, AudioBuffer<int>(2, 1));
-  assert(buffers.size() == 2);
+  assert(buffers.size() == 1);
   for (auto& buffer : buffers) {
     assert(buffer.getChannelCount() == 1);
     assert(buffer.getFrameCount() == 2);
@@ -77,7 +77,8 @@ void testInterleavingMono() {
 
   AudioBuffer<int> a1(2, 2);
   for (unsigned i = 0; i < a1.size(); i++) {
-    a1[i] = i;
+    a1[i] = i * 2;
+    std::cout << "a: " << a1[i] << std::endl;
   }
 
   std::vector<AudioBuffer<int>*> buffer_pointers;
@@ -88,14 +89,16 @@ void testInterleavingMono() {
 
   for (unsigned j = 0; j < buffers.size(); j++) {
     auto& buffer = buffers[j];
+    assert(buffer.getFrameCount() == a1.getFrameCount());
     for (unsigned i = 0; i < buffer.size(); i++) {
-      assert(buffer[i] == (int) (j + i * 2));
+      assert(buffer[i] == (i > buffer.size() / 2) ? 5 : 1);
     }
   }
 
   a1.interleaveBuffers(buffer_pointers);
+  assert(a1.getFrameCount() == buffers[0].getFrameCount());
   for (unsigned i = 0; i < a1.size(); i++) {
-    assert(a1[i] == (int) i);
+    assert(a1[i] == (i > a1.size() / 2) ? 5 : 1);
   }
 }
 
@@ -103,5 +106,6 @@ int main() {
   testConstructors();
   testResizing();
   testInterleavingStereo();
+  testInterleavingMono();
   return 0;
 }

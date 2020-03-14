@@ -100,22 +100,24 @@ void AudioBuffer<T>::interleaveBuffers(std::vector<AudioBuffer<T>*>& buffers) {
 
   const unsigned channelDemultiplex = mChannelCount / buffers.size();
   
-  setFrameCount(buffers[0]->getFrameCount() * channelDemultiplex);
+  setFrameCount(buffers[0]->getFrameCount());
 
   for (unsigned long i = 0; i < mFrameCount; i++) {
-    for (unsigned j = 0; j < mChannelCount; j++) {
-      mBuffer[i * mChannelCount + j] = (*buffers[j])[i];
+    for (unsigned j = 0; j < mChannelCount; j += channelDemultiplex) {
+      for (unsigned k = 0; k < channelDemultiplex; k++) {
+        mBuffer[i * mChannelCount + j + k] = (*buffers[j])[i];
+      }
     }
   }
 }
 
 template <typename T>
 void AudioBuffer<T>::deinterleaveBuffer(std::vector<AudioBuffer<T>*>& buffers) {
-  if (buffers.size() != mChannelCount) {
+  if (buffers.size() > mChannelCount) {
     std::cout << "Cannot interleave buffers of size " << buffers.size() << std::endl;
     return;
   }
-  if ( mChannelCount % buffers.size() != 0) {
+  if (mChannelCount % buffers.size() != 0) {
     std::cout << "Cannot demultiplex buffers into channels" << std::endl;
   }
 
@@ -123,7 +125,7 @@ void AudioBuffer<T>::deinterleaveBuffer(std::vector<AudioBuffer<T>*>& buffers) {
 
   for (auto buffer : buffers) {
     buffer->setChannelCount(1);
-    buffer->setFrameCount(mFrameCount / channelMultiplex);
+    buffer->setFrameCount(mFrameCount);
   }
 
   for (unsigned long i = 0; i < mFrameCount; i++) {
@@ -132,6 +134,7 @@ void AudioBuffer<T>::deinterleaveBuffer(std::vector<AudioBuffer<T>*>& buffers) {
       for (unsigned k = 0; k < channelMultiplex; k++) {
         (*buffers[j])[i] += mBuffer[i * mChannelCount + j + k];
       }
+      (*buffers[j])[i] /= channelMultiplex;
     }
   }
 }
