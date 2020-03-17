@@ -12,6 +12,7 @@ int main() {
   Delay delay;
   LadspaEffect effect;
   effect.loadPlugin("/home/mark/Downloads/ladspa_sdk_1.15/plugins/amp.so");
+  mixer.add(effect);
 
   // LadspaManager manager;
   // const LADSPA_Descriptor * descriptor = manager.loadPlugin("/home/mark/Downloads/ladspa_sdk_1.15/plugins/amp.so");

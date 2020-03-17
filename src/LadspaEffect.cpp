@@ -27,11 +27,23 @@ void LadspaEffect::loadPlugin(const std::string& pluginPath) {
       break;
     }
   }
-  mHandle = descriptor->instantiate(descriptor, 100);
+  mHandle = descriptor->instantiate(descriptor, mContext.getSampleRate());
   for (unsigned i = 0; i < descriptor->PortCount; i++) {
     auto portDescriptor = descriptor->PortDescriptors[i];
     if (LADSPA_IS_PORT_CONTROL(portDescriptor)) {
+      LADSPA_PortRangeHintDescriptor hintDescriptor = mDescriptor->PortRangeHints[i].HintDescriptor;
+      mControlPorts.push_back(0);
+      descriptor->connect_port(mHandle, i, &mControlPorts[mControlPorts.size() - 1]);
       std::cout << "Port: " << descriptor->PortNames[i] << std::endl;
+      if (LADSPA_IS_HINT_SAMPLE_RATE(hintDescriptor)) {
+        std::cout << "\tSampleRate Dependent" << std::endl;
+      }
+      if (LADSPA_IS_HINT_BOUNDED_BELOW(hintDescriptor)) {
+        std::cout << "\tBelow: " << mDescriptor->PortRangeHints[i].LowerBound << std::endl;
+      }
+      if (LADSPA_IS_HINT_BOUNDED_ABOVE(hintDescriptor)) {
+        std::cout << "\tUpper: " << mDescriptor->PortRangeHints[i].UpperBound << std::endl;
+      }
     }
     if (LADSPA_IS_PORT_AUDIO(portDescriptor)) {
       if (LADSPA_IS_PORT_INPUT(portDescriptor)) {
@@ -41,16 +53,13 @@ void LadspaEffect::loadPlugin(const std::string& pluginPath) {
         mOutputPorts.push_back(LadspaManager::Port(i));
       } 
     }
-    if (LADSPA_IS_PORT_CONTROL(portDescriptor)) {
-      mControlPorts.push_back(1);
-      descriptor->connect_port(mHandle, i, &mControlPorts[mControlPorts.size() - 1]);
-    }
   }
 
   if (descriptor->activate != NULL) {
     descriptor->activate(mHandle);
   }
-  mControlPorts[0] = 1.0;
+  mControlPorts[0] = 0.0;
+  mControlPorts[1] = 1.0;
 }
 
 void LadspaEffect::getOutput(AudioBuffer<float>& buffer) {
