@@ -19,10 +19,16 @@ namespace tsal {
 class PolySynth : public Instrument {
   public:
     PolySynth(Mixer* mixer);
+    PolySynth(PolySynth&& other) noexcept :
+      Instrument(other.mMixer),
+      mMode(std::move(other.mMode)),
+      mVoices(std::move(other.mVoices)),
+      mRoutedSynths(other.mMixer) {}
     virtual void getOutput(AudioBuffer<float> &buffer) override;
     void play(double note, double velocity = 100.0);
     void stop(double note);
     void setMode(Oscillator::OscillatorMode mode);
+    PolySynth& operator=(const PolySynth& synth);
  private:
     Synth* getInactiveVoice();
     Oscillator::OscillatorMode mMode;

@@ -65,4 +65,23 @@ Synth* PolySynth::getInactiveVoice() {
   return voice;
 }
 
+PolySynth& PolySynth::operator=(const PolySynth& synth) {
+  if (&synth != this) {
+    mMode = synth.mMode;
+    mVoices = std::vector<Synth>();
+
+    for (Synth s : mVoices) {
+      mRoutedSynths.remove(s);
+    }
+
+    for (Synth s : synth.mVoices) {
+      Synth copy = Synth(s);
+      mVoices.push_back(std::move(copy));
+      mRoutedSynths.add(s);
+    }
+  }
+
+  return *this;
+}
+
 }
