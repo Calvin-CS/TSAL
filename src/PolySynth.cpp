@@ -1,41 +1,87 @@
-#ifndef POLYSYNTH_H
-#define POLYSYNTH_H
-
-#include "Synth.hpp"
-#include "Oscillator.hpp"
-#include "Instrument.hpp"
-
-#define NUM_VOICES 20
+#include "PolySynth.hpp"
 
 namespace tsal {
 
-/** @class PolySynth
- * @brief A polyphonic synthesizer
- *
- * PolySynth uses multiple Synths to create a polyphonic 
- * synthesizer that can handle multiple notes being played
- * at the same time
- */
-class PolySynth : public Instrument {
-  public:
-    PolySynth(Mixer* mixer);
-    PolySynth(PolySynth&& other) noexcept :
-      Instrument(other.mMixer),
-      mMode(std::move(other.mMode)),
-      mVoices(std::move(other.mVoices)),
-      mRoutedSynths(other.mMixer) {}
-    virtual void getOutput(AudioBuffer<float> &buffer) override;
-    void play(double note, double velocity = 100.0);
-    void stop(double note);
-    void setMode(Oscillator::OscillatorMode mode);
-    PolySynth& operator=(const PolySynth& synth);
- private:
-    Synth* getInactiveVoice();
-    Oscillator::OscillatorMode mMode;
-    std::vector<Synth> mVoices;
-    RouteDevice<Synth> mRoutedSynths;
-};
-  
+PolySynth::PolySynth(Mixer* mixer) : Instrument(mixer), mVoices(NUM_VOICES, Synth(mixer)), mRoutedSynths(mixer) {
+  for (unsigned i = 0; i < mVoices.size(); i++) {
+    mVoices[i].setActive(false);
+    mVoices[i].setVolume(0.3);
+    mRoutedSynths.add(mVoices[i]);
+  }
 }
 
-#endif
+void PolySynth::getOutput(AudioBuffer<float> &buffer) {
+  mRoutedSynths.getOutput(buffer);
+}
+
+/* @brief Play a note with velocity
+ *
+ * @param note
+ * @param velocity
+ */
+void PolySynth::play(double note, double velocity) {
+  Synth* voice = getInactiveVoice();
+  if (voice == nullptr) {
+    // Maybe change the behavior to grab the nearest note 
+    return;
+  }
+  voice->play(note, velocity);
+}
+
+/* @brief Stop playing a note
+ *
+ * @param note
+ */
+void PolySynth::stop(double note) {
+  for (unsigned i = 0; i < mVoices.size(); i++) {
+    if (mVoices[i].getNote() == note) {
+      mVoices[i].stop();
+      mVoices[i].setActive(false);
+    }
+  }
+}
+
+/* @brief Set the mode of the underlying synths
+ *
+ * @param mode
+ */
+void PolySynth::setMode(Oscillator::OscillatorMode mode) {
+  for (unsigned i = 0; i < mVoices.size(); i++) {
+    mVoices[i].setMode(mode);
+  }
+}
+
+Synth* PolySynth::getInactiveVoice() {
+  // Whenever a note is pressed, an inactive voice needs to be found an played
+  // If all the voices are active, a nullptr is returned
+  Synth* voice = nullptr;
+  for (unsigned i = 0; i < mVoices.size(); i++) {
+    if (!mVoices[i].isActive()) {
+      voice = &mVoices[i];
+      voice->setActive();
+      break;
+    }
+  }
+  return voice;
+}
+
+PolySynth& PolySynth::operator=(const PolySynth& synth) {
+  if (&synth != this) {
+    mMode = synth.mMode;
+    mVoices = std::vector<Synth>();
+
+    for (Synth s : mVoices) {
+      mRoutedSynths.remove(s);
+    }
+
+    for (Synth s : synth.mVoices) {
+      Synth copy = Synth(s);
+      mVoices.push_back(std::move(copy));
+      mRoutedSynths.add(s);
+    }
+  }
+
+  return *this;
+}
+
+}
