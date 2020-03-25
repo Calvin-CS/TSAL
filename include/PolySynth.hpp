@@ -23,7 +23,13 @@ class PolySynth : public Instrument {
       Instrument(other.mMixer),
       mMode(std::move(other.mMode)),
       mVoices(std::move(other.mVoices)),
-      mRoutedSynths(other.mMixer) {}
+      mRoutedSynths(other.mMixer) {
+      for (unsigned i = 0; i < mVoices.size(); i++) {
+        mVoices[i].setActive(false);
+        mVoices[i].setVolume(0.3);
+        mRoutedSynths.add(mVoices[i]);
+      }
+    }
     virtual void getOutput(AudioBuffer<float> &buffer) override;
     void play(double note, double velocity = 100.0);
     void stop(double note);
