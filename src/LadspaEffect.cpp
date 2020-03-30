@@ -3,7 +3,6 @@
 #include <cmath>
 #include <ladspa.h>
 
-#define BUFFER_SIZE 2048
 namespace tsal {
 
 void LadspaEffect::loadPlugin(const std::string& pluginPath) {
@@ -58,8 +57,6 @@ void LadspaEffect::loadPlugin(const std::string& pluginPath) {
   if (descriptor->activate != NULL) {
     descriptor->activate(mHandle);
   }
-  mControlPorts[0] = 0.0;
-  mControlPorts[1] = 1.0;
 }
 
 void LadspaEffect::getOutput(AudioBuffer<float>& buffer) {
