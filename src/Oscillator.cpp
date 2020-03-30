@@ -111,7 +111,7 @@ void Oscillator::setNote(double note) {
  */
 void Oscillator::setFrequency(double frequency) {
   mFrequency = Util::checkParameterRange("Oscillator: Frequency", frequency, mFrequencyRange);
-  mPhaseStep = mFrequency * PI2 / mMixer->getSampleRate();
+  mPhaseStep = mFrequency * PI2 / mContext.getSampleRate();
 }
 
 /**

@@ -18,7 +18,6 @@ int main(int argc, char* argv[]) {
       
   // Create the mixer and array of synths
   tsal::Mixer mixer;
-  std::vector<tsal::Synth> synths(numThreads, tsal::Synth(&mixer));
 
   // Setup omp with a number of threads
   omp_set_num_threads(numThreads);
@@ -27,16 +26,16 @@ int main(int argc, char* argv[]) {
   #pragma omp parallel
   {
     int id = omp_get_thread_num();
+    tsal::Synth synth;
     // Add the synth to the mixer
-    mixer.add(synths[id]);
-    synths[id].setVolume(.5);
-    
+    mixer.add(synth);
+    synth.setMode(tsal::Oscillator::SAW);
     // Start playing a pitch based on thread number
-    synths[id].play(tsal::C4 + 5 * id);
+    synth.play(tsal::C4 + 5 * id);
     // Wait for a second
-    tsal::Util::thread_sleep(1000);
+    tsal::Util::thread_sleep(5000);
     // Stop playing 
-    synths[id].stop();
+    synth.stop();
   }
 
   return 0;

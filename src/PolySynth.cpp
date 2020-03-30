@@ -1,17 +1,25 @@
 #include "PolySynth.hpp"
+#include "OutputDevice.hpp"
 
 namespace tsal {
 
-PolySynth::PolySynth(Mixer* mixer) : Instrument(mixer), mVoices(NUM_VOICES, Synth(mixer)), mRoutedSynths(mixer) {
+PolySynth::PolySynth() : mVoices(NUM_VOICES, Synth()) {
   for (unsigned i = 0; i < mVoices.size(); i++) {
     mVoices[i].setActive(false);
-    mVoices[i].setVolume(0.3);
+    mVoices[i].setVolume(0.5);
     mRoutedSynths.add(mVoices[i]);
   }
 }
 
 void PolySynth::getOutput(AudioBuffer<float> &buffer) {
   mRoutedSynths.getOutput(buffer);
+}
+
+void PolySynth::updateContext(const Context& context) {
+  OutputDevice::updateContext(context); 
+  for (unsigned i = 0; i < mVoices.size(); i++) {
+    mVoices[i].updateContext(context);
+  }
 }
 
 /* @brief Play a note with velocity

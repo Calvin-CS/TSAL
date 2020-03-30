@@ -3,9 +3,13 @@
 
 #include "OutputDevice.hpp"
 #include "Channel.hpp"
+#include "Context.hpp"
 #include "Compressor.hpp"
 #include "Sequencer.hpp"
 #include "portaudio.h"
+#include <memory>
+#include <condition_variable>
+#include <mutex>
 
 namespace tsal {
 
@@ -30,22 +34,30 @@ class Mixer {
     void remove(Instrument& instrument);
     void remove(Effect& effect);
 
-    Channel& getMaster() { return mMaster; };
-    Sequencer& getSequencer() { return mSequencer; };
-    unsigned getSampleRate() { return mSampleRate; };
-    unsigned getChannelCount() { return mChannelCount; };
+    Context getContext() { return mContext; };
+
+    void requestModelChange(std::function<void()> change);
+    void runModelChanges();
 
   private:
-    PaStream* mPaStream;
+    bool mProcessing = false;
+    unsigned mChangeRequests = 0;
+
+    std::mutex mChangeRequestMutex;
+    std::mutex mModelMutex; 
+    std::mutex mWaitModelChangeMutex;
+
+    std::condition_variable mWaitModelChangeCondition;
+    std::condition_variable mModelChangeRequestCondition;
+    
+    Context mContext;
     Channel mMaster;
     Compressor mCompressor;
     Sequencer mSequencer;
+    PaStream *mPaStream;
     void openPaStream();
     
     AudioBuffer<float> mBuffer;
-    unsigned mSampleRate = 44100;
-    // Assuming two channels until a system for variable number of channels exists
-    unsigned mChannelCount = 2;
     int audioCallback(float *outputBuffer, unsigned long frameCount);
     static void paStreamFinished(void* userData);
     static int paCallback( const void *inputBuffer, void *outputBuffer,
