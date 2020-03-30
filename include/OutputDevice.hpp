@@ -18,6 +18,7 @@ class Mixer;
  */
 class OutputDevice {
   public:
+    OutputDevice() = default;
     virtual ~OutputDevice() {};
     /**
      * @brief Get the output for the device
