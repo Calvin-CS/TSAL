@@ -2,7 +2,6 @@
 #define OSCILLATORNODE_H
 
 #include "OutputDevice.hpp"
-#include "Mixer.hpp"
 
 namespace tsal {
 
@@ -14,7 +13,6 @@ namespace tsal {
  */
 class Oscillator : public OutputDevice {
   public:
-    Oscillator(Mixer* mixer) : OutputDevice(mixer){};
     /**
      * @brief Modes for the oscillator 
      * 

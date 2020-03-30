@@ -2,7 +2,6 @@
 #define COMPRESSOR_H
 
 #include "Effect.hpp"
-#include "Buffer.hpp"
 #include "Util.hpp"
 #include <vector>
 
@@ -23,9 +22,9 @@ namespace tsal {
  */
 class Compressor : public Effect {
   public:
-    Compressor(Mixer* mixer);
+    Compressor() : mEnvelope(COMPRESSOR_MAX_BUFFER) {}
     virtual void getOutput(AudioBuffer<float>& buffer) override;
-    virtual void setMixer(Mixer* mixer) override;
+    virtual void updateContext(const Context& context) override;
     void setAttackTime(double attackTime);
     void setReleaseTime(double releaseTime);
     void setThreshold(double threshold);

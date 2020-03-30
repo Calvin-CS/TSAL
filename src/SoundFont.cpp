@@ -1,5 +1,4 @@
 #include "SoundFont.hpp"
-#include "Mixer.hpp"
 
 namespace tsal {
 
@@ -16,10 +15,10 @@ SoundFont::~SoundFont() {
   tsf_close(mSoundFont);
 }
 
-void SoundFont::setMixer(Mixer* mixer) {
-  OutputDevice::setMixer(mixer);
-  tsf_set_output(mSoundFont, TSF_MONO, mMixer->getSampleRate(), 0);
-}
+// void SoundFont::setMixer(Mixer* mixer) {
+//   OutputDevice::updateContext(mContext)
+//   tsf_set_output(mSoundFont, TSF_MONO, mContext.getSampleRate(), 0);
+// }
 
 void SoundFont::getOutput(AudioBuffer<float> &buffer) {
   // tsf_render_float(mSoundFont, buffer, buffer.size(), 0);

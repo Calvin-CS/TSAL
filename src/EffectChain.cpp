@@ -9,17 +9,15 @@ EffectChain::~EffectChain() {
 }
 
 void EffectChain::getOutput(AudioBuffer<float> &buffer) {
-  std::lock_guard<std::mutex> guard(mEffectChainMutex);
   for (auto effect : mEffects) {
     effect->getOutput(buffer);
   }
 }
 
-void EffectChain::setMixer(Mixer* mixer) {
-  std::lock_guard<std::mutex> guard(mEffectChainMutex);
-  OutputDevice::setMixer(mixer);
+void EffectChain::updateContext(const Context& context) {
+  OutputDevice::updateContext(context);
   for (auto effect : mEffects) {
-    effect->setMixer(mixer);
+    effect->updateContext(context);
   }
 } 
 
@@ -28,8 +26,11 @@ void EffectChain::setMixer(Mixer* mixer) {
  * @param effect
  */
 void EffectChain::add(Effect& effect) {
-  std::lock_guard<std::mutex> guard(mEffectChainMutex);
-  effect.setMixer(mMixer);
+  mContext.requestModelChange(std::bind(&EffectChain::addDeviceToModel, this, std::ref(effect)));
+}
+
+void EffectChain::addDeviceToModel(Effect& effect) {
+  effect.updateContext(mContext);
   mEffects.push_back(&effect);
 }
 
@@ -38,12 +39,17 @@ void EffectChain::add(Effect& effect) {
  * @param effect
  */
 void EffectChain::remove(Effect& effect) {
-  std::lock_guard<std::mutex> guard(mEffectChainMutex);
-  for (unsigned i = 1; i < mEffects.size() - 1; i++) {
+  mContext.requestModelChange(std::bind(&EffectChain::removeDeviceFromModel, this, std::ref(effect)));
+}
+
+void EffectChain::removeDeviceFromModel(Effect& effect) {
+  for (unsigned i = 0; i < mEffects.size(); i++) {
     if (mEffects[i] == &effect) {
+      effect.updateContext(Context::clear());
       mEffects.erase(mEffects.begin() + i);
     }
   }
+  std::cout << std::endl;
 }
 
 }

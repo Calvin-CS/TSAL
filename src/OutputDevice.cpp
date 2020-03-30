@@ -1,14 +1,8 @@
 #include "OutputDevice.hpp"
-#include "Mixer.hpp"
 #include "Util.hpp"
 #include <cmath>
 
 namespace tsal {
-
-OutputDevice::OutputDevice(Mixer* mixer) {
-  setMixer(mixer);
-}
-
 
 /**
  * @brief Set the active status of the device

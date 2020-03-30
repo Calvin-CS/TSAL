@@ -16,10 +16,10 @@ namespace tsal {
  */
 class Channel : public ChannelDevice {
   public:
-    Channel(Mixer* mixer);
+    Channel();
     virtual ~Channel();
     virtual void getOutput(AudioBuffer<float> &buffer) override;
-    virtual void setMixer(Mixer* mixer) override;
+    virtual void updateContext(const Context& context) override;
     virtual void setParentChannel(Channel* channel) override;
     void add(Channel& channel);
     void add(Effect& effect, unsigned position);

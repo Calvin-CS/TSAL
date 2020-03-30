@@ -25,7 +25,6 @@ class SoundFont : public Instrument {
     SoundFont(Mixer* mixer, std::string filename);
     ~SoundFont();
     virtual void getOutput(AudioBuffer<float> &buffer) override;
-    virtual void setMixer(Mixer* mixer) override;
     void play(double note, double velocity = 100.0);
     void stop(double note);
     void channelNoteOn(int channel, unsigned note, double velocity = 100.0);

@@ -17,7 +17,7 @@ namespace tsal {
  */
 class Synth : public Instrument {
   public:
-    Synth(Mixer *mixer);
+    Synth();
     virtual void getOutput(AudioBuffer<float> &buffer) override;
     void play(double note, double velocity = 100.0);
     void stop();
@@ -32,10 +32,10 @@ class Synth : public Instrument {
 
     double getNote() const;
     
-    virtual void setMixer(Mixer* mixer) override {
-      OutputDevice::setMixer(mixer);
-      mOscillator.setMixer(mixer);
-      mEnvelope.setMixer(mixer);
+    virtual void updateContext(const Context& context) override {
+      OutputDevice::updateContext(context);
+      mOscillator.updateContext(context);
+      mEnvelope.updateContext(context);
     }
 
   private:

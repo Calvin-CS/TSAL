@@ -22,7 +22,7 @@ void insertionSort(ThreadSynth& synth, int size, int* data) {
 
 int main() {
   Mixer mixer;
-  ThreadSynth synth(&mixer);
+  ThreadSynth synth;
   mixer.add(synth);
   synth.setEnvelopeActive(false);
 

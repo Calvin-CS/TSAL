@@ -12,8 +12,6 @@ class Channel;
  * @brief Base class for a device that can be routed to a channel
  */
 class ChannelDevice : public OutputDevice {
-  public:
-    ChannelDevice(Mixer* mixer) : OutputDevice(mixer){};
   protected:
     virtual void setParentChannel(Channel* channel) = 0;
     Channel* mParentChannel = nullptr;

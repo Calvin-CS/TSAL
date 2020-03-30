@@ -18,7 +18,6 @@ namespace tsal {
  */
 class Effect : public ChannelDevice {
   public:
-    Effect(Mixer* mixer);
     ~Effect();
     virtual void setParentChannel(Channel* channel) override;
 };

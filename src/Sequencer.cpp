@@ -1,5 +1,4 @@
 #include "Sequencer.hpp"
-#include "Mixer.hpp"
 
 namespace tsal {
 

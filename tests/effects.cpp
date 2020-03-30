@@ -1,46 +1,42 @@
 #include "tsal.hpp"
 #include <cassert>
+#include <omp.h>
 
 using namespace tsal;
 
 void testEffectChain() {
+  unsigned currentTest = 0;
   Mixer mixer;
-  Synth synth(&mixer);
-  Channel channel(&mixer);
-  Compressor compressor[3]{Compressor(&mixer), Compressor(&mixer),
-                           Compressor(&mixer)};
+  Channel channel;
 
+  std::cout << "Testing effect chain: " << std::endl;
   mixer.add(channel);
-  channel.add(synth);
-  synth.play(C4);
   
-  channel.add(compressor[0]);
-  channel.add(compressor[1]);
-  assert(channel.getEffectCount() == 2);
-  std::cout << "1" << std::flush;
+  // Add a bunch of effects around the same time
+  omp_set_num_threads(50);
+  #pragma omp parallel
+  {
+    Compressor compressor;
+    channel.add(compressor);
+  }
+  std::cout << ++currentTest << std::flush;
   
-  // Test middle case remove effect (effect chain: 0 1 2)
-  channel.add(compressor[2]);
-  channel.remove(compressor[1]);
+  std::vector<Compressor> compressors(3, Compressor());
+  channel.add(compressors[0]);
+  channel.add(compressors[1]);
+  channel.add(compressors[2]);
+  assert(channel.getEffectCount() == 3);
+  std::cout << ++currentTest << std::flush;
+  
+  channel.remove(compressors[1]);
   assert(channel.getEffectCount() == 2);
-  std::cout << "2" << std::flush;
-
-  // Test front case (effect chain: 0 2 1)
-  channel.add(compressor[1]);
-  channel.remove(compressor[0]);
-  assert(channel.getEffectCount() == 2);
-  std::cout << "3" << std::flush;
-
-  // Test back case (effect chain: 2 1)
-  channel.remove(compressor[1]);
-  assert(channel.getEffectCount() == 1);
-  std::cout << "4" << std::endl;
+  std::cout << ++currentTest << std::flush;
 }
 
 void testCompressor() {
   Mixer mixer;
-  Synth synth(&mixer);
-  Compressor compressor(&mixer);
+  Synth synth;
+  Compressor compressor;
   mixer.add(compressor);
   mixer.add(synth);
 
@@ -73,10 +69,10 @@ void testCompressor() {
 
 void testDelay() {
   Mixer mixer;
-  Synth synth(&mixer);
-  Delay delay(&mixer);
-  mixer.add(synth);
+  Synth synth;
+  Delay delay;
   mixer.add(delay);
+  mixer.add(synth);
 }
 
 int main() {
