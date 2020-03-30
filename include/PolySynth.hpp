@@ -18,6 +18,7 @@ namespace tsal {
  */
 class PolySynth : public Instrument {
   public:
+    PolySynth() = default;
     PolySynth(Mixer* mixer);
     PolySynth(PolySynth&& other) noexcept :
       Instrument(other.mMixer),

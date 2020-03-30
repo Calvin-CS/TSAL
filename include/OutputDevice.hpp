@@ -17,6 +17,7 @@ class Mixer;
  */
 class OutputDevice {
   public:
+    OutputDevice() = default;
     OutputDevice(Mixer* mixer);
     virtual ~OutputDevice() {};
     virtual void getOutput(AudioBuffer<float> &buffer) { return; };

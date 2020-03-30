@@ -13,6 +13,7 @@ class Channel;
  */
 class ChannelDevice : public OutputDevice {
   public:
+    ChannelDevice() = default;
     ChannelDevice(Mixer* mixer) : OutputDevice(mixer){};
   protected:
     virtual void setParentChannel(Channel* channel) = 0;

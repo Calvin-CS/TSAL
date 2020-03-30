@@ -18,6 +18,7 @@ namespace tsal {
 template <typename DeviceType>
 class RouteDevice : public OutputDevice {
   public:
+    RouteDevice() = default;
     RouteDevice(Mixer* mixer) : OutputDevice(mixer){};
     ~RouteDevice();
     virtual void getOutput(AudioBuffer<float> &buffer) override;
