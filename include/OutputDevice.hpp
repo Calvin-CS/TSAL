@@ -3,6 +3,7 @@
 
 #include "Util.hpp"
 #include "AudioBuffer.hpp"
+#include "Context.hpp"
 #include <iostream>
 #include <vector>
 
@@ -17,16 +18,16 @@ class Mixer;
  */
 class OutputDevice {
   public:
-    OutputDevice(Mixer* mixer);
+    OutputDevice() = default;
     virtual ~OutputDevice() {};
-    virtual void getOutput(AudioBuffer<float> &buffer) { return; };
     /**
      * @brief Get the output for the device
      * 
      * @return double 
      */
+    virtual void getOutput(AudioBuffer<float> &buffer) { return; };
     virtual void setActive(bool active = true);
-    virtual void setMixer(Mixer* mixer) { mMixer = mixer; };
+    virtual void updateContext(const Context& context) { mContext.update(context); };
 
     void setPanning(double panning);
     void setGain(double gain);
@@ -38,8 +39,8 @@ class OutputDevice {
 
   protected:
     virtual void setChannelPanning(unsigned channelCount);
-    Mixer* mMixer = nullptr;
     bool mActive = true;
+    Context mContext;
     double mAmp = 1.0;
     double mPanning = 0.0;
     std::vector<double> mChannelPanning;

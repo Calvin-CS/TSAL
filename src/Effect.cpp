@@ -1,10 +1,7 @@
 #include "Effect.hpp"
-#include "Mixer.hpp"
+#include "Channel.hpp"
 
 namespace tsal {
-
-Effect::Effect(Mixer* mixer) : ChannelDevice(mixer) {
-}
 
 Effect::~Effect() {
   if (mParentChannel != nullptr)

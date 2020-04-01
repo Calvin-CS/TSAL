@@ -235,6 +235,7 @@ todo.txt
 compile_commands.json
 .clangd
 .cquery
+.ccls*
 .cquery_cached_index
 RtAudio.h
 NUL

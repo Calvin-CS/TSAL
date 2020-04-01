@@ -17,7 +17,9 @@ int main() {
   Mixer mixer;
   
   // Create the synthesizer object
-  PolySynth synth(&mixer);
+  Synth synth;
+  // Synth synth;
+  synth.setMode(Oscillator::SAW);
   
   // Add the synth to the mixer
   mixer.add(synth);

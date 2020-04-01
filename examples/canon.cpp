@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
 
 
   tsal::Mixer mixer;
-  std::vector<tsal::ThreadSynth> voices(numVoices, tsal::ThreadSynth(&mixer));  
+  std::vector<tsal::ThreadSynth> voices(numVoices, tsal::ThreadSynth(mixer.getContext()));  
 
   omp_set_num_threads(numVoices);
 

@@ -1,9 +1,8 @@
 #include "Channel.hpp"
-#include "Mixer.hpp"
 
 namespace tsal {
   
-Channel::Channel(Mixer* mixer) : ChannelDevice(mixer), mChannelIn(mixer), mRoutedInstruments(mixer), mRoutedChannels(mixer), mEffectChain(mixer, mChannelIn) {
+Channel::Channel() {
   mChannelIn.add(mRoutedInstruments);
   mChannelIn.add(mRoutedChannels);
 }
@@ -19,9 +18,10 @@ void Channel::setParentChannel(Channel* channel) {
   mParentChannel = channel;
 }
 
-void Channel::setMixer(Mixer* mixer) {
-  mChannelIn.setMixer(mixer);
-  mEffectChain.setMixer(mixer);
+void Channel::updateContext(const Context& context) {
+  OutputDevice::updateContext(context);
+  mChannelIn.updateContext(context);
+  mEffectChain.updateContext(context);
 }
 
 void Channel::getOutput(AudioBuffer<float> &buffer) {

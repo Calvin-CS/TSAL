@@ -125,7 +125,7 @@ int main(int argc, char* argv[]) {
   std::thread producers[numProducers];
   std::thread consumers[numConsumers];
   for (int i = 0; i < numProducers; i++) {
-    producers[i] = std::thread(produce, &queue, &mixer);
+    producers[i] = std::thread(produce, &queue, mixer.getContext());
   }
   for (int i = 0; i < numConsumers; i++) {
     consumers[i] = std::thread(consume, &queue, &mixer);

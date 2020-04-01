@@ -1,10 +1,7 @@
 #include "Instrument.hpp"
-#include "Mixer.hpp"
+#include "Channel.hpp"
 
 namespace tsal {
-
-Instrument::Instrument(Mixer *mixer) : ChannelDevice(mixer){
-};
 
 Instrument::~Instrument() {
   if (mParentChannel != nullptr)

@@ -8,17 +8,19 @@ SET(BUILD_SHARED_LIBS ON)
 
 set(PUBLIC_HEADERS
   ${TSAL_INCLUDE_DIR}/AudioBuffer.hpp
-  ${TSAL_INCLUDE_DIR}/Buffer.hpp
   ${TSAL_INCLUDE_DIR}/ChannelDevice.hpp
   ${TSAL_INCLUDE_DIR}/Channel.hpp
   ${TSAL_INCLUDE_DIR}/Compressor.hpp
+  ${TSAL_INCLUDE_DIR}/Context.hpp
   ${TSAL_INCLUDE_DIR}/Delay.hpp
   ${TSAL_INCLUDE_DIR}/EffectChain.hpp
   ${TSAL_INCLUDE_DIR}/Effect.hpp
   ${TSAL_INCLUDE_DIR}/Envelope.hpp
+  ${TSAL_INCLUDE_DIR}/LadspaEffect.hpp
+  ${TSAL_INCLUDE_DIR}/LadspaManager.hpp
   ${TSAL_INCLUDE_DIR}/InputDevice.hpp
   ${TSAL_INCLUDE_DIR}/Instrument.hpp
-  # ${TSAL_INCLUDE_DIR}/MidiNotes.hpp
+  ${TSAL_INCLUDE_DIR}/MidiNotes.hpp
   # ${TSAL_INCLUDE_DIR}/MidiParser.hpp
   ${TSAL_INCLUDE_DIR}/Mixer.hpp
   ${TSAL_INCLUDE_DIR}/Oscillator.hpp
@@ -37,10 +39,13 @@ set(PUBLIC_HEADERS
 set(SOURCES
   Channel.cpp
   Compressor.cpp
+  Context.cpp
   Delay.cpp
   EffectChain.cpp
   Effect.cpp
   Envelope.cpp
+  LadspaEffect.cpp
+  LadspaManager.cpp
   Instrument.cpp
   # MidiParser.cpp
   Mixer.cpp
@@ -67,9 +72,11 @@ target_include_directories(tsal
 
 target_link_libraries(tsal
   PUBLIC
+    ladspa
     portaudio
     OpenMP::OpenMP_CXX
     Threads::Threads
+    dl
   )
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang|GNU")
@@ -93,7 +100,7 @@ set_target_properties(tsal
 # source_group(TREE "${PROJECT_SOURCE_DIR}/include" PREFIX "Header Files" FILES ${HEADER_LIST})
 
 # install(TARGETS tsal midifile tsf
-install(TARGETS tsal
+install(TARGETS tsal ladspa
   EXPORT tsalTargets
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}

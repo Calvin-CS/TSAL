@@ -12,7 +12,7 @@ namespace tsal {
  */
 class Instrument : public ChannelDevice {
   public:
-    Instrument(Mixer* mixer);
+    Instrument() = default;
     virtual ~Instrument();
     virtual void setParentChannel(Channel* channel) override;
 };

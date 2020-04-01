@@ -1,10 +1,6 @@
 #include "Delay.hpp"
-#include "Mixer.hpp"
 
 namespace tsal {
-
-Delay::Delay(Mixer* mixer) : Effect(mixer), mBuffer(mixer->getSampleRate()) {
-}
 
 /* @brief Dynamically allocates a buffer based on the sample rate
  *
@@ -13,13 +9,15 @@ Delay::Delay(Mixer* mixer) : Effect(mixer), mBuffer(mixer->getSampleRate()) {
  * changes
  */
 void Delay::init() {
-  mBuffer.resize(mMixer->getSampleRate());
-  Delay::mDelayRange = std::make_pair(0, mBuffer.size());
+  const unsigned delay = mContext.getSampleRate();
+  mBuffer.setFrameCount(delay);
+  mBuffer.setChannelCount(mContext.getChannelCount());
+  Delay::mDelayRange = std::make_pair(0, delay);
   setDelay(1000);
 }
 
-void Delay::setMixer(Mixer* mixer) {
-  OutputDevice::setMixer(mixer);
+void Delay::updateContext(const Context& context) {
+  OutputDevice::updateContext(context);
   init();
 }
 
@@ -51,7 +49,7 @@ void Delay::getOutput(AudioBuffer<float> &buffer) {
  * @param delay (ms)
  */
 void Delay::setDelay(unsigned delay) {
-  delay = std::round(mMixer->getSampleRate() * ((double) delay / 1000));
+  delay = std::round(mContext.getSampleRate() * ((double) delay / 1000));
   mDelay = Util::checkParameterRange("Delay: Delay", delay, mDelayRange);
 }
 

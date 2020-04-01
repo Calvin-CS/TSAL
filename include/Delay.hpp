@@ -1,9 +1,10 @@
 #ifndef DELAY_H
 #define DELAY_H
 
+#include "AudioBuffer.hpp"
 #include "Effect.hpp"
-#include "Buffer.hpp"
 #include "Util.hpp"
+#include <vector>
 
 namespace tsal {
 
@@ -14,14 +15,13 @@ namespace tsal {
  */
 class Delay : public Effect {
   public:
-    Delay(Mixer *mixer);
     void init();
-    virtual void setMixer(Mixer* mixer) override;
+    virtual void updateContext(const Context& context) override;
     virtual void getOutput(AudioBuffer<float> &buffer) override;
     void setDelay(unsigned delay);
     void setFeedback(double feedback);
   private:
-    Buffer<double> mBuffer;
+    AudioBuffer<float> mBuffer;
     unsigned mCounter = 0;
     int mDelay = 0;
     double mFeedback = 0.5;

@@ -1,10 +1,11 @@
 #ifndef ROUTEDEVICE_H
 #define ROUTEDEVICE_H
 
-#include "InputDevice.hpp"
 #include "OutputDevice.hpp"
 #include <mutex>
 #include <vector>
+#include <memory>
+#include <functional>
 
 namespace tsal {
 
@@ -18,10 +19,10 @@ namespace tsal {
 template <typename DeviceType>
 class RouteDevice : public OutputDevice {
   public:
-    RouteDevice(Mixer* mixer) : OutputDevice(mixer){};
+    RouteDevice() = default;
     ~RouteDevice();
     virtual void getOutput(AudioBuffer<float> &buffer) override;
-    virtual void setMixer(Mixer* mixer) override;
+    virtual void updateContext(const Context& context) override;
     
     void add(DeviceType& device);
     void remove(DeviceType& device);
@@ -32,29 +33,25 @@ class RouteDevice : public OutputDevice {
     // std::vector<DeviceType*>& getInputDevices() { return mRoutedInputs; };
 
   protected:
+    void addDeviceToModel(DeviceType& device);
+    void removeDeviceFromModel(DeviceType& device);
     /* Store an input device with an output buffer
      * Each device buffer is combined/mixed within this class
      * so that they aren't modifying existing data
      */ 
     struct RoutedInput {
+        RoutedInput(DeviceType* d)
+          : device(d) {};
         DeviceType* device;
         AudioBuffer<float> buffer;
-        RoutedInput(DeviceType* d, Mixer* mixer)
-          : device(d) {};
     };
     bool outOfRange(const int index) const;
-    std::vector<RoutedInput*> mRoutedInputs;
-    /* The mutex protection on RouteDevice and EffectChain
-     * should use a single mutex for structure modification protection
-     * to reduce complexity. But there are potential for deadlocks in both cases
-     */
-    std::mutex mRouterMutex;
+    std::vector<std::unique_ptr<RoutedInput>> mRoutedInputs;
 };
 
 
 template <typename DeviceType>
 RouteDevice<DeviceType>::~RouteDevice() {
-  std::lock_guard<std::mutex> guard(mRouterMutex);
   for (unsigned i = 0; i < mRoutedInputs.size(); i++) {
     mRoutedInputs.erase(mRoutedInputs.begin() + i);
   }
@@ -62,8 +59,7 @@ RouteDevice<DeviceType>::~RouteDevice() {
 
 template <typename DeviceType>
 void RouteDevice<DeviceType>::getOutput(AudioBuffer<float> &buffer) {
-  std::lock_guard<std::mutex> guard(mRouterMutex);
-  for (auto routedInput : mRoutedInputs) {
+  for (const auto& routedInput : mRoutedInputs) {
     routedInput->buffer.setSize(buffer);
     routedInput->buffer.clear();
     routedInput->device->getOutput(routedInput->buffer);
@@ -74,11 +70,10 @@ void RouteDevice<DeviceType>::getOutput(AudioBuffer<float> &buffer) {
 };
 
 template <typename DeviceType>
-void RouteDevice<DeviceType>::setMixer(Mixer* mixer) {
-  std::lock_guard<std::mutex> guard(mRouterMutex);
-  OutputDevice::setMixer(mixer);
-  for (unsigned i = 0; i < mRoutedInputs.size(); i++) {
-    mRoutedInputs[i]->device->setMixer(mixer);
+void RouteDevice<DeviceType>::updateContext(const Context& context) {
+  OutputDevice::updateContext(context);
+  for (const auto& routedInput : mRoutedInputs) {
+    routedInput->device->updateContext(context);
   }
 }
 
@@ -89,9 +84,13 @@ void RouteDevice<DeviceType>::setMixer(Mixer* mixer) {
  */
 template <typename DeviceType>
 void RouteDevice<DeviceType>::add(DeviceType& device) {
-  std::lock_guard<std::mutex> guard(mRouterMutex);
-  device.setMixer(mMixer);
-  mRoutedInputs.push_back(new RoutedInput(&device, mMixer));
+  mContext.requestModelChange(std::bind(&RouteDevice<DeviceType>::addDeviceToModel, this, std::ref(device)));
+}
+
+template <typename DeviceType>
+void RouteDevice<DeviceType>::addDeviceToModel(DeviceType& device) {
+  device.updateContext(mContext);
+  mRoutedInputs.push_back(std::make_unique<RoutedInput>(&device));
 }
 
 /**
@@ -101,9 +100,14 @@ void RouteDevice<DeviceType>::add(DeviceType& device) {
  */
 template <typename DeviceType>
 void RouteDevice<DeviceType>::remove(DeviceType& device) {
-  std::lock_guard<std::mutex> guard(mRouterMutex);
+  mContext.requestModelChange(std::bind(&RouteDevice<DeviceType>::removeDeviceFromModel, this, std::ref(device)));
+}
+
+template <typename DeviceType>
+void RouteDevice<DeviceType>::removeDeviceFromModel(DeviceType& device) {
   for (unsigned i = 0; i < mRoutedInputs.size(); i++) {
     if (&device == mRoutedInputs[i]->device) {
+      device.updateContext(Context::clear());
       mRoutedInputs.erase(mRoutedInputs.begin() + i);
       break;
     }
