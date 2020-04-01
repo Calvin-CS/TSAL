@@ -1,6 +1,8 @@
 #ifndef ENVELOPE_H
 #define ENVELOPE_H
 
+#include <algorithm>
+#include "Mixer.hpp"
 #include "OutputDevice.hpp"
 #include "Util.hpp"
 #include <cmath>
