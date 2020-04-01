@@ -19,7 +19,6 @@ namespace tsal {
  */
 class PolySynth : public Instrument {
   public:
-    PolySynth() = default;
     PolySynth(PolySynth&& other) noexcept :
       mMode(std::move(other.mMode)),
       mVoices(std::move(other.mVoices)) {
