@@ -4,7 +4,9 @@
 #include "AudioBuffer.hpp"
 #include <iostream>
 #include <sstream>
+#if defined(__GNUC__) // GNU compiler
 #include <dlfcn.h>
+#endif
 #include <ladspa.h>
 #include <vector>
 
@@ -19,8 +21,8 @@ class LadspaManager {
         AudioBuffer<LADSPA_Data> buffer;
         unsigned id;
     };
-    std::vector<ladspa_key> listPlugins();
-    const LADSPA_Descriptor * loadPlugin(const std::string& pluginPath);
+    static std::vector<ladspa_key> listPlugins();
+    static const LADSPA_Descriptor* loadPlugin(const std::string& pluginPath);
 };
 
 }

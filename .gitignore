@@ -241,3 +241,5 @@ RtAudio.h
 NUL
 
 build
+.vs
+CMakeSettings.json

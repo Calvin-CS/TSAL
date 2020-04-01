@@ -15,7 +15,8 @@ std::vector<ladspa_key> LadspaManager::listPlugins() {
 }
 
 const LADSPA_Descriptor * LadspaManager::loadPlugin(const std::string& pluginPath) {
-  const LADSPA_Descriptor * descriptor;
+  const LADSPA_Descriptor * descriptor = NULL;
+  /*
   void * pluginHandle = dlopen(pluginPath.c_str(), RTLD_NOW);
   if (pluginHandle == NULL) {
     std::cout << "Failed to open plugin: " << pluginPath << std::endl;
@@ -32,6 +33,8 @@ const LADSPA_Descriptor * LadspaManager::loadPlugin(const std::string& pluginPat
     }
     return descriptor;
   }
+  */
+  return descriptor;
 }
 
 }

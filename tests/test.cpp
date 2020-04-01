@@ -1,4 +1,3 @@
-#include "LadspaManager.hpp"
 #include "Oscillator.hpp"
 #include "tsal.hpp"
 #include <omp.h>
@@ -12,12 +11,15 @@ int main() {
   synth.setMode(Oscillator::SAW);
 
   Delay delay;
+  /*
   LadspaEffect effect;
   LadspaEffect effect2;
   effect.loadPlugin("/home/mark/Downloads/ladspa_sdk_1.15/plugins/filter.so");
   effect2.loadPlugin("/home/mark/Downloads/ladspa_sdk_1.15/plugins/amp.so");
   mixer.add(effect);
   mixer.add(effect2);
+  */
+
 
   mixer.add(synth);
   // mixer.add(delay);

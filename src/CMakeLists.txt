@@ -16,8 +16,8 @@ set(PUBLIC_HEADERS
   ${TSAL_INCLUDE_DIR}/EffectChain.hpp
   ${TSAL_INCLUDE_DIR}/Effect.hpp
   ${TSAL_INCLUDE_DIR}/Envelope.hpp
-  ${TSAL_INCLUDE_DIR}/LadspaEffect.hpp
-  ${TSAL_INCLUDE_DIR}/LadspaManager.hpp
+  # ${TSAL_INCLUDE_DIR}/LadspaEffect.hpp
+  # ${TSAL_INCLUDE_DIR}/LadspaManager.hpp
   ${TSAL_INCLUDE_DIR}/InputDevice.hpp
   ${TSAL_INCLUDE_DIR}/Instrument.hpp
   ${TSAL_INCLUDE_DIR}/MidiNotes.hpp
@@ -76,7 +76,7 @@ target_link_libraries(tsal
     portaudio
     OpenMP::OpenMP_CXX
     Threads::Threads
-    dl
+    # dl
   )
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang|GNU")
