@@ -13,6 +13,8 @@ namespace tsal {
 class Instrument : public ChannelDevice {
   public:
     Instrument() = default;
+    virtual void play(double note, double velocity = 100.0) = 0;
+    virtual void stop(double note) = 0;
     virtual ~Instrument();
     virtual void setParentChannel(Channel* channel) override;
 };

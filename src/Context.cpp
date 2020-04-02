@@ -15,7 +15,7 @@ Context::Context(unsigned sampleRate, unsigned channelCount, Mixer *mixer) :
 
 void Context::requestModelChange(std::function<void()> change) {
   if (mMixer == nullptr) {
-    std::cout << "Mixer not set: making unsafe changes" << std::endl;
+    // This change will not be thread safe
     change();
     return;
   }

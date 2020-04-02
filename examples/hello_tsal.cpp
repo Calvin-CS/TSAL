@@ -19,7 +19,7 @@ int main() {
   // Create the synthesizer object
   Synth synth;
   // Synth synth;
-  synth.setMode(Oscillator::SAW);
+  synth.setMode(Oscillator::SINE);
   
   // Add the synth to the mixer
   mixer.add(synth);

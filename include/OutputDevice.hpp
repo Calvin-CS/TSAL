@@ -25,7 +25,7 @@ class OutputDevice {
      * 
      * @return double 
      */
-    virtual void getOutput(AudioBuffer<float> &buffer) { return; };
+    virtual void getOutput(AudioBuffer<float>& buffer) { (void)buffer; return; };
     virtual void setActive(bool active = true);
     virtual void updateContext(const Context& context) { mContext.update(context); };
 

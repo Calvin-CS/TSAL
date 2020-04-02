@@ -38,7 +38,7 @@ class Oscillator : public OutputDevice {
 
   private:
     double polyBLEP(double t);
-    double mFrequency;
+    double mFrequency = 0.0;
     
     OscillatorMode mMode = SINE;
     double mPhase = 0.0;

@@ -20,7 +20,7 @@ class Synth : public Instrument {
     Synth();
     virtual void getOutput(AudioBuffer<float> &buffer) override;
     void play(double note, double velocity = 100.0);
-    void stop();
+    void stop(double note = MidiNote::A0);
     void setVelocity(double velocity);
     void setMode(Oscillator::OscillatorMode mode) { mOscillator.setMode(mode); };
     void setEnvelopeActive(bool active = true) { mEnvelope.setActive(active); };
@@ -41,7 +41,7 @@ class Synth : public Instrument {
   private:
     Oscillator mOscillator;
     Envelope mEnvelope;
-    double mVelocity;
+    double mVelocity = 0.0;
     double mNote = 0.0;
     
     static Util::ParameterRange<double> mVelocityRange;

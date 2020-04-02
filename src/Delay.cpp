@@ -49,7 +49,7 @@ void Delay::getOutput(AudioBuffer<float> &buffer) {
  * @param delay (ms)
  */
 void Delay::setDelay(unsigned delay) {
-  delay = std::round(mContext.getSampleRate() * ((double) delay / 1000));
+  delay = std::round((double) mContext.getSampleRate() * ((double) delay / 1000));
   mDelay = Util::checkParameterRange("Delay: Delay", delay, mDelayRange);
 }
 

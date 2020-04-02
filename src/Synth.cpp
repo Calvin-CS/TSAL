@@ -46,7 +46,8 @@ void Synth::play(double note, double velocity) {
  * 
  * @param note 
  */
-void Synth::stop() {
+void Synth::stop(double note) {
+  (void)note;
   if (mEnvelope.isActive()) {
     mEnvelope.stop();
   } else {
