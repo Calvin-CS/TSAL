@@ -19,8 +19,8 @@ class Synth : public Instrument {
   public:
     Synth();
     virtual void getOutput(AudioBuffer<float> &buffer) override;
-    void play(double note, double velocity = 100.0);
-    void stop(double note = MidiNote::A0);
+    virtual void play(double note, double velocity = 100.0) override;
+    virtual void stop(double note = MidiNote::A0) override;
     void setVelocity(double velocity);
     void setMode(Oscillator::OscillatorMode mode) { mOscillator.setMode(mode); };
     void setEnvelopeActive(bool active = true) { mEnvelope.setActive(active); };

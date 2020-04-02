@@ -31,8 +31,8 @@ class PolySynth : public Instrument {
     }
     PolySynth();
     virtual void getOutput(AudioBuffer<float> &buffer) override;
-    void play(double note, double velocity = 100.0);
-    void stop(double note);
+    void play(double note, double velocity = 100.0) override;
+    void stop(double note) override;
     void setMode(Oscillator::OscillatorMode mode);
     PolySynth& operator=(const PolySynth& synth);
     virtual void updateContext(const Context& context) override;
