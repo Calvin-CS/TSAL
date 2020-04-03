@@ -20,17 +20,14 @@ int main() {
   Synth synth;
   // Synth synth;
   synth.setMode(Oscillator::SINE);
+  synth.setVolume(0.5);
+  synth.setPanning(-0.1);
   
   // Add the synth to the mixer
   mixer.add(synth);
   
   // Play a note on the synth
   synth.play(C4);
-  // synth.play(E4);
-  
-  // Util::thread_sleep(1000);
-
-  // synth.stop(C4);
   
   // Wait for the user to stop the synth
   char input;

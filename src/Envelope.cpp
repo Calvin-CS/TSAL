@@ -2,16 +2,9 @@
 
 namespace tsal {
 
-// Ensures that a parameter is never actually set to 0. A value of 0
-// does not work with calculateMultiplier function, so just set a really
-// small value when 0 is specified
-template <typename Item>
-Item checkParameterRangeWithMax(const std::string& name, Item value, std::pair<Item, Item> range) {
-  return std::max(Util::checkParameterRange(name, value, range), MIN_VALUE);
-}
-
+double Envelope::TimeRangeMin = 0.00001;
 Envelope::Envelope() {
-  mStateValue[OFF] = MIN_VALUE;
+  mStateValue[OFF] = TimeRangeMin;
   mStateValue[ATTACK] = 0.01;
   mStateValue[DECAY] = 0.5;
   mStateValue[SUSTAIN] = 0.5;
@@ -135,7 +128,7 @@ void Envelope::setEnvelope(double attackTime, double decayTime, double sustainLe
  * @param attackTime 
  */
 void Envelope::setAttackTime(double attackTime) {
-  mStateValue[ATTACK] = checkParameterRangeWithMax("Envelope: AttackTime", attackTime, mTimeRange);
+  mStateValue[ATTACK] = Util::checkParameterRangeHiddenFloor("Envelope: AttackTime", attackTime, mTimeRange, TimeRangeMin);
 }
 
 /**
@@ -144,7 +137,7 @@ void Envelope::setAttackTime(double attackTime) {
  * @param decayTime 
  */
 void Envelope::setDecayTime(double decayTime) {
-  mStateValue[DECAY] = checkParameterRangeWithMax("Envelope: DecayTime", decayTime, mTimeRange);
+  mStateValue[DECAY] = Util::checkParameterRangeHiddenFloor("Envelope: DecayTime", decayTime, mTimeRange, TimeRangeMin);
 }
 
 /**
@@ -153,7 +146,7 @@ void Envelope::setDecayTime(double decayTime) {
  * @param releaseTime 
  */
 void Envelope::setReleaseTime(double releaseTime) {
-  mStateValue[RELEASE] = checkParameterRangeWithMax("Envelope: ReleaseTime", releaseTime, mTimeRange);
+  mStateValue[RELEASE] = Util::checkParameterRangeHiddenFloor("Envelope: ReleaseTime", releaseTime, mTimeRange, TimeRangeMin);
 }
 
 /**

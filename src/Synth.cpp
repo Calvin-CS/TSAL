@@ -17,11 +17,10 @@ void Synth::getOutput(AudioBuffer<float> &buffer) {
 
   setChannelPanning(channels);
 
-  mOscillator.getOutput(buffer);
   for (unsigned long i = 0; i < frames; i++) {
     const auto envelope = mEnvelope.getSample();
     for (unsigned j = 0; j < channels; j++) {
-      buffer[i * channels + j] *= mChannelPanning[j] * envelope * mAmp * (mVelocity / 127.0); 
+      buffer[i * channels + j] = mFilter.process(mOscillator.getSample() * mChannelPanning[j] * envelope * mAmp * (mVelocity / 127.0)); 
     }
   }
 }

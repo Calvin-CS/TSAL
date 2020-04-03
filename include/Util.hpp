@@ -27,11 +27,11 @@ class Util {
     static double dbToVolume(double db);
     static void thread_sleep(unsigned duration, Timing::TimeScale scale = Timing::MILLISECOND);
 
-    template <typename Item>
-    using ParameterRange = std::pair<Item, Item>;
+    template <typename T>
+    using ParameterRange = std::pair<T, T>;
 
-    template <typename Item>
-    static Item checkParameterRange(const std::string& name, Item value, std::pair<Item, Item> range) {
+    template <typename T>
+    static T checkParameterRange(const std::string& name, T value, ParameterRange<T> range) {
       if (value < range.first || value > range.second) {
         std::cout << name << ": not in range["
                   << range.first << ", "
@@ -39,6 +39,26 @@ class Util {
                   << "]" << std::endl;
       }
       return std::min(std::max(value, range.first), range.second);
+    }
+
+    /**
+     * @brief Forces a hidden floor value on the range 
+     * 
+     * Lets the user set expected values without causing divide by 0 or other arithmetic errors
+     */
+    template <typename T>
+    static T checkParameterRangeHiddenFloor(const std::string& name, T value, ParameterRange<T> range, T floor) {
+      return std::max(Util::checkParameterRange(name, value, range), floor);
+    }
+
+    /**
+     * @brief Forces a hidden ceiling value on the range 
+     * 
+     * Lets the user set expected values without causing divide by 0 or other arithmetic errors
+     */
+    template <typename T>
+    static T checkParameterRangeHiddenCeiling(const std::string& name, T value, ParameterRange<T> range, T ceiling) {
+      return std::min(Util::checkParameterRange(name, value, range), ceiling);
     }
 };
 

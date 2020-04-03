@@ -1,5 +1,5 @@
-#ifndef OSCILLATORNODE_H
-#define OSCILLATORNODE_H
+#ifndef OSCILLATOR_H
+#define OSCILLATOR_H
 
 #include "OutputDevice.hpp"
 

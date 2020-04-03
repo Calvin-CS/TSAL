@@ -5,6 +5,7 @@
 #include "Envelope.hpp"
 #include "Instrument.hpp"
 #include "MidiNotes.hpp"
+#include "Filter.hpp"
 #include "Sequencer.hpp"
 
 namespace tsal {
@@ -39,6 +40,7 @@ class Synth : public Instrument {
     }
 
   private:
+    Filter mFilter;
     Oscillator mOscillator;
     Envelope mEnvelope;
     double mVelocity = 0.0;

@@ -7,8 +7,6 @@
 #include "Util.hpp"
 #include <cmath>
 
-#define MIN_VALUE 0.0001
-
 namespace tsal {
 
 /** @class Envelope
@@ -39,7 +37,6 @@ class Envelope : public OutputDevice {
     void setEnvelope(double attackTime, double decayTime, double sustainLevel, double releaseTime);
 
     double getStateValue(EnvelopeState state) { return mStateValue[state]; };
-    // Min value exists since the calculateMultiplier function doesn't work with 0
   private:
     void calculateMultiplier(double startLevel, double endLevel, unsigned lengthInSamples);
     bool stateIsTimed();
@@ -50,6 +47,7 @@ class Envelope : public OutputDevice {
     double mEnvelopeValue = 0.0;
     double mMultiplier = 0.0;
 
+    static double TimeRangeMin;
     static Util::ParameterRange<double> mTimeRange;
     static Util::ParameterRange<double> mSustainRange;
 };

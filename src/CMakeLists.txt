@@ -16,6 +16,7 @@ set(PUBLIC_HEADERS
   ${TSAL_INCLUDE_DIR}/EffectChain.hpp
   ${TSAL_INCLUDE_DIR}/Effect.hpp
   ${TSAL_INCLUDE_DIR}/Envelope.hpp
+  ${TSAL_INCLUDE_DIR}/Filter.hpp
   # ${TSAL_INCLUDE_DIR}/LadspaEffect.hpp
   # ${TSAL_INCLUDE_DIR}/LadspaManager.hpp
   ${TSAL_INCLUDE_DIR}/InputDevice.hpp
@@ -44,6 +45,7 @@ set(SOURCES
   EffectChain.cpp
   Effect.cpp
   Envelope.cpp
+  Filter.cpp
   LadspaEffect.cpp
   LadspaManager.cpp
   Instrument.cpp
