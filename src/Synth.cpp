@@ -6,7 +6,11 @@ namespace tsal {
 
 Synth::Synth() {
   mEnvelope.setActive(false);
-};
+  mFilter.setMode(Filter::HIGHPASS);
+  mLFO.setMode(Oscillator::SINE);
+  mLFO.setFrequency(2);
+  mLFO.setActive();
+}
 
 void Synth::getOutput(AudioBuffer<float> &buffer) {
   if (!mActive) {
@@ -19,8 +23,13 @@ void Synth::getOutput(AudioBuffer<float> &buffer) {
 
   for (unsigned long i = 0; i < frames; i++) {
     const auto envelope = mEnvelope.getSample();
+    const auto output = mOscillator.getSample();
+    
+    const auto lfoFilterMod = (mLFO.getSample() + 1) / 2;
+    mFilter.setCutoff(lfoFilterMod);
+
     for (unsigned j = 0; j < channels; j++) {
-      buffer[i * channels + j] = mFilter.process(mOscillator.getSample() * mChannelPanning[j] * envelope * mAmp * (mVelocity / 127.0)); 
+      buffer[i * channels + j] = mFilter.process(output * mChannelPanning[j] * envelope * mAmp * (mVelocity / 127.0)); 
     }
   }
 }

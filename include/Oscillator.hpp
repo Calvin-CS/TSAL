@@ -29,6 +29,10 @@ class Oscillator : public OutputDevice {
     void setMode(OscillatorMode mode);
     void setNote(double note);
     void setFrequency(double frequency);
+    virtual void updateContext(const Context &context) override {
+      OutputDevice::updateContext(context);
+      setFrequency(mFrequency);
+    }
 
     double getFrequency() const;
     unsigned getNote() const;

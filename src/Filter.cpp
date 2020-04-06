@@ -3,8 +3,9 @@
 namespace tsal {
 
 double Filter::process(double input) {
-  const double cutoffLow = mMode == LOWPASS ? 0 : mCutoffLow;
-  const double cutoffHigh = mMode == HIGHPASS ? 0 : mCutoffHigh;
+  // https://www.musicdsp.org/en/latest/Filters/131-cascaded-resonant-lp-hp-filter.html
+  const double cutoffLow = mMode == LOWPASS ? CutoffRangeMax : mCutoffLow;
+  const double cutoffHigh = mMode == HIGHPASS ? CutoffRangeMax : mCutoffHigh;
   const double fbLow = mResonanceLow + mResonanceLow/(1 - cutoffLow);
   const double fbHigh = mResonanceHigh + mResonanceHigh/(1 - cutoffHigh);
   m1 = m1 + cutoffLow*(input - m1 + fbLow*(m1 - m2)) + mPentium4;
@@ -15,7 +16,7 @@ double Filter::process(double input) {
 }
 
 void Filter::setCutoff(double cutoff) {
-  // mCutoffLow = mCutoffHigh = Util::checkParameterRangeHiddenCeiling(
+  mCutoffLow = mCutoffHigh = Util::checkParameterRangeHiddenCeiling("Filter: Cutoff", cutoff, mCutoffRange, CutoffRangeMax);
 }
 
 double Filter::mPentium4 = 1.0e-24;

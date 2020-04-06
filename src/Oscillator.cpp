@@ -142,6 +142,6 @@ unsigned Oscillator::getNote() const {
 }
 
 Util::ParameterRange<double> Oscillator::mNoteRange = std::make_pair(21.0, 108.0);
-Util::ParameterRange<double> Oscillator::mFrequencyRange = std::make_pair(27.5, 4186.0);
+Util::ParameterRange<double> Oscillator::mFrequencyRange = std::make_pair(0, 1000.0);
 
 }

@@ -19,13 +19,13 @@ class Filter {
     double process(double input);
 
     void setMode(FilterMode mode) { mMode = mode; };
-    void setCutoff(double cutoffLow);
+    void setCutoff(double cutoff);
     void setResonance(double resonance);
     
   private:
     FilterMode mMode = HIGHPASS;
     double mCutoffLow = 0.5;
-    double mCutoffHigh = 0.2;
+    double mCutoffHigh = 0.5;
     double mResonanceLow = 0.5;
     double mResonanceHigh = 0.5;
 

@@ -19,7 +19,7 @@ int main() {
   // Create the synthesizer object
   Synth synth;
   // Synth synth;
-  synth.setMode(Oscillator::SINE);
+  synth.setMode(Oscillator::SAW);
   synth.setVolume(0.5);
   synth.setPanning(-0.1);
   
@@ -28,6 +28,8 @@ int main() {
   
   // Play a note on the synth
   synth.play(C4);
+  Util::thread_sleep(10);
+  synth.stop();
   
   // Wait for the user to stop the synth
   char input;

@@ -37,12 +37,16 @@ class Synth : public Instrument {
       OutputDevice::updateContext(context);
       mOscillator.updateContext(context);
       mEnvelope.updateContext(context);
+      mLFO.updateContext(context);
     }
 
   private:
+    Oscillator mLFO;
     Filter mFilter;
     Oscillator mOscillator;
     Envelope mEnvelope;
+
+    double mLfoAmount = 1;
     double mVelocity = 0.0;
     double mNote = 0.0;
     
