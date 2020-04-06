@@ -14,9 +14,16 @@ class Channel;
 class ChannelDevice : public OutputDevice {
   public:
     ChannelDevice() = default;
+    void setPanning(double panning);
   protected:
+    virtual void setChannelPanning(unsigned channelCount);
     virtual void setParentChannel(Channel* channel) = 0;
     Channel* mParentChannel = nullptr;
+
+    double mPanning = 0.0;
+    std::vector<double> mChannelPanning;
+
+    static Util::ParameterRange<double> mPanningRange;    
 };
 
 }

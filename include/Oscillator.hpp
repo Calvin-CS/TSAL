@@ -25,7 +25,6 @@ class Oscillator : public OutputDevice {
     };
 
     double getSample();
-    void getOutput(AudioBuffer<float> &buffer) override;
     void setMode(OscillatorMode mode);
     void setNote(double note);
     void setFrequency(double frequency);

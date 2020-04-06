@@ -39,6 +39,7 @@ set(PUBLIC_HEADERS
 
 set(SOURCES
   Channel.cpp
+  ChannelDevice.cpp
   Compressor.cpp
   Context.cpp
   Delay.cpp
