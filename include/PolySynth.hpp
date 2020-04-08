@@ -20,12 +20,10 @@ namespace tsal {
 class PolySynth : public Instrument {
   public:
     PolySynth(PolySynth&& other) noexcept :
-      mMode(std::move(other.mMode)),
+      mMix(std::move(other.mMix)),
       mVoices(std::move(other.mVoices)) {
       for (unsigned i = 0; i < mVoices.size(); i++) {
-        mVoices[i].setActive(false);
-        mVoices[i].setVolume(0.3);
-        mRoutedSynths.add(mVoices[i]);
+        mVoices[i].stop(0.0);
       }
       updateContext(other.mContext);
     }
@@ -37,10 +35,29 @@ class PolySynth : public Instrument {
     PolySynth& operator=(const PolySynth& synth);
     virtual void updateContext(const Context& context) override;
  private:
-    Synth* getInactiveVoice();
-    Oscillator::OscillatorMode mMode;
-    std::vector<Synth> mVoices;
-    RouteDevice<Synth> mRoutedSynths;
+    class Voice : public Instrument {
+      public:
+        Voice() {
+          mOsc2.setMode(Oscillator::SAW);
+          mFilter.setMode(Filter::BANDPASS);
+          mFilter.setCutoff(0.1);
+        }
+        double getSample(double mix);
+        void play(double note, double velocity) override;
+        void stop(double note = MidiNote::A0) override;
+        virtual void updateContext(const Context& context) override; 
+        double getNote() { return mOsc1.getNote(); };
+      private:
+        Oscillator mOsc1;
+        Oscillator mOsc2;
+        Filter mFilter;
+        Envelope mEnvelope;
+        double mVelocity = 100.0;
+        unsigned mNote = 0.0;
+    };
+    Voice* getInactiveVoice();
+    double mMix = 0.05;
+    std::vector<Voice> mVoices;
 };
   
 }

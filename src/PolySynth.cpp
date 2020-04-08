@@ -1,24 +1,43 @@
 #include "PolySynth.hpp"
-#include "OutputDevice.hpp"
 
 namespace tsal {
 
-PolySynth::PolySynth() : mVoices(NUM_VOICES, Synth()) {
-  for (unsigned i = 0; i < mVoices.size(); i++) {
-    mVoices[i].setActive(false);
-    mVoices[i].setVolume(0.5);
-    mRoutedSynths.add(mVoices[i]);
+PolySynth::PolySynth() : mVoices(NUM_VOICES, Voice()) {
+  for (auto& voice : mVoices) {
+    voice.setActive(false);
   }
 }
 
 void PolySynth::getOutput(AudioBuffer<float> &buffer) {
-  mRoutedSynths.getOutput(buffer);
+  if (!mActive) {
+    return;
+  }
+  const auto channels = buffer.getChannelCount();
+  const auto frames = buffer.getFrameCount();
+
+  setChannelPanning(channels);
+
+  for (unsigned long i = 0; i < frames; i++) {
+    // Get the collective output of the voices
+    double output = 0.0;
+    double activeVoices = 0.0;
+    for (auto& voice : mVoices) {
+      output += voice.getSample(mMix);
+      activeVoices += voice.isActive() ? 1 : 0;
+    }
+    // Scale the output by the number of active voices 
+    output = activeVoices > 0 ? output / activeVoices : output;
+
+    for (unsigned j = 0; j < channels; j++) {
+      buffer[i * channels + j] = output * mChannelPanning[j] * mAmp; 
+    }
+  }
 }
 
 void PolySynth::updateContext(const Context& context) {
   OutputDevice::updateContext(context); 
-  for (unsigned i = 0; i < mVoices.size(); i++) {
-    mVoices[i].updateContext(context);
+  for (auto& voice : mVoices) {
+    voice.updateContext(context);
   }
 }
 
@@ -28,10 +47,10 @@ void PolySynth::updateContext(const Context& context) {
  * @param velocity
  */
 void PolySynth::play(double note, double velocity) {
-  Synth* voice = getInactiveVoice();
+  Voice* voice = getInactiveVoice();
   if (voice == nullptr) {
-    // Maybe change the behavior to grab the nearest note 
-    return;
+    voice = &mVoices[0]; 
+    voice->stop();
   }
   voice->play(note, velocity);
 }
@@ -41,10 +60,10 @@ void PolySynth::play(double note, double velocity) {
  * @param note
  */
 void PolySynth::stop(double note) {
-  for (unsigned i = 0; i < mVoices.size(); i++) {
-    if (mVoices[i].getNote() == note) {
-      mVoices[i].stop();
-      mVoices[i].setActive(false);
+  for (auto& voice : mVoices) {
+    if (voice.getNote() == note) {
+      voice.stop();
+      voice.setActive(false);
     }
   }
 }
@@ -55,18 +74,17 @@ void PolySynth::stop(double note) {
  */
 void PolySynth::setMode(Oscillator::OscillatorMode mode) {
   for (unsigned i = 0; i < mVoices.size(); i++) {
-    mVoices[i].setMode(mode);
   }
 }
 
-Synth* PolySynth::getInactiveVoice() {
+PolySynth::Voice* PolySynth::getInactiveVoice() {
   // Whenever a note is pressed, an inactive voice needs to be found an played
   // If all the voices are active, a nullptr is returned
-  Synth* voice = nullptr;
+  Voice* voice = nullptr;
   for (unsigned i = 0; i < mVoices.size(); i++) {
     if (!mVoices[i].isActive()) {
+      mVoices[i].setActive();
       voice = &mVoices[i];
-      voice->setActive();
       break;
     }
   }
@@ -75,21 +93,55 @@ Synth* PolySynth::getInactiveVoice() {
 
 PolySynth& PolySynth::operator=(const PolySynth& synth) {
   if (&synth != this) {
-    mMode = synth.mMode;
-    mVoices = std::vector<Synth>();
+    // mVoices = std::vector<Voice>();
 
-    for (Synth s : mVoices) {
-      mRoutedSynths.remove(s);
-    }
+    // for (Synth s : mVoices) {
+    //   mRoutedSynths.remove(s);
+    // }
 
-    for (Synth s : synth.mVoices) {
-      Synth copy = Synth(s);
-      mVoices.push_back(std::move(copy));
-      mRoutedSynths.add(s);
-    }
+    // for (Synth s : synth.mVoices) {
+    //   Synth copy = Synth(s);
+    //   mVoices.push_back(std::move(copy));
+    //   mRoutedSynths.add(s);
+    // }
   }
 
   return *this;
+}
+
+double PolySynth::Voice::getSample(double mix) {
+  if (!mActive) {
+    return 0.0;
+  }
+  return mFilter.process((mOsc1.getSample() * (1 - mix) +
+                          mOsc2.getSample() * mix) *
+                         (mVelocity / 120.0));
+}
+
+void PolySynth::Voice::play(double note, double velocity) {
+  mNote = note;
+  mOsc1.setActive();
+  mOsc2.setActive();
+  mEnvelope.start();
+  mVelocity = velocity; 
+  mOsc1.setNote(note);
+  mOsc2.setNote(note);
+}
+
+void PolySynth::Voice::stop(double note) {
+  (void)note;
+  if (mEnvelope.isActive()) {
+    mEnvelope.stop();
+  } else {
+    mOsc1.setActive(false);
+    mOsc2.setActive(false);
+  }
+}
+
+void PolySynth::Voice::updateContext(const Context& context) {
+    mOsc1.updateContext(context);
+    mOsc2.updateContext(context);
+    mEnvelope.updateContext(context);
 }
 
 }

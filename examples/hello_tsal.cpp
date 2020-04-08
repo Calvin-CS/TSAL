@@ -17,25 +17,28 @@ int main() {
   Mixer mixer;
   
   // Create the synthesizer object
-  Synth synth;
+  PolySynth synth;
   // Synth synth;
-  synth.setMode(Oscillator::SAW);
-  synth.setVolume(0.5);
-  synth.setPanning(-0.1);
+  // synth.setMode(Oscillator::SAW);
+  synth.setPanning(-0.8);
   
   // Add the synth to the mixer
   mixer.add(synth);
   
   // Play a note on the synth
   synth.play(C4);
-  Util::thread_sleep(10);
-  synth.stop();
+  synth.play(E4);
+  synth.play(G4);
+  synth.play(B4);
   
   // Wait for the user to stop the synth
   char input;
   std::cout << "Press <enter> to quit:" << std::flush;
   std::cin.get(input);
   
+  synth.stop(C4);
+  synth.stop(E4);
+
   return 0;
   
 }

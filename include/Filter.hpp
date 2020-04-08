@@ -23,7 +23,7 @@ class Filter {
     void setResonance(double resonance);
     
   private:
-    FilterMode mMode = HIGHPASS;
+    FilterMode mMode = BANDPASS;
     double mCutoffLow = 0.5;
     double mCutoffHigh = 0.5;
     double mResonanceLow = 0.5;
