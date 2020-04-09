@@ -10,7 +10,7 @@ namespace tsal {
 double Oscillator::getSample() {
   double t = mPhase / PI2;
 
-  switch (mMode) {
+  switch (getParameterInt(mode)) {
     case SINE:
       mWaveFormValue = sin(mPhase);
       break;
@@ -83,7 +83,7 @@ double Oscillator::polyBLEP(double t)
  * @param note (midi format)
  */
 void Oscillator::setNote(double note) {
-  setFrequency(getFrequencyFromNote(Util::checkParameterRange("Oscillator: Note", note, mNoteRange)));
+  setParameter(Parameters::frequency, getFrequencyFromNote(note));
 }
 
 /**
@@ -91,9 +91,8 @@ void Oscillator::setNote(double note) {
  * 
  * @param frequency 
  */
-void Oscillator::setFrequency(double frequency) {
-  mFrequency = Util::checkParameterRange("Oscillator: Frequency", frequency, mFrequencyRange);
-  mPhaseStep = mFrequency * PI2 / mContext.getSampleRate();
+void Oscillator::setFrequency(double sfrequency) {
+  setParameter(Parameters::frequency, sfrequency);
 }
 
 /**
@@ -102,7 +101,7 @@ void Oscillator::setFrequency(double frequency) {
  * @param mode 
  */
 void Oscillator::setMode(OscillatorMode mode) {
-  mMode = mode;
+  setParameter(Parameters::mode, mode);
 }
 
 /**
@@ -111,7 +110,7 @@ void Oscillator::setMode(OscillatorMode mode) {
  * @return double 
  */
 double Oscillator::getFrequency() const {
-  return mFrequency;
+  return getParameter(frequency);
 }
 
 /**
@@ -120,10 +119,15 @@ double Oscillator::getFrequency() const {
  * @return unsigned (midi)
  */
 unsigned Oscillator::getNote() const {
-  return getNoteFromFrequency(mFrequency);
+  return getNoteFromFrequency(getParameter(frequency));
 }
 
-Util::ParameterRange<double> Oscillator::mNoteRange = std::make_pair(21.0, 108.0);
-Util::ParameterRange<double> Oscillator::mFrequencyRange = std::make_pair(0, 1000.0);
+void Oscillator::parameterUpdate(unsigned id) {
+  switch (id) {
+  case frequency:
+    mPhaseStep = getParameter(frequency) * PI2 / mContext.getSampleRate();
+    break;
+  }
+}
 
 }

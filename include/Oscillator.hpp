@@ -16,8 +16,8 @@ class Oscillator : public OutputDevice, public ParameterManager {
   public:
     Oscillator() :
       ParameterManager({
-                        { .name="Mode", .max=0.0, .min=2.0, .defaultValue=0.0 },
-                        { .name="Frequency", .max=0.0, .min=5.0, .defaultValue=1.0 },
+                        { .name="Mode", .min=0.0, .max=2.0, .defaultValue=0.0 },
+                        { .name="Frequency", .min=0.0, .max=1000.0, .defaultValue=1.0 },
         }){
     }
     enum Parameters {
@@ -41,7 +41,8 @@ class Oscillator : public OutputDevice, public ParameterManager {
     void setFrequency(double frequency);
     virtual void updateContext(const Context &context) override {
       OutputDevice::updateContext(context);
-      setFrequency(mFrequency);
+      // Frequency parameter depends on sample rate
+      parameterUpdate(frequency);
     }
 
     double getFrequency() const;
@@ -50,17 +51,15 @@ class Oscillator : public OutputDevice, public ParameterManager {
     static unsigned getNoteFromFrequency(double frequency);
     static double getFrequencyFromNote(double note);
 
+  protected:
+    virtual void parameterUpdate(unsigned id) override;
   private:
     double polyBLEP(double t);
-    double mFrequency = 0.0;
     
-    OscillatorMode mMode = SINE;
     double mPhase = 0.0;
     double mPhaseStep = 0.0;
     double mWaveFormValue = 0.0;
 
-    static Util::ParameterRange<double> mNoteRange;
-    static Util::ParameterRange<double> mFrequencyRange;
 };
 
 }

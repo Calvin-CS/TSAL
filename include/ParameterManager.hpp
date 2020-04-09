@@ -5,8 +5,10 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
+#include <cmath>
 
 #define EXCLUSIVE 0.0001
+
 namespace tsal {
 
 /** @class ParameterManager
@@ -34,12 +36,12 @@ class ParameterManager {
           param.min += EXCLUSIVE;
         }
       }
-    }
-
-    double get(unsigned id) const {
-      return mParameters[id].value;
     };
-    void set(unsigned id, double value) {
+
+    std::string getParameterName(unsigned id) const { return mParameters[id].name; };
+    int getParameterInt(unsigned id) const { return std::round(mParameters[id].value); };
+    double getParameter(unsigned id) const { return mParameters[id].value; };
+    void setParameter(unsigned id, double value) {
       auto& param = mParameters[id];
       param.value = std::min(std::max(value, param.min), param.max);
       parameterUpdate(id);
