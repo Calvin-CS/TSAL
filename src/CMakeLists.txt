@@ -26,6 +26,7 @@ set(PUBLIC_HEADERS
   ${TSAL_INCLUDE_DIR}/Mixer.hpp
   ${TSAL_INCLUDE_DIR}/Oscillator.hpp
   ${TSAL_INCLUDE_DIR}/OutputDevice.hpp
+  ${TSAL_INCLUDE_DIR}/ParameterManager.hpp
   ${TSAL_INCLUDE_DIR}/PolySynth.hpp
   ${TSAL_INCLUDE_DIR}/ProgressOctave.hpp
   ${TSAL_INCLUDE_DIR}/RouteDevice.hpp

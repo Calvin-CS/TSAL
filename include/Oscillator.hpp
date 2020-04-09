@@ -2,6 +2,7 @@
 #define OSCILLATOR_H
 
 #include "OutputDevice.hpp"
+#include "ParameterManager.hpp"
 
 namespace tsal {
 
@@ -11,16 +12,26 @@ namespace tsal {
  * Oscillator is a low level synthesizer that generates samples from
  * algorithmic waveforms. It supports saw, sine, and square waveforms
  */
-class Oscillator : public OutputDevice {
+class Oscillator : public OutputDevice, public ParameterManager {
   public:
+    Oscillator() :
+      ParameterManager({
+                        { .name="Mode", .max=0.0, .min=2.0, .defaultValue=0.0 },
+                        { .name="Frequency", .max=0.0, .min=5.0, .defaultValue=1.0 },
+        }){
+    }
+    enum Parameters {
+                     mode = 0,
+                     frequency,
+    };
     /**
      * @brief Modes for the oscillator 
      * 
      * Oscillator mode can be switched at anytime during execution
      */
     enum OscillatorMode {
+      SINE = 0,
       SAW,
-      SINE,
       SQUARE
     };
 

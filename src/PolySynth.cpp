@@ -1,4 +1,5 @@
 #include "PolySynth.hpp"
+#include "ParameterManager.hpp"
 
 namespace tsal {
 
