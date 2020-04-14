@@ -16,13 +16,22 @@ class Oscillator : public OutputDevice, public ParameterManager {
   public:
     Oscillator() :
       ParameterManager({
-                        { .name="Mode", .min=0.0, .max=2.0, .defaultValue=0.0 },
+                        { .name="OscillatorMode", .min=0.0, .max=2.0, .defaultValue=0.0 },
+                        { .name="ModulationMode", .min=0.0, .max=2.0, .defaultValue=0.0 },
+                        { .name="Modulation", .min=-1.0, .max=1.0, .defaultValue=0.0 },
                         { .name="Frequency", .min=0.0, .max=1000.0, .defaultValue=1.0 },
         }){
-    }
+    };
     enum Parameters {
-                     mode = 0,
-                     frequency,
+                     OSCILLATOR_MODE = 0,
+                     MODULATION_MODE,
+                     MODULATION,
+                     FREQUENCY,
+    };
+    enum ModulationMode {
+                     MIX = 0,
+                     AM, // Amplitude modulation
+                     PM, // Phaser modulation
     };
     /**
      * @brief Modes for the oscillator 
@@ -32,7 +41,7 @@ class Oscillator : public OutputDevice, public ParameterManager {
     enum OscillatorMode {
       SINE = 0,
       SAW,
-      SQUARE
+      SQUARE,
     };
 
     double getSample();
@@ -42,11 +51,11 @@ class Oscillator : public OutputDevice, public ParameterManager {
     virtual void updateContext(const Context &context) override {
       OutputDevice::updateContext(context);
       // Frequency parameter depends on sample rate
-      parameterUpdate(frequency);
+      parameterUpdate(FREQUENCY);
     }
 
-    double getFrequency() const;
-    unsigned getNote() const;
+    double getFrequency();
+    unsigned getNote();
 
     static unsigned getNoteFromFrequency(double frequency);
     static double getFrequencyFromNote(double note);
@@ -56,9 +65,9 @@ class Oscillator : public OutputDevice, public ParameterManager {
   private:
     double polyBLEP(double t);
     
+
     double mPhase = 0.0;
     double mPhaseStep = 0.0;
-    double mWaveFormValue = 0.0;
 
 };
 

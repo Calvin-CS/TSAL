@@ -8,28 +8,42 @@ namespace tsal {
 // Helpful implementation of ployBLEP to reduce aliasing
 // http://metafunction.co.uk/all-about-digital-oscillators-part-2-blits-bleps/
 double Oscillator::getSample() {
-  double t = mPhase / PI2;
+  const double t = mPhase / PI2;
+  const double modulation = getParameter(MODULATION);
+  const ModulationMode modulationMode = (ModulationMode) getParameterInt(MODULATION_MODE);
+  double phase = mPhase;
+  double output = 0.0;
 
-  switch (getParameterInt(mode)) {
+  if (modulationMode == PM) {
+    phase += modulation;
+  }
+
+  switch (getParameterInt(OSCILLATOR_MODE)) {
     case SINE:
-      mWaveFormValue = sin(mPhase);
+      output = sin(phase);
       break;
     case SAW:
-      mWaveFormValue = (2.0 * mPhase / PI2) - 1.0;
-      mWaveFormValue -= polyBLEP(t); // Layer output of Poly BLEP on top
+      output = (2.0 * phase / PI2) - 1.0;
+      output -= polyBLEP(t); // Layer output of Poly BLEP on top
       break;
     case SQUARE:
-      mWaveFormValue = mPhase < M_PI ? 1 : -1;
-      mWaveFormValue += polyBLEP(t); // Layer output of Poly BLEP on top (flip)
-      mWaveFormValue -= polyBLEP(fmod(t + 0.5, 1.0)); // Layer output of Poly BLEP on top (flop)
+      output = phase < M_PI ? 1 : -1;
+      output += polyBLEP(t); // Layer output of Poly BLEP on top (flip)
+      output -= polyBLEP(fmod(t + 0.5, 1.0)); // Layer output of Poly BLEP on top (flop)
       break;
+  }
+
+  if (modulationMode == AM) {
+    output *= modulation;
+  } else if (modulationMode == MIX) {
+    output = (output + modulation) / 2.0;
   }
 
   mPhase += mPhaseStep;  
   while (mPhase >= PI2)
     mPhase -= PI2;
 
-  return mWaveFormValue * mAmp;
+  return output * mAmp;
 }
 
 /**
@@ -83,7 +97,7 @@ double Oscillator::polyBLEP(double t)
  * @param note (midi format)
  */
 void Oscillator::setNote(double note) {
-  setParameter(Parameters::frequency, getFrequencyFromNote(note));
+  setParameter(FREQUENCY, getFrequencyFromNote(note));
 }
 
 /**
@@ -91,8 +105,8 @@ void Oscillator::setNote(double note) {
  * 
  * @param frequency 
  */
-void Oscillator::setFrequency(double sfrequency) {
-  setParameter(Parameters::frequency, sfrequency);
+void Oscillator::setFrequency(double frequency) {
+  setParameter(FREQUENCY, frequency);
 }
 
 /**
@@ -101,7 +115,7 @@ void Oscillator::setFrequency(double sfrequency) {
  * @param mode 
  */
 void Oscillator::setMode(OscillatorMode mode) {
-  setParameter(Parameters::mode, mode);
+  setParameter(OSCILLATOR_MODE, mode);
 }
 
 /**
@@ -109,8 +123,8 @@ void Oscillator::setMode(OscillatorMode mode) {
  * 
  * @return double 
  */
-double Oscillator::getFrequency() const {
-  return getParameter(frequency);
+double Oscillator::getFrequency() {
+  return getParameter(FREQUENCY);
 }
 
 /**
@@ -118,14 +132,14 @@ double Oscillator::getFrequency() const {
  * 
  * @return unsigned (midi)
  */
-unsigned Oscillator::getNote() const {
-  return getNoteFromFrequency(getParameter(frequency));
+unsigned Oscillator::getNote() {
+  return getNoteFromFrequency(getParameter(FREQUENCY));
 }
 
 void Oscillator::parameterUpdate(unsigned id) {
   switch (id) {
-  case frequency:
-    mPhaseStep = getParameter(frequency) * PI2 / mContext.getSampleRate();
+  case FREQUENCY:
+    mPhaseStep = getParameter(FREQUENCY) * PI2 / mContext.getSampleRate();
     break;
   }
 }

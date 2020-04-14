@@ -1,7 +1,6 @@
 #ifndef PARAMETERMANAGER_H
 #define PARAMETERMANAGER_H
 
-#include <sched.h>
 #include <vector>
 #include <iostream>
 #include <algorithm>
@@ -23,8 +22,10 @@ class ParameterManager {
         double defaultValue;
         double value;
         bool exclusiveMax = false;
-        bool exclusiveMin  = false;
+        bool exclusiveMin = false;
+        double* connection = NULL;
     };
+    ParameterManager() = default;
     ParameterManager(std::vector<Parameter>&& parameters) {
       mParameters.swap(parameters);
       for (auto& param : mParameters) {
@@ -39,16 +40,37 @@ class ParameterManager {
     };
 
     std::string getParameterName(unsigned id) const { return mParameters[id].name; };
-    int getParameterInt(unsigned id) const { return std::round(mParameters[id].value); };
-    double getParameter(unsigned id) const { return mParameters[id].value; };
+    Parameter& getParameterData(unsigned id) { return mParameters[id]; };
+    double* getParameterPointer(unsigned id) { return &(mParameters[id].value); };
+    int getParameterInt(unsigned id) { return std::round(getParameter(id)); };
+    double getParameter(unsigned id) {
+      auto& param = mParameters[id];
+      return param.connection == NULL ? mParameters[id].value : getConnectedParameter(id);
+    };
     void setParameter(unsigned id, double value) {
       auto& param = mParameters[id];
       param.value = std::min(std::max(value, param.min), param.max);
       parameterUpdate(id);
     }
+    void connectParameter(unsigned id, double* connection) {
+      mParameters[id].connection = connection;
+    }
+    void disconnectParameter(unsigned id) {
+      mParameters[id].connection = NULL;
+    }
+    void disconnectParameters() {
+      for (unsigned i = 0; i < mParameters.size(); i++) {
+        disconnectParameter(i);
+      }
+    }
   protected:
     virtual void parameterUpdate(unsigned id) {};
   private:
+    
+    double getConnectedParameter(unsigned id) {
+      setParameter(id, *(mParameters[id].connection));
+      return mParameters[id].value;
+    };
     std::vector<Parameter> mParameters;
 };
 

@@ -3,12 +3,6 @@
 
 namespace tsal {
 
-PolySynth::PolySynth() : mVoices(NUM_VOICES, Voice()) {
-  for (auto& voice : mVoices) {
-    voice.setActive(false);
-  }
-}
-
 void PolySynth::getOutput(AudioBuffer<float> &buffer) {
   if (!mActive) {
     return;
@@ -23,7 +17,7 @@ void PolySynth::getOutput(AudioBuffer<float> &buffer) {
     double output = 0.0;
     double activeVoices = 0.0;
     for (auto& voice : mVoices) {
-      output += voice.getSample(mMix);
+      output += voice.getSample();
       activeVoices += voice.isActive() ? 1 : 0;
     }
     // Scale the output by the number of active voices 
@@ -110,13 +104,28 @@ PolySynth& PolySynth::operator=(const PolySynth& synth) {
   return *this;
 }
 
-double PolySynth::Voice::getSample(double mix) {
-  if (!mActive) {
-    return 0.0;
+
+void PolySynth::parameterUpdate(unsigned id) {
+  for (auto& voice : mVoices) {
+    switch (id) {
+    // case OSC1_MODE:
+    //   voice.mOsc1.setMode((Oscillator::OscillatorMode) getParameterInt(id));
+    //   break;
+    // case OSC2_MODE:
+    //   voice.mOsc2.setMode((Oscillator::OscillatorMode) getParameterInt(id));
+    //   break;
+    case MODULATION_MODE:
+      voice.mModulationMode = (Oscillator::ModulationMode) getParameterInt(id);
+      break;
+    }
   }
-  return mFilter.process((mOsc1.getSample() * (1 - mix) +
-                          mOsc2.getSample() * mix) *
-                         (mVelocity / 120.0));
+};
+
+double PolySynth::Voice::getSample() {
+  mOsc1.setParameter(Oscillator::MODULATION, mOsc2.getSample());
+  return mFilter.process(mOsc1.getSample() *
+                         (mVelocity / 120.0) *
+                         mEnvelope.getSample());
 }
 
 void PolySynth::Voice::play(double note, double velocity) {

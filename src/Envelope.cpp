@@ -2,15 +2,6 @@
 
 namespace tsal {
 
-double Envelope::TimeRangeMin = 0.00001;
-Envelope::Envelope() {
-  mStateValue[OFF] = TimeRangeMin;
-  mStateValue[ATTACK] = 0.01;
-  mStateValue[DECAY] = 0.5;
-  mStateValue[SUSTAIN] = 0.5;
-  mStateValue[RELEASE] = 2.0;
-}
-
 /**
  * @brief Increments the current state
  * 
@@ -22,22 +13,22 @@ void Envelope::updateState() {
   // OFF and SUSTAIN are indefinite so no need to set mNextStateIndex
   mNextStateIndex = stateIsTimed() ? mStateValue[mState] * mContext.getSampleRate() : 0;
   switch(mState) {
-    case OFF:
+    case E_OFF:
       mEnvelopeValue = 0.0;
       break;
-    case ATTACK:
-      mEnvelopeValue = mStateValue[OFF];
+    case E_ATTACK:
+      mEnvelopeValue = mStateValue[E_OFF];
       calculateMultiplier(mEnvelopeValue, 1.0, mNextStateIndex);
       break;
-    case DECAY:
+    case E_DECAY:
       mEnvelopeValue = 1.0;
-      calculateMultiplier(mEnvelopeValue, mStateValue[SUSTAIN], mNextStateIndex);
+      calculateMultiplier(mEnvelopeValue, mStateValue[E_SUSTAIN], mNextStateIndex);
       break;
-    case SUSTAIN:
-      mEnvelopeValue = mStateValue[SUSTAIN];
+    case E_SUSTAIN:
+      mEnvelopeValue = mStateValue[E_SUSTAIN];
       break;
-    case RELEASE:
-      calculateMultiplier(mEnvelopeValue, mStateValue[OFF], mNextStateIndex);
+    case E_RELEASE:
+      calculateMultiplier(mEnvelopeValue, mStateValue[E_OFF], mNextStateIndex);
       break;
   }  
 }
@@ -83,7 +74,7 @@ void Envelope::calculateMultiplier(double startLevel, double endLevel, unsigned 
  */
 void Envelope::start() {
   // Start the envelope in the attack state
-  mState = OFF;
+  mState = E_OFF;
   updateState();
 }
 
@@ -92,7 +83,7 @@ void Envelope::start() {
  * 
  */
 void Envelope::stop() {
-  mState = SUSTAIN;
+  mState = E_SUSTAIN;
   updateState();
 }
 
@@ -104,7 +95,7 @@ void Envelope::stop() {
  * @return false 
  */
 bool Envelope::stateIsTimed() {
-  return mState != OFF && mState != SUSTAIN;
+  return mState != E_OFF && mState != E_SUSTAIN;
 }
 
 /**
@@ -128,7 +119,7 @@ void Envelope::setEnvelope(double attackTime, double decayTime, double sustainLe
  * @param attackTime 
  */
 void Envelope::setAttackTime(double attackTime) {
-  mStateValue[ATTACK] = Util::checkParameterRangeHiddenFloor("Envelope: AttackTime", attackTime, mTimeRange, TimeRangeMin);
+  setParameter(ATTACK, attackTime);
 }
 
 /**
@@ -137,7 +128,7 @@ void Envelope::setAttackTime(double attackTime) {
  * @param decayTime 
  */
 void Envelope::setDecayTime(double decayTime) {
-  mStateValue[DECAY] = Util::checkParameterRangeHiddenFloor("Envelope: DecayTime", decayTime, mTimeRange, TimeRangeMin);
+  setParameter(DECAY, decayTime);
 }
 
 /**
@@ -146,7 +137,7 @@ void Envelope::setDecayTime(double decayTime) {
  * @param releaseTime 
  */
 void Envelope::setReleaseTime(double releaseTime) {
-  mStateValue[RELEASE] = Util::checkParameterRangeHiddenFloor("Envelope: ReleaseTime", releaseTime, mTimeRange, TimeRangeMin);
+  setParameter(DECAY, releaseTime);
 }
 
 /**
@@ -155,10 +146,20 @@ void Envelope::setReleaseTime(double releaseTime) {
  * @param level 
  */
 void Envelope::setSustainLevel(double level) {
-  mStateValue[SUSTAIN] = Util::checkParameterRange("Envelope: SustainLevel", level, mSustainRange);
+  setParameter(SUSTAIN, level);
 }
 
-Util::ParameterRange<double> Envelope::mTimeRange = std::make_pair(0.0, 2000.0);
-Util::ParameterRange<double> Envelope::mSustainRange = std::make_pair(0.0, 1.0);
+void Envelope::parameterUpdate(unsigned id) {
+  switch (id) {
+  case ATTACK:
+    mStateValue[E_ATTACK] = getParameter(id);
+  case DECAY:
+    mStateValue[E_DECAY] = getParameter(id);
+  case SUSTAIN:
+    mStateValue[E_SUSTAIN] = getParameter(id);
+  case RELEASE:
+    mStateValue[E_RELEASE] = getParameter(id);
+  }
+}
 
 }

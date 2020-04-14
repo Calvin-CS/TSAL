@@ -1,3 +1,5 @@
+#include "Oscillator.hpp"
+#include "PolySynth.hpp"
 #include "tsal.hpp"
 
 /** @example hello_tsal.cpp
@@ -21,23 +23,34 @@ int main() {
   // Synth synth;
   // synth.setMode(Oscillator::SAW);
   synth.setPanning(-0.8);
+  synth.setParameter(PolySynth::OSC1_MODE, Oscillator::SINE);
+  synth.setParameter(PolySynth::OSC2_MODE, Oscillator::SINE);
   
   // Add the synth to the mixer
   mixer.add(synth);
   
   // Play a note on the synth
   synth.play(C4);
+  Util::thread_sleep(500);
+  synth.stop(C4);
+  Util::thread_sleep(500);
+
+  // synth.setParameter(PolySynth::OSC1_MODE, Oscillator::SQUARE);
+  // synth.setParameter(PolySynth::OSC2_MODE, Oscillator::SAW);
+  synth.setParameter(PolySynth::MODULATION_MODE, Oscillator::AM);
+
   synth.play(E4);
-  synth.play(G4);
-  synth.play(B4);
+  Util::thread_sleep(500);
+  synth.stop(E4);
+  Util::thread_sleep(500);
+  // synth.play(G4);
+  // synth.play(B4);
   
   // Wait for the user to stop the synth
-  char input;
-  std::cout << "Press <enter> to quit:" << std::flush;
-  std::cin.get(input);
+  // char input;
+  // std::cout << "Press <enter> to quit:" << std::flush;
+  // std::cin.get(input);
   
-  synth.stop(C4);
-  synth.stop(E4);
 
   return 0;
   
