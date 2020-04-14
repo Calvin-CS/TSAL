@@ -21,13 +21,13 @@ class Envelope : public OutputDevice, public ParameterManager {
   public:
     Envelope() :
       ParameterManager({
-                        { .name="Attack", .min=0.0, .max=2000.0, .defaultValue=0.01, .exclusiveMin=true },
-                        { .name="Decay", .min=0.0, .max=2000.0, .defaultValue=0.5, .exclusiveMin=true},
+                        { .name="Attack", .min=0.0, .max=100.0, .defaultValue=0.01, .exclusiveMin=true },
+                        { .name="Decay", .min=0.0, .max=100.0, .defaultValue=0.5, .exclusiveMin=true},
                         { .name="Sustain", .min=0.0, .max=1.0, .defaultValue=0.5 },
-                        { .name="Release", .min=0.0, .max=2000.0, .defaultValue=2.0, .exclusiveMin=true},
+                        { .name="Release", .min=0.0, .max=100.0, .defaultValue=2.0, .exclusiveMin=true},
         })
     {
-      setEnvelope(0.01, 0.5, 0.5, 2.0);
+      setEnvelope(0.5, 0.5, 0.5, 5.0);
     };
     enum Parameters {
                      ATTACK,
@@ -44,28 +44,22 @@ class Envelope : public OutputDevice, public ParameterManager {
     void setSustainLevel(double level);
     void setReleaseTime(double releaseTime);
     void setEnvelope(double attackTime, double decayTime, double sustainLevel, double releaseTime);
-  protected:
-    virtual void parameterUpdate(unsigned int id) override;
   private:
     enum EnvelopeState {
-                        E_OFF,
                         E_ATTACK,
                         E_DECAY,
                         E_SUSTAIN,
                         E_RELEASE,
+                        E_OFF,
     };
     void calculateMultiplier(double startLevel, double endLevel, unsigned lengthInSamples);
+    double getStateValue(EnvelopeState state); 
     bool stateIsTimed();
     EnvelopeState mState = E_OFF; 
-    double mStateValue[5] { 0.00001, 0.0, 0.0, 0.0, 0.0 };
     unsigned mCurrentStateIndex = 0;
     unsigned mNextStateIndex = 0;
     double mEnvelopeValue = 0.0;
     double mMultiplier = 0.0;
-
-    static double TimeRangeMin;
-    static Util::ParameterRange<double> mTimeRange;
-    static Util::ParameterRange<double> mSustainRange;
 };
 
 }

@@ -11,26 +11,35 @@ void Envelope::updateState() {
   mState = static_cast<EnvelopeState>((mState + 1) % 5);
   mCurrentStateIndex = 0;
   // OFF and SUSTAIN are indefinite so no need to set mNextStateIndex
-  mNextStateIndex = stateIsTimed() ? mStateValue[mState] * mContext.getSampleRate() : 0;
+  mNextStateIndex = stateIsTimed() ? getStateValue(mState) * mContext.getSampleRate() : 0;
   switch(mState) {
     case E_OFF:
       mEnvelopeValue = 0.0;
       break;
     case E_ATTACK:
-      mEnvelopeValue = mStateValue[E_OFF];
+      mEnvelopeValue = getStateValue(E_OFF);
       calculateMultiplier(mEnvelopeValue, 1.0, mNextStateIndex);
       break;
     case E_DECAY:
       mEnvelopeValue = 1.0;
-      calculateMultiplier(mEnvelopeValue, mStateValue[E_SUSTAIN], mNextStateIndex);
+      calculateMultiplier(mEnvelopeValue, getStateValue(E_SUSTAIN), mNextStateIndex);
       break;
     case E_SUSTAIN:
-      mEnvelopeValue = mStateValue[E_SUSTAIN];
+      mEnvelopeValue = getStateValue(E_SUSTAIN);
       break;
     case E_RELEASE:
-      calculateMultiplier(mEnvelopeValue, mStateValue[E_OFF], mNextStateIndex);
+      calculateMultiplier(mEnvelopeValue, getStateValue(E_OFF), mNextStateIndex);
       break;
   }  
+}
+
+double Envelope::getStateValue(EnvelopeState state) {
+  // This assumes that parameters are ordered
+  if (state == E_OFF) {
+    return 0.00001;
+  } else {
+    return getParameter(state);
+  }
 }
 
 /**
@@ -147,19 +156,6 @@ void Envelope::setReleaseTime(double releaseTime) {
  */
 void Envelope::setSustainLevel(double level) {
   setParameter(SUSTAIN, level);
-}
-
-void Envelope::parameterUpdate(unsigned id) {
-  switch (id) {
-  case ATTACK:
-    mStateValue[E_ATTACK] = getParameter(id);
-  case DECAY:
-    mStateValue[E_DECAY] = getParameter(id);
-  case SUSTAIN:
-    mStateValue[E_SUSTAIN] = getParameter(id);
-  case RELEASE:
-    mStateValue[E_RELEASE] = getParameter(id);
-  }
 }
 
 }

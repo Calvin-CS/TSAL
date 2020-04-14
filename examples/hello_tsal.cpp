@@ -23,6 +23,10 @@ int main() {
   // Synth synth;
   // synth.setMode(Oscillator::SAW);
   synth.setPanning(-0.8);
+  synth.setParameter(PolySynth::MODULATION_MODE, Oscillator::PM);
+  synth.setParameter(PolySynth::ENV_ATTACK, 5.0);
+  // synth.setParameter(PolySynth::ENV_SUSTAIN, 1.0);
+  synth.setParameter(PolySynth::ENV_RELEASE, 10.0);
   synth.setParameter(PolySynth::OSC1_MODE, Oscillator::SINE);
   synth.setParameter(PolySynth::OSC2_MODE, Oscillator::SINE);
   
@@ -31,18 +35,18 @@ int main() {
   
   // Play a note on the synth
   synth.play(C4);
-  Util::thread_sleep(500);
+  Util::thread_sleep(1500);
   synth.stop(C4);
-  Util::thread_sleep(500);
+  Util::thread_sleep(5000);
 
   // synth.setParameter(PolySynth::OSC1_MODE, Oscillator::SQUARE);
   // synth.setParameter(PolySynth::OSC2_MODE, Oscillator::SAW);
-  synth.setParameter(PolySynth::MODULATION_MODE, Oscillator::AM);
+  // synth.setParameter(PolySynth::MODULATION_MODE, Oscillator::AM);
 
   synth.play(E4);
   Util::thread_sleep(500);
   synth.stop(E4);
-  Util::thread_sleep(500);
+  Util::thread_sleep(1500);
   // synth.play(G4);
   // synth.play(B4);
   
