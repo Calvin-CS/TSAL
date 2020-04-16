@@ -20,15 +20,11 @@ namespace tsal {
 class Envelope : public OutputDevice, public ParameterManager {
   public:
     Envelope() :
-      ParameterManager({
-                        { .name="Attack", .min=0.0, .max=100.0, .defaultValue=0.01, .exclusiveMin=true },
-                        { .name="Decay", .min=0.0, .max=100.0, .defaultValue=0.5, .exclusiveMin=true},
-                        { .name="Sustain", .min=0.0, .max=1.0, .defaultValue=0.5 },
-                        { .name="Release", .min=0.0, .max=100.0, .defaultValue=2.0, .exclusiveMin=true},
-        })
+      ParameterManager(std::vector<Parameter>(ParameterDefs, ParameterDefs + 4))
     {
-      setEnvelope(0.5, 0.5, 0.5, 5.0);
+      setEnvelope(0.0, 0.5, 0.5, 1.0);
     };
+    static Parameter ParameterDefs[];
     enum Parameters {
                      ATTACK,
                      DECAY,

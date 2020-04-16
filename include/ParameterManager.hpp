@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <cmath>
 
+
 #define EXCLUSIVE 0.0001
 
 namespace tsal {

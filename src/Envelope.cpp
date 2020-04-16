@@ -2,6 +2,13 @@
 
 namespace tsal {
 
+ParameterManager::Parameter Envelope::ParameterDefs[] =
+  {
+   { .name="Attack", .min=0.0, .max=100.0, .defaultValue=0.01, .exclusiveMin=true },
+   { .name="Decay", .min=0.0, .max=100.0, .defaultValue=0.5, .exclusiveMin=true},
+   { .name="Sustain", .min=0.0, .max=1.0, .defaultValue=0.5 },
+   { .name="Release", .min=0.0, .max=100.0, .defaultValue=2.0, .exclusiveMin=true},
+};
 /**
  * @brief Increments the current state
  * 
@@ -36,7 +43,7 @@ void Envelope::updateState() {
 double Envelope::getStateValue(EnvelopeState state) {
   // This assumes that parameters are ordered
   if (state == E_OFF) {
-    return 0.00001;
+    return 0.0001;
   } else {
     return getParameter(state);
   }
@@ -116,10 +123,10 @@ bool Envelope::stateIsTimed() {
  * @param releaseTime
  */
 void Envelope::setEnvelope(double attackTime, double decayTime, double sustainLevel, double releaseTime) {
-  setAttackTime(attackTime);
-  setDecayTime(decayTime);
-  setSustainLevel(sustainLevel);
-  setReleaseTime(releaseTime);
+  setParameter(ATTACK, attackTime);
+  setParameter(DECAY, decayTime);
+  setParameter(SUSTAIN, sustainLevel);
+  setParameter(RELEASE, releaseTime);
 }
 
 /**

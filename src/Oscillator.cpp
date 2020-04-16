@@ -13,7 +13,7 @@ double Oscillator::getSample() {
   const ModulationMode modulationMode = (ModulationMode) getParameterInt(MODULATION_MODE);
   double phase = mPhase;
   double output = 0.0;
-
+  
   if (modulationMode == PM) {
     phase += modulation;
   }
@@ -38,6 +38,7 @@ double Oscillator::getSample() {
   } else if (modulationMode == MIX) {
     output = (output + modulation) / 2.0;
   }
+  
 
   mPhase += mPhaseStep;  
   while (mPhase >= PI2)

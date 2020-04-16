@@ -24,8 +24,7 @@ int main() {
   // synth.setMode(Oscillator::SAW);
   synth.setPanning(-0.8);
   synth.setParameter(PolySynth::MODULATION_MODE, Oscillator::PM);
-  synth.setParameter(PolySynth::ENV_ATTACK, 5.0);
-  // synth.setParameter(PolySynth::ENV_SUSTAIN, 1.0);
+  synth.setParameter(PolySynth::ENV_ATTACK, 1.0);
   synth.setParameter(PolySynth::ENV_RELEASE, 10.0);
   synth.setParameter(PolySynth::OSC1_MODE, Oscillator::SINE);
   synth.setParameter(PolySynth::OSC2_MODE, Oscillator::SINE);

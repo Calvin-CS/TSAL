@@ -29,9 +29,10 @@ class Oscillator : public OutputDevice, public ParameterManager {
                      FREQUENCY,
     };
     enum ModulationMode {
-                     MIX = 0,
-                     AM, // Amplitude modulation
-                     PM, // Phaser modulation
+                         NONE = 0,
+                         MIX,
+                         AM, // Amplitude modulation
+                         PM, // Phaser modulation
     };
     /**
      * @brief Modes for the oscillator 
@@ -65,7 +66,6 @@ class Oscillator : public OutputDevice, public ParameterManager {
   private:
     double polyBLEP(double t);
     
-
     double mPhase = 0.0;
     double mPhaseStep = 0.0;
 
