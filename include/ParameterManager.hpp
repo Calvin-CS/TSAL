@@ -43,6 +43,8 @@ class ParameterManager {
     std::string getParameterName(unsigned id) const { return mParameters[id].name; };
     Parameter& getParameterData(unsigned id) { return mParameters[id]; };
     double* getParameterPointer(unsigned id) { return &(mParameters[id].value); };
+    template <typename T>
+    T getParameter(unsigned id) { return static_cast<T>(getParameter(id)); };
     int getParameterInt(unsigned id) { return std::round(getParameter(id)); };
     double getParameter(unsigned id) {
       auto& param = mParameters[id];

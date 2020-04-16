@@ -21,18 +21,19 @@ int main() {
   // Create the synthesizer object
   PolySynth synth;
   PolySynth synth2;
-  Delay de;
-  de.setParameter(Delay::FEEDBACK, 0.3);
-  mixer.add(de);
+  Delay delay;
+  delay.setParameter(Delay::FEEDBACK, 0.3);
+  mixer.add(delay);
   // Synth synth;
   // synth.setMode(Oscillator::SAW);
   synth.setPanning(-0.8);
-  synth.setParameter(PolySynth::MODULATION_MODE, Oscillator::AM);
+  synth.setParameter(PolySynth::MODULATION_MODE, Oscillator::MIX);
+  synth.setVolume(0.2);
   // synth.setParameter(PolySynth::OSC2_OFFSET, 0.2);
-  // synth.setParameter(PolySynth::ENV_ATTACK, 0.1);
-  synth.setParameter(PolySynth::ENV_RELEASE, 10.0);
+  synth.setParameter(PolySynth::ENV_ATTACK, 0.1);
+  // synth.setParameter(PolySynth::ENV_RELEASE, 10.0);
   synth.setParameter(PolySynth::OSC1_MODE, Oscillator::SINE);
-  synth.setParameter(PolySynth::OSC2_MODE, Oscillator::SINE);
+  synth.setParameter(PolySynth::OSC2_MODE, Oscillator::SQUARE);
   
   // Add the synth to the mixer
   mixer.add(synth);
