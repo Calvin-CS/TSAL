@@ -11,7 +11,7 @@ double Oscillator::getSample() {
   const double t = mPhase / PI2;
   const double modulation = getParameter(MODULATION);
   const ModulationMode modulationMode = (ModulationMode) getParameterInt(MODULATION_MODE);
-  double phase = mPhase;
+  double phase = mPhase + (getParameter(PHASE_OFFSET) * PI2);
   double output = 0.0;
   
   if (modulationMode == PM) {

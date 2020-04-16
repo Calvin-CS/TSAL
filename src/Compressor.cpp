@@ -22,9 +22,8 @@ void Compressor::getOutput(AudioBuffer<float> &buffer) {
 
 void Compressor::updateContext(const Context& context) {
   OutputDevice::updateContext(context);
-  // Do this better
-  setAttackTime(1.0);
-  setReleaseTime(1500.0);
+  parameterUpdate(ATTACK);
+  parameterUpdate(RELEASE);
 }
 
 /**
@@ -53,11 +52,11 @@ void Compressor::getEnvelope(AudioBuffer<float> &buffer) {
  * 
  */
 void Compressor::filterAudio(AudioBuffer<float> &buffer) {
-  double postGainAmp = Util::dbToAmp(mPostGain);
+  double postGainAmp = Util::dbToAmp(getParameter(POST_GAIN));
 
   // If there is any pregain, apply it to the audio buffer
-  if (mPreGain != 0.0) {
-    double preGainAmp = Util::dbToAmp(mPreGain);
+  if (getParameter(PRE_GAIN) != 0.0) {
+    double preGainAmp = Util::dbToAmp(getParameter(PRE_GAIN));
     for (unsigned i = 0; i < buffer.size(); i++) {
       buffer[i] *= preGainAmp;
     }
@@ -70,7 +69,7 @@ void Compressor::filterAudio(AudioBuffer<float> &buffer) {
   const auto frames = buffer.getFrameCount();
   // Apply the adjusted gain and postGain to the audio buffer
   for (unsigned long i = 0; i < frames; i++) {
-    mGain = mSlope * (mThreshold - Util::ampToDb(mEnvelope[i]));
+    mGain = mSlope * (getParameter(THRESHOLD) - Util::ampToDb(mEnvelope[i]));
     mGain = std::min(0.0, mGain);
     mGain = Util::dbToAmp(mGain);
     for (unsigned j = 0; j < channels; j++) {
@@ -85,7 +84,7 @@ void Compressor::filterAudio(AudioBuffer<float> &buffer) {
  * 
  */
 void Compressor::calculateSlope() {
-  mSlope = 1.0 - (1.0 / mRatio);
+  mSlope = 1.0 - (1.0 / getParameter(RATIO));
 }
 
 /**
@@ -94,8 +93,7 @@ void Compressor::calculateSlope() {
  * @param attackTime
  */
 void Compressor::setAttackTime(double attackTime) {
-  attackTime = Util::checkParameterRange("Compressor: AttackTime", attackTime, mAttackTimeRange);
-  mAttackGain = attackTime == 0.0 ? 0.0 : std::exp(-1.0 / (mContext.getSampleRate() * attackTime/1000));
+  setParameter(ATTACK, attackTime);
 }
 
 /**
@@ -104,8 +102,7 @@ void Compressor::setAttackTime(double attackTime) {
  * @param releaseTime 
  */
 void Compressor::setReleaseTime(double releaseTime) {
-  releaseTime = Util::checkParameterRange("Compressor: ReleaseTime", releaseTime, mReleaseTimeRange);
-  mReleaseGain = releaseTime == 0.0 ? 0.0 : std::exp(-1.0 / (mContext.getSampleRate() * releaseTime/1000));
+  setParameter(RELEASE, releaseTime);
 }
 
 /**
@@ -114,7 +111,7 @@ void Compressor::setReleaseTime(double releaseTime) {
  * @param threshold (dB)
  */
 void Compressor::setThreshold(double threshold) {
-  mThreshold = Util::checkParameterRange("Compressor: Threshold", threshold, mThresholdRange);
+  setParameter(THRESHOLD, threshold);
 }
 
 /**
@@ -123,7 +120,7 @@ void Compressor::setThreshold(double threshold) {
  * @param ratio (1: n)
  */
 void Compressor::setRatio(double ratio) {
-  mRatio = Util::checkParameterRange("Compressor: Ratio", ratio, mRatioRange); 
+  setParameter(RATIO, ratio);
 }
 
 /**
@@ -132,7 +129,7 @@ void Compressor::setRatio(double ratio) {
  * @param preGain (dB)
  */
 void Compressor::setPreGain(double preGain) {
-  mPreGain = Util::checkParameterRange("Compressor: PreGain", preGain, mGainRange);
+  setParameter(PRE_GAIN, preGain);
 }
 
 /**
@@ -141,12 +138,18 @@ void Compressor::setPreGain(double preGain) {
  * @param postGain (dB)
  */
 void Compressor::setPostGain(double postGain) {
-  mPostGain = Util::checkParameterRange("Compressor: PostGain", postGain, mGainRange);
+  setParameter(POST_GAIN, postGain);
 }
 
-Util::ParameterRange<double> Compressor::mAttackTimeRange = std::make_pair(0.0, 2000.0);
-Util::ParameterRange<double> Compressor::mReleaseTimeRange = std::make_pair(0.0, 2000.0);
-Util::ParameterRange<double> Compressor::mThresholdRange = std::make_pair(-60.0, 0.0);
-Util::ParameterRange<double> Compressor::mRatioRange = std::make_pair(1.0, 20.0);
-Util::ParameterRange<double> Compressor::mGainRange = std::make_pair(-30.0, 30.0);
+void Compressor::parameterUpdate(unsigned id) {
+  switch(id) {
+  case ATTACK:
+    mAttackGain = getParameter(id) == 0.0 ? 0.0 : std::exp(-1.0 / (mContext.getSampleRate() * getParameter(id)/1000));
+    break;
+  case RELEASE:
+    mReleaseGain = getParameter(id) == 0.0 ? 0.0 : std::exp(-1.0 / (mContext.getSampleRate() * getParameter(id)/1000));
+    break;
+  }
+}
+
 }

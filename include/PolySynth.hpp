@@ -29,13 +29,15 @@ class PolySynth : public Instrument, public ParameterManager {
     };
     PolySynth() :
       ParameterManager({
-                        { .name="Osc1Mode", .min=0.0, .max=2.0, .defaultValue=1.0 },
-                        { .name="Osc2Mode", .min=0.0, .max=2.0, .defaultValue=1.0 },
-                        { .name="ModulationMode", .min=0.0, .max=2.0, .defaultValue=0.0 },
-                        { .name="EnvAttack", .min=0.0, .max=100.0, .defaultValue=0.1, .exclusiveMin=true },
-                        { .name="EnvDecay", .min=0.0, .max=100.0, .defaultValue=0.5, .exclusiveMin=true},
-                        { .name="EnvSustain", .min=0.0, .max=1.0, .defaultValue=0.5 },
-                        { .name="EnvRelease", .min=0.0, .max=100.0, .defaultValue=2.0, .exclusiveMin=true},
+                        { .name="Osc1 Mode", .min=0.0, .max=2.0, .defaultValue=0.0 },
+                        { .name="Osc2 Mode", .min=0.0, .max=2.0, .defaultValue=0.0 },
+                        { .name="Osc2 Offset", .min=0.0, .max=1.0, .defaultValue=0.0},
+                        { .name="Modulation Mode", .min=0.0, .max=3.0, .defaultValue=0.0 },
+                        { .name="Env Attack", .min=0.0, .max=100.0, .defaultValue=0.1, .exclusiveMin=true },
+                        // Envelope::ParameterDefs[Envelope::ATTACK],
+                        { .name="Env Decay", .min=0.0, .max=100.0, .defaultValue=0.5, .exclusiveMin=true},
+                        { .name="Env Sustain", .min=0.0, .max=1.0, .defaultValue=0.5 },
+                        { .name="Env Release", .min=0.0, .max=100.0, .defaultValue=2.0, .exclusiveMin=true},
         }),
       mVoices(NUM_VOICES, Voice())
     {
@@ -43,8 +45,8 @@ class PolySynth : public Instrument, public ParameterManager {
         voice.setActive(false);
         voice.mOsc1.connectParameter(Oscillator::OSCILLATOR_MODE, getParameterPointer(OSC1_MODE));
         voice.mOsc2.connectParameter(Oscillator::OSCILLATOR_MODE, getParameterPointer(OSC2_MODE));
-        voice.mOsc1.connectParameter(Oscillator::MODULATION_MODE, getParameterPointer(MODULATION_MODE));
-        std::cout << getParameter(ENV_ATTACK) << std::endl;
+        voice.mOsc1.connectParameter(Oscillator::MODULATION_MODE, getParameterPointer(PolySynth::MODULATION_MODE));
+        voice.mOsc2.connectParameter(Oscillator::PHASE_OFFSET, getParameterPointer(OSC2_OFFSET));
         voice.mEnvelope.connectParameter(Envelope::ATTACK, getParameterPointer(ENV_ATTACK));
         voice.mEnvelope.connectParameter(Envelope::DECAY, getParameterPointer(ENV_DECAY));
         voice.mEnvelope.connectParameter(Envelope::SUSTAIN, getParameterPointer(ENV_SUSTAIN));
@@ -54,6 +56,7 @@ class PolySynth : public Instrument, public ParameterManager {
     enum Parameters {
                      OSC1_MODE = 0,
                      OSC2_MODE,
+                     OSC2_OFFSET,
                      MODULATION_MODE,
                      ENV_ATTACK,
                      ENV_DECAY,
@@ -67,7 +70,7 @@ class PolySynth : public Instrument, public ParameterManager {
     PolySynth& operator=(const PolySynth& synth);
     virtual void updateContext(const Context& context) override;
   protected:
-    virtual void parameterUpdate(unsigned id) override;
+    virtual void parameterUpdate(unsigned id) override {};
   private:
     class Voice : public Instrument {
       public:

@@ -22,7 +22,6 @@ class Envelope : public OutputDevice, public ParameterManager {
     Envelope() :
       ParameterManager(std::vector<Parameter>(ParameterDefs, ParameterDefs + 4))
     {
-      setEnvelope(0.0, 0.5, 0.5, 1.0);
     };
     static Parameter ParameterDefs[];
     enum Parameters {

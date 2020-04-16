@@ -20,27 +20,34 @@ int main() {
   
   // Create the synthesizer object
   PolySynth synth;
+  PolySynth synth2;
   // Synth synth;
   // synth.setMode(Oscillator::SAW);
   synth.setPanning(-0.8);
-  synth.setParameter(PolySynth::MODULATION_MODE, Oscillator::PM);
-  synth.setParameter(PolySynth::ENV_ATTACK, 1.0);
+  synth.setParameter(PolySynth::MODULATION_MODE, Oscillator::AM);
+  // synth.setParameter(PolySynth::OSC2_OFFSET, 0.2);
+  // synth.setParameter(PolySynth::ENV_ATTACK, 0.1);
   synth.setParameter(PolySynth::ENV_RELEASE, 10.0);
   synth.setParameter(PolySynth::OSC1_MODE, Oscillator::SINE);
   synth.setParameter(PolySynth::OSC2_MODE, Oscillator::SINE);
   
   // Add the synth to the mixer
   mixer.add(synth);
+  mixer.add(synth2);
   
+  synth2.play(C4);
+  synth2.setParameter(PolySynth::MODULATION_MODE, Oscillator::MIX);
+  synth2.setVolume(0.5);
   // Play a note on the synth
-  synth.play(C4);
+  synth.play(E4);
   Util::thread_sleep(1500);
-  synth.stop(C4);
+  synth.stop(E4);
   Util::thread_sleep(5000);
 
   // synth.setParameter(PolySynth::OSC1_MODE, Oscillator::SQUARE);
+  // synth.setParameter(PolySynth::OSC2_OFFSET, 0.0);
   // synth.setParameter(PolySynth::OSC2_MODE, Oscillator::SAW);
-  // synth.setParameter(PolySynth::MODULATION_MODE, Oscillator::AM);
+  synth.setParameter(PolySynth::MODULATION_MODE, Oscillator::PM);
 
   synth.play(E4);
   Util::thread_sleep(500);

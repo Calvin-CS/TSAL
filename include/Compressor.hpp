@@ -3,6 +3,7 @@
 
 #include "Effect.hpp"
 #include "Util.hpp"
+#include "ParameterManager.hpp"
 #include <vector>
 
 /*
@@ -20,9 +21,26 @@ namespace tsal {
  * compressor is louder than the compressors threshold, it will reduce the loudness.
  * Implementation adapted from https://christianfloisand.wordpress.com/2014/06/09/dynamics-processing-compressorlimiter-part-1/
  */
-class Compressor : public Effect {
+class Compressor : public Effect, public ParameterManager {
   public:
-    Compressor() : mEnvelope(COMPRESSOR_MAX_BUFFER) {}
+    Compressor() :
+      ParameterManager({
+                        { .name="Attack", .min=0.0, .max=2000.0, .defaultValue=0.0},
+                        { .name="Release", .min=0.0, .max=2000.0, .defaultValue=0.0 },
+                        { .name="Threshold", .min=-60.0, .max=60.0, .defaultValue=-30.0 },
+                        { .name="Ratio", .min=1.0, .max=20.0, .defaultValue=2.0 },
+                        { .name="Pre Gain", .min=-30.0, .max=30.0, .defaultValue=0.0 },
+                        { .name="Post Gain", .min=-30.0, .max=30.0, .defaultValue=0.0 },
+          }),
+      mEnvelope(COMPRESSOR_MAX_BUFFER) {};
+    enum Parameters {
+                     ATTACK=0,
+                     RELEASE,
+                     THRESHOLD,
+                     RATIO,
+                     PRE_GAIN,
+                     POST_GAIN,
+    };
     virtual void getOutput(AudioBuffer<float>& buffer) override;
     virtual void updateContext(const Context& context) override;
     void setAttackTime(double attackTime);
@@ -31,7 +49,8 @@ class Compressor : public Effect {
     void setRatio(double ratio);
     void setPreGain(double preGain);
     void setPostGain(double postGain);
-
+  protected:
+    virtual void parameterUpdate(unsigned id) override;
   private:
     void filterAudio(AudioBuffer<float>& buffer);
     void getEnvelope(AudioBuffer<float>& buffer);
@@ -44,17 +63,6 @@ class Compressor : public Effect {
     double mGain = 0.0;
     double mAttackGain = 0.0;
     double mReleaseGain = 0.0;
-
-    double mThreshold = -30.0;
-    double mRatio = 2.0;
-    double mPreGain = 6.0;
-    double mPostGain = 0.0;
-
-    static Util::ParameterRange<double> mAttackTimeRange;
-    static Util::ParameterRange<double> mReleaseTimeRange;
-    static Util::ParameterRange<double> mThresholdRange;
-    static Util::ParameterRange<double> mRatioRange;
-    static Util::ParameterRange<double> mGainRange;
 };
 
 }

@@ -104,23 +104,6 @@ PolySynth& PolySynth::operator=(const PolySynth& synth) {
   return *this;
 }
 
-
-void PolySynth::parameterUpdate(unsigned id) {
-  for (auto& voice : mVoices) {
-    switch (id) {
-    // case OSC1_MODE:
-    //   voice.mOsc1.setMode((Oscillator::OscillatorMode) getParameterInt(id));
-    //   break;
-    // case OSC2_MODE:
-    //   voice.mOsc2.setMode((Oscillator::OscillatorMode) getParameterInt(id));
-    //   break;
-    case MODULATION_MODE:
-      voice.mModulationMode = (Oscillator::ModulationMode) getParameterInt(id);
-      break;
-    }
-  }
-};
-
 double PolySynth::Voice::getSample() {
   mOsc1.setParameter(Oscillator::MODULATION, mOsc2.getSample());
   return mFilter.process(mOsc1.getSample() *
