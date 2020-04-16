@@ -21,6 +21,9 @@ int main() {
   // Create the synthesizer object
   PolySynth synth;
   PolySynth synth2;
+  Delay de;
+  de.setParameter(Delay::FEEDBACK, 0.3);
+  mixer.add(de);
   // Synth synth;
   // synth.setMode(Oscillator::SAW);
   synth.setPanning(-0.8);
