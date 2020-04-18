@@ -31,6 +31,9 @@ double Oscillator::getSample() {
       output += polyBLEP(t); // Layer output of Poly BLEP on top (flip)
       output -= polyBLEP(fmod(t + 0.5, 1.0)); // Layer output of Poly BLEP on top (flop)
       break;
+    case WHITE_NOISE:
+      output = Util::random() * 2 - 1;
+      break;
   }
 
   if (modulationMode == AM) {

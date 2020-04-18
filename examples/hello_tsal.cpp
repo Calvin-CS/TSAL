@@ -27,13 +27,14 @@ int main() {
   // Synth synth;
   // synth.setMode(Oscillator::SAW);
   synth.setPanning(-0.8);
-  synth.setParameter(PolySynth::MODULATION_MODE, Oscillator::MIX);
-  synth.setVolume(0.2);
+  synth.setParameter(PolySynth::MODULATION_MODE, Oscillator::AM);
+  synth.setVolume(0.1);
   // synth.setParameter(PolySynth::OSC2_OFFSET, 0.2);
   synth.setParameter(PolySynth::ENV_ATTACK, 0.1);
   // synth.setParameter(PolySynth::ENV_RELEASE, 10.0);
   synth.setParameter(PolySynth::OSC1_MODE, Oscillator::SINE);
-  synth.setParameter(PolySynth::OSC2_MODE, Oscillator::SQUARE);
+  synth.setParameter(PolySynth::OSC2_MODE, Oscillator::WHITE_NOISE);
+  // synth.setParameter(PolySynth::OSC2_MODE, Oscillator::WHITE_NOISE);
   
   // Add the synth to the mixer
   mixer.add(synth);

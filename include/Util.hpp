@@ -4,6 +4,7 @@
 #include "Timing.hpp"
 #include <iostream>
 #include <algorithm>
+#include <random>
 #define _USE_MATH_DEFINES
 #include <cmath>
 #define PI2 (M_PI * 2)
@@ -21,6 +22,7 @@ namespace tsal {
  */
 class Util {
   public:
+    static double random() { return mDist(mGen); };
     static double ampToDb(double amplitude);
     static double dbToAmp(double db);
     static double volumeToDb(double volume);
@@ -60,6 +62,8 @@ class Util {
     static T checkParameterRangeHiddenCeiling(const std::string& name, T value, ParameterRange<T> range, T ceiling) {
       return std::min(Util::checkParameterRange(name, value, range), ceiling);
     }
+    static std::mt19937 mGen;
+    static std::uniform_real_distribution<> mDist;
 };
 
 

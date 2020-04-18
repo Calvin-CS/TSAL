@@ -1,4 +1,5 @@
 #include "Util.hpp"
+#include <random>
 
 namespace tsal {
 
@@ -21,5 +22,10 @@ double Util::volumeToDb(double volume) {
 double Util::dbToVolume(double db) {
   return std::pow(10.0, db / 33.22);
 }
+
+
+std::random_device rd;
+std::mt19937 Util::mGen(rd());
+std::uniform_real_distribution<> Util::mDist(0.0, 1.0);
 
 }
