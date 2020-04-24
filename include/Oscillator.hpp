@@ -15,14 +15,12 @@ namespace tsal {
 class Oscillator : public OutputDevice, public ParameterManager {
   public:
     Oscillator() :
-      ParameterManager({
-                        { .name="Oscillator Mode", .min=0.0, .max=3.0, .defaultValue=0.0 },
-                        { .name="Modulation Mode", .min=0.0, .max=3.0, .defaultValue=0.0 },
-                        { .name="Modulation", .min=-1.0, .max=1.0, .defaultValue=0.0 },
-                        { .name="Frequency", .min=0.0, .max=1000.0, .defaultValue=1.0 },
-                        { .name="Phase Offset", .min=0.0, .max=1.0, .defaultValue=0.0 },
-        }){
+      ParameterManager(OscillatorParameters) {};
+    Oscillator(std::vector<Parameter> parameters) :
+      ParameterManager(OscillatorParameters) {
+      addParameters(parameters);
     };
+    static std::vector<Parameter> OscillatorParameters;
     enum Parameters {
                      OSCILLATOR_MODE = 0,
                      MODULATION_MODE,

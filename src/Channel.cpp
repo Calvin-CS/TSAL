@@ -1,8 +1,13 @@
 #include "Channel.hpp"
 
 namespace tsal {
-  
-Channel::Channel() {
+
+std::vector<ParameterManager::Parameter> Channel::ChannelParameters
+({
+ });
+
+Channel::Channel() :
+  ParameterManager(ChannelParameters) {
   mChannelIn.add(mRoutedInstruments);
   mChannelIn.add(mRoutedChannels);
 }

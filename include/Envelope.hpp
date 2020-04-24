@@ -20,10 +20,12 @@ namespace tsal {
 class Envelope : public OutputDevice, public ParameterManager {
   public:
     Envelope() :
-      ParameterManager(std::vector<Parameter>(ParameterDefs, ParameterDefs + 4))
-    {
-    };
-    static Parameter ParameterDefs[];
+      ParameterManager(EnvelopeParameters) {};
+    Envelope(std::vector<Parameter> parameters) :
+      ParameterManager(EnvelopeParameters) {
+      addParameters(parameters);
+    }
+    static std::vector<Parameter> EnvelopeParameters;
     enum Parameters {
                      ATTACK,
                      DECAY,

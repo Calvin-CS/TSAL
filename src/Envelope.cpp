@@ -2,13 +2,13 @@
 
 namespace tsal {
 
-ParameterManager::Parameter Envelope::ParameterDefs[] =
-  {
-   { .name="Attack", .min=0.0, .max=100.0, .defaultValue=0.0, .exclusiveMin=true },
-   { .name="Decay", .min=0.0, .max=100.0, .defaultValue=0.5, .exclusiveMin=true},
-   { .name="Sustain", .min=0.0, .max=1.0, .defaultValue=0.5 },
-   { .name="Release", .min=0.0, .max=100.0, .defaultValue=2.0, .exclusiveMin=true},
-};
+std::vector<ParameterManager::Parameter> Envelope::EnvelopeParameters
+({
+  { .name="Attack", .min=0.0, .max=100.0, .defaultValue=0.0, .exclusiveMin=true },
+  { .name="Decay", .min=0.0, .max=100.0, .defaultValue=0.5, .exclusiveMin=true},
+  { .name="Sustain", .min=0.0, .max=1.0, .defaultValue=0.5 },
+  { .name="Release", .min=0.0, .max=100.0, .defaultValue=2.0, .exclusiveMin=true},
+});
 /**
  * @brief Increments the current state
  * 

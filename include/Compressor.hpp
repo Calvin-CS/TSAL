@@ -21,20 +21,20 @@ namespace tsal {
  * compressor is louder than the compressors threshold, it will reduce the loudness.
  * Implementation adapted from https://christianfloisand.wordpress.com/2014/06/09/dynamics-processing-compressorlimiter-part-1/
  */
-class Compressor : public Effect, public ParameterManager {
+class Compressor : public Effect {
   public:
     Compressor() :
-      ParameterManager({
-                        { .name="Attack", .min=0.0, .max=2000.0, .defaultValue=0.0},
-                        { .name="Release", .min=0.0, .max=2000.0, .defaultValue=0.0 },
-                        { .name="Threshold", .min=-60.0, .max=60.0, .defaultValue=-30.0 },
-                        { .name="Ratio", .min=1.0, .max=20.0, .defaultValue=2.0 },
-                        { .name="Pre Gain", .min=-30.0, .max=30.0, .defaultValue=0.0 },
-                        { .name="Post Gain", .min=-30.0, .max=30.0, .defaultValue=0.0 },
-          }),
+      Effect(CompressorParameters),
       mEnvelope(COMPRESSOR_MAX_BUFFER) {};
+    Compressor(std::vector<Parameter> parameters) :
+      Effect(CompressorParameters),
+      mEnvelope(COMPRESSOR_MAX_BUFFER) {
+      addParameters(parameters);
+    };
+    static std::vector<Parameter> CompressorParameters;
     enum Parameters {
-                     ATTACK=0,
+                     WET_DRY=0,
+                     ATTACK,
                      RELEASE,
                      THRESHOLD,
                      RATIO,

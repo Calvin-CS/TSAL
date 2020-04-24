@@ -2,6 +2,12 @@
 
 namespace tsal {
 
+std::vector<ParameterManager::Parameter> Delay::DelayParameters
+({
+  { .name="Delay", .min=0.0, .max=5.0, .defaultValue=1.0 },
+  { .name="Feedback", .min=0.0, .max=1.0, .defaultValue=0.5 }
+});
+
 void Delay::updateContext(const Context& context) {
   OutputDevice::updateContext(context);
   // Update context dependent parameters 
@@ -21,8 +27,8 @@ void Delay::getOutput(AudioBuffer<float> &buffer) {
     if (offset < 0) offset = mBuffer.size() + offset;
 
     for (unsigned j = 0; j < channels; j++) {
-      double const output = mBuffer[offset];
-      double const bufferValue = buffer[i * channels + j] + output * getParameter(FEEDBACK);
+      const double output = mBuffer[offset];
+      const double bufferValue = buffer[i * channels + j] + output * getParameter(FEEDBACK);
       mBuffer[mCounter++] = bufferValue;
       if (mCounter >= mBuffer.size()) {
         mCounter = 0;

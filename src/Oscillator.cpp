@@ -5,6 +5,14 @@
 
 namespace tsal {
 
+std::vector<ParameterManager::Parameter> Oscillator::OscillatorParameters
+({
+  { .name="Oscillator Mode", .min=0.0, .max=3.0, .defaultValue=0.0 },
+  { .name="Modulation Mode", .min=0.0, .max=3.0, .defaultValue=0.0 },
+  { .name="Modulation", .min=-1.0, .max=1.0, .defaultValue=0.0 },
+  { .name="Frequency", .min=0.0, .max=1000.0, .defaultValue=1.0 },
+  { .name="Phase Offset", .min=0.0, .max=1.0, .defaultValue=0.0 },
+});
 // Helpful implementation of ployBLEP to reduce aliasing
 // http://metafunction.co.uk/all-about-digital-oscillators-part-2-blits-bleps/
 double Oscillator::getSample() {

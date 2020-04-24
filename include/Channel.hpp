@@ -4,6 +4,7 @@
 #include "EffectChain.hpp"
 #include "Instrument.hpp"
 #include "OutputDevice.hpp"
+#include "ParameterManager.hpp"
 
 namespace tsal {
 
@@ -14,10 +15,11 @@ namespace tsal {
  * Instruments, effects, and channels can all be added to a channel. The mixer has one default master channel
  * but more channels can be added to the mixer to increase flexibility
  */
-class Channel : public ChannelDevice {
+class Channel : public ChannelDevice, public ParameterManager {
   public:
     Channel();
     virtual ~Channel();
+    static std::vector<Parameter> ChannelParameters;
     virtual void getOutput(AudioBuffer<float> &buffer) override;
     virtual void updateContext(const Context& context) override;
     virtual void setParentChannel(Channel* channel) override;

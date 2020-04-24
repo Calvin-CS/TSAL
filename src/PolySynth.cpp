@@ -1,7 +1,18 @@
 #include "PolySynth.hpp"
-#include "ParameterManager.hpp"
 
 namespace tsal {
+
+std::vector<ParameterManager::Parameter> PolySynth::PolySynthParameters
+({
+  { .name="Osc1 Mode", .min=0.0, .max=3.0, .defaultValue=0.0 },
+  { .name="Osc2 Mode", .min=0.0, .max=3.0, .defaultValue=0.0 },
+  { .name="Osc2 Offset", .min=0.0, .max=1.0, .defaultValue=0.0},
+  { .name="Modulation Mode", .min=0.0, .max=3.0, .defaultValue=0.0 },
+  { .name="Env Attack", .min=0.0, .max=100.0, .defaultValue=0.1, .exclusiveMin=true },
+  { .name="Env Decay", .min=0.0, .max=100.0, .defaultValue=0.5, .exclusiveMin=true},
+  { .name="Env Sustain", .min=0.0, .max=1.0, .defaultValue=0.5 },
+  { .name="Env Release", .min=0.0, .max=100.0, .defaultValue=2.0, .exclusiveMin=true},
+});
 
 void PolySynth::getOutput(AudioBuffer<float> &buffer) {
   if (!mActive) {

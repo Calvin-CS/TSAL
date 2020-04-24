@@ -1,7 +1,11 @@
 #include "Effect.hpp"
 #include "Channel.hpp"
-
 namespace tsal {
+
+std::vector<ParameterManager::Parameter> Effect::EffectParameters
+({
+  { .name="Wet/Dry", .min=0.0, .max=1.0, .defaultValue=1.0 },
+ });
 
 Effect::~Effect() {
   if (mParentChannel != nullptr)

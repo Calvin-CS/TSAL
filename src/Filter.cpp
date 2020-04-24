@@ -2,6 +2,13 @@
 
 namespace tsal {
 
+std::vector<ParameterManager::Parameter> Filter::FilterParameters
+({
+  { .name="Filter Mode", .min=0.0, .max=2.0, .defaultValue=LOWPASS },
+  { .name="Cutoff", .min=0.0, .max=1.0, .defaultValue=0.0, .exclusiveMax=true },
+    { .name="Resonance", .min=0.0, .max=1.0, .defaultValue=0.0 }
+});
+
 double Filter::process(double input) {
   // https://www.musicdsp.org/en/latest/Filters/131-cascaded-resonant-lp-hp-filter.html
   const double cutoff = getParameter(CUTOFF);

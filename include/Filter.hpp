@@ -12,12 +12,13 @@ namespace tsal {
 class Filter : public ParameterManager {
   public:
     Filter() :
-      ParameterManager({
-                        { .name="Filter Mode", .min=0.0, .max=2.0, .defaultValue=LOWPASS },
-                        { .name="Cutoff", .min=0.0, .max=1.0, .defaultValue=0.0, .exclusiveMax=true },
-                        { .name="Resonance", .min=0.0, .max=1.0, .defaultValue=0.0 },
-        }) {};
+      ParameterManager(FilterParameters) {};
+    Filter(std::vector<Parameter> parameters) :
+      ParameterManager(FilterParameters) {
+      addParameters(parameters);
+    }
 
+    static std::vector<Parameter> FilterParameters;
     enum Parameters {
                      FILTER_MODE=0,
                      CUTOFF,

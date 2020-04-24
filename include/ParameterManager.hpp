@@ -37,16 +37,10 @@ class ParameterManager {
         double* connection = NULL;
     };
     ParameterManager() = default;
-    ParameterManager(std::vector<Parameter>&& parameters) {
+    ParameterManager(std::vector<Parameter> parameters) {
       mParameters.swap(parameters);
       for (auto& param : mParameters) {
-        param.value = param.defaultValue;
-        if (param.exclusiveMax) {
-          param.max -= EXCLUSIVE;
-        }
-        if (param.exclusiveMin) {
-          param.min += EXCLUSIVE;
-        }
+        initializeParameter(param);
       }
     };
 
@@ -76,10 +70,25 @@ class ParameterManager {
         disconnectParameter(i);
       }
     }
+    size_t getParameterCount() { return mParameters.size(); };
   protected:
     virtual void parameterUpdate(unsigned id) {};
+    void addParameters(std::vector<Parameter> parameters) {
+      for (unsigned i = 0; i < parameters.size(); i++) {
+        mParameters.push_back(parameters[i]);
+        initializeParameter(mParameters.back());
+      }
+    }
   private:
-    
+    void initializeParameter(Parameter& parameter) {
+      parameter.value = parameter.defaultValue;
+      if (parameter.exclusiveMax) {
+        parameter.max -= EXCLUSIVE;
+      }
+      if (parameter.exclusiveMin) {
+        parameter.min += EXCLUSIVE;
+      }
+    }
     double getConnectedParameter(unsigned id) {
       setParameter(id, *(mParameters[id].connection));
       return mParameters[id].value;

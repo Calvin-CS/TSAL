@@ -5,6 +5,8 @@
 #include "OutputDevice.hpp"
 #include "RouteDevice.hpp"
 #include "Instrument.hpp"
+#include "ParameterManager.hpp"
+#include <algorithm>
 
 namespace tsal {
 
@@ -16,9 +18,19 @@ namespace tsal {
  * It processes the audio and then continues to pass it up the chain until the audio reaches
  * the end and it routed to the mixer
  */
-class Effect : public ChannelDevice {
+class Effect : public ChannelDevice, public ParameterManager {
   public:
+    Effect() :
+      ParameterManager(EffectParameters) {};
+    Effect(std::vector<Parameter> parameters) :
+      ParameterManager(EffectParameters) {
+      addParameters(parameters);
+    };
     ~Effect();
+    enum Parameters {
+                     WET_DRY = 0,
+    };
+    static std::vector<Parameter> EffectParameters;
     virtual void setParentChannel(Channel* channel) override;
 };
 

@@ -14,15 +14,18 @@ namespace tsal {
  * 
  * Adds a delay effect to audio input to achieve a more spacious sound
  */
-class Delay : public Effect, public ParameterManager {
+class Delay : public Effect {
   public:
     Delay() :
-      ParameterManager({
-                        { .name="Delay", .min=0.0, .max=5.0, .defaultValue=1.0 },
-                        { .name="Feedback", .min=0.0, .max=1.0, .defaultValue=0.5 }
-        }) {};
+      Effect(DelayParameters) {};
+    Delay(std::vector<Parameter> parameters) :
+      Effect(DelayParameters) {
+      addParameters(parameters);
+    };
+    static std::vector<Parameter> DelayParameters;
     enum Parameters {
-                     DELAY=0,
+                     WET_DRY=0,
+                     DELAY,
                      FEEDBACK,
     };
     virtual void updateContext(const Context& context) override;

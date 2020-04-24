@@ -4,6 +4,15 @@
   
 namespace tsal {
 
+std::vector<ParameterManager::Parameter> Compressor::CompressorParameters
+({
+  { .name="Release", .min=0.0, .max=2000.0, .defaultValue=0.0 },
+  { .name="Threshold", .min=-60.0, .max=60.0, .defaultValue=-30.0 },
+  { .name="Ratio", .min=1.0, .max=20.0, .defaultValue=2.0 },
+  { .name="Pre Gain", .min=-30.0, .max=30.0, .defaultValue=0.0 },
+  { .name="Post Gain", .min=-30.0, .max=30.0, .defaultValue=0.0 },
+});
+
 void Compressor::getOutput(AudioBuffer<float> &buffer) {
   /* The Compressor uses a circular buffer where a value is written behind 
    * the value that was read. Once the buffer is full of new values, all

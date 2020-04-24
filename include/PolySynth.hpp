@@ -1,7 +1,6 @@
 #ifndef POLYSYNTH_H
 #define POLYSYNTH_H
 
-#include "ParameterManager.hpp"
 #include "Synth.hpp"
 #include "Oscillator.hpp"
 #include "Instrument.hpp"
@@ -18,7 +17,7 @@ namespace tsal {
  * synthesizer that can handle multiple notes being played
  * at the same time
  */
-class PolySynth : public Instrument, public ParameterManager {
+class PolySynth : public Instrument {
   public:
     PolySynth(PolySynth&& other) noexcept :
       mVoices(std::move(other.mVoices)) {
@@ -28,19 +27,8 @@ class PolySynth : public Instrument, public ParameterManager {
       updateContext(other.mContext);
     };
     PolySynth() :
-      ParameterManager({
-                        { .name="Osc1 Mode", .min=0.0, .max=3.0, .defaultValue=0.0 },
-                        { .name="Osc2 Mode", .min=0.0, .max=3.0, .defaultValue=0.0 },
-                        { .name="Osc2 Offset", .min=0.0, .max=1.0, .defaultValue=0.0},
-                        { .name="Modulation Mode", .min=0.0, .max=3.0, .defaultValue=0.0 },
-                        { .name="Env Attack", .min=0.0, .max=100.0, .defaultValue=0.1, .exclusiveMin=true },
-                        // Envelope::ParameterDefs[Envelope::ATTACK],
-                        { .name="Env Decay", .min=0.0, .max=100.0, .defaultValue=0.5, .exclusiveMin=true},
-                        { .name="Env Sustain", .min=0.0, .max=1.0, .defaultValue=0.5 },
-                        { .name="Env Release", .min=0.0, .max=100.0, .defaultValue=2.0, .exclusiveMin=true},
-        }),
-      mVoices(NUM_VOICES, Voice())
-    {
+      Instrument(PolySynthParameters),
+      mVoices(NUM_VOICES, Voice()) {
       for (auto& voice : mVoices) {
         voice.setActive(false);
         voice.mOsc1.connectParameter(Oscillator::OSCILLATOR_MODE, getParameterPointer(OSC1_MODE));
@@ -53,6 +41,7 @@ class PolySynth : public Instrument, public ParameterManager {
         voice.mEnvelope.connectParameter(Envelope::RELEASE, getParameterPointer(ENV_RELEASE));
       }
     };
+    static std::vector<Parameter> PolySynthParameters;
     enum Parameters {
                      OSC1_MODE = 0,
                      OSC2_MODE,
