@@ -18,7 +18,8 @@ std::vector<ParameterManager::Parameter> Oscillator::OscillatorParameters
 double Oscillator::getSample() {
   const double t = mPhase / PI2;
   const double modulation = getParameter(MODULATION);
-  const ModulationMode modulationMode = (ModulationMode) getParameterInt(MODULATION_MODE);
+  const ModulationMode modulationMode = (ModulationMode) getParameter(MODULATION_MODE);
+
   double phase = mPhase + (getParameter(PHASE_OFFSET) * PI2);
   double output = 0.0;
   
@@ -26,7 +27,7 @@ double Oscillator::getSample() {
     phase += modulation;
   }
 
-  switch (getParameterInt(OSCILLATOR_MODE)) {
+  switch ((OscillatorMode) getParameter(OSCILLATOR_MODE)) {
     case SINE:
       output = sin(phase);
       break;

@@ -27,8 +27,6 @@ class ParameterManager {
         double max;
         // The default value that the parameter is initialized with
         double defaultValue;
-        // The stored value
-        double value;
         // Allows value to approach minimum without actually equaling minimum
         bool exclusiveMax = false;
         // Allows value to approach maximum without actually equaling maximum
@@ -46,17 +44,15 @@ class ParameterManager {
 
     std::string getParameterName(unsigned id) const { return mParameters[id].name; };
     Parameter& getParameterData(unsigned id) { return mParameters[id]; };
-    double* getParameterPointer(unsigned id) { return &(mParameters[id].value); };
+    double* getParameterPointer(unsigned id) { return &(mValues[id]); };
     template <typename T>
     T getParameter(unsigned id) { return static_cast<T>(getParameter(id)); };
     int getParameterInt(unsigned id) { return std::round(getParameter(id)); };
-    double getParameter(unsigned id) {
-      auto& param = mParameters[id];
-      return param.connection == NULL ? mParameters[id].value : getConnectedParameter(id);
+    inline double getParameter(unsigned id) {
+      return mParameters[id].connection == NULL ? mValues[id] : getConnectedParameter(id);
     };
-    void setParameter(unsigned id, double value) {
-      auto& param = mParameters[id];
-      param.value = std::min(std::max(value, param.min), param.max);
+    inline void setParameter(unsigned id, double value) {
+      mValues[id] = std::min(std::max(value, mParameters[id].min), mParameters[id].max);
       parameterUpdate(id);
     }
     void connectParameter(unsigned id, double* connection) {
@@ -81,7 +77,7 @@ class ParameterManager {
     }
   private:
     void initializeParameter(Parameter& parameter) {
-      parameter.value = parameter.defaultValue;
+      mValues.push_back(parameter.defaultValue);
       if (parameter.exclusiveMax) {
         parameter.max -= EXCLUSIVE;
       }
@@ -90,10 +86,10 @@ class ParameterManager {
       }
     }
     double getConnectedParameter(unsigned id) {
-      setParameter(id, *(mParameters[id].connection));
-      return mParameters[id].value;
+      return *(mParameters[id].connection);
     };
     std::vector<Parameter> mParameters;
+    std::vector<double> mValues;
 };
 
 }

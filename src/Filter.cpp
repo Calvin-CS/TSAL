@@ -13,8 +13,8 @@ double Filter::process(double input) {
   // https://www.musicdsp.org/en/latest/Filters/131-cascaded-resonant-lp-hp-filter.html
   const double cutoff = getParameter(CUTOFF);
   const double resonance = getParameter(RESONANCE);
-  const double cutoffLow = getParameter<FilterMode>(FILTER_MODE) == LOWPASS ? getParameterData(CUTOFF).max : cutoff;
-  const double cutoffHigh = getParameter<FilterMode>(FILTER_MODE) == HIGHPASS ? getParameterData(CUTOFF).max : cutoff;
+  const double cutoffLow = (FilterMode) getParameter(FILTER_MODE) == LOWPASS ? getParameterData(CUTOFF).max : cutoff;
+  const double cutoffHigh = (FilterMode) getParameter(FILTER_MODE) == HIGHPASS ? getParameterData(CUTOFF).max : cutoff;
   const double fbLow = resonance + resonance/(1 - cutoffLow);
   const double fbHigh = resonance + resonance/(1 - cutoffHigh);
   m1 = m1 + cutoffLow*(input - m1 + fbLow*(m1 - m2)) + mPentium4;
