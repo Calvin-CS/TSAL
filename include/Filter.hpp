@@ -39,7 +39,10 @@ class Filter : public ParameterManager {
   private:
     FilterMode mMode = LOWPASS;
 
-    double m1, m2, m3, m4 = 0.0;
+    double m1 = 0.0;
+    double m2 = 0.0;
+    double m3 = 0.0;
+    double m4 = 0.0;
     static double mPentium4;
 
 };

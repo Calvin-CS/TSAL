@@ -122,7 +122,7 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     endif()
 
     if(NOT CMAKE_CXX_STANDARD)
-      set(CMAKE_CXX_STANDARD 14) # Supported values are ``11``, ``14``, and ``17``.
+      set(CMAKE_CXX_STANDARD 20) # Supported values are ``11``, ``14``, and ``17``.
     endif()
     if(NOT CMAKE_CXX_STANDARD_REQUIRED)
       set(CMAKE_CXX_STANDARD_REQUIRED ON)

@@ -27,10 +27,13 @@ void PolySynth::getOutput(AudioBuffer<float> &buffer) {
     // Get the collective output of the voices
     double output = 0.0;
     double activeVoices = 0.0;
+    /*
     for (auto& voice : mVoices) {
       output += voice.getSample();
       activeVoices += voice.isActive() ? 1 : 0;
     }
+    */
+    output += mVoices[0].getSample();
     // Scale the output by the number of active voices 
     output = activeVoices > 0 ? output / activeVoices : output;
 
