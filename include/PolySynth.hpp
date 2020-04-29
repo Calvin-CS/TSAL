@@ -19,20 +19,13 @@ namespace tsal {
  */
 class PolySynth : public Instrument {
   public:
-    PolySynth(PolySynth&& other) noexcept :
-      mVoices(std::move(other.mVoices)) {
-      for (unsigned i = 0; i < mVoices.size(); i++) {
-        mVoices[i].stop(0.0);
-      }
-      updateContext(other.mContext);
-    };
     PolySynth() :
       Instrument(PolySynthParameters),
       mVoices(NUM_VOICES, Voice()) {
       for (auto& voice : mVoices) {
         voice.setActive(false);
         voice.mOsc1.connectParameter(Oscillator::OSCILLATOR_MODE, getParameterPointer(OSC1_MODE));
-
+        voice.mOsc2.connectParameter(Oscillator::OSCILLATOR_MODE, getParameterPointer(OSC2_MODE));
         voice.mOsc1.connectParameter(Oscillator::MODULATION_MODE, getParameterPointer(PolySynth::MODULATION_MODE));
         voice.mOsc2.connectParameter(Oscillator::PHASE_OFFSET, getParameterPointer(OSC2_OFFSET));
         voice.mEnvelope.connectParameter(Envelope::ATTACK, getParameterPointer(ENV_ATTACK));

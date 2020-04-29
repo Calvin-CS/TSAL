@@ -27,9 +27,9 @@ void PolySynth::getOutput(AudioBuffer<float> &buffer) {
     // Get the collective output of the voices
     double output = 0.0;
     double activeVoices = 0.0;
-    for (size_t i = 0; i < mVoices.size(); i++) {
-      if (mVoices[i].isActive()) {
-        output += mVoices[i].getSample();
+    for (size_t k = 0; k < mVoices.size(); k++) {
+      if (mVoices[k].isActive()) {
+        output += mVoices[k].getSample();
         ++activeVoices;
       }
     }
