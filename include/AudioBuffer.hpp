@@ -6,6 +6,23 @@
 
 namespace tsal {
 
+/** @class AudioBuffer
+ * @brief Stores audio data in an interleaved buffer multiplexed by channels and
+frames.
+ *
+ * With functionality for storing and manipulating audio data, AudioBuffer is
+used or interfaces with almost every class in TSAL.
+ * It is responsible for routing audio data throughout the system.
+ * AudioBuffer stores a series of frames which are made up of some number of
+channels.
+ * In the case of stereo audio, there may be some number of frames with 2 channels
+in each frame.
+ * For example, the first 2 values in the stereo buffer will be samples for the
+left and right channel which comprise the first frame
+ * The next 2 values are the left and right samples for the second frame and so
+on.
+ * This method is optimized for CPU spatial locality since buffers are commonily iterated through sequentially
+ */
 template <typename T>
 class AudioBuffer {
   public:
@@ -20,11 +37,16 @@ class AudioBuffer {
     void setSize(AudioBuffer<T>& buffer) { setSize(buffer.getFrameCount(), buffer.getChannelCount()); };
     void setFrameCount(unsigned long frameCount);
     void setChannelCount(unsigned channelCount);
+    /**
+     * @brief Zeros out the buffer
+     */
     void clear() { std::fill(mBuffer.begin(), mBuffer.end(), 0); };
-    void copyBuffer (AudioBuffer<T>& buffer);
     unsigned long getFrameCount() { return mFrameCount; };
     unsigned getChannelCount() { return mChannelCount; };
     unsigned long size() { return mFrameCount * mChannelCount; };
+    /**
+     * @brief Get the raw pointer to the buffer data. Use carefully
+     */
     T* getRawPointer() { return mBuffer.data(); };
     const T& operator[](int index) const;
     T& operator[](int index);
@@ -51,12 +73,7 @@ T& AudioBuffer<T>::operator[](int index) {
 template <typename T>
 void AudioBuffer<T>::resize() {
   unsigned long bufferSize = mFrameCount * mChannelCount;
-  // We only call resize if the buffer is larger than our current buffer
-  // This shouldn't break anything, just allows for dynamic resizing from the mixer
-  // THere are ways to make a fixed audio buffer size, and maybe that's what should be done on the mixer
-  if (bufferSize > mBuffer.size()) {
-    mBuffer.resize(bufferSize);
-  }
+  mBuffer.resize(bufferSize);
 }
 
 template <typename T>
@@ -68,34 +85,34 @@ void AudioBuffer<T>::setSize(unsigned long frameCount, unsigned channelCount) {
 template <typename T>
 void AudioBuffer<T>::setFrameCount(unsigned long frameCount) {
   mFrameCount = frameCount;
+  // Resize the buffer with the new frame count
   resize();
 }
 
 template <typename T>
 void AudioBuffer<T>::setChannelCount(unsigned channelCount) {
   mChannelCount = channelCount;
+  // Resize the buffer with the new channel count
   resize();
 }
 
-template <typename T>
-void AudioBuffer<T>::copyBuffer(AudioBuffer<T>& buffer) {
-  setChannelCount(buffer.getChannelCount());
-  setFrameCount(buffer.getFrameCount());
-  for (unsigned long i = 0; i < mFrameCount; i++) {
-    for (unsigned j = 0; j < mChannelCount; j++) {
-      mBuffer[i * mChannelCount + j] = buffer[i * mChannelCount + j];
-    }
-  }
-}
-
+/**
+ * @brief Combine multiple buffers into one buffer
+ * 
+ * @param buffers the group of buffers of interleave
+ *
+ * When there are multiple buffers, like one for each channel, this function interleaves multiple buffers into one buffer.
+ */
 template <typename T>
 void AudioBuffer<T>::interleaveBuffers(std::vector<AudioBuffer<T>*>& buffers) {
   if (buffers.size() == 0) {
+    // Maybe these should throw and exception
     std::cout << "Cannot interleave buffers of size 0" << std::endl;
     return;
   }
   if (mChannelCount % buffers.size() != 0) {
     std::cout << "Cannot demultiplex buffers into channels" << std::endl;
+    return;
   }
 
   const unsigned channelDemultiplex = mChannelCount / buffers.size();
@@ -111,6 +128,13 @@ void AudioBuffer<T>::interleaveBuffers(std::vector<AudioBuffer<T>*>& buffers) {
   }
 }
 
+/**
+ * @brief Create multiple buffers from one buffer
+ * 
+ * @param buffers the group of buffers to deinterleave into
+ *
+ * When there are multiple channels interleaved in one buffer, this function deinterleaves the one buffer into multiple, one for each channel.
+ */
 template <typename T>
 void AudioBuffer<T>::deinterleaveBuffer(std::vector<AudioBuffer<T>*>& buffers) {
   if (buffers.size() > mChannelCount) {
@@ -130,11 +154,12 @@ void AudioBuffer<T>::deinterleaveBuffer(std::vector<AudioBuffer<T>*>& buffers) {
 
   for (unsigned long i = 0; i < mFrameCount; i++) {
     for (unsigned j = 0; j < mChannelCount; j += channelMultiplex) {
-      (*buffers[j])[i] = 0;
+      AudioBuffer<T>& b= (*buffers[j]);
+      b[i] = 0;
       for (unsigned k = 0; k < channelMultiplex; k++) {
-        (*buffers[j])[i] += mBuffer[i * mChannelCount + j + k];
+        b[i] += mBuffer[i * mChannelCount + j + k];
       }
-      (*buffers[j])[i] /= channelMultiplex;
+      b[i] /= channelMultiplex;
     }
   }
 }

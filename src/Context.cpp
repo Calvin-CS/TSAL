@@ -13,6 +13,13 @@ Context::Context(unsigned sampleRate, unsigned channelCount, Mixer *mixer) :
   mChannelCount(channelCount),
   mMixer(mixer){};
 
+/**
+ * @brief Used to add a new device to the model
+ * 
+ * @param change the atomic change to be made
+ *
+ * Given a function, Context will submit a change request to the mixer which will be executed after the current audio callback.
+ */
 void Context::requestModelChange(std::function<void()> change) {
   if (mMixer == nullptr) {
     // This change will not be thread safe

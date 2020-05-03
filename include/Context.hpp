@@ -8,6 +8,13 @@ namespace tsal {
 
 class Mixer;
 
+/** @class Context
+ * @brief Manages the connection between the Mixer and other devices
+ *
+ * Context provides a safe interface for devices to interact with the necessary
+Mixer methods.
+ * An empty can also be used to initialize a device without being connected to a Mixer.
+ */
 class Context {
   public:
     Context();
