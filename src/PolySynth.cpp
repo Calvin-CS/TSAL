@@ -100,24 +100,6 @@ PolySynth::Voice* PolySynth::getInactiveVoice() {
   return voice;
 }
 
-PolySynth& PolySynth::operator=(const PolySynth& synth) {
-  if (&synth != this) {
-    // mVoices = std::vector<Voice>();
-
-    // for (Synth s : mVoices) {
-    //   mRoutedSynths.remove(s);
-    // }
-
-    // for (Synth s : synth.mVoices) {
-    //   Synth copy = Synth(s);
-    //   mVoices.push_back(std::move(copy));
-    //   mRoutedSynths.add(s);
-    // }
-  }
-
-  return *this;
-}
-
 double PolySynth::Voice::getSample() {
   mOsc1.setParameter(Oscillator::MODULATION, mOsc2.getSample());
   return mFilter.process(mOsc1.getSample() *

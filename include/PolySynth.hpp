@@ -24,16 +24,23 @@ class PolySynth : public Instrument {
       mVoices(NUM_VOICES, Voice()) {
       for (auto& voice : mVoices) {
         voice.setActive(false);
-        voice.mOsc1.connectParameter(Oscillator::OSCILLATOR_MODE, getParameterPointer(OSC1_MODE));
-        voice.mOsc2.connectParameter(Oscillator::OSCILLATOR_MODE, getParameterPointer(OSC2_MODE));
-        voice.mOsc1.connectParameter(Oscillator::MODULATION_MODE, getParameterPointer(PolySynth::MODULATION_MODE));
-        voice.mOsc2.connectParameter(Oscillator::PHASE_OFFSET, getParameterPointer(OSC2_OFFSET));
-        voice.mEnvelope.connectParameter(Envelope::ATTACK, getParameterPointer(ENV_ATTACK));
-        voice.mEnvelope.connectParameter(Envelope::DECAY, getParameterPointer(ENV_DECAY));
-        voice.mEnvelope.connectParameter(Envelope::SUSTAIN, getParameterPointer(ENV_SUSTAIN));
-        voice.mEnvelope.connectParameter(Envelope::RELEASE, getParameterPointer(ENV_RELEASE));
       }
+      connectParameters();
     };
+    PolySynth& operator=(const PolySynth& synth) {
+      if (this == &synth) return *this;
+      mVoices = synth.mVoices;
+      connectParameters();
+      return *this;
+    };
+    PolySynth(const PolySynth& synth) : PolySynth() {
+      mVoices = synth.mVoices;
+      connectParameters();
+    };
+    PolySynth(const PolySynth&& synth) : PolySynth() {
+      mVoices = synth.mVoices;
+      connectParameters();
+    }
     static std::vector<Parameter> PolySynthParameters;
     enum Parameters {
                      OSC1_MODE = 0,
@@ -49,8 +56,19 @@ class PolySynth : public Instrument {
     void play(double note, double velocity = 100.0) override;
     void stop(double note) override;
     void setMode(Oscillator::OscillatorMode mode);
-    PolySynth& operator=(const PolySynth& synth);
     virtual void updateContext(const Context& context) override;
+    void connectParameters() {
+      for (auto& voice : mVoices) {
+        voice.mOsc1.connectParameter(Oscillator::OSCILLATOR_MODE, getParameterPointer(OSC1_MODE));
+        voice.mOsc2.connectParameter(Oscillator::OSCILLATOR_MODE, getParameterPointer(OSC2_MODE));
+        voice.mOsc1.connectParameter(Oscillator::MODULATION_MODE, getParameterPointer(PolySynth::MODULATION_MODE));
+        voice.mOsc2.connectParameter(Oscillator::PHASE_OFFSET, getParameterPointer(OSC2_OFFSET));
+        voice.mEnvelope.connectParameter(Envelope::ATTACK, getParameterPointer(ENV_ATTACK));
+        voice.mEnvelope.connectParameter(Envelope::DECAY, getParameterPointer(ENV_DECAY));
+        voice.mEnvelope.connectParameter(Envelope::SUSTAIN, getParameterPointer(ENV_SUSTAIN));
+        voice.mEnvelope.connectParameter(Envelope::RELEASE, getParameterPointer(ENV_RELEASE));
+      }
+    }
   protected:
     virtual void parameterUpdate(unsigned id) override {};
   private:
