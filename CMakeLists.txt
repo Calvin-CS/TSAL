@@ -150,7 +150,25 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     # Docs only available if this is the main app
     find_package(Doxygen)
     if(Doxygen_FOUND)
-    add_subdirectory(docs)
+      set(DOXYGEN_GENERATE_HTML YES)
+      set(DOXYGEN_EXCLUDE_PATTERNS
+        */.git/*
+        */.svn/*
+        */.hg/*
+        */CMakeFiles/*
+        */_CPack_Packages/*
+        DartConfiguration.tcl
+        CMakeLists.txt
+        CMakeCache.txt
+        */extern/*
+      )
+      message(STATUS "Working on Doxygen")
+      doxygen_add_docs(
+        doxygen
+        ${PROJECT_SOURCE_DIR}
+        COMMENT "Generate man pages"
+      )
+      message(STATUS "Generated")
     else()
     message(STATUS "Doxygen not found, not building docs")
     endif()
