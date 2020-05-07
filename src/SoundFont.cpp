@@ -2,8 +2,8 @@
 
 namespace tsal {
 
-SoundFont::SoundFont(Mixer* mixer, std::string filename) : Instrument(mixer) {
-  mSoundFont = tsf_load_filename(filename.c_str());
+SoundFont::SoundFont(std::string filename) {
+  // mSoundFont = tsf_load_filename(filename.c_str());
   if (mSoundFont == nullptr) {
     std::cout << "Failed to load SoundFont: " << filename << std::endl;
     return;
@@ -12,7 +12,7 @@ SoundFont::SoundFont(Mixer* mixer, std::string filename) : Instrument(mixer) {
 }
 
 SoundFont::~SoundFont() {
-  tsf_close(mSoundFont);
+  // tsf_close(mSoundFont);
 }
 
 // void SoundFont::setMixer(Mixer* mixer) {
@@ -25,15 +25,15 @@ void SoundFont::getOutput(AudioBuffer<float> &buffer) {
 }
 
 void SoundFont::play(double note, double velocity) {
-  tsf_note_on(mSoundFont, mPresetIndex, note, velocity/127.0);
+  // tsf_note_on(mSoundFont, mPresetIndex, note, velocity/127.0);
 }
 
 void SoundFont::stop(double note) {
-  tsf_note_off(mSoundFont, mPresetIndex, note);
+  // tsf_note_off(mSoundFont, mPresetIndex, note);
 }
 
 void SoundFont::reset() {
-  tsf_reset(mSoundFont);
+  // tsf_reset(mSoundFont);
 }
 
 /** 
@@ -62,7 +62,7 @@ void SoundFont::setPreset(std::string presetName) {
  * @param presetNumber
  */
 int SoundFont::getPresetIndex(int bank, int presetNumber) {
-  return tsf_get_presetindex(mSoundFont, bank, presetNumber);
+  return 0;//tsf_get_presetindex(mSoundFont, bank, presetNumber);
 }
 
 /** 
@@ -84,7 +84,7 @@ int SoundFont::getPresetIndex(std::string presetName) {
  * @brief Get the number of presets in the soundfont
  */
 int SoundFont::getPresetCount() {
-  return tsf_get_presetcount(mSoundFont);
+  return 0; //tsf_get_presetcount(mSoundFont);
 }
     
 /** 
@@ -93,7 +93,7 @@ int SoundFont::getPresetCount() {
  * @param presetIndex
  */
 std::string SoundFont::getPresetName(int presetIndex) {
-  return std::string(tsf_get_presetname(mSoundFont, presetIndex));
+  return ""; //std::string(tsf_get_presetname(mSoundFont, presetIndex));
 }
 
 /** 
@@ -104,7 +104,7 @@ std::string SoundFont::getPresetName(int presetIndex) {
  * @param presetNumber
  */
 std::string SoundFont::getPresetName(int bank, int presetNumber) {
-  return std::string(tsf_bank_get_presetname(mSoundFont, bank, presetNumber));
+  return ""; //std::string(tsf_bank_get_presetname(mSoundFont, bank, presetNumber));
 }
 
 } // namespace tsal

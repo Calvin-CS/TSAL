@@ -19,7 +19,7 @@ void Synth::getOutput(AudioBuffer<float> &buffer) {
   const auto channels = buffer.getChannelCount();
   const auto frames = buffer.getFrameCount();
 
-  setChannelPanning(channels);
+  // setChannelPanning(channels);
 
   for (unsigned long i = 0; i < frames; i++) {
     const auto envelope = mEnvelope.getSample();
@@ -29,7 +29,7 @@ void Synth::getOutput(AudioBuffer<float> &buffer) {
     mFilter.setCutoff(lfoFilterMod);
 
     for (unsigned j = 0; j < channels; j++) {
-      buffer[i * channels + j] = mFilter.process(output * mChannelPanning[j] * envelope * mAmp * (mVelocity / 127.0)); 
+      buffer[i * channels + j] = mFilter.process(output * envelope * (mVelocity / 127.0)); 
     }
   }
 }

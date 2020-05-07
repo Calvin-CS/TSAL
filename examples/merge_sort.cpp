@@ -187,7 +187,6 @@ int main() {
     std::vector<ThreadSynth> voices(threads, ThreadSynth());
     for (unsigned i = 0; i < voices.size(); i++) {
       mixer.add(voices[i]);
-      voices[i].setVolume(0.5);
       voices[i].setEnvelopeActive(false);      
     } 
     mergeSortFunction(voices, threads, 5000);

@@ -56,7 +56,7 @@ double Oscillator::getSample() {
   while (mPhase >= PI2)
     mPhase -= PI2;
 
-  return output * mAmp;
+  return output;
 }
 
 /**

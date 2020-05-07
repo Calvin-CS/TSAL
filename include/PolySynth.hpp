@@ -26,24 +26,32 @@ class PolySynth : public Instrument {
         voice.setActive(false);
       }
       connectParameters();
+      mLFO.setMode(Oscillator::SINE);
+      mLFO.setFrequency(1);
+      mLFO.setActive();
     };
     PolySynth& operator=(const PolySynth& synth) {
       if (this == &synth) return *this;
       mVoices = synth.mVoices;
+      mLFO = synth.mLFO;
       connectParameters();
       return *this;
     };
     PolySynth(const PolySynth& synth) : PolySynth() {
       mVoices = synth.mVoices;
+      mLFO = synth.mLFO;
       connectParameters();
     };
     PolySynth(const PolySynth&& synth) : PolySynth() {
       mVoices = synth.mVoices;
+      mLFO = synth.mLFO;
       connectParameters();
     }
     static std::vector<Parameter> PolySynthParameters;
     enum Parameters {
-                     OSC1_MODE = 0,
+                     VOLUME = 0, 
+                     PANNING,
+                     OSC1_MODE,
                      OSC2_MODE,
                      OSC2_OFFSET,
                      MODULATION_MODE,
@@ -57,6 +65,9 @@ class PolySynth : public Instrument {
     void stop(double note) override;
     void setMode(Oscillator::OscillatorMode mode);
     virtual void updateContext(const Context& context) override;
+  protected:
+    virtual void parameterUpdate(unsigned id) override { Instrument::parameterUpdate(id); };
+  private:
     void connectParameters() {
       for (auto& voice : mVoices) {
         voice.mOsc1.connectParameter(Oscillator::OSCILLATOR_MODE, getParameterPointer(OSC1_MODE));
@@ -69,9 +80,6 @@ class PolySynth : public Instrument {
         voice.mEnvelope.connectParameter(Envelope::RELEASE, getParameterPointer(ENV_RELEASE));
       }
     }
-  protected:
-    virtual void parameterUpdate(unsigned id) override {};
-  private:
     class Voice : public Instrument {
       public:
         Voice() {
@@ -95,6 +103,7 @@ class PolySynth : public Instrument {
         unsigned mNote = 0.0;
     };
     Voice* getInactiveVoice();
+    Oscillator mLFO;
     std::vector<Voice> mVoices;
 };
   

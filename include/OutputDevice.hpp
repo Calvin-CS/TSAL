@@ -29,20 +29,11 @@ class OutputDevice {
     virtual void setActive(bool active = true);
     virtual void updateContext(const Context& context) { mContext.update(context); };
 
-    void setGain(double gain);
-    void setVolume(double volume);
-
-    double getGain() const;
-    double getVolume() const;
     bool isActive() const;
 
   protected:
     bool mActive = true;
     Context mContext;
-    double mAmp = 1.0;
-    
-    static Util::ParameterRange<double> mGainRange;
-    static Util::ParameterRange<double> mVolumeRange;
 };
 
 }

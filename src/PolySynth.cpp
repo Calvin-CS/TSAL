@@ -1,17 +1,19 @@
 #include "PolySynth.hpp"
+#include "Envelope.hpp"
 
 namespace tsal {
 
 std::vector<ParameterManager::Parameter> PolySynth::PolySynthParameters
 ({
+  Instrument::InstrumentParameters[Instrument::VOLUME],
   { .name="Osc1 Mode", .min=0.0, .max=3.0, .defaultValue=0.0 },
   { .name="Osc2 Mode", .min=0.0, .max=3.0, .defaultValue=0.0 },
   { .name="Osc2 Offset", .min=0.0, .max=1.0, .defaultValue=0.0},
   { .name="Modulation Mode", .min=0.0, .max=3.0, .defaultValue=0.0 },
-  { .name="Env Attack", .min=0.0, .max=100.0, .defaultValue=0.1, .exclusiveMin=true },
-  { .name="Env Decay", .min=0.0, .max=100.0, .defaultValue=0.5, .exclusiveMin=true},
-  { .name="Env Sustain", .min=0.0, .max=1.0, .defaultValue=0.5 },
-  { .name="Env Release", .min=0.0, .max=100.0, .defaultValue=2.0, .exclusiveMin=true},
+  Parameter::copy(Envelope::EnvelopeParameters[Envelope::ATTACK], "Attack"),
+  Parameter::copy(Envelope::EnvelopeParameters[Envelope::DECAY], "Decay"),
+  Parameter::copy(Envelope::EnvelopeParameters[Envelope::SUSTAIN], "Sustain"),
+  Parameter::copy(Envelope::EnvelopeParameters[Envelope::RELEASE], "Release"),
 });
 
 void PolySynth::getOutput(AudioBuffer<float> &buffer) {
@@ -21,7 +23,7 @@ void PolySynth::getOutput(AudioBuffer<float> &buffer) {
   const auto channels = buffer.getChannelCount();
   const auto frames = buffer.getFrameCount();
 
-  setChannelPanning(channels);
+  mPanning.setChannelPanning(channels);
 
   for (unsigned long i = 0; i < frames; i++) {
     // Get the collective output of the voices
@@ -38,7 +40,7 @@ void PolySynth::getOutput(AudioBuffer<float> &buffer) {
     output = activeVoices > 0 ? output / activeVoices : output;
 
     for (unsigned j = 0; j < channels; j++) {
-      buffer[i * channels + j] = output * mChannelPanning[j] * mAmp; 
+      buffer[i * channels + j] = output * mAmp.getAmp() * mPanning.getPanningChannel(j) ;//* ((mLFO.getSample() + 1) / 2); 
     }
   }
 }
@@ -48,6 +50,7 @@ void PolySynth::updateContext(const Context& context) {
   for (auto& voice : mVoices) {
     voice.updateContext(context);
   }
+  mLFO.updateContext(context);
 }
 
 /* @brief Play a note with velocity

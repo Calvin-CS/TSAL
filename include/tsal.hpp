@@ -8,6 +8,7 @@
 #include "Oscillator.hpp"
 #include "PolySynth.hpp"
 #include "ProgressOctave.hpp"
+#include "SoundFont.hpp"
 #include "Synth.hpp"
 #include "ThreadSynth.hpp"
 // #include "LadspaManager.hpp"

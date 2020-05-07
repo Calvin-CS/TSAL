@@ -5,6 +5,8 @@
 #include "Instrument.hpp"
 #include "OutputDevice.hpp"
 #include "ParameterManager.hpp"
+#include "Amp.hpp"
+#include "Panning.hpp"
 
 namespace tsal {
 
@@ -20,6 +22,10 @@ class Channel : public ChannelDevice, public ParameterManager {
     Channel();
     virtual ~Channel();
     static std::vector<Parameter> ChannelParameters;
+    enum Parameters {
+                     VOLUME = 0,
+                     PANNING,
+    };
     virtual void getOutput(AudioBuffer<float> &buffer) override;
     virtual void updateContext(const Context& context) override;
     virtual void setParentChannel(Channel* channel) override;
@@ -36,7 +42,11 @@ class Channel : public ChannelDevice, public ParameterManager {
     int getInstrumentCount() { return mRoutedInstruments.size(); };
     int getEffectCount() { return mEffectChain.size(); };
 
+  protected:
+    virtual void parameterUpdate(unsigned int id) override;
   private:
+    Amp mAmp;
+    Panning mPanning;
     RouteDevice<OutputDevice> mChannelIn;
     RouteDevice<Instrument> mRoutedInstruments;
     RouteDevice<Channel> mRoutedChannels;

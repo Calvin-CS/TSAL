@@ -25,7 +25,6 @@ void ProgressOctave::updateContext(const Context& context) {
 
     auto& oscillator = mOscillators[i];
     mRoutedOscillators.add(*(oscillator.get()));
-    oscillator->setVolume(0.5);
     oscillator->setFrequency(startingFrequency + octavePortion * i);
   }
 }

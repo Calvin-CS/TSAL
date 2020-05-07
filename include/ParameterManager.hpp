@@ -19,6 +19,16 @@ namespace tsal {
 class ParameterManager {
   public:
     struct Parameter {
+        static Parameter copy(const Parameter& parameter, std::string newName) {
+          return {
+                  .name = newName,
+                  .min = parameter.min,
+                  .max = parameter.max,
+                  .defaultValue = parameter.defaultValue,
+                  .exclusiveMax = parameter.exclusiveMax,
+                  .exclusiveMin = parameter.exclusiveMin,
+          };
+        };
         // The name the of the parameter
         std::string name; 
         // The minimum value that a user can assign
@@ -102,13 +112,14 @@ the pointer
     }
   private:
     void initializeParameter(Parameter& parameter) {
-      mValues.push_back(parameter.defaultValue);
       if (parameter.exclusiveMax) {
         parameter.max -= EXCLUSIVE;
       }
       if (parameter.exclusiveMin) {
         parameter.min += EXCLUSIVE;
       }
+      mValues.push_back(parameter.defaultValue);
+      setParameter(mValues.size() - 1, parameter.defaultValue);
     }
     double getConnectedParameter(unsigned id) {
       return *(mParameters[id].connection);

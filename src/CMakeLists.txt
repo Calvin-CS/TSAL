@@ -7,6 +7,7 @@ set(INSTALL_CONFIGDIR ${CMAKE_INSTALL_LIBDIR}/cmake/tsal)
 SET(BUILD_SHARED_LIBS ON)
 
 set(PUBLIC_HEADERS
+  ${TSAL_INCLUDE_DIR}/Amp.hpp
   ${TSAL_INCLUDE_DIR}/AudioBuffer.hpp
   ${TSAL_INCLUDE_DIR}/ChannelDevice.hpp
   ${TSAL_INCLUDE_DIR}/Channel.hpp
@@ -26,11 +27,13 @@ set(PUBLIC_HEADERS
   ${TSAL_INCLUDE_DIR}/Mixer.hpp
   ${TSAL_INCLUDE_DIR}/Oscillator.hpp
   ${TSAL_INCLUDE_DIR}/OutputDevice.hpp
+  ${TSAL_INCLUDE_DIR}/Panning.hpp
   ${TSAL_INCLUDE_DIR}/ParameterManager.hpp
   ${TSAL_INCLUDE_DIR}/PolySynth.hpp
   ${TSAL_INCLUDE_DIR}/ProgressOctave.hpp
   ${TSAL_INCLUDE_DIR}/RouteDevice.hpp
   ${TSAL_INCLUDE_DIR}/Sequencer.hpp
+  ${TSAL_INCLUDE_DIR}/SoundFont.hpp
   ${TSAL_INCLUDE_DIR}/Synth.hpp
   ${TSAL_INCLUDE_DIR}/ThreadSynth.hpp
   ${TSAL_INCLUDE_DIR}/Timing.hpp
@@ -39,6 +42,7 @@ set(PUBLIC_HEADERS
   )
 
 set(SOURCES
+  Amp.cpp
   Channel.cpp
   ChannelDevice.cpp
   Compressor.cpp
@@ -55,6 +59,7 @@ set(SOURCES
   Mixer.cpp
   Oscillator.cpp
   OutputDevice.cpp
+  Panning.cpp
   PolySynth.cpp
   ProgressOctave.cpp
   Sequencer.cpp
@@ -78,6 +83,7 @@ target_link_libraries(tsal
   PUBLIC
     ladspa
     portaudio
+    tsf
     OpenMP::OpenMP_CXX
     Threads::Threads
     # dl
@@ -104,7 +110,7 @@ set_target_properties(tsal
 # source_group(TREE "${PROJECT_SOURCE_DIR}/include" PREFIX "Header Files" FILES ${HEADER_LIST})
 
 # install(TARGETS tsal midifile tsf
-install(TARGETS tsal ladspa
+install(TARGETS tsal ladspa tsf
   EXPORT tsalTargets
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}

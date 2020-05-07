@@ -1,5 +1,3 @@
-#include "Oscillator.hpp"
-#include "PolySynth.hpp"
 #include "tsal.hpp"
 
 /** @example hello_tsal.cpp
@@ -17,52 +15,72 @@ using namespace tsal;
 int main() {
   // Create the mixer object
   Mixer mixer;
-  
+  SoundFont sf("/usr/share/sounds/sf2/FluidR3_GM.sf2");
+  sf.setPreset("Halo Pad"); 
+  mixer.add(sf);
+  // sf.play(C4);
+  // sf.play(E4);
   // Create the synthesizer object
   PolySynth synth;
   PolySynth synth2;
   Delay delay;
   delay.setParameter(Delay::FEEDBACK, 0.3);
-  mixer.add(delay);
+  // mixer.add(delay);
   // Synth synth;
   // synth.setMode(Oscillator::SAW);
-  synth.setPanning(-0.8);
+  // synth.setPanning(-0.8);
   synth.setParameter(PolySynth::MODULATION_MODE, Oscillator::AM);
-  synth.setVolume(0.1);
+  synth.setParameter(PolySynth::VOLUME, 0.5);
+  // synth.setParameter(PolySynth::PANNING, -1.0);
   // synth.setParameter(PolySynth::OSC2_OFFSET, 0.2);
   synth.setParameter(PolySynth::ENV_ATTACK, 0.1);
   // synth.setParameter(PolySynth::ENV_RELEASE, 10.0);
   synth.setParameter(PolySynth::OSC1_MODE, Oscillator::SINE);
-  synth.setParameter(PolySynth::OSC2_MODE, Oscillator::SAW);
+  synth.setParameter(PolySynth::OSC2_MODE, Oscillator::SINE);
+  synth2.setParameter(PolySynth::OSC1_MODE, Oscillator::SINE);
+  // synth2.setParameter(PolySynth::PANNING, 1.0);
+  synth.setParameter(PolySynth::MODULATION_MODE, Oscillator::NONE);
   // synth.setParameter(PolySynth::OSC2_MODE, Oscillator::WHITE_NOISE);
   
-  PolySynth synth3 = synth;
-  PolySynth synth4(std::move(synth2));
-  // Add the synth to the mixer
-  mixer.add(synth3);
-  mixer.add(synth4);
+  synth2.setParameter(PolySynth::VOLUME, 0.5);
+  // PolySynth synth3 = synth;
+  // PolySynth synth(std::move(synth2));
+  // Add the synth t
+  Channel chan;
+  mixer.add(synth);
+  mixer.add(synth2);
+  chan.setParameter(Channel::PANNING, 1.0);
+  mixer.add(chan);
   
-  synth4.play(C4);
-  synth4.setParameter(PolySynth::MODULATION_MODE, Oscillator::MIX);
-  synth4.setVolume(0.5);
+  synth.play(C4);
+  synth.setParameter(PolySynth::MODULATION_MODE, Oscillator::MIX);
   // Play a note on the synth
-  synth3.play(E4);
+  synth2.play(E4);
   Util::thread_sleep(1500);
-  synth3.stop(E4);
+  synth2.stop(E4);
   Util::thread_sleep(5000);
 
   // synth.setParameter(PolySynth::OSC1_MODE, Oscillator::SQUARE);
   // synth.setParameter(PolySynth::OSC2_OFFSET, 0.0);
   // synth.setParameter(PolySynth::OSC2_MODE, Oscillator::SAW);
-  synth3.setParameter(PolySynth::MODULATION_MODE, Oscillator::PM);
+  synth2.setParameter(PolySynth::MODULATION_MODE, Oscillator::PM);
 
-  synth3.play(E4);
+  synth2.play(E4);
   Util::thread_sleep(500);
-  synth3.stop(E4);
+  synth2.stop(E4);
   Util::thread_sleep(1500);
   // synth.play(G4);
-  // synth.play(B4);
+  synth.stop(C4);
   
+  for (unsigned i = 0; i < 10; i++) {
+    static double volume = 0.0;
+    synth2.setParameter(PolySynth::VOLUME, volume);
+    synth2.play(C4);
+    Util::thread_sleep(500);
+    synth2.stop(C4);
+    Util::thread_sleep(100);
+    volume += 0.1;
+  }
   // Wait for the user to stop the synth
   // char input;
   // std::cout << "Press <enter> to quit:" << std::flush;

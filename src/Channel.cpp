@@ -4,7 +4,9 @@ namespace tsal {
 
 std::vector<ParameterManager::Parameter> Channel::ChannelParameters
 ({
- });
+  Amp::AmpParameterVolume,
+  Panning::PanningParameter,
+});
 
 Channel::Channel() :
   ParameterManager(ChannelParameters) {
@@ -31,10 +33,17 @@ void Channel::updateContext(const Context& context) {
 
 void Channel::getOutput(AudioBuffer<float> &buffer) {
   if (mActive) {
+    const auto channels = buffer.getChannelCount();
+    const auto frames = buffer.getFrameCount();
+  
+    mPanning.setChannelPanning(channels);
+    
     mChannelIn.getOutput(buffer);
     mEffectChain.getOutput(buffer);
-    for (unsigned i = 0; i < buffer.size(); i++) {
-      buffer[i] *= mAmp;
+    for (unsigned i = 0; i < frames; i++) {
+      for (unsigned j = 0; j < channels; j++) {
+        buffer[i * channels + j] *= mAmp.getAmp() * mPanning.getPanningChannel(j);
+      }
     }
   }
 }
@@ -96,5 +105,16 @@ void Channel::add(Channel& channel) {
 void Channel::remove(Channel& channel) {
   mRoutedChannels.remove(channel);
 }
+
+void Channel::parameterUpdate(unsigned id) {
+  switch(id) {
+  case VOLUME:
+    mAmp.setVolume(getParameter(VOLUME));
+    break;
+  case PANNING:
+    mPanning.setPanning(getParameter(PANNING));
+    break;
+  }
+};
 
 }

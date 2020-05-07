@@ -21,6 +21,7 @@ project(${LOCAL_PROJECT_NAME}
         DESCRIPTION ${LOCAL_PROJECT_DESCRIPTION}
         LANGUAGES C CXX)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # detect operating system and host processor
 message(STATUS "We are on a ${CMAKE_SYSTEM_NAME} system")
 message(STATUS "The host processor is ${CMAKE_HOST_SYSTEM_PROCESSOR}")
