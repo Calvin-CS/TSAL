@@ -5,7 +5,6 @@ namespace tsal {
 
 std::vector<ParameterManager::Parameter> PolySynth::PolySynthParameters
 ({
-  Instrument::InstrumentParameters[Instrument::VOLUME],
   { .name="Osc1 Mode", .min=0.0, .max=3.0, .defaultValue=0.0 },
   { .name="Osc2 Mode", .min=0.0, .max=3.0, .defaultValue=0.0 },
   { .name="Osc2 Offset", .min=0.0, .max=1.0, .defaultValue=0.0},

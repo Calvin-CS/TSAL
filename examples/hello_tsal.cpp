@@ -15,9 +15,6 @@ using namespace tsal;
 int main() {
   // Create the mixer object
   Mixer mixer;
-  SoundFont sf("/usr/share/sounds/sf2/FluidR3_GM.sf2");
-  sf.setPreset("Halo Pad"); 
-  mixer.add(sf);
   // sf.play(C4);
   // sf.play(E4);
   // Create the synthesizer object
