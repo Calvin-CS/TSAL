@@ -6,7 +6,7 @@
 #include "Instrument.hpp"
 #include "RouteDevice.hpp"
 
-#define NUM_VOICES 1 
+#define NUM_VOICES 10
 
 namespace tsal {
 
