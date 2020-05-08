@@ -1,5 +1,6 @@
 #include "PolySynth.hpp"
 #include "Envelope.hpp"
+#include "Oscillator.hpp"
 
 namespace tsal {
 
@@ -13,6 +14,13 @@ std::vector<ParameterManager::Parameter> PolySynth::PolySynthParameters
   Parameter::copy(Envelope::EnvelopeParameters[Envelope::DECAY], "Decay"),
   Parameter::copy(Envelope::EnvelopeParameters[Envelope::SUSTAIN], "Sustain"),
   Parameter::copy(Envelope::EnvelopeParameters[Envelope::RELEASE], "Release"),
+  { .name="LFO Active", .min=0.0, .max=1.0, .defaultValue=0.0 },
+  { .name="LFO Mode", .min=0.0, .max=3.0, .defaultValue=0.0 },
+  Parameter::copy(Oscillator::OscillatorParameters[Oscillator::FREQUENCY], "LFO Frequency"),
+  Parameter::copy(Envelope::EnvelopeParameters[Envelope::ATTACK], "LFO Attack"),
+  Parameter::copy(Envelope::EnvelopeParameters[Envelope::DECAY], "LFO Decay"),
+  Parameter::copy(Envelope::EnvelopeParameters[Envelope::SUSTAIN], "LFO Sustain"),
+  Parameter::copy(Envelope::EnvelopeParameters[Envelope::RELEASE], "LFO Release"),
 });
 
 void PolySynth::getOutput(AudioBuffer<float> &buffer) {
@@ -26,11 +34,12 @@ void PolySynth::getOutput(AudioBuffer<float> &buffer) {
 
   for (unsigned long i = 0; i < frames; i++) {
     // Get the collective output of the voices
+    double lfo = ((getParameter(LFO_ACTIVE) > 0.5 ? mLFO.getSample() : 1.0) + 1) / 2;
     double output = 0.0;
     double activeVoices = 0.0;
     for (size_t k = 0; k < mVoices.size(); k++) {
       if (mVoices[k].isActive()) {
-        output += mVoices[k].getSample();
+        output += mVoices[k].getSample(lfo);
         ++activeVoices;
       }
     }
@@ -39,7 +48,7 @@ void PolySynth::getOutput(AudioBuffer<float> &buffer) {
     output = activeVoices > 0 ? output / activeVoices : output;
 
     for (unsigned j = 0; j < channels; j++) {
-      buffer[i * channels + j] = output * mAmp.getAmp() * mPanning.getPanningChannel(j) ;//* ((mLFO.getSample() + 1) / 2); 
+      buffer[i * channels + j] = output * mAmp.getAmp() * mPanning.getPanningChannel(j) * lfo; 
     }
   }
 }
@@ -102,9 +111,9 @@ PolySynth::Voice* PolySynth::getInactiveVoice() {
   return voice;
 }
 
-double PolySynth::Voice::getSample() {
+double PolySynth::Voice::getSample(double lfo) {
   mOsc1.setParameter(Oscillator::MODULATION, mOsc2.getSample());
-  return mFilter.process(mOsc1.getSample() *
+  return lfo * mLFOEnvelope.getSample() * mFilter.process(mOsc1.getSample() *
                          (mVelocity / 120.0) *
                          mEnvelope.getSample());
 }
@@ -115,6 +124,7 @@ void PolySynth::Voice::play(double note, double velocity) {
   mOsc1.setActive();
   mOsc2.setActive();
   mEnvelope.start();
+  mLFOEnvelope.start();
   mVelocity = velocity; 
   mOsc1.setNote(note);
   mOsc2.setNote(note);
@@ -124,6 +134,7 @@ void PolySynth::Voice::stop(double note) {
   (void)note;
   if (mEnvelope.isActive()) {
     mEnvelope.stop();
+    mLFOEnvelope.stop();
   } else {
     mOsc1.setActive(false);
     mOsc2.setActive(false);
@@ -134,6 +145,7 @@ void PolySynth::Voice::updateContext(const Context& context) {
     mOsc1.updateContext(context);
     mOsc2.updateContext(context);
     mEnvelope.updateContext(context);
+    mLFOEnvelope.updateContext(context);
 }
 
 }

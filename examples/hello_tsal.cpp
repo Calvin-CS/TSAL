@@ -27,13 +27,18 @@ int main() {
   // synth.setMode(Oscillator::SAW);
   // synth.setPanning(-0.8);
   synth.setParameter(PolySynth::MODULATION_MODE, Oscillator::AM);
-  synth.setParameter(PolySynth::VOLUME, 0.5);
+  synth.setParameter(PolySynth::VOLUME, 1.0);
+  synth.setParameter(PolySynth::ENV_ATTACK, 0.0);
+  synth.setParameter(PolySynth::LFO_ACTIVE, 1.0);
+  synth.setParameter(PolySynth::LFO_ATTACK, 3.0);
+  synth.setParameter(PolySynth::LFO_MODE, Oscillator::SQUARE);
+  synth.setParameter(PolySynth::LFO_FREQUENCY, 2.0);
   // synth.setParameter(PolySynth::PANNING, -1.0);
   // synth.setParameter(PolySynth::OSC2_OFFSET, 0.2);
   synth.setParameter(PolySynth::ENV_ATTACK, 0.1);
   // synth.setParameter(PolySynth::ENV_RELEASE, 10.0);
   synth.setParameter(PolySynth::OSC1_MODE, Oscillator::SINE);
-  synth.setParameter(PolySynth::OSC2_MODE, Oscillator::SINE);
+  synth.setParameter(PolySynth::OSC2_MODE, Oscillator::AM);
   synth2.setParameter(PolySynth::OSC1_MODE, Oscillator::SINE);
   // synth2.setParameter(PolySynth::PANNING, 1.0);
   synth.setParameter(PolySynth::MODULATION_MODE, Oscillator::NONE);
@@ -45,7 +50,7 @@ int main() {
   // Add the synth t
   Channel chan;
   mixer.add(synth);
-  mixer.add(synth2);
+  // mixer.add(synth2);
   chan.setParameter(Channel::PANNING, 1.0);
   mixer.add(chan);
   
