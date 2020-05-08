@@ -42,6 +42,7 @@ int main() {
   synth2.setParameter(PolySynth::OSC1_MODE, Oscillator::SINE);
   // synth2.setParameter(PolySynth::PANNING, 1.0);
   synth.setParameter(PolySynth::MODULATION_MODE, Oscillator::NONE);
+  synth2.setParameter(PolySynth::ENV_RELEASE, 3.0);
   // synth.setParameter(PolySynth::OSC2_MODE, Oscillator::WHITE_NOISE);
   
   synth2.setParameter(PolySynth::VOLUME, 0.5);
@@ -49,8 +50,7 @@ int main() {
   // PolySynth synth(std::move(synth2));
   // Add the synth t
   Channel chan;
-  mixer.add(synth);
-  // mixer.add(synth2);
+  mixer.add(synth2);
   chan.setParameter(Channel::PANNING, 1.0);
   mixer.add(chan);
   
@@ -58,9 +58,7 @@ int main() {
   synth.setParameter(PolySynth::MODULATION_MODE, Oscillator::MIX);
   // Play a note on the synth
   synth2.play(E4);
-  Util::thread_sleep(1500);
   synth2.stop(E4);
-  Util::thread_sleep(5000);
 
   // synth.setParameter(PolySynth::OSC1_MODE, Oscillator::SQUARE);
   // synth.setParameter(PolySynth::OSC2_OFFSET, 0.0);
@@ -68,9 +66,7 @@ int main() {
   synth2.setParameter(PolySynth::MODULATION_MODE, Oscillator::PM);
 
   synth2.play(E4);
-  Util::thread_sleep(500);
   synth2.stop(E4);
-  Util::thread_sleep(1500);
   // synth.play(G4);
   synth.stop(C4);
   
@@ -80,7 +76,7 @@ int main() {
     synth2.play(C4);
     Util::thread_sleep(500);
     synth2.stop(C4);
-    Util::thread_sleep(100);
+    Util::thread_sleep(2000);
     volume += 0.1;
   }
   // Wait for the user to stop the synth
