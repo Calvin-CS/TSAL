@@ -1,4 +1,7 @@
-#include "Envelope.hpp" namespace tsal {
+#include "Envelope.hpp" 
+
+namespace tsal {
+
 std::vector<ParameterManager::Parameter> Envelope::EnvelopeParameters
 ({
   { .name="Attack", .min=0.0, .max=100.0, .defaultValue=0.0, .exclusiveMin=true },

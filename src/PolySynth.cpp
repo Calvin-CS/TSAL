@@ -83,6 +83,7 @@ void PolySynth::stop(double note) {
   for (auto& voice : mVoices) {
     if (voice.getNote() == note) {
       voice.stop();
+      voice.setActive(false);
     }
   }
 }
