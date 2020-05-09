@@ -108,6 +108,7 @@ PolySynth::Voice* PolySynth::getInactiveVoice() {
   //     break;
   //   }
   // }
+  // return voice;
   return &mVoices[i++ % mVoices.size()];
 }
 

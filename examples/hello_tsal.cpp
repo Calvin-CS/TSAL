@@ -70,13 +70,17 @@ int main() {
   // synth.play(G4);
   synth.stop(C4);
   
-  for (unsigned i = 0; i < 10; i++) {
+  for (unsigned i = 0; i < 50; i++) {
     static double volume = 0.0;
     synth2.setParameter(PolySynth::VOLUME, volume);
     synth2.play(C4);
+    synth2.play(E4);
+    synth2.play(G4);
     Util::thread_sleep(500);
     synth2.stop(C4);
-    Util::thread_sleep(2000);
+    synth2.stop(E4);
+    synth2.stop(G4);
+    Util::thread_sleep(500);
     volume += 0.1;
   }
   // Wait for the user to stop the synth

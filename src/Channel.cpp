@@ -4,8 +4,8 @@ namespace tsal {
 
 std::vector<ParameterManager::Parameter> Channel::ChannelParameters
 ({
-  Amp::AmpParameterVolume,
-  Panning::PanningParameter,
+  { .name="Volume", .min=0.0, .max=2.0, .defaultValue=1.0 },
+  { .name="Panning", .min=-1.0, .max=1.0, .defaultValue=0.0 },
 });
 
 Channel::Channel() :

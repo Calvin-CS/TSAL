@@ -66,7 +66,7 @@ double Envelope::getSample() {
     mEnvelopeValue *= mMultiplier;
   }
   // TODO: never figured out why, but occasionally the envelope Value skyrockets when in attack state. This is protect against anything ridiculous
-  return std::min(1.0, mEnvelopeValue);
+  return std::max(0.0, std::min(1.0, mEnvelopeValue));
 }
 
 /**
