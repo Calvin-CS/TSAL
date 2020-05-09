@@ -45,7 +45,7 @@ void PolySynth::getOutput(AudioBuffer<float> &buffer) {
     }
     // output += mVoices[0].getSample();
     // Scale the output by the number of active voices 
-    // output = activeVoices > 0 ? output / activeVoices : output;
+    output = activeVoices > 0 ? output / activeVoices : output;
 
     for (unsigned j = 0; j < channels; j++) {
       buffer[i * channels + j] = output * mAmp.getAmp() * mPanning.getPanningChannel(j) * lfo; 
@@ -97,19 +97,17 @@ void PolySynth::setMode(Oscillator::OscillatorMode mode) {
 }
 
 PolySynth::Voice* PolySynth::getInactiveVoice() {
-  static unsigned i = 0;
   // Whenever a note is pressed, an inactive voice needs to be found an played
   // If all the voices are active, a nullptr is returned
-  // Voice* voice = nullptr;
-  // for (unsigned i = 0; i < mVoices.size(); i++) {
-  //   if (!mVoices[i].isActive()) {
-  //     mVoices[i].setActive();
-  //     voice = &mVoices[i];
-  //     break;
-  //   }
-  // }
-  // return voice;
-  return &mVoices[i++ % mVoices.size()];
+  Voice* voice = nullptr;
+  for (unsigned i = 0; i < mVoices.size(); i++) {
+    if (!mVoices[i].isActive()) {
+      mVoices[i].setActive();
+      voice = &mVoices[i];
+      break;
+    }
+  }
+  return voice;
 }
 
 double PolySynth::Voice::getSample(double lfo) {
