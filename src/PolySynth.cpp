@@ -135,10 +135,10 @@ void PolySynth::Voice::stop(double note) {
   (void)note;
   if (mEnvelope.isActive()) {
     mEnvelope.stop();
-    // mLFOEnvelope.stop();
+    mLFOEnvelope.stop();
   } else {
-    // mOsc1.setActive(false);
-    // mOsc2.setActive(false);
+    mOsc1.setActive(false);
+    mOsc2.setActive(false);
   }
 }
 
