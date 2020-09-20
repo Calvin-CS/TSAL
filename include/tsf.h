@@ -56,7 +56,7 @@ extern "C" {
 #ifdef TSF_STATIC
 #define TSFDEF static
 #else
-#define TSFDEF extern
+#define TSFDEF inline
 #endif
 
 // The load functions will return a pointer to a struct tsf which all functions
