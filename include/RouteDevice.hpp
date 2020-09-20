@@ -71,7 +71,7 @@ void RouteDevice<DeviceType>::getOutput(AudioBuffer<float> &buffer) {
       buffer[i] += routedInput->buffer[i];
     }
   }
-};
+}
 
 template <typename DeviceType>
 void RouteDevice<DeviceType>::setMixer(Mixer* mixer) {
