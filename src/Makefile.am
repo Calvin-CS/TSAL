@@ -29,7 +29,7 @@ libtsal_la_SOURCES = \
 includedir=${prefix}/include/tsal
 include_HEADERS = \
   $(top_srcdir)/include/tsal.hpp \
-  $(top_srcdir)/include/tsf.hpp \
+  $(top_srcdir)/include/tsf.h \
   $(top_srcdir)/include/AudioBuffer.hpp \
   $(top_srcdir)/include/Binasc.h \
   $(top_srcdir)/include/Buffer.hpp \
