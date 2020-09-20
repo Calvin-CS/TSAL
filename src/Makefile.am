@@ -29,9 +29,12 @@ libtsal_la_SOURCES = \
 includedir=${prefix}/include/tsal
 include_HEADERS = \
   $(top_srcdir)/include/tsal.hpp \
+  $(top_srcdir)/include/tsf.hpp \
+  $(top_srcdir)/include/AudioBuffer.hpp \
   $(top_srcdir)/include/Binasc.h \
   $(top_srcdir)/include/Buffer.hpp \
   $(top_srcdir)/include/Channel.hpp \
+  $(top_srcdir)/include/ChannelDevice.hpp \
   $(top_srcdir)/include/Compressor.hpp \
   $(top_srcdir)/include/Delay.hpp \
   $(top_srcdir)/include/Effect.hpp \
@@ -55,5 +58,6 @@ include_HEADERS = \
   $(top_srcdir)/include/SoundFont.hpp \
 	$(top_srcdir)/include/Synth.hpp \
 	$(top_srcdir)/include/ThreadSynth.hpp \
+  $(top_srcdir)/include/Timing.hpp \
   $(top_srcdir)/include/Util.hpp
 
