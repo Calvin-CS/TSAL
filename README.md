@@ -29,8 +29,8 @@ To install the library on your system run `make install` as root.
 ## Running the tests
 
 Use `make check` to run the tests
-Note: at the moment, `make check` fails certain assertions in both 'effects.cpp' and 'mixer.cpp'. Do not worry about this,
-the library will still have been built successfully.
+
+Note: at the moment, `make check` fails certain assertions in both 'effects.cpp' and 'mixer.cpp'. Do not worry about this, the library will still have been built successfully.
 
 ## Built With
 
