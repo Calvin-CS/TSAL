@@ -13,7 +13,7 @@ class Timing {
     enum NoteScale {
       TICK = 0,
       EIGHTH = 8,
-      QUATER = 4,
+      QUARTER = 4,
       HALF = 2,
       WHOLE = 1,
     };
