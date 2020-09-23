@@ -21,7 +21,7 @@ class Util {
     template <typename T>
     static MidiNote scaleToNote(T value, std::pair<T, T> valueRange, std::pair<MidiNote, MidiNote> noteRange) {
       return static_cast<MidiNote> (noteRange.first + ((noteRange.second - noteRange.first) * ((double) value / (valueRange.second - valueRange.first))));
-    };
+    }
     static double ampToDb(double amplitude);
     static double dbToAmp(double db);
     static double volumeToDb(double volume);
