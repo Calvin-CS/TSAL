@@ -1,0 +1,29 @@
+#!/bin/sh
+
+brew update
+
+#Download and install the dependencies
+echo "Installing autoconf..."
+brew install autoconf
+
+echo "Installing automake..."
+brew install automake
+
+echo "Installing libtool..."
+brew install libtool
+
+echo "Installing portaudio..."
+brew install portaudio
+
+echo
+echo "Installing TSAL..."
+
+#make and install TSAL
+sudo autoreconf -vi
+
+./configure
+
+make
+
+make install
+
