@@ -6,6 +6,17 @@ brew update
 echo "Installing autoconf..."
 brew install autoconf
 
+# Check if the install worked, if not change the ownership of the directory
+# and try to install again
+if [ $? -eq 0 ]; then
+	continue
+else
+	chmod u+w /usr/local/share/man/man8
+	sudo chown -R $(whoami) /usr/local/share/man/man8
+
+	brew install autoconf
+fi
+
 echo "Installing automake..."
 brew install automake
 
