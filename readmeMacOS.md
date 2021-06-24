@@ -1,4 +1,4 @@
-# TSAL instatllion on MacOS
+# TSAL installation on MacOS
 
 #### There are two methods to install and build TSAL on MacOS
 1. Using our install script
