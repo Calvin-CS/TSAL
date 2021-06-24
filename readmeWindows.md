@@ -8,6 +8,20 @@
 
 #### If you want to specify the installation directory, we advise you to use method 2.
 
+### Installing Cygwin
+
+1. Download [Cygwin](https://www.cygwin.com/)
+2. Install the setup file; Continue until you get to the "Select Packages" window
+   - **NOTE**: If the window crashes, open the setup file and follow the steps again
+4. Click View > Not Installed
+5. In the search box type `lynx` and click the dropdown next to "Skip" and select the last one
+6. Do the same for `dos2unix` and `wget`
+7. Click "Next" and finish the installation
+
+![me](https://github.com/samuelth47/TSGL/blob/master/Windows/Cygwin.gif)
+
+### Installing TSAL
+
 ## Method 1
 * clone the [TSAL repository](https://github.com/Calvin-CS/TSAL.git)
 * cd into the cloned folder
