@@ -4,7 +4,7 @@
 1. Using our install script
 2. Running a couple of commands
 
-#### If you want to specify the installation directory, we advise you to use method 2.
+#### Both methods install TSAL by default in /usr/lib. If you want to specify the installation directory, we advise you to use method 2.
 
 ## Method 1
 * clone the [TSAL repository](https://github.com/Calvin-CS/TSAL.git)
@@ -20,7 +20,7 @@ autoreconf -vi
 make
 make install
 ```
-##### The above command will by default install TSAL in /usr/local/lib.
+
 If you want to specify your installation directory use:
 ```
 ./configure --prefix=installdirectory
