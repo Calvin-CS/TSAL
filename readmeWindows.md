@@ -18,7 +18,7 @@
 6. Do the same for `dos2unix` and `wget`
 7. Click "Next" and finish the installation
 
-![me](https://github.com/samuelth47/TSGL/blob/master/Windows/Cygwin.gif)
+![me](https://github.com/Calvin-CS/TSAL/blob/master/wiki_media/Cygwin.gif)
 
 ### Installing TSAL
 
