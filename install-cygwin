@@ -14,10 +14,16 @@ echo "All necessary packages installed"
 echo "########################################################################"
 
 #make and install TSAL
-autoreconf -vi 
+#autoreconf -vi
 
-./configure --prefix=/usr
+#./configure --prefix=/usr
 
-make
+#make
 
-make install
+#make install
+
+rm -rf apt-cyg*
+
+cp -r include /usr/include/TSAL
+
+mv /usr/include/TSAL/tsal.hpp /usr/include

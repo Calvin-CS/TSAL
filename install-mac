@@ -52,3 +52,7 @@ sudo autoreconf -vi
 make
 
 make install
+
+cp -r include /usr/local/include/TSAL
+
+mv /usr/include/TSAL/tsal.hpp /usr/local/include
