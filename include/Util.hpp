@@ -6,7 +6,9 @@
 #include <algorithm>
 #include <random>
 #define _USE_MATH_DEFINES
-#include <cmath>
+#include <math.h>
+#define M_LN10 2.30258509299404568402
+#define M_PI 3.14159265358979323846
 #define PI2 (M_PI * 2)
 
 #include <chrono>
@@ -44,8 +46,8 @@ class Util {
     }
 
     /**
-     * @brief Forces a hidden floor value on the range 
-     * 
+     * @brief Forces a hidden floor value on the range
+     *
      * Lets the user set expected values without causing divide by 0 or other arithmetic errors
      */
     template <typename T>
@@ -54,8 +56,8 @@ class Util {
     }
 
     /**
-     * @brief Forces a hidden ceiling value on the range 
-     * 
+     * @brief Forces a hidden ceiling value on the range
+     *
      * Lets the user set expected values without causing divide by 0 or other arithmetic errors
      */
     template <typename T>
