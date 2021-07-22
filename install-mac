@@ -1,0 +1,58 @@
+#!/bin/bash
+
+which -s brew
+if [ $? != 0 ]; then
+	echo "Installing homebrew..."
+	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+	export PATH=/usr/bin:$PATH
+else
+	echo "Homebrew detected"
+	export PATH=/usr/bin:$PATH
+fi
+
+echo
+echo "Using Homebrew to install dependencies..."
+echo
+
+brew update
+
+#Download and install the dependencies
+echo "Installing autoconf..."
+brew install autoconf
+
+# Check if the install worked, if not change the ownership of the directory
+# and try to install again
+if [ $? -eq 0 ]; then
+	continue
+else
+	chmod u+w /usr/local/share/man/man8
+	sudo chown -R $(whoami) /usr/local/share/man/man8
+
+	brew install autoconf
+fi
+
+echo "Installing automake..."
+brew install automake
+
+echo "Installing libtool..."
+brew install libtool
+
+echo "Installing portaudio..."
+brew install portaudio
+
+echo
+echo "Installing TSAL..."
+
+#make and install TSAL
+sudo autoreconf -vi
+
+./configure
+
+make
+
+make install
+
+cp -r include /usr/local/include/TSAL
+
+mv /usr/include/TSAL/tsal.hpp /usr/local/include

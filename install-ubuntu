@@ -1,0 +1,37 @@
+#!/bin/sh
+
+#make and install TSAL
+sudo autoreconf -vi
+
+./configure --prefix=/usr
+
+make
+
+make install
+
+cp -r include /usr/include/TSAL
+
+mv /usr/include/TSAL/tsal.hpp /usr/include
+
+#comment out the lines that print out the pcm errors
+cd /usr/share/alsa
+
+sudo sed -i 's/^pcm.rear cards.pcm.rear/#pcm.rear cards.pcm.rear/' alsa.conf
+
+sudo sed -i 's/^pcm.center_lfe cards.pcm.center_lfe/#cm.center_lfe cards.pcm.center_lfe/' alsa.conf
+
+sudo sed -i 's/^pcm.side cards.pcm.side/#pcm.side cards.pcm.side/' alsa.conf
+
+sudo sed -i 's/^pcm.surround21 cards.pcm.surround21/#pcm.surround21 cards.pcm.surround21/' alsa.conf
+
+sudo sed -i 's/^pcm.surround40 cards.pcm.surround40/#pcm.surround40 cards.pcm.surround40/' alsa.conf
+
+sudo sed -i 's/^pcm.surround41 cards.pcm.surround41/#pcm.surround41 cards.pcm.surround41/' alsa.conf
+
+sudo sed -i 's/^pcm.surround50 cards.pcm.surround50/#pcm.surround50 cards.pcm.surround50/' alsa.conf
+
+sudo sed -i 's/^pcm.surround51 cards.pcm.surround51/#pcm.surround51 cards.pcm.surround51/' alsa.conf
+
+sudo sed -i 's/^pcm.surround71 cards.pcm.surround71/#pcm.surround71 cards.pcm.surround71/' alsa.conf
+
+cd -
