@@ -2,21 +2,22 @@
 #include <iostream>
 using namespace tsal;
 
-long long factorial(int n, ThreadSynth& synth, SoundFont& soundFont) {
+long long factorial(int n, ThreadSynth& synth) {
     const int DURATION = 1;
     long long answer = 0;
 
+    // Use a Note Scale to choose different notes as the recursion happens
     MidiNote note = Util::scaleToNote(n, std::make_pair(0, 30), std::make_pair(C4, C7));
 
     if (n > 1) {
-      //synth.play(note, Timing::SECOND, DURATION);
-      soundFont.play(40);
-      answer = n * factorial(n - 1, synth, soundFont);
-      soundFont.play(40);
-      //synth.play(note, Timing::SECOND, DURATION);
+      synth.play(note, Timing::SECOND, DURATION);
+      // Recursive call
+      answer = n * factorial(n - 1, synth);
+      synth.play(note, Timing::SECOND, DURATION);
     } else {
-      //synth.play(note, Timing::SECOND, DURATION);
-      soundFont.play(40);
+      synth.play(note, Timing::SECOND, DURATION);
+      // Wait for 2 seconds at the bottom to show you have reached the base case
+      synth.stop(Timing::SECOND, DURATION*2);
       answer = 1;
     }
 
@@ -24,16 +25,15 @@ long long factorial(int n, ThreadSynth& synth, SoundFont& soundFont) {
 }
 
 int main(int argc, char* argv[]) {
+    // Setup to use TSAL
     Mixer mixer;
     ThreadSynth synth(&mixer);
-    SoundFont soundFont(&mixer, "cymbalRoll.sf2");
 
     mixer.add(synth);
-    mixer.add(soundFont);
 
     synth.setEnvelopeActive(false);
 
     int n = atoi(argv[1]);
-    std::cout << factorial(n, synth, soundFont) << std::endl;
+    std::cout << "Factorial of "<< argv[1] << " = " << factorial(n, synth) << std::endl;
     return 0;
 }
