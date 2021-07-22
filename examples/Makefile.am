@@ -9,7 +9,6 @@ noinst_PROGRAMS = \
 	merge_sort \
 	progress \
 	producer_consumer \
-	fibonacci \
 	factorial
 
 
@@ -44,9 +43,6 @@ progress_LDADD = $(top_builddir)/src/libtsal.la
 
 producer_consumer_SOURCES = producer_consumer.cpp
 producer_consumer_LDADD = $(top_builddir)/src/libtsal.la
-
-fibonacci_SOURCES = fibonacci.cpp
-fibonacci_LDADD = $(top_builddir)/src/libtsal.la
 
 factorial_SOURCES = factorial.cpp
 factorial_LDADD = $(top_builddir)/src/libtsal.la
