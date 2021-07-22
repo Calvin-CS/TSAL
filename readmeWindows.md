@@ -42,4 +42,3 @@ If you want to specify your installation directory use:
 ./configure --prefix=installdirectory
 ``` 
 instead of `./configure` **replacing** `installdirectory` with your desired path.
-{"mode":"full","isActive":false}
